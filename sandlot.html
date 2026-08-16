@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Sandbox — Diya Mahapatra</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --orange: #E53D00;
+      --black:  #0F0F0F;
+      --gray:   #6B7280;
+      --border: #E5E7EB;
+      --ease:   cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+
+    html, body {
+      width: 100%;
+      font-family: 'Inter', system-ui, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      background: #fff;
+      color: var(--black);
+    }
+
+    /* ── CUSTOM CURSOR ── */
+    body, body * { cursor: none; }
+    #custom-cursor {
+      position: fixed; pointer-events: none; z-index: 9999;
+      left: 0; top: 0; width: 28px; height: 28px;
+      border-radius: 50%; border: 1.5px solid var(--orange);
+      opacity: 0; will-change: transform;
+      transition: width 0.38s var(--ease), height 0.38s var(--ease), border-radius 0.38s var(--ease);
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 10;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 40px; height: 57px;
+      border-bottom: 1px solid var(--border);
+      background: rgba(255,255,255,0.92);
+      backdrop-filter: blur(12px);
+    }
+    .nav-logo {
+      display: flex; align-items: center; gap: 8px;
+      font-size: 15px; font-weight: 600;
+      text-decoration: none; color: var(--black);
+    }
+    .nav-links { list-style: none; display: flex; gap: 32px; }
+    .nav-links a {
+      font-size: 14px; color: var(--gray);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--black); }
+    .nav-links a.active { color: var(--black); font-weight: 500; }
+
+    /* ── PAGE ── */
+    .page {
+      min-height: 100vh;
+      padding: 120px 60px 80px;
+      opacity: 0;
+      animation: fadeIn 0.6s var(--ease) 0.1s forwards;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(12px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .sandlot-eyebrow {
+      font-size: 11px; font-weight: 600;
+      letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--gray); margin-bottom: 80px;
+      display: block; text-align: center;
+    }
+
+    /* ── SCATTERED COLLAGE ── */
+    .sandbox-collage {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 36px;
+      padding: 0 0 80px;
+      align-items: start;
+    }
+
+    .img-item {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      will-change: transform;
+      transition: transform 0.55s var(--ease);
+    }
+
+    /* stagger each column vertically for the scattered feel */
+    .img-item-diya      { margin-top: 60px;  transform: rotate(-5deg); }
+    .img-item-gradient  { margin-top: 0px;   transform: rotate(0deg); }
+    .img-item-article   { margin-top: 100px; transform: rotate(0deg); }
+    .img-item-resonance { margin-top: 30px;  transform: rotate(0deg); }
+
+    .img-item-diya:hover      { transform: rotate(3deg)  scale(1.04); }
+    .img-item-gradient:hover  { transform: rotate(-4deg) scale(1.04); }
+    .img-item-article:hover   { transform: rotate(-3deg) scale(1.04); }
+    .img-item-resonance:hover { transform: rotate(-4deg) scale(1.04); }
+
+    .img-item:active { transform: scale(1.07); transition-duration: 0.18s; }
+
+    .img-item img { display: block; width: 100%; }
+    .img-item-diya      { max-width: 320px; }
+    .img-item-gradient  { max-width: 300px; }
+    .img-item-article   { max-width: 290px; }
+    .img-item-resonance { max-width: 260px; }
+
+    /* ── P5 SKETCH ── */
+    .sketch-item {
+      margin-top: 80px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    .sketch-item iframe {
+      border: none;
+      border-radius: 12px;
+      display: block;
+      width: 480px;
+      height: 480px;
+    }
+
+    .img-label {
+      margin-top: 11px;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--black);
+      letter-spacing: 0.01em;
+    }
+    .img-desc {
+      margin-top: 4px;
+      font-size: 11px;
+      font-weight: 400;
+      color: var(--gray);
+      max-width: 200px;
+      line-height: 1.5;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="custom-cursor"></div>
+
+  <nav>
+    <a class="nav-logo" href="diya-splash.html?skip"><img src="images/miffy.png" alt="miffy" style="width:22px;height:22px;object-fit:contain;display:block;">diya</a>
+    <ul class="nav-links">
+      <li><a href="diya-splash.html?skip">Work</a></li>
+      <li><a href="sandlot.html" class="active">Sandbox</a></li>
+      <li><a href="https://drive.google.com/file/d/1dbvKrqRNuBisy0lqk2uoBBgtkCQalHIH/view?usp=sharing" target="_blank">Resume</a></li>
+    </ul>
+  </nav>
+
+  <div class="page">
+    <p class="sandlot-eyebrow">Sandbox</p>
+
+    <div class="sandbox-collage">
+
+      <div class="img-item img-item-diya">
+        <img src="images/diyawidget.png" alt="Diya widget" draggable="false"/>
+        <span class="img-label">Diya Widget</span>
+        <span class="img-desc">A personal iOS widget concept</span>
+      </div>
+
+      <div class="img-item img-item-gradient">
+        <img src="images/gradient.png" alt="Gradient" draggable="false"/>
+        <span class="img-label">Gradient</span>
+        <span class="img-desc">Made on Adobe Photoshop</span>
+      </div>
+
+      <div class="img-item img-item-article">
+        <img src="images/article.png" alt="Article" draggable="false"/>
+        <span class="img-label">Article</span>
+        <span class="img-desc">UI exploration</span>
+      </div>
+
+      <div class="img-item img-item-resonance">
+        <img src="images/resonance.png" alt="Resonance" draggable="false"/>
+        <span class="img-label">Resonance</span>
+        <span class="img-desc">Energy drink branding concept</span>
+      </div>
+
+    </div>
+
+    <div class="sketch-item">
+      <iframe src="https://editor.p5js.org/diyamahapatra/full/qwQsS791d" allowfullscreen></iframe>
+      <span class="img-label">p5.js sketch</span>
+      <span class="img-desc">Made with p5.js</span>
+    </div>
+
+  </div>
+
+  <script>
+    const cursorEl = document.getElementById('custom-cursor');
+    let cx = -200, cy = -200, clx = cx, cly = cy;
+
+    document.addEventListener('mousemove', e => {
+      cx = e.clientX; cy = e.clientY;
+      cursorEl.style.opacity = '1';
+    });
+
+    (function cursorLoop() {
+      clx += (cx - clx) * 0.14;
+      cly += (cy - cly) * 0.14;
+      cursorEl.style.transform = `translate(${clx.toFixed(1)}px, ${cly.toFixed(1)}px) translate(-50%, -50%)`;
+      requestAnimationFrame(cursorLoop);
+    })();
+  </script>
+</body>
+</html>

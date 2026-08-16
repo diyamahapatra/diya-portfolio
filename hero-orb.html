@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Diya Mahapatra — Product Designer</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=DM+Serif+Display:ital@1&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ═══════════════════════════════════════════════════════════
+       RESET + TOKENS
+    ═══════════════════════════════════════════════════════════ */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:   #080808;
+      --fg:   #F2F0FF;
+      --fg2:  rgba(242,240,255,0.45);
+      --fg3:  rgba(242,240,255,0.22);
+
+      /* lilac scale */
+      --l1: #F5F3FF;
+      --l2: #EDE9FE;
+      --l3: #DDD6FE;
+      --l4: #C4B5FD;
+      --l5: #A78BFA;
+      --l6: #8B5CF6;
+      --l7: #7C3AED;
+      --l8: #6D28D9;
+
+      --bdr: rgba(196,181,253,0.10);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--fg);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      overflow-x: hidden;
+      cursor: none;
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       CUSTOM CURSOR
+    ═══════════════════════════════════════════════════════════ */
+    .cur-dot {
+      position: fixed; top: 0; left: 0;
+      width: 5px; height: 5px;
+      background: var(--l4);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(-50%, -50%);
+      transition: width .15s, height .15s, opacity .15s;
+    }
+
+    .cur-ring {
+      position: fixed; top: 0; left: 0;
+      width: 30px; height: 30px;
+      border: 1px solid rgba(196,181,253,0.35);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9998;
+      transform: translate(-50%, -50%);
+      transition: width .28s cubic-bezier(.23,1,.32,1),
+                  height .28s cubic-bezier(.23,1,.32,1),
+                  border-color .28s;
+    }
+    .cur-ring.hovered {
+      width: 50px; height: 50px;
+      border-color: rgba(196,181,253,0.55);
+    }
+    .cur-ring.clicking {
+      width: 22px; height: 22px;
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       FILM GRAIN OVERLAY
+    ═══════════════════════════════════════════════════════════ */
+    .grain {
+      position: fixed; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.78' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      background-repeat: repeat;
+      background-size: 240px 240px;
+      opacity: 0.030;
+      pointer-events: none;
+      z-index: 1000;
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       NAVIGATION
+    ═══════════════════════════════════════════════════════════ */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0;
+      z-index: 500;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 22px 52px;
+      transition: background .5s, border-color .5s, backdrop-filter .5s;
+    }
+    nav.scrolled {
+      background: rgba(8,8,8,0.80);
+      backdrop-filter: blur(22px);
+      -webkit-backdrop-filter: blur(22px);
+      border-bottom: 1px solid var(--bdr);
+    }
+
+    .nav-logo {
+      font-size: 14px; font-weight: 500;
+      color: var(--fg); text-decoration: none;
+      letter-spacing: 0.015em;
+    }
+    .nav-logo em { font-style: normal; color: var(--l4); }
+
+    .nav-links { display: flex; gap: 36px; list-style: none; }
+    .nav-links a {
+      font-size: 13px; font-weight: 400;
+      letter-spacing: 0.025em;
+      color: var(--fg2); text-decoration: none;
+      position: relative;
+      transition: color .2s;
+    }
+    .nav-links a::after {
+      content: '';
+      position: absolute; bottom: -3px; left: 0;
+      width: 0; height: 1px;
+      background: var(--l4);
+      transition: width .3s cubic-bezier(.23,1,.32,1);
+    }
+    .nav-links a:hover { color: var(--fg); }
+    .nav-links a:hover::after { width: 100%; }
+
+    /* ═══════════════════════════════════════════════════════════
+       HERO SECTION
+    ═══════════════════════════════════════════════════════════ */
+    .hero {
+      position: relative;
+      height: 100vh; min-height: 680px;
+      display: flex; align-items: center; justify-content: center;
+      overflow: hidden;
+    }
+
+    /* subtle dot grid */
+    .hero-grid {
+      position: absolute; inset: 0;
+      background-image: radial-gradient(rgba(196,181,253,0.15) 1px, transparent 1px);
+      background-size: 40px 40px;
+      mask-image: radial-gradient(ellipse at center, black 20%, transparent 75%);
+      -webkit-mask-image: radial-gradient(ellipse at center, black 20%, transparent 75%);
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    /* edge darkening vignette */
+    .hero-vignette {
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse at 50% 50%, transparent 38%, rgba(8,8,8,0.88) 100%);
+      pointer-events: none;
+      z-index: 7;
+    }
+
+    /* ─── ORB STAGE ─── */
+    .orb-stage {
+      position: absolute; inset: 0;
+      display: flex; align-items: center; justify-content: center;
+      pointer-events: none;
+      z-index: 3;
+    }
+
+    /* JS applies parallax here — no CSS animation */
+    #orbPlex {
+      position: relative;
+      width: 580px; height: 580px;
+      will-change: transform;
+    }
+
+    /* CSS float breathing lives here — separate from parallax */
+    .orb-float {
+      position: relative; width: 100%; height: 100%;
+      animation: float 9s ease-in-out infinite;
+      will-change: transform;
+    }
+
+    /* Every blob is absolute inside orb-float */
+    .blob {
+      position: absolute;
+      border-radius: 50%;
+      will-change: border-radius;
+    }
+
+    /* ── BLOB 1: vast outer aura / diffusion glow ── */
+    .b1 {
+      width:  720px; height: 720px;
+      top: 50%; left: 50%;
+      margin: -360px 0 0 -360px;
+      background: radial-gradient(ellipse at 42% 36%,
+        rgba(139,92,246, 0.24) 0%,
+        rgba(109,40,217, 0.10) 42%,
+        transparent 68%
+      );
+      filter: blur(100px);
+      opacity: 0.95;
+      animation: m1 22s ease-in-out infinite;
+    }
+
+    /* ── BLOB 2: core body — the main orb volume ── */
+    .b2 {
+      width: 400px; height: 400px;
+      top: 50%; left: 50%;
+      margin: -200px 0 0 -200px;
+      background: radial-gradient(ellipse at 36% 30%,
+        rgba(237,233,254, 0.92) 0%,
+        rgba(196,181,253, 0.78) 22%,
+        rgba(139,92,246,  0.58) 52%,
+        rgba(109,40,217,  0.28) 78%,
+        transparent 100%
+      );
+      filter: blur(46px);
+      animation: m2 11s ease-in-out infinite;
+    }
+
+    /* ── BLOB 3: secondary offset — gives depth & asymmetry ── */
+    .b3 {
+      width: 280px; height: 260px;
+      top: 24%; left: 52%;
+      margin-left: -40px;
+      background: radial-gradient(ellipse at 38% 28%,
+        rgba(245,243,255, 0.72) 0%,
+        rgba(221,214,254, 0.50) 46%,
+        transparent 80%
+      );
+      filter: blur(32px);
+      mix-blend-mode: screen;
+      animation: m3 7.5s ease-in-out infinite;
+    }
+
+    /* ── BLOB 4: specular highlight ── */
+    .b4 {
+      width: 150px; height: 150px;
+      top: 30%; left: 38%;
+      background: radial-gradient(circle at 36% 30%,
+        rgba(255,255,255, 0.70) 0%,
+        rgba(237,233,254, 0.40) 42%,
+        transparent 74%
+      );
+      filter: blur(18px);
+      mix-blend-mode: screen;
+      animation: m4 5.2s ease-in-out infinite;
+    }
+
+    /* ── BLOB 5: grounding shadow beneath orb ── */
+    .b5 {
+      width: 400px; height: 150px;
+      bottom: 4%; left: 50%;
+      margin-left: -200px;
+      background: radial-gradient(ellipse at 50% 10%,
+        rgba(91,33,182, 0.20) 0%,
+        transparent 70%
+      );
+      filter: blur(52px);
+      animation: m5 18s ease-in-out infinite;
+    }
+
+    /* ── BLOB 6: outer ring pulse / corona ── */
+    .b6 {
+      width: 530px; height: 530px;
+      top: 50%; left: 50%;
+      margin: -265px 0 0 -265px;
+      background: radial-gradient(ellipse at center,
+        transparent 38%,
+        rgba(139,92,246, 0.055) 56%,
+        rgba(109,40,217, 0.10)  72%,
+        transparent              88%
+      );
+      filter: blur(18px);
+      animation: m6 28s ease-in-out infinite, corona 7s ease-in-out infinite;
+    }
+
+    /* ─── MORPH KEYFRAMES ─── */
+    @keyframes m1 {
+      0%,100% { border-radius: 67% 33% 47% 53% / 37% 20% 80% 63%; }
+      25%      { border-radius: 42% 58% 29% 71% / 52% 44% 56% 48%; }
+      50%      { border-radius: 29% 71% 62% 38% / 62% 57% 43% 38%; }
+      75%      { border-radius: 54% 46% 38% 62% / 42% 62% 38% 58%; }
+    }
+    @keyframes m2 {
+      0%,100% { border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; }
+      33%      { border-radius: 47% 53% 67% 33% / 53% 75% 25% 47%; }
+      66%      { border-radius: 33% 67% 53% 47% / 37% 47% 53% 63%; }
+    }
+    @keyframes m3 {
+      0%,100% { border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%; }
+      50%      { border-radius: 72% 28% 38% 62% / 62% 38% 48% 60%; }
+    }
+    @keyframes m4 {
+      0%,100% { border-radius: 60% 40% 55% 45% / 50% 62% 38% 52%; }
+      50%      { border-radius: 38% 62% 42% 58% / 62% 40% 58% 42%; }
+    }
+    @keyframes m5 {
+      0%,100% { border-radius: 60% 40% 30% 70% / 50% 40% 60% 50%; }
+      50%      { border-radius: 38% 62% 72% 28% / 38% 62% 40% 60%; }
+    }
+    @keyframes m6 {
+      0%,100% { border-radius: 55% 45% 48% 52% / 42% 55% 45% 58%; }
+      50%      { border-radius: 45% 55% 52% 48% / 58% 42% 55% 42%; }
+    }
+
+    /* float + breathe */
+    @keyframes float {
+      0%,100% { transform: translateY(0px)   scale(1.00); }
+      38%      { transform: translateY(-18px) scale(1.018); }
+      72%      { transform: translateY(-8px)  scale(0.992); }
+    }
+    @keyframes corona {
+      0%,100% { opacity: 0.55; transform: scale(1.00); }
+      50%      { opacity: 1.00; transform: scale(1.04); }
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       HERO CONTENT
+    ═══════════════════════════════════════════════════════════ */
+    .hero-content {
+      position: relative;
+      z-index: 10;
+      text-align: center;
+      max-width: 880px;
+      padding: 0 28px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    /* availability pill */
+    .avail {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-size: 11px; font-weight: 400;
+      letter-spacing: 0.06em;
+      color: var(--fg3);
+      margin-bottom: 24px;
+      padding: 6px 14px;
+      border: 1px solid rgba(196,181,253,0.08);
+      border-radius: 100px;
+      background: rgba(196,181,253,0.04);
+      opacity: 0;
+      animation: fadeUp .8s cubic-bezier(.23,1,.32,1) .1s forwards;
+    }
+    .avail-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: #4ade80;
+      flex-shrink: 0;
+      box-shadow: 0 0 0 0 rgba(74,222,128,0);
+      animation: ping 2.6s ease-in-out infinite;
+    }
+    @keyframes ping {
+      0%,100% { box-shadow: 0 0 0 0   rgba(74,222,128,0.45); }
+      50%      { box-shadow: 0 0 0 5px rgba(74,222,128,0.00); }
+    }
+
+    /* role eyebrow */
+    .eyebrow {
+      display: inline-flex; align-items: center; gap: 12px;
+      font-size: 10.5px; font-weight: 500;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--l4);
+      margin-bottom: 26px;
+      opacity: 0;
+      animation: fadeUp .8s cubic-bezier(.23,1,.32,1) .26s forwards;
+    }
+    .eyebrow::before, .eyebrow::after {
+      content: ''; display: block;
+      width: 24px; height: 1px;
+      background: var(--l4);
+      opacity: 0.6;
+    }
+
+    /* main heading */
+    h1 {
+      font-family: 'DM Serif Display', Georgia, serif;
+      font-style: italic;
+      font-size: clamp(58px, 10vw, 114px);
+      line-height: 0.90;
+      letter-spacing: -0.022em;
+      margin-bottom: 30px;
+      opacity: 0;
+      animation: fadeUp .95s cubic-bezier(.23,1,.32,1) .44s forwards;
+    }
+    h1 .first {
+      display: block;
+      color: var(--fg);
+      /* subtle glow behind first name */
+      text-shadow: 0 0 80px rgba(196,181,253,0.18);
+    }
+    h1 .last {
+      display: block;
+      background: linear-gradient(138deg,
+        var(--l2)  0%,
+        var(--l4) 40%,
+        var(--l5) 70%,
+        var(--l6) 100%
+      );
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    /* tagline */
+    .tagline {
+      font-size: 15.5px; font-weight: 300;
+      line-height: 1.76;
+      letter-spacing: 0.01em;
+      color: var(--fg2);
+      max-width: 400px;
+      margin-bottom: 50px;
+      opacity: 0;
+      animation: fadeUp .95s cubic-bezier(.23,1,.32,1) .62s forwards;
+    }
+
+    /* CTA row */
+    .cta-row {
+      display: flex; align-items: center; gap: 14px;
+      opacity: 0;
+      animation: fadeUp .95s cubic-bezier(.23,1,.32,1) .80s forwards;
+    }
+
+    .btn-p {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 13px 26px;
+      background: var(--l4);
+      color: #16073a;
+      font-size: 13px; font-weight: 600;
+      letter-spacing: 0.01em;
+      border-radius: 100px;
+      text-decoration: none;
+      border: none; cursor: none;
+      transition: background .22s, transform .22s, box-shadow .22s;
+    }
+    .btn-p:hover {
+      background: var(--l3);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 32px rgba(196,181,253,0.28),
+                  0  2px  8px rgba(196,181,253,0.12);
+    }
+    .btn-p svg { flex-shrink: 0; }
+
+    .btn-s {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 12px 26px;
+      border: 1px solid var(--bdr);
+      background: rgba(196,181,253,0.04);
+      color: var(--fg2);
+      font-size: 13px; font-weight: 400;
+      letter-spacing: 0.01em;
+      border-radius: 100px;
+      text-decoration: none;
+      cursor: none;
+      transition: border-color .22s, color .22s, transform .22s;
+    }
+    .btn-s:hover {
+      border-color: rgba(196,181,253,0.28);
+      color: var(--fg);
+      transform: translateY(-2px);
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       SCROLL INDICATOR
+    ═══════════════════════════════════════════════════════════ */
+    .scroll-hint {
+      position: absolute;
+      bottom: 34px; left: 50%; transform: translateX(-50%);
+      display: flex; flex-direction: column; align-items: center; gap: 10px;
+      z-index: 10;
+      opacity: 0;
+      animation: fadeUp .9s cubic-bezier(.23,1,.32,1) 1.15s forwards;
+    }
+    .scroll-hint span {
+      font-size: 9.5px; font-weight: 500;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--fg3);
+    }
+    .scroll-bar {
+      width: 1px; height: 42px;
+      overflow: hidden;
+      position: relative;
+    }
+    .scroll-bar::after {
+      content: '';
+      display: block;
+      width: 1px; height: 100%;
+      background: linear-gradient(to bottom, var(--l5), transparent);
+      animation: scrollDrop 2.4s ease-in-out infinite;
+    }
+    @keyframes scrollDrop {
+      0%   { transform: translateY(-100%); opacity: 1;   }
+      80%  { transform: translateY(100%);  opacity: 0.2; }
+      100% { transform: translateY(100%);  opacity: 0;   }
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       ENTRANCE ANIMATION
+    ═══════════════════════════════════════════════════════════ */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0);    }
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       ACCESSIBLE MOTION REDUCTION
+    ═══════════════════════════════════════════════════════════ */
+    @media (prefers-reduced-motion: reduce) {
+      .blob, .orb-float, .avail-dot, .scroll-bar::after, .b6 {
+        animation-duration: 999s !important;
+        animation-play-state: paused !important;
+      }
+      * { transition-duration: 0.01ms !important; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Custom cursor -->
+  <div class="cur-dot"  id="curDot"></div>
+  <div class="cur-ring" id="curRing"></div>
+
+  <!-- Film grain -->
+  <div class="grain" aria-hidden="true"></div>
+
+  <!-- Navigation -->
+  <nav id="mainNav">
+    <a href="#" class="nav-logo">Diya <em>Mahapatra</em></a>
+    <ul class="nav-links">
+      <li><a href="#">Work</a></li>
+      <li><a href="#">About</a></li>
+      <li><a href="#">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- Hero -->
+  <section class="hero" id="hero">
+
+    <!-- dot grid -->
+    <div class="hero-grid" aria-hidden="true"></div>
+
+    <!-- ── ORB ── -->
+    <div class="orb-stage" aria-hidden="true">
+      <!-- parallax target (JS-driven transform) -->
+      <div id="orbPlex">
+        <!-- breathing float (CSS animation) -->
+        <div class="orb-float">
+          <div class="blob b1"></div>  <!-- wide aura         -->
+          <div class="blob b2"></div>  <!-- core body         -->
+          <div class="blob b3"></div>  <!-- secondary depth   -->
+          <div class="blob b4"></div>  <!-- specular          -->
+          <div class="blob b5"></div>  <!-- ground shadow     -->
+          <div class="blob b6"></div>  <!-- corona ring pulse -->
+        </div>
+      </div>
+    </div>
+
+    <!-- vignette sits above orb, below text -->
+    <div class="hero-vignette" aria-hidden="true"></div>
+
+    <!-- ── CONTENT ── -->
+    <div class="hero-content">
+      <p class="avail">
+        <span class="avail-dot"></span>
+        Available for new projects
+      </p>
+
+      <p class="eyebrow">Product Designer</p>
+
+      <h1>
+        <span class="first">Diya</span>
+        <span class="last">Mahapatra</span>
+      </h1>
+
+      <p class="tagline">
+        Crafting interfaces that feel inevitable —<br>
+        from first touch to lasting habit.
+      </p>
+
+      <div class="cta-row">
+        <a href="#" class="btn-p">
+          View Work
+          <svg width="13" height="13" viewBox="0 0 13 13" fill="none" aria-hidden="true">
+            <path d="M2.5 6.5h8M7 3l3.5 3.5L7 10" stroke="currentColor" stroke-width="1.6"
+                  stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
+        <a href="#" class="btn-s">Get in touch</a>
+      </div>
+    </div>
+
+    <!-- scroll hint -->
+    <div class="scroll-hint" aria-hidden="true">
+      <span>Scroll</span>
+      <div class="scroll-bar"></div>
+    </div>
+
+  </section>
+
+
+  <script>
+    /* ═══════════════════════════════════════════════════════════
+       UTILITIES
+    ═══════════════════════════════════════════════════════════ */
+    const lerp = (a, b, t) => a + (b - a) * t;
+
+    /* ═══════════════════════════════════════════════════════════
+       CUSTOM CURSOR
+    ═══════════════════════════════════════════════════════════ */
+    const dot  = document.getElementById('curDot');
+    const ring = document.getElementById('curRing');
+
+    let mx = 0, my = 0;   // raw mouse
+    let rx = 0, ry = 0;   // ring (lagged)
+
+    document.addEventListener('mousemove', e => {
+      mx = e.clientX; my = e.clientY;
+      // dot is instant
+      dot.style.left = mx + 'px';
+      dot.style.top  = my + 'px';
+    });
+
+    // Hover expand
+    document.querySelectorAll('a, button').forEach(el => {
+      el.addEventListener('mouseenter', () => ring.classList.add('hovered'));
+      el.addEventListener('mouseleave', () => ring.classList.remove('hovered'));
+    });
+
+    // Click shrink
+    document.addEventListener('mousedown', () => ring.classList.add('clicking'));
+    document.addEventListener('mouseup',   () => ring.classList.remove('clicking'));
+
+    function tickCursor() {
+      rx = lerp(rx, mx, 0.11);
+      ry = lerp(ry, my, 0.11);
+      ring.style.left = rx + 'px';
+      ring.style.top  = ry + 'px';
+      requestAnimationFrame(tickCursor);
+    }
+    tickCursor();
+
+    /* ═══════════════════════════════════════════════════════════
+       ORB PARALLAX
+       Parallax lives on #orbPlex (parent of the CSS-animated float).
+       This way CSS float transform & JS parallax don't conflict.
+    ═══════════════════════════════════════════════════════════ */
+    const orb  = document.getElementById('orbPlex');
+    const hero = document.getElementById('hero');
+
+    let ox = 0, oy = 0;   // current orb parallax offset (lerped)
+    let otx = 0, oty = 0; // target offset
+
+    const MAX_X = 32; // px
+    const MAX_Y = 22; // px
+    const EASE  = 0.038;
+
+    // Center relative to hero bounds (handles scroll offset)
+    function getCenter() {
+      const r = hero.getBoundingClientRect();
+      return { cx: r.left + r.width  / 2,
+               cy: r.top  + r.height / 2 };
+    }
+
+    document.addEventListener('mousemove', e => {
+      const { cx, cy } = getCenter();
+      const nx = (e.clientX - cx) / (window.innerWidth  / 2); // –1 → 1
+      const ny = (e.clientY - cy) / (window.innerHeight / 2);
+      otx = nx * MAX_X;
+      oty = ny * MAX_Y;
+    });
+
+    // Gently return to center when mouse leaves
+    document.addEventListener('mouseleave', () => { otx = 0; oty = 0; });
+
+    function tickOrb() {
+      ox = lerp(ox, otx, EASE);
+      oy = lerp(oy, oty, EASE);
+      orb.style.transform = `translate(${ox}px, ${oy}px)`;
+      requestAnimationFrame(tickOrb);
+    }
+    tickOrb();
+
+    /* ═══════════════════════════════════════════════════════════
+       NAV SCROLL TINT
+    ═══════════════════════════════════════════════════════════ */
+    const nav = document.getElementById('mainNav');
+    window.addEventListener('scroll', () => {
+      nav.classList.toggle('scrolled', window.scrollY > 30);
+    }, { passive: true });
+  </script>
+</body>
+</html>

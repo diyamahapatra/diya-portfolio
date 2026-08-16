@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>SIS Platform — Diya Mahapatra</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300&family=Instrument+Serif:ital@0;1&family=Lora:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --orange: #E53D00;
+      --black:  #0F0F0F;
+      --gray:   #6B7280;
+      --border: #E5E7EB;
+      --ease:   cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+
+    html, body {
+      width: 100%;
+      font-family: 'Inter', system-ui, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      background: #fff;
+      color: var(--black);
+    }
+
+    /* ── CUSTOM CURSOR ── */
+    body, body * { cursor: none; }
+    #custom-cursor {
+      position: fixed; pointer-events: none; z-index: 9999;
+      left: 0; top: 0; width: 28px; height: 28px;
+      border-radius: 50%; border: 1.5px solid var(--orange);
+      opacity: 0; will-change: transform;
+      transition: width 0.38s var(--ease), height 0.38s var(--ease);
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 40px; height: 57px;
+      border-bottom: 1px solid var(--border);
+      background: rgba(255,255,255,0.92);
+      backdrop-filter: blur(12px);
+    }
+    .nav-logo {
+      display: flex; align-items: center; gap: 8px;
+      font-size: 15px; font-weight: 600;
+      text-decoration: none; color: var(--black);
+    }
+    .nav-links { list-style: none; display: flex; gap: 32px; }
+    .nav-links a {
+      font-size: 14px; color: var(--gray);
+      text-decoration: none; transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--black); }
+    .nav-links a.active { color: var(--black); font-weight: 500; }
+
+    /* ── LAYOUT ── */
+    .cs-layout {
+      display: flex;
+      padding-top: 57px;
+      min-height: 100vh;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    /* ── SIDEBAR ── */
+    .cs-sidebar {
+      width: 180px;
+      flex-shrink: 0;
+      padding: 48px 24px 48px 0;
+      position: sticky;
+      top: 57px;
+      height: calc(100vh - 57px);
+      overflow-y: auto;
+    }
+    .cs-sidebar-label {
+      font-size: 11px; font-weight: 600;
+      letter-spacing: 0.10em; text-transform: uppercase;
+      color: var(--gray);
+      margin-bottom: 16px;
+    }
+    .cs-sidebar-links {
+      list-style: none;
+      display: flex; flex-direction: column; gap: 2px;
+    }
+    .cs-sidebar-links a {
+      font-size: 13px; color: var(--gray);
+      text-decoration: none;
+      padding: 5px 0;
+      display: block;
+      transition: color 0.18s;
+      border-left: 2px solid transparent;
+      padding-left: 10px;
+      margin-left: -12px;
+    }
+    .cs-sidebar-links a:hover { color: var(--black); }
+    .cs-sidebar-links a.active {
+      color: var(--black); font-weight: 500;
+      border-left-color: var(--orange);
+    }
+
+    /* ── MAIN CONTENT ── */
+    .cs-main {
+      flex: 1;
+      padding: 48px 0 120px 48px;
+    }
+    .cs-content {
+      width: 100%;
+      max-width: 700px;
+    }
+
+    /* metadata */
+    .cs-meta {
+      font-size: 12px; color: var(--gray);
+      margin-bottom: 14px;
+      display: flex; align-items: center; gap: 8px;
+      letter-spacing: 0.02em;
+    }
+    .cs-meta span { color: var(--border); }
+
+    /* title */
+    .cs-title {
+      font-family: 'Lora', serif;
+      font-size: clamp(26px, 3vw, 40px);
+      font-weight: 500;
+      letter-spacing: -0.01em;
+      line-height: 1.2;
+      color: var(--black);
+      margin-bottom: 20px;
+    }
+
+    /* intro paragraph */
+    .cs-intro {
+      font-size: 16px;
+      line-height: 1.7;
+      color: #3D3D3D;
+      margin-bottom: 36px;
+    }
+
+    /* hero image */
+    .cs-hero-img {
+      width: 100%;
+      border-radius: 0;
+      overflow: hidden;
+      margin-bottom: 48px;
+      background: #F3F4F6;
+    }
+    .cs-hero-img img {
+      width: 100%; height: auto; display: block;
+    }
+
+    /* overview grid */
+    .cs-overview-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 32px;
+      padding: 36px 0 48px;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 72px;
+    }
+    .cs-overview-label {
+      font-size: 10px; font-weight: 600;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--gray);
+      margin-bottom: 10px;
+    }
+    .cs-overview-value {
+      font-size: 14px; color: var(--black);
+      line-height: 1.6;
+    }
+
+    /* sections */
+    .cs-section {
+      margin-bottom: 72px;
+    }
+    .cs-section-label {
+      font-size: 12px; font-weight: 400;
+      letter-spacing: 0.04em;
+      color: var(--gray);
+      margin-bottom: 12px;
+      display: block;
+    }
+    .cs-section h2 {
+      font-family: 'Lora', serif;
+      font-size: clamp(20px, 2.2vw, 26px);
+      font-weight: 500;
+      letter-spacing: -0.01em;
+      color: var(--black);
+      margin-bottom: 16px;
+      line-height: 1.25;
+    }
+    .cs-section p {
+      font-size: 15px;
+      line-height: 1.75;
+      color: #3D3D3D;
+      margin-bottom: 16px;
+    }
+    .cs-section p:last-child { margin-bottom: 0; }
+
+    /* image block */
+    .cs-img-block {
+      width: 100%;
+      border-radius: 12px;
+      overflow: hidden;
+      margin: 32px 0;
+      background: #F3F4F6;
+      aspect-ratio: 16/9;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .cs-img-block img { width: 100%; height: 100%; object-fit: cover; }
+    .cs-img-caption {
+      font-size: 12px; color: var(--gray);
+      margin-top: -20px; margin-bottom: 32px;
+      text-align: center;
+    }
+
+    /* ── FOOTER ── */
+    .site-footer {
+      background: #fff;
+      border-top: 1px solid var(--border);
+      padding: 80px 96px 56px;
+    }
+    .footer-inner { max-width: 1000px; margin: 0 auto; }
+    .footer-heading {
+      font-family: 'Lora', serif;
+      font-size: clamp(36px, 4.5vw, 64px);
+      font-weight: 500; letter-spacing: -0.04em;
+      line-height: 1.08; color: var(--black); margin-bottom: 10px;
+    }
+    .footer-sub {
+      font-size: 22px; font-weight: 400;
+      color: #3D3D3D; margin-top: 0; margin-bottom: 40px;
+    }
+    .footer-caret {
+      display: inline-block; color: var(--orange);
+      font-weight: 300; animation: caretBlink 0.8s step-end infinite; margin-left: 1px;
+    }
+    @keyframes caretBlink { 0%,100% { opacity: 1; } 50% { opacity: 0; } }
+    .footer-main {
+      display: flex; align-items: flex-start;
+      justify-content: space-between; gap: 40px; margin-bottom: 56px;
+    }
+    .footer-left { display: flex; flex-direction: column; }
+    .footer-links { display: flex; flex-direction: column; gap: 6px; }
+    .footer-link {
+      font-size: 14px; font-weight: 400; color: var(--gray);
+      text-decoration: none; transition: color 0.18s;
+    }
+    .footer-link:hover { color: var(--black); }
+    .footer-nav {
+      display: flex; flex-direction: column;
+      align-items: flex-end; gap: 8px; padding-top: 8px;
+    }
+    .footer-nav-link {
+      font-size: 13px; font-weight: 400; color: var(--gray);
+      text-decoration: none; transition: color 0.18s;
+    }
+    .footer-nav-link:hover { color: var(--black); }
+    .footer-bottom {
+      display: flex; align-items: center; justify-content: space-between;
+      border-top: 1px solid var(--border); padding-top: 24px;
+    }
+    .footer-copy { font-size: 12px; color: var(--gray); }
+
+    /* cursor glow */
+    #cursor-glow {
+      position: fixed; inset: 0; pointer-events: none; z-index: 2;
+      opacity: 0; transition: opacity 0.6s var(--ease);
+      background: radial-gradient(
+        640px circle at var(--mx, 50%) var(--my, 50%),
+        rgba(229,61,0,0.18) 0%, rgba(229,61,0,0.07) 40%, transparent 70%
+      );
+    }
+    #cursor-glow.active { opacity: 1; }
+  </style>
+</head>
+<body>
+
+  <div id="custom-cursor"></div>
+  <div id="cursor-glow"></div>
+
+  <nav>
+    <a class="nav-logo" href="diya-splash.html?skip"><img src="images/miffy.png" alt="miffy" style="width:22px;height:22px;object-fit:contain;display:block;">diya</a>
+    <ul class="nav-links">
+      <li><a href="diya-splash.html?skip" class="active">Work</a></li>
+      <li><a href="sandlot.html">Sandbox</a></li>
+      <li><a href="https://drive.google.com/file/d/1dbvKrqRNuBisy0lqk2uoBBgtkCQalHIH/view?usp=sharing" target="_blank">Resume</a></li>
+    </ul>
+  </nav>
+
+  <div class="cs-layout">
+
+    <!-- Sidebar -->
+    <aside class="cs-sidebar">
+      <p class="cs-sidebar-label">On this page</p>
+      <ul class="cs-sidebar-links">
+        <li><a href="#overview" class="active">Overview</a></li>
+        <li><a href="#problem">The Problem</a></li>
+        <li><a href="#role">Role & Constraints</a></li>
+        <li><a href="#research">Research</a></li>
+        <li><a href="#insight">The Insight</a></li>
+        <li><a href="#system">Three Pages</a></li>
+        <li><a href="#aa">A&A Hypotheses</a></li>
+        <li><a href="#fp">Forms & Petitions</a></li>
+        <li><a href="#ai">AI as a Design Tool</a></li>
+        <li><a href="#testing">Usability Testing</a></li>
+        <li><a href="#next">What's Next</a></li>
+      </ul>
+    </aside>
+
+    <!-- Main -->
+    <main class="cs-main">
+    <div class="cs-content">
+
+      <p class="cs-meta">
+        SIS Platform
+        <span>·</span>
+        Product Designer
+        <span>·</span>
+        2026
+      </p>
+
+      <h1 class="cs-title">Student Information System</h1>
+
+      <!-- Hero image — VFD Design 3 from Figma -->
+      <div class="cs-hero-img" id="overview">
+        <img src="images/vfd-design-3.png" alt="SIS Platform — VFD Design 3"/>
+      </div>
+
+      <!-- Intro -->
+      <p class="cs-intro">Placeholder — one-sentence hook describing what this project was and why it mattered.</p>
+
+      <!-- Overview grid -->
+      <div class="cs-overview-grid">
+        <div class="cs-overview-item">
+          <p class="cs-overview-label">Role</p>
+          <p class="cs-overview-value">Design Intern</p>
+        </div>
+        <div class="cs-overview-item">
+          <p class="cs-overview-label">Platform</p>
+          <p class="cs-overview-value">OmniUpdate (OB)</p>
+        </div>
+        <div class="cs-overview-item">
+          <p class="cs-overview-label">Scope</p>
+          <p class="cs-overview-value">3 pages<br>VFD · A&A · F&P</p>
+        </div>
+        <div class="cs-overview-item">
+          <p class="cs-overview-label">Skills</p>
+          <p class="cs-overview-value">UX Research<br>Information Architecture<br>Prototyping</p>
+        </div>
+      </div>
+
+      <!-- 1. The Problem -->
+      <div class="cs-section" id="problem">
+        <p class="cs-section-label">01 — The Problem</p>
+        <h2>Placeholder — hook + one stat</h2>
+        <p>Placeholder — what was broken for students? Lead with the hook, then anchor it with a single compelling stat.</p>
+      </div>
+
+      <!-- 2. Role & Constraints -->
+      <div class="cs-section" id="role">
+        <p class="cs-section-label">02 — Role & Constraints</p>
+        <h2>Intern. OmniUpdate. Three pages. Eight weeks.</h2>
+        <p>Placeholder — what was the scope of your work? What constraints shaped the design decisions you made?</p>
+      </div>
+
+      <!-- 3. Research -->
+      <div class="cs-section" id="research">
+        <p class="cs-section-label">03 — What the Research Told Me</p>
+        <h2>Four themes from an affinity map, GA4, and a live site audit</h2>
+        <p>Placeholder — walk through your research methods and what each one surfaced. What were the four themes?</p>
+        <div class="cs-img-block">
+          <div style="display:flex;align-items:center;justify-content:center;width:100%;height:100%;">
+            <p style="font-size:13px;color:var(--gray);">Affinity map / research artifacts</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4. The Insight -->
+      <div class="cs-section" id="insight">
+        <p class="cs-section-label">04 — The Insight That Changed My Direction</p>
+        <h2>Situation-first, not category-first</h2>
+        <p>Placeholder — describe the pivot moment. What did you learn that reframed how you approached the architecture?</p>
+      </div>
+
+      <!-- 5. Three Pages, One System -->
+      <div class="cs-section" id="system">
+        <p class="cs-section-label">05 — Three Pages, One System</p>
+        <h2>VFD, A&A, and F&P — built on a shared design language</h2>
+        <p>Placeholder — how did you create cohesion across three distinct pages? What patterns, components, or principles carried through?</p>
+        <div class="cs-img-block">
+          <div style="display:flex;align-items:center;justify-content:center;width:100%;height:100%;">
+            <p style="font-size:13px;color:var(--gray);">Design system / shared components</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 6. A&A Hypotheses -->
+      <div class="cs-section" id="aa">
+        <p class="cs-section-label">06 — Designing A&A: Testing Three Hypotheses</p>
+        <h2>Two concepts explored, one cut — and why</h2>
+        <p>Placeholder — walk through concepts 1 and 2. What were the hypotheses behind each? Why did Design 3 get cut?</p>
+        <div class="cs-img-block">
+          <div style="display:flex;align-items:center;justify-content:center;width:100%;height:100%;">
+            <p style="font-size:13px;color:var(--gray);">A&A concepts 1 & 2</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 7. Forms & Petitions -->
+      <div class="cs-section" id="fp">
+        <p class="cs-section-label">07 — Designing Forms & Petitions: A Bet on Search</p>
+        <h2>Two concepts, one rationale for leading with search</h2>
+        <p>Placeholder — describe the two concepts and the reasoning behind betting on search as the primary navigation pattern.</p>
+        <div class="cs-img-block">
+          <div style="display:flex;align-items:center;justify-content:center;width:100%;height:100%;">
+            <p style="font-size:13px;color:var(--gray);">F&P concepts</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 8. AI as a Design Tool -->
+      <div class="cs-section" id="ai">
+        <p class="cs-section-label">08 — How I Used AI as a Design Tool</p>
+        <h2>Placeholder — what role did AI play in your process?</h2>
+        <p>Placeholder — describe how you used AI in your design workflow. Was it for research synthesis, copy, ideation, prototyping? What worked and what didn't?</p>
+      </div>
+
+      <!-- 9. Usability Testing -->
+      <div class="cs-section" id="testing">
+        <p class="cs-section-label">09 — Usability Testing Plan</p>
+        <h2>What I'm watching for — and why</h2>
+        <p>Placeholder — what are you testing, with whom, and what specific behaviors or signals are you looking for? What would success look like?</p>
+      </div>
+
+      <!-- 10. What's Next -->
+      <div class="cs-section" id="next">
+        <p class="cs-section-label">10 — What I'd Do Next</p>
+        <h2>Placeholder — if you had more time</h2>
+        <p>Placeholder — what would you build, test, or revisit with another sprint? What open questions are still on the table?</p>
+      </div>
+
+    </div>
+    </main>
+  </div>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-main">
+        <div class="footer-left">
+          <h2 class="footer-heading">I'm glad we could<br><span style="color:var(--orange);font-family:'Inter',sans-serif;">cross paths</span></h2>
+          <p class="footer-sub">Let's get in touch and build something <span id="footer-word">together</span><span class="footer-caret">|</span></p>
+          <div class="footer-links">
+            <a class="footer-link" href="mailto:diyamahapatra@berkeley.edu">email</a>
+            <a class="footer-link" href="#">linkedIn</a>
+            <a class="footer-link" href="https://drive.google.com/file/d/1dbvKrqRNuBisy0lqk2uoBBgtkCQalHIH/view?usp=sharing" target="_blank">resume</a>
+          </div>
+        </div>
+        <div class="footer-nav">
+          <a class="footer-nav-link" href="diya-splash.html?skip">Work</a>
+          <a class="footer-nav-link" href="sandlot.html">Sandbox</a>
+          <a class="footer-nav-link" href="https://drive.google.com/file/d/1dbvKrqRNuBisy0lqk2uoBBgtkCQalHIH/view?usp=sharing" target="_blank">Resume</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p class="footer-copy">© 2026 Diya Mahapatra</p>
+        <p class="footer-copy">made with thai iced tea 🧋 · designed on Figma, coded with Claude Code</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    /* ── CUSTOM CURSOR ── */
+    const cursorEl = document.getElementById('custom-cursor');
+    let cx = -200, cy = -200, clx = cx, cly = cy;
+    document.addEventListener('mousemove', e => {
+      cx = e.clientX; cy = e.clientY;
+      cursorEl.style.opacity = '1';
+    });
+    (function cursorLoop() {
+      clx += (cx - clx) * 0.14;
+      cly += (cy - cly) * 0.14;
+      cursorEl.style.transform = `translate(${clx.toFixed(1)}px, ${cly.toFixed(1)}px) translate(-50%, -50%)`;
+      requestAnimationFrame(cursorLoop);
+    })();
+
+    /* ── SIDEBAR ACTIVE STATE ON SCROLL ── */
+    const sections = document.querySelectorAll('.cs-section, #overview');
+    const sidebarLinks = document.querySelectorAll('.cs-sidebar-links a');
+
+    const io = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          sidebarLinks.forEach(a => a.classList.remove('active'));
+          const active = document.querySelector(`.cs-sidebar-links a[href="#${entry.target.id}"]`);
+          if (active) active.classList.add('active');
+        }
+      });
+    }, { rootMargin: '-20% 0px -70% 0px' });
+
+    sections.forEach(s => io.observe(s));
+
+    /* ── CURSOR GLOW (footer only) ── */
+    const glowEl = document.getElementById('cursor-glow');
+    let overFooter = false;
+    let glowX = window.innerWidth / 2, glowY = window.innerHeight / 2;
+    let glowLx = glowX, glowLy = glowY;
+    document.addEventListener('mousemove', e => { glowX = e.clientX; glowY = e.clientY; });
+    (function glowLoop() {
+      glowLx += (glowX - glowLx) * 0.07;
+      glowLy += (glowY - glowLy) * 0.07;
+      glowEl.style.setProperty('--mx', glowLx.toFixed(1) + 'px');
+      glowEl.style.setProperty('--my', glowLy.toFixed(1) + 'px');
+      requestAnimationFrame(glowLoop);
+    })();
+    const footerEl = document.querySelector('.site-footer');
+    footerEl.addEventListener('mouseenter', () => { glowEl.classList.add('active'); });
+    footerEl.addEventListener('mouseleave', () => { glowEl.classList.remove('active'); });
+
+    /* ── FOOTER WORD CYCLER ── */
+    (function() {
+      const words = ['together', 'great', 'magical', 'inspiring'];
+      const el = document.getElementById('footer-word');
+      if (!el) return;
+      let wi = 0, charI = words[0].length, deleting = false;
+      const TYPE_SPEED = 80, DELETE_SPEED = 45, PAUSE_AFTER = 1800, PAUSE_BEFORE = 220;
+      function tick() {
+        const current = words[wi];
+        if (deleting) {
+          charI--;
+          el.textContent = current.slice(0, charI);
+          if (charI === 0) { deleting = false; wi = (wi + 1) % words.length; setTimeout(tick, PAUSE_BEFORE); return; }
+          setTimeout(tick, DELETE_SPEED);
+        } else {
+          charI++;
+          el.textContent = words[wi].slice(0, charI);
+          if (charI === words[wi].length) { setTimeout(() => { deleting = true; tick(); }, PAUSE_AFTER); return; }
+          setTimeout(tick, TYPE_SPEED);
+        }
+      }
+      setTimeout(() => { deleting = true; tick(); }, PAUSE_AFTER);
+    })();
+  </script>
+</body>
+</html>

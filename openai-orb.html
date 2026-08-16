@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Orb</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html, body {
+      width: 100%; height: 100%;
+      overflow: hidden;
+      /* warm fallback while canvas boots */
+      background: hsl(28, 85%, 55%);
+    }
+
+    canvas {
+      display: block;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw; height: 100vh;
+    }
+
+    .overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 10;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      pointer-events: none;
+      user-select: none;
+    }
+
+    .label {
+      font-family: 'Inter', system-ui, sans-serif;
+      font-size: 12px;
+      font-weight: 400;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.60);
+      margin-bottom: 16px;
+    }
+
+    .typewriter {
+      font-family: 'Inter', system-ui, sans-serif;
+      font-size: clamp(48px, 8vw, 96px);
+      font-weight: 600;
+      color: #ffffff;
+      letter-spacing: -0.028em;
+      line-height: 1;
+      display: flex;
+      align-items: center;
+    }
+
+    .caret {
+      display: inline-block;
+      width: 3px;
+      height: 0.78em;
+      background: #ffffff;
+      border-radius: 2px;
+      margin-left: 5px;
+      vertical-align: baseline;
+      position: relative;
+      top: 0.06em;
+      animation: blink 1.05s step-end infinite;
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50%       { opacity: 0; }
+    }
+  </style>
+</head>
+<body>
+
+  <canvas id="c"></canvas>
+
+  <div class="overlay">
+    <p class="label">built for</p>
+    <p class="typewriter">
+      <span id="typed"></span><span class="caret"></span>
+    </p>
+  </div>
+
+  <script>
+    const cvs = document.getElementById('c');
+    const ctx  = cvs.getContext('2d');
+
+    /* ── size canvas buffer to match display ── */
+    function resize() {
+      cvs.width  = window.innerWidth;
+      cvs.height = window.innerHeight;
+    }
+    resize();
+    window.addEventListener('resize', resize);
+
+    /* ── mouse ── */
+    let mx = cvs.width  / 2;
+    let my = cvs.height / 2;
+    let lx = mx, ly = my;
+    window.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
+
+    /* ─────────────────────────────────────────────────────────────
+       COLOUR ZONES
+       Each zone is a radial-gradient "puddle" of colour that slowly
+       drifts around its home position.  Five puddles overlapping on
+       a warm amber base reproduce the OpenAI × Hardware mesh look.
+
+       [base_x, base_y, amp_x, amp_y, freq_x, freq_y, phase, h, s, l]
+       positions are 0-1 fractions of the viewport.
+    ───────────────────────────────────────────────────────────── */
+    const ZONES = [
+      [0.12, 0.12, 0.10, 0.09, 0.27, 0.31, 0.00,  40, 98, 57], // golden amber  — top-left
+      [0.88, 0.09, 0.09, 0.10, 0.21, 0.29, 1.30, 258, 50, 72], // soft lavender — top-right
+      [0.50, 0.52, 0.11, 0.10, 0.38, 0.24, 2.50,  22, 80, 64], // warm peach    — centre
+      [0.10, 0.88, 0.10, 0.09, 0.30, 0.26, 3.80,  16, 85, 47], // deep coral    — btm-left
+      [0.84, 0.77, 0.10, 0.11, 0.25, 0.36, 5.00, 348, 68, 65], // rose-pink     — btm-right
+    ];
+
+    /* ─────────────────────────────────────────────────────────────
+       RENDER LOOP
+       No ctx.filter — just overlapping radial gradients with soft
+       alpha falloffs.  Five full-canvas fillRect passes create the
+       mesh.  The animated focal point gives each zone an organic
+       "breathing" quality even when the zone barely moves.
+    ───────────────────────────────────────────────────────────── */
+    let t = 0;
+
+    function render() {
+      const W = cvs.width;
+      const H = cvs.height;
+
+      /* smooth mouse lag */
+      lx += (mx - lx) * 0.04;
+      ly += (my - ly) * 0.04;
+      const mox = (lx / W - 0.5) * 0.06;
+      const moy = (ly / H - 0.5) * 0.05;
+
+      /* ── warm amber base ── */
+      ctx.fillStyle = 'hsl(30, 88%, 56%)';
+      ctx.fillRect(0, 0, W, H);
+
+      /* ── paint each colour zone ── */
+      const R = Math.max(W, H) * 0.88; // radius big enough to fill from corners
+
+      ZONES.forEach(([bx, by, ax, ay, fx, fy, ph, h, s, l]) => {
+        /* drifting centre */
+        const nx = bx + Math.sin(t * fx + ph)        * ax + mox;
+        const ny = by + Math.sin(t * fy + ph + 1.05) * ay + moy;
+        const cx = nx * W;
+        const cy = ny * H;
+
+        /* focal point orbits the centre — this is what makes it
+           feel alive rather than a static blob */
+        const fpx = cx + Math.cos(t * 0.20 + ph) * R * 0.12;
+        const fpy = cy + Math.sin(t * 0.15 + ph) * R * 0.09;
+
+        const g = ctx.createRadialGradient(fpx, fpy, 0, cx, cy, R);
+        g.addColorStop(0.00, `hsla(${h}, ${s}%, ${Math.min(l + 10, 88)}%, 0.90)`);
+        g.addColorStop(0.30, `hsla(${h}, ${s}%, ${l}%,                    0.75)`);
+        g.addColorStop(0.65, `hsla(${h}, ${s}%, ${Math.max(l -  8, 20)}%, 0.22)`);
+        g.addColorStop(1.00, `hsla(${h}, ${s}%, ${Math.max(l - 14, 15)}%, 0.00)`);
+
+        ctx.fillStyle = g;
+        ctx.fillRect(0, 0, W, H);
+      });
+
+      t += 0.004;
+      requestAnimationFrame(render);
+    }
+
+    render();
+
+    /* ─────────────────────────────────────────────────────────────
+       TYPEWRITER
+    ───────────────────────────────────────────────────────────── */
+    const WORDS        = ['the future', 'the detail', 'the human', 'the craft', 'the unknown'];
+    const SPEED_TYPE   = 105;
+    const SPEED_DELETE = 58;
+    const PAUSE_AFTER  = 1900;
+    const PAUSE_BEFORE = 360;
+
+    const typedEl = document.getElementById('typed');
+    let wi = 0, ci = 0, deleting = false;
+
+    function tick() {
+      const word = WORDS[wi];
+      deleting ? ci-- : ci++;
+      typedEl.textContent = word.slice(0, ci);
+
+      let delay = deleting ? SPEED_DELETE : SPEED_TYPE;
+      if (!deleting && ci === word.length) { delay = PAUSE_AFTER;  deleting = true;  }
+      else if (deleting && ci === 0)       { delay = PAUSE_BEFORE; deleting = false; wi = (wi + 1) % WORDS.length; }
+
+      setTimeout(tick, delay);
+    }
+
+    setTimeout(tick, 600);
+  </script>
+</body>
+</html>

@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Diya</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: #0d0d0d;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+    }
+
+    /* ── OUTER FRAME (dashed selection border + handle dots) ── */
+    .frame {
+      position: relative;
+      width: 480px;
+      height: 340px;
+      border: 2px dashed rgba(120, 90, 220, 0.85);
+      border-radius: 4px;
+    }
+
+    /* corner + midpoint handle dots */
+    .handle {
+      position: absolute;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #7B5FDC;
+      border: 2px solid #fff;
+      transform: translate(-50%, -50%);
+    }
+    .handle.tl  { top: 0;   left: 0;   }
+    .handle.tm  { top: 0;   left: 50%; }
+    .handle.tr  { top: 0;   left: 100%;}
+    .handle.ml  { top: 50%; left: 0;   }
+    .handle.mr  { top: 50%; left: 100%;}
+    .handle.bl  { top: 100%;left: 0;   }
+    .handle.bm  { top: 100%;left: 50%; }
+    .handle.br  { top: 100%;left: 100%;}
+
+    /* size label at bottom */
+    .size-label {
+      position: absolute;
+      bottom: -36px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #7B5FDC;
+      color: #fff;
+      font-family: 'Courier New', monospace;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 4px 14px;
+      border-radius: 20px;
+      white-space: nowrap;
+    }
+
+    /* ── LETTERS ROW ── */
+    .letters {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .letter {
+      height: 140px;
+      width: auto;
+      object-fit: contain;
+      filter: drop-shadow(0 8px 16px rgba(0,0,0,0.4));
+    }
+
+    /* staggered bounce — each letter different timing + phase */
+    #lD { animation: bounce 1.8s ease-in-out infinite 0s;    }
+    #lI { animation: bounce 2.0s ease-in-out infinite 0.3s;  }
+    #lY { animation: bounce 1.6s ease-in-out infinite 0.15s; }
+    #lA { animation: bounce 1.9s ease-in-out infinite 0.45s; }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0px)   rotate(-1deg); }
+      35%       { transform: translateY(-14px) rotate(1.5deg);  }
+      65%       { transform: translateY(-8px)  rotate(-0.5deg); }
+    }
+
+    /* ── PINK CURSOR ── */
+    .cursor {
+      position: absolute;
+      bottom: 10%;
+      right: 8%;
+      width: 38px;
+      height: 44px;
+      pointer-events: none;
+      filter: drop-shadow(0 2px 6px rgba(0,0,0,0.5));
+      animation: cursorAnim 3.2s ease-in-out infinite;
+    }
+
+    /* click ripple */
+    .ripple {
+      position: absolute;
+      bottom: 12%;
+      right: 10%;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      border: 2px solid #FF85B3;
+      pointer-events: none;
+      opacity: 0;
+      animation: ripple 3.2s ease-in-out infinite;
+    }
+
+    @keyframes cursorAnim {
+      0%   { transform: translate(0,     0)    scale(1);    }
+      18%  { transform: translate(-18px, -14px) scale(1);   }
+      28%  { transform: translate(-18px, -14px) scale(0.7); } /* click */
+      36%  { transform: translate(-18px, -14px) scale(1);   }
+      56%  { transform: translate(14px,   10px) scale(1);   }
+      66%  { transform: translate(14px,   10px) scale(0.7); } /* click */
+      74%  { transform: translate(14px,   10px) scale(1);   }
+      90%  { transform: translate(-4px,  -4px)  scale(1);   }
+      100% { transform: translate(0,      0)    scale(1);   }
+    }
+
+    @keyframes ripple {
+      28%  { opacity: 0;   transform: scale(0.6); }
+      36%  { opacity: 0.8; transform: scale(1);   }
+      46%  { opacity: 0;   transform: scale(2.2); }
+      66%  { opacity: 0;   transform: scale(0.6); }
+      74%  { opacity: 0.8; transform: scale(1);   }
+      84%  { opacity: 0;   transform: scale(2.2); }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="frame">
+    <!-- handle dots -->
+    <div class="handle tl"></div>
+    <div class="handle tm"></div>
+    <div class="handle tr"></div>
+    <div class="handle ml"></div>
+    <div class="handle mr"></div>
+    <div class="handle bl"></div>
+    <div class="handle bm"></div>
+    <div class="handle br"></div>
+
+    <span class="size-label">500 × 20</span>
+
+    <!-- letters -->
+    <div class="letters">
+      <img id="lD" class="letter" src="file:///Users/diyamahapatra/Downloads/a_3d_render_of_the_letter_d_light_purple_color_textured_like_high_quality_craft-removebg-preview.png" alt="D" />
+      <img id="lI" class="letter" src="file:///Users/diyamahapatra/Downloads/a_3d_render_of_the_letter_i_with_the_exact_same_dark_blue_gritty_and_tactile-removebg-preview.png" alt="I" />
+      <img id="lY" class="letter" src="file:///Users/diyamahapatra/Downloads/a_high_quality_3d_render_of_the_letter_y._the_style_should_be_modern_and_clean-removebg-preview.png" alt="Y" />
+      <img id="lA" class="letter" src="file:///Users/diyamahapatra/Downloads/a_high_quality_3d_render_of_the_letter_a._the_letter_is_wrapped_in_a_dark_blue-removebg-preview.png" alt="A" />
+    </div>
+
+    <!-- pink cursor + ripple -->
+    <div class="ripple"></div>
+    <svg class="cursor" viewBox="0 0 22 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M2,1 L2,20 L6,15 L9.5,23.5 L12.5,22.2 L9,13.5 L15,11.5 Z"
+            fill="#FF85B3" stroke="white" stroke-width="1" stroke-linejoin="round"/>
+    </svg>
+  </div>
+
+</body>
+</html>
