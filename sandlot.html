@@ -11,7 +11,7 @@
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
     :root {
-      --orange: #E53D00;
+      --orange: #8B5CF6;
       --black:  #0F0F0F;
       --gray:   #6B7280;
       --border: #E5E7EB;
@@ -19,21 +19,41 @@
     }
 
     html, body {
-      width: 100%;
+      width: 100%; height: 100%;
       font-family: 'Inter', system-ui, sans-serif;
       -webkit-font-smoothing: antialiased;
       background: #fff;
       color: var(--black);
+      overflow: hidden;               /* the canvas pans; the page itself never scrolls */
+      overscroll-behavior: none;
     }
 
-    /* ── CUSTOM CURSOR ── */
+    /* ── CUSTOM CURSOR ──
+       Idle it's an open ring; on mouse-down it contracts into a filled dot,
+       which reads as "gripping" the canvas. */
     body, body * { cursor: none; }
     #custom-cursor {
       position: fixed; pointer-events: none; z-index: 9999;
       left: 0; top: 0; width: 28px; height: 28px;
-      border-radius: 50%; border: 1.5px solid var(--orange);
+      border-radius: 50%;
+      border: 1.5px solid var(--orange);
+      background: transparent;
       opacity: 0; will-change: transform;
-      transition: width 0.38s var(--ease), height 0.38s var(--ease), border-radius 0.38s var(--ease);
+      transition: width 0.26s var(--ease), height 0.26s var(--ease),
+                  border-width 0.26s var(--ease), background 0.22s var(--ease),
+                  box-shadow 0.26s var(--ease);
+    }
+    /* hovering the canvas: ring thickens slightly — "this is grabbable" */
+    #custom-cursor.over-canvas {
+      border-width: 2.5px;
+      box-shadow: 0 0 0 4px rgba(139,92,246,0.10);
+    }
+    /* actively dragging: collapse to a filled dot with a soft halo */
+    #custom-cursor.grabbing {
+      width: 12px; height: 12px;
+      border-width: 2px;
+      background: var(--orange);
+      box-shadow: 0 0 0 7px rgba(139,92,246,0.16);
     }
 
     /* ── NAV ── */
@@ -59,35 +79,49 @@
     .nav-links a:hover { color: var(--black); }
     .nav-links a.active { color: var(--black); font-weight: 500; }
 
-    /* ── PAGE ── */
-    .page {
-      min-height: 100vh;
-      padding: 120px 60px 80px;
+    /* ── VIEWPORT: the fixed window you look through ── */
+    .canvas-viewport {
+      position: fixed; inset: 0;
+      overflow: hidden;
+      touch-action: none;             /* we handle panning ourselves via pointer events */
       opacity: 0;
       animation: fadeIn 0.6s var(--ease) 0.1s forwards;
     }
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(12px); }
-      to   { opacity: 1; transform: translateY(0); }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+    /* faint grid so motion is legible even over empty space */
+    .canvas-grid {
+      position: absolute; inset: -50%;
+      background-image:
+        linear-gradient(to right,  rgba(15,15,15,0.045) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(15,15,15,0.045) 1px, transparent 1px);
+      background-size: 64px 64px;
+      pointer-events: none;
+      will-change: transform;
     }
 
-    .sandlot-eyebrow {
-      font-size: 11px; font-weight: 600;
-      letter-spacing: 0.14em; text-transform: uppercase;
-      color: var(--gray); margin-bottom: 80px;
-      display: block; text-align: center;
+    /* ── PLANE: holds the repeating tiles ── */
+    .canvas-plane {
+      position: absolute; top: 0; left: 0;
+      will-change: transform;
+    }
+    /* One tile = one full copy of the collection. The plane is filled with a
+       grid of these and the offset wraps, so the canvas never runs out. */
+    .tile {
+      position: absolute; top: 0; left: 0;
+      will-change: transform;
+    }
+    /* Shifted at runtime so the artwork's own bounding box starts at the tile
+       origin — without it the empty margin baked into each item's coordinates
+       would be added to the gap between every repeat. */
+    .tile-inner {
+      position: absolute; top: 0; left: 0;
+      will-change: transform;
     }
 
-    /* ── SCATTERED COLLAGE ── */
-    .sandbox-collage {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 36px;
-      padding: 0 0 80px;
-      align-items: start;
-    }
-
+    /* ── ITEMS scattered in 2D space ── */
     .img-item {
+      position: absolute;
       display: flex;
       flex-direction: column;
       align-items: flex-start;
@@ -95,38 +129,34 @@
       transition: transform 0.55s var(--ease);
     }
 
-    /* stagger each column vertically for the scattered feel */
-    .img-item-diya      { margin-top: 60px;  transform: rotate(-5deg); }
-    .img-item-gradient  { margin-top: 0px;   transform: rotate(0deg); }
-    .img-item-article   { margin-top: 100px; transform: rotate(0deg); }
-    .img-item-resonance { margin-top: 30px;  transform: rotate(0deg); }
+    /* x / y / rotation for each piece across the tile */
+    .img-item-draw      { left: 150px;  top: 350px;  width: 300px; transform: rotate(3deg); }
+    .img-item-diya      { left: 700px;  top: 250px;  width: 320px; transform: rotate(-5deg); }
+    .img-item-article   { left: 1290px; top: 320px;  width: 290px; transform: rotate(-2deg); }
+    .img-item-gradient  { left: 310px;  top: 890px;  width: 300px; transform: rotate(2deg); }
+    .img-item-resonance { left: 890px;  top: 930px;  width: 260px; transform: rotate(3deg); }
+    .img-item-foundtype { left: 1430px; top: 870px;  width: 240px; transform: rotate(4deg); }
 
+    .img-item-draw:hover      { transform: rotate(-2deg) scale(1.04); }
     .img-item-diya:hover      { transform: rotate(3deg)  scale(1.04); }
     .img-item-gradient:hover  { transform: rotate(-4deg) scale(1.04); }
     .img-item-article:hover   { transform: rotate(-3deg) scale(1.04); }
     .img-item-resonance:hover { transform: rotate(-4deg) scale(1.04); }
+    .img-item-foundtype:hover { transform: rotate(-2deg) scale(1.04); }
 
-    .img-item:active { transform: scale(1.07); transition-duration: 0.18s; }
+    /* while panning, suppress hover transitions so nothing fights the drag */
+    .is-panning .img-item { transition: none; }
+    .is-panning .img-item:hover { transform: none; }
+    .is-panning .img-item-draw:hover      { transform: rotate(3deg); }
+    .is-panning .img-item-diya:hover      { transform: rotate(-5deg); }
+    .is-panning .img-item-gradient:hover  { transform: rotate(2deg); }
+    .is-panning .img-item-article:hover   { transform: rotate(-2deg); }
+    .is-panning .img-item-resonance:hover { transform: rotate(3deg); }
+    .is-panning .img-item-foundtype:hover { transform: rotate(4deg); }
 
-    .img-item img { display: block; width: 100%; }
-    .img-item-diya      { max-width: 320px; }
-    .img-item-gradient  { max-width: 300px; }
-    .img-item-article   { max-width: 290px; }
-    .img-item-resonance { max-width: 260px; }
-
-    /* ── P5 SKETCH ── */
-    .sketch-item {
-      margin-top: 80px;
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-    }
-    .sketch-item iframe {
-      border: none;
-      border-radius: 12px;
-      display: block;
-      width: 480px;
-      height: 480px;
+    .img-item img {
+      display: block; width: 100%;
+      -webkit-user-drag: none; user-select: none;
     }
 
     .img-label {
@@ -144,6 +174,63 @@
       max-width: 200px;
       line-height: 1.5;
     }
+
+    /* ── ONBOARDING CUE ──
+       A screenshot of this page looks like a normal scrolling page, so the
+       drag affordance has to be taught explicitly on arrival. */
+    .drag-hint {
+      position: fixed; left: 50%; bottom: 40px; z-index: 12;
+      display: flex; align-items: center; gap: 10px;
+      padding: 11px 20px 11px 16px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.90);
+      border: 1px solid var(--border);
+      box-shadow: 0 6px 28px rgba(15,15,15,0.10);
+      backdrop-filter: blur(14px);
+      font-size: 11.5px; font-weight: 500;
+      letter-spacing: 0.07em; text-transform: uppercase;
+      color: var(--black);
+      pointer-events: none;
+      white-space: nowrap;
+      transform: translateX(-50%);
+      opacity: 0;
+      animation: hintIn 0.7s var(--ease) 0.9s forwards;
+      transition: opacity 0.45s var(--ease), transform 0.45s var(--ease);
+    }
+    @keyframes hintIn {
+      from { opacity: 0; transform: translateX(-50%) translateY(10px); }
+      to   { opacity: 1; transform: translateX(-50%) translateY(0); }
+    }
+    /* once you've dragged, it leaves and does not come back this visit */
+    .drag-hint.hide {
+      opacity: 0 !important;
+      transform: translateX(-50%) translateY(8px) !important;
+    }
+
+    /* the little hand slides back and forth, miming the gesture */
+    .hint-hand {
+      display: block; width: 17px; height: 17px;
+      color: var(--orange);
+      animation: handSwipe 2.6s var(--ease) infinite;
+    }
+    .hint-hand svg { display: block; width: 100%; height: 100%; }
+    @keyframes handSwipe {
+      0%, 100% { transform: translateX(-4px); }
+      50%      { transform: translateX(5px); }
+    }
+    .hint-arrow {
+      color: var(--orange); font-size: 13px;
+      animation: arrowDrift 2.6s var(--ease) infinite;
+    }
+    @keyframes arrowDrift {
+      0%, 100% { transform: translate(0, 0); opacity: 0.75; }
+      50%      { transform: translate(3px, -3px); opacity: 1; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .img-item, #custom-cursor { transition: none; }
+      .hint-hand, .hint-arrow, .drag-hint { animation: none; opacity: 1; }
+    }
   </style>
 </head>
 <body>
@@ -151,68 +238,290 @@
   <div id="custom-cursor"></div>
 
   <nav>
-    <a class="nav-logo" href="diya-splash.html?skip"><img src="images/miffy.png" alt="miffy" style="width:22px;height:22px;object-fit:contain;display:block;">diya</a>
+    <a class="nav-logo" href="diya-splash.html?skip"><img src="images/purpmiffy.png" alt="miffy" style="width:22px;height:22px;object-fit:contain;display:block;">diya</a>
     <ul class="nav-links">
       <li><a href="diya-splash.html?skip">Work</a></li>
       <li><a href="sandlot.html" class="active">Sandbox</a></li>
-      <li><a href="https://drive.google.com/file/d/1dbvKrqRNuBisy0lqk2uoBBgtkCQalHIH/view?usp=sharing" target="_blank">Resume</a></li>
+      <li><a href="Diyas_Resume.pdf" target="_blank">Resume</a></li>
     </ul>
   </nav>
 
-  <div class="page">
-    <p class="sandlot-eyebrow">Sandbox</p>
+  <div class="canvas-viewport" id="viewport">
+    <div class="canvas-grid" id="grid"></div>
 
-    <div class="sandbox-collage">
+    <div class="canvas-plane" id="plane">
+      <div class="tile" id="tile">
+       <div class="tile-inner" id="tileInner">
 
-      <div class="img-item img-item-diya">
-        <img src="images/diyawidget.png" alt="Diya widget" draggable="false"/>
-        <span class="img-label">Diya Widget</span>
-        <span class="img-desc">A personal iOS widget concept</span>
+        <div class="img-item img-item-draw">
+          <img src="images/draw.png" alt="Digital painting of a kitchen scene" draggable="false"/>
+          <span class="img-label">Digital Art</span>
+          <span class="img-desc">Painting exploration on Procreate</span>
+        </div>
+
+        <div class="img-item img-item-diya">
+          <img src="images/diyawidget.png" alt="Personal iOS widget concept" draggable="false"/>
+          <span class="img-label">3D / Graphic Design</span>
+          <span class="img-desc">Personal iOS widget concept</span>
+        </div>
+
+        <div class="img-item img-item-article">
+          <img src="images/article.png" alt="Personal profile interface" draggable="false"/>
+          <span class="img-label">UI Exploration</span>
+          <span class="img-desc">Personal profile built with Claude</span>
+        </div>
+
+        <div class="img-item img-item-gradient">
+          <img src="images/gradient.png" alt="Gradient study" draggable="false"/>
+          <span class="img-label">Visual Study</span>
+          <span class="img-desc">Gradient exploration in Photoshop</span>
+        </div>
+
+        <div class="img-item img-item-resonance">
+          <img src="images/resonance.png" alt="Resonance energy drink" draggable="false"/>
+          <span class="img-label">Branding</span>
+          <span class="img-desc">Resonance energy drink concept</span>
+        </div>
+
+        <div class="img-item img-item-foundtype">
+          <img src="images/foundtype.png" alt="Experimental letterforms" draggable="false"/>
+          <span class="img-label">Typography</span>
+          <span class="img-desc">Experimental letterforms</span>
+        </div>
+
+       </div>
       </div>
-
-      <div class="img-item img-item-gradient">
-        <img src="images/gradient.png" alt="Gradient" draggable="false"/>
-        <span class="img-label">Gradient</span>
-        <span class="img-desc">Made on Adobe Photoshop</span>
-      </div>
-
-      <div class="img-item img-item-article">
-        <img src="images/article.png" alt="Article" draggable="false"/>
-        <span class="img-label">Article</span>
-        <span class="img-desc">UI exploration</span>
-      </div>
-
-      <div class="img-item img-item-resonance">
-        <img src="images/resonance.png" alt="Resonance" draggable="false"/>
-        <span class="img-label">Resonance</span>
-        <span class="img-desc">Energy drink branding concept</span>
-      </div>
-
     </div>
+  </div>
 
-    <div class="sketch-item">
-      <iframe src="https://editor.p5js.org/diyamahapatra/full/qwQsS791d" allowfullscreen></iframe>
-      <span class="img-label">p5.js sketch</span>
-      <span class="img-desc">Made with p5.js</span>
-    </div>
-
+  <div class="drag-hint" id="dragHint">
+    <span class="hint-hand" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M9 11V6.5a1.5 1.5 0 0 1 3 0V11"/>
+        <path d="M12 11V5.5a1.5 1.5 0 0 1 3 0V11"/>
+        <path d="M15 11.5V8a1.5 1.5 0 0 1 3 0v6.5a6 6 0 0 1-6 6h-1.2a5 5 0 0 1-3.9-1.9L5 15.5a1.5 1.5 0 0 1 2.4-1.8L9 15.5V8"/>
+      </svg>
+    </span>
+    Drag to explore
+    <span class="hint-arrow" aria-hidden="true">↗</span>
   </div>
 
   <script>
+    /* ── custom cursor ── */
     const cursorEl = document.getElementById('custom-cursor');
-    let cx = -200, cy = -200, clx = cx, cly = cy;
-
     document.addEventListener('mousemove', e => {
-      cx = e.clientX; cy = e.clientY;
+      cursorEl.style.transform = `translate(${e.clientX}px, ${e.clientY}px) translate(-50%, -50%)`;
       cursorEl.style.opacity = '1';
     });
 
-    (function cursorLoop() {
-      clx += (cx - clx) * 0.14;
-      cly += (cy - cly) * 0.14;
-      cursorEl.style.transform = `translate(${clx.toFixed(1)}px, ${cly.toFixed(1)}px) translate(-50%, -50%)`;
-      requestAnimationFrame(cursorLoop);
-    })();
+    /* ── infinite pannable canvas ──
+       The plane is tiled with copies of the collection and the translation is
+       wrapped by the tile size, so dragging any direction forever just brings
+       the work back around instead of hitting an edge. */
+    const viewport = document.getElementById('viewport');
+    const plane    = document.getElementById('plane');
+    const tile      = document.getElementById('tile');
+    const tileInner = document.getElementById('tileInner');
+    const grid     = document.getElementById('grid');
+    const hint     = document.getElementById('dragHint');
+
+    const GAP       = 110;    // breathing room between one copy and the next
+    const DRAG_RATE = 0.42;   // canvas travel per pixel of pointer movement
+    const EASE      = 0.075;  // how quickly the canvas catches up to your hand;
+                              // lower = heavier, more gliding, more "smooth scroll"
+    const FRICTION  = 0.94;   // how fast momentum decays
+    const MIN_V     = 0.05;   // velocity below which momentum stops
+    const HINT_KEY  = 'sandbox-drag-hint-seen';
+
+    let TILE_W = 0, TILE_H = 0;
+    /* The canvas never jumps straight to where you dragged. Input moves a
+       target, and the rendered position eases toward it every frame — that lag
+       is what gives the pan weight instead of feeling stuck to the cursor. */
+    let x = 0, y = 0;         // rendered position; render() wraps it
+    let tx = 0, ty = 0;       // target position that input actually moves
+    let vx = 0, vy = 0;
+    let dragging = false, moved = false;
+    let lastX = 0, lastY = 0, pointerId = null;
+    let raf = null, nudgeRaf = null;
+
+    /* Tile size comes from the artwork's own bounding box, so adding a piece
+       later needs no hand-tuned constants and never leaves a seam. The inner
+       layer is pulled back by the box's top-left corner, which is what keeps
+       the repeats tight instead of inheriting each item's leading margin. */
+    function measure() {
+      let minL = Infinity, minT = Infinity, maxR = -Infinity, maxB = -Infinity;
+      tileInner.querySelectorAll('.img-item').forEach(el => {
+        minL = Math.min(minL, el.offsetLeft);
+        minT = Math.min(minT, el.offsetTop);
+        maxR = Math.max(maxR, el.offsetLeft + el.offsetWidth);
+        maxB = Math.max(maxB, el.offsetTop  + el.offsetHeight);
+      });
+      tileInner.style.transform = `translate(${-minL}px, ${-minT}px)`;
+      TILE_W = (maxR - minL) + GAP;
+      TILE_H = (maxB - minT) + GAP;
+      tile.style.width  = TILE_W + 'px';
+      tile.style.height = TILE_H + 'px';
+    }
+
+    /* Lay down enough copies to cover the window plus one tile of slack in
+       each direction — that slack is what the wrapped offset moves through. */
+    function buildTiles() {
+      plane.querySelectorAll('.tile.clone').forEach(n => n.remove());
+      const cols = Math.ceil(window.innerWidth  / TILE_W) + 1;
+      const rows = Math.ceil(window.innerHeight / TILE_H) + 1;
+      for (let i = 0; i <= cols; i++) {
+        for (let j = 0; j <= rows; j++) {
+          if (i === 0 && j === 0) continue;          // the original tile
+          const c = tile.cloneNode(true);
+          c.classList.add('clone');
+          c.removeAttribute('id');
+          c.setAttribute('aria-hidden', 'true');     // duplicates aren't read out
+          c.style.transform = `translate3d(${i * TILE_W}px, ${j * TILE_H}px, 0)`;
+          plane.appendChild(c);
+        }
+      }
+    }
+
+    function render() {
+      /* wrap into [-TILE, 0) so there is always a copy covering the window */
+      const wx = ((x % TILE_W) + TILE_W) % TILE_W - TILE_W;
+      const wy = ((y % TILE_H) + TILE_H) % TILE_H - TILE_H;
+      plane.style.transform = `translate3d(${wx}px, ${wy}px, 0)`;
+      grid.style.transform  = `translate3d(${x % 64}px, ${y % 64}px, 0)`;
+    }
+
+    /* The artwork now sits flush against the tile origin, so open on a small
+       offset — otherwise the first piece starts tucked under the nav and the
+       pinned heading. Only applied once, so a resize never yanks you back. */
+    let placed = false;
+    function layout() {
+      measure(); buildTiles();
+      if (!placed) { x = tx = 130; y = ty = 250; placed = true; }
+      render();
+    }
+    layout();
+    window.addEventListener('load', layout);   // images settle the tile height
+    window.addEventListener('resize', layout);
+
+    function dismissHint() {
+      if (hint.classList.contains('hide')) return;
+      hint.classList.add('hide');
+      try { sessionStorage.setItem(HINT_KEY, '1'); } catch (e) {}
+      if (nudgeRaf) { cancelAnimationFrame(nudgeRaf); nudgeRaf = null; }
+    }
+    /* already taught this visit? then never show it again */
+    try {
+      if (sessionStorage.getItem(HINT_KEY)) {
+        hint.style.animation = 'none';
+        hint.classList.add('hide');
+      }
+    } catch (e) {}
+
+    /* A one-shot drift on arrival: the canvas itself eases a little to the
+       left and settles back, so the page visibly *moves* before you touch it.
+       Any real input cancels it immediately. */
+    function nudge() {
+      if (hint.classList.contains('hide')) return;
+      const AMP = 52, DUR = 1800, t0 = performance.now();
+      const startX = tx;
+      const step = now => {
+        const p = Math.min((now - t0) / DUR, 1);
+        const eased = Math.sin(p * Math.PI);               // out and back
+        tx = startX - AMP * eased;                         // drive the target,
+        startLoop();                                       // let the ease smooth it
+        if (p < 1 && !dragging) nudgeRaf = requestAnimationFrame(step);
+        else nudgeRaf = null;
+      };
+      nudgeRaf = requestAnimationFrame(step);
+    }
+    setTimeout(nudge, 1700);
+
+    /* One loop drives everything: momentum feeds the target, the rendered
+       position eases toward it, and it parks itself once both have settled. */
+    function tick() {
+      if (!dragging) {
+        vx *= FRICTION; vy *= FRICTION;
+        if (Math.abs(vx) < MIN_V) vx = 0;
+        if (Math.abs(vy) < MIN_V) vy = 0;
+        tx += vx; ty += vy;
+      }
+      x += (tx - x) * EASE;
+      y += (ty - y) * EASE;
+      render();
+
+      const settled = !dragging && vx === 0 && vy === 0 &&
+                      Math.abs(tx - x) < 0.1 && Math.abs(ty - y) < 0.1;
+      if (settled) { x = tx; y = ty; render(); raf = null; }
+      else raf = requestAnimationFrame(tick);
+    }
+    function startLoop() { if (!raf) raf = requestAnimationFrame(tick); }
+
+    viewport.addEventListener('pointerenter', () => cursorEl.classList.add('over-canvas'));
+    viewport.addEventListener('pointerleave', () => cursorEl.classList.remove('over-canvas'));
+
+    viewport.addEventListener('pointerdown', e => {
+      if (e.button !== 0) return;
+      dragging = true; moved = false;
+      pointerId = e.pointerId;
+      lastX = e.clientX; lastY = e.clientY;
+      vx = vy = 0;
+      if (raf) { cancelAnimationFrame(raf); raf = null; }
+      if (nudgeRaf) { cancelAnimationFrame(nudgeRaf); nudgeRaf = null; }
+      /* Paint the grab state before capturing: setPointerCapture can throw for
+         a pointer the browser no longer considers active, and if it does the
+         cursor must not be left stuck in its open-ring state. */
+      document.body.classList.add('is-panning');
+      cursorEl.classList.add('grabbing');
+      try { viewport.setPointerCapture(pointerId); } catch (err) {}
+    });
+
+    viewport.addEventListener('pointermove', e => {
+      if (!dragging) return;
+      const dx = (e.clientX - lastX) * DRAG_RATE, dy = (e.clientY - lastY) * DRAG_RATE;
+      if (Math.abs(dx) + Math.abs(dy) > 3) moved = true;
+      tx += dx; ty += dy;
+      vx = dx; vy = dy;
+      lastX = e.clientX; lastY = e.clientY;
+      startLoop();
+      if (moved) dismissHint();
+    });
+
+    function endDrag() {
+      if (!dragging) return;
+      dragging = false;
+      try {
+        if (pointerId !== null && viewport.hasPointerCapture(pointerId)) {
+          viewport.releasePointerCapture(pointerId);
+        }
+      } catch (err) {}
+      pointerId = null;
+      document.body.classList.remove('is-panning');
+      cursorEl.classList.remove('grabbing');
+      startLoop();
+    }
+    viewport.addEventListener('pointerup', endDrag);
+    viewport.addEventListener('pointercancel', endDrag);
+
+    /* trackpad / wheel also pans, in both axes */
+    viewport.addEventListener('wheel', e => {
+      e.preventDefault();
+      tx -= e.deltaX; ty -= e.deltaY;
+      vx = vy = 0;
+      startLoop();
+      dismissHint();
+    }, { passive: false });
+
+    /* arrow keys, for keyboard reachability */
+    window.addEventListener('keydown', e => {
+      const step = e.shiftKey ? 240 : 90;
+      const map = { ArrowLeft:[step,0], ArrowRight:[-step,0], ArrowUp:[0,step], ArrowDown:[0,-step] };
+      const d = map[e.key];
+      if (!d) return;
+      e.preventDefault();
+      tx += d[0]; ty += d[1];
+      startLoop();
+      dismissHint();
+    });
   </script>
 </body>
 </html>

@@ -11,7 +11,7 @@
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
     :root {
-      --orange: #E53D00;
+      --orange: #8B5CF6;
       --black:  #0F0F0F;
       --gray:   #6B7280;
       --border: #E5E7EB;
@@ -32,7 +32,8 @@
       position: fixed;
       inset: 0;
       z-index: 100;
-      background: hsl(30, 88%, 56%);
+      /* same diagonal as the Flourish AI card (.thumb-1) */
+      background: linear-gradient(135deg, #BCD8D8 0%, #C0C8E8 52%, #EDE0D4 100%);
       --cx: 50%; --cy: 50%;
     }
 
@@ -62,12 +63,19 @@
     .splash-label {
       font-size: 11.5px; font-weight: 400;
       letter-spacing: 0.22em; text-transform: uppercase;
-      color: rgba(255,255,255,0.60);
+      /* dark ink: the Flourish pastels are far too light to carry white type */
+      color: rgba(255,255,255,0.88);
+      text-shadow: 0 1px 3px rgba(24,40,52,0.36), 0 2px 12px rgba(24,40,52,0.30);
       margin-bottom: 16px;
     }
     .splash-typing {
       font-size: clamp(44px, 7.5vw, 90px);
       font-weight: 600; color: #fff;
+      /* white on these pastels is only ~1.3:1 on its own — the shadow is what
+         actually separates the letterforms from the background */
+      text-shadow: 0 1px 2px rgba(24,40,52,0.28),
+                   0 2px 10px rgba(24,40,52,0.30),
+                   0 6px 34px rgba(24,40,52,0.26);
       letter-spacing: -0.028em; line-height: 1;
       display: flex; align-items: center;
     }
@@ -75,6 +83,7 @@
       display: inline-block;
       width: 3px; height: 0.76em;
       background: #fff; border-radius: 2px;
+      box-shadow: 0 1px 8px rgba(24,40,52,0.30);
       margin-left: 4px; position: relative; top: 0.05em;
       animation: blink 1.05s step-end infinite;
     }
@@ -102,26 +111,6 @@
       opacity: 0;
     }
     #portfolio.visible { opacity: 1; }
-
-    /* subtle ambient warm glow that breathes */
-    #portfolio::before {
-      content: '';
-      position: fixed;
-      top: -15vh; right: -8vw;
-      width: 55vw; height: 55vh;
-      background: radial-gradient(ellipse at 55% 45%,
-        rgba(217, 92, 58, 0.042) 0%,
-        rgba(217, 92, 58, 0.012) 40%,
-        transparent 70%);
-      pointer-events: none;
-      animation: ambientDrift 24s ease-in-out infinite;
-      z-index: 0;
-    }
-    @keyframes ambientDrift {
-      0%, 100% { transform: translate(0, 0)           scale(1);    }
-      35%       { transform: translate(-2vw, 3vh)      scale(1.06); }
-      68%       { transform: translate(2vw, -1.5vh)    scale(0.96); }
-    }
 
     /* ── NAV ── */
     nav {
@@ -153,10 +142,10 @@
 
     /* ── HERO ── */
     .hero {
-      padding: 10vh 96px 6vh;
-      max-width: 1100px; margin: 0 auto;
+      padding: 10vh 64px 6vh;
+      max-width: 1080px; margin: 0 auto;
       display: flex; flex-direction: row;
-      align-items: flex-end;
+      align-items: center;
       justify-content: space-between;
       text-align: left;
       gap: 40px;
@@ -166,8 +155,8 @@
       height: clamp(130px, 15vw, 200px);
       width: auto;
       display: block;
-      align-self: flex-end;
-      margin-bottom: 160px;
+      align-self: center;
+      margin-bottom: 0;
       opacity: 0; transform: translateY(20px);
       transition: opacity .9s var(--ease) .8s, transform .9s var(--ease) .8s;
       animation: miffyFloat 4s ease-in-out infinite;
@@ -242,15 +231,9 @@
       0%, 100% { opacity: 1; transform: scale(1); }
       50%       { opacity: 0.4; transform: scale(0.75); }
     }
-    .hero-label {
-      font-size: 18px; color: var(--gray);
-      margin-bottom: 24px; font-weight: 400;
-      opacity: 0; transform: translateY(8px);
-      transition: opacity .7s var(--ease), transform .7s var(--ease);
-    }
     .hero-heading {
-      font-size: clamp(48px, 6.5vw, 88px);
-      line-height: 1.06; letter-spacing: -0.02em;
+      font-size: clamp(30px, 3.6vw, 46px);
+      line-height: 1.18; letter-spacing: -0.02em;
       font-weight: 500; margin-bottom: 0;
       display: flex; flex-direction: column; gap: 0;
     }
@@ -316,7 +299,6 @@
     @keyframes hintBounce { 0%,100%{transform:translateY(0)} 50%{transform:translateY(5px)} }
 
     /* stagger all hero children in once .visible is added */
-    #portfolio.visible .hero-label,
     #portfolio.visible .hero-sub,
     #portfolio.visible .credentials,
     #portfolio.visible .hero-scroll-hint {
@@ -327,23 +309,6 @@
       opacity: 1;
       transform: translateY(0);
     }
-
-    /* ── CURSOR GLOW ── */
-    #cursor-glow {
-      position: fixed;
-      inset: 0;
-      pointer-events: none;
-      z-index: 2;
-      opacity: 0;
-      transition: opacity 0.6s var(--ease);
-      background: radial-gradient(
-        640px circle at var(--mx, 50%) var(--my, 50%),
-        rgba(229, 61, 0, 0.18) 0%,
-        rgba(229, 61, 0, 0.07) 40%,
-        transparent 70%
-      );
-    }
-    #cursor-glow.active { opacity: 1; }
 
     /* ── CUSTOM CURSOR ── */
     body, body * { cursor: none; }
@@ -854,6 +819,204 @@
     @keyframes lgPf2 { from { transform: translateY(-3px); } to { transform: translateY(3px);  } }
     @keyframes lgPf3 { from { transform: translateY(0);  } to { transform: translateY(-5px); } }
 
+    /* ── THUMB BIT — Berkeley IT advising router ── */
+    .thumb-bit {
+      background: #EDF2F8;
+      position: relative; overflow: hidden;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .bit-bg { position: absolute; inset: -25%; z-index: 0; }
+    .bit-blob { position: absolute; border-radius: 50%; will-change: transform; }
+    .bit-blob-1 { width: 62%; height: 62%; background: #B9CFE9; top: -6%;  left: -8%;  filter: blur(44px); animation: bitb1 4.2s ease-in-out infinite alternate; }
+    .bit-blob-2 { width: 54%; height: 54%; background: #F7E2AC; top: 8%;   right: -10%; filter: blur(40px); animation: bitb2 5.0s ease-in-out infinite alternate; }
+    .bit-blob-3 { width: 74%; height: 74%; background: #DCE9F6; bottom: -12%; left: 4%; filter: blur(46px); animation: bitb3 3.8s ease-in-out infinite alternate; }
+    .bit-blob-4 { width: 46%; height: 46%; background: #FFFFFF; top: 34%;  left: 32%; filter: blur(38px); animation: bitb4 4.6s ease-in-out infinite alternate; }
+    @keyframes bitb1 { to { transform: translate(22%, 18%) scale(1.18); } }
+    @keyframes bitb2 { to { transform: translate(-20%, 22%) scale(0.88); } }
+    @keyframes bitb3 { to { transform: translate(18%, -20%) scale(1.14); } }
+    @keyframes bitb4 { to { transform: translate(-16%, 14%) scale(1.12); } }
+
+    .bit-scene {
+      position: relative; z-index: 2;
+      width: 80%;
+      display: flex; flex-direction: column;
+      animation: bitFloat 6s ease-in-out infinite;
+    }
+    .bit-stack { display: grid; }
+    .bit-card {
+      grid-area: 1 / 1; align-self: center;
+      width: 100%;
+      background: rgba(255,255,255,0.92);
+      backdrop-filter: blur(14px) saturate(160%);
+      -webkit-backdrop-filter: blur(14px) saturate(160%);
+      border: 0;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 14px 44px rgba(18,48,88,0.20),
+                  0 0 0 1px rgba(0,50,98,0.10);
+    }
+
+    /* ── UC Berkeley page chrome ── */
+    .bit-notice {
+      background: #3B7EA1; color: #fff;
+      font-size: 5.7px; letter-spacing: 0.02em;
+      padding: 3.4px 10px;
+    }
+    .bit-hdr {
+      background: #003262; color: #fff;
+      padding: 7px 10px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .bit-hdr-l {
+      font-family: 'Lora', serif;
+      font-size: 9px; letter-spacing: 0.01em;
+      display: flex; align-items: center; gap: 4.5px;
+      white-space: nowrap;
+    }
+    .bit-hdr-l b { font-weight: 700; }
+    .bit-hdr-l i { font-style: normal; opacity: 0.55; font-weight: 300; }
+    .bit-hdr-r {
+      font-size: 5.1px; letter-spacing: 0.02em;
+      opacity: 0.92; white-space: nowrap;
+    }
+
+    .bit-body { padding: 13px 14px 15px; }
+
+    .bit-step {
+      font-size: 8.5px; font-weight: 700;
+      letter-spacing: 0.14em; text-transform: uppercase;
+      color: #7C8CA1; margin-bottom: 4.5px;
+    }
+    .bit-q {
+      font-family: 'Lora', serif;
+      font-size: 14px; font-weight: 500;
+      color: #123A63; letter-spacing: -0.01em;
+      margin-bottom: 10px;
+    }
+    .bit-row {
+      display: flex; align-items: center; gap: 9px;
+      padding: 6.5px 10px; margin-top: 5.5px;
+      border: 1px solid rgba(20,60,100,0.10);
+      border-radius: 6px;
+      background: rgba(255,255,255,0.66);
+      font-size: 9.5px; color: #3D4A5C;
+      white-space: nowrap; overflow: hidden;
+    }
+    .bit-box {
+      width: 11.5px; height: 11.5px; flex-shrink: 0;
+      border-radius: 3px;
+      border: 1.4px solid #A9BCD2;
+      background: #fff;
+      position: relative;
+    }
+    .bit-box::after {
+      content: ''; position: absolute;
+      left: 3.1px; top: 0.4px;
+      width: 3.4px; height: 6.9px;
+      border: solid #fff; border-width: 0 1.5px 1.5px 0;
+      transform: rotate(45deg) scale(0);
+    }
+
+    .bit-plan-block {
+      border: 1px solid rgba(29,78,137,0.32);
+      border-radius: 7px;
+      background: rgba(255,255,255,0.62);
+      padding: 9px 11px; margin-top: 7px;
+    }
+    .bit-plan-h {
+      font-size: 9.5px; font-weight: 700;
+      color: #1D4E89; margin-bottom: 4.5px;
+    }
+    .bit-plan-s {
+      font-size: 8.5px; color: #5A6A7D;
+      line-height: 1.45; margin-bottom: 3.5px;
+    }
+    .bit-plan-link {
+      font-size: 8.5px; font-weight: 700;
+      color: #1D4E89;
+    }
+
+    .bit-card-s1 { animation: bitS1 15s ease-in-out infinite; }
+    .bit-card-s2 { animation: bitS2 15s ease-in-out infinite; }
+    .bit-card-s3 { animation: bitS3 15s ease-in-out infinite; }
+    @keyframes bitS1 {
+      0%       { opacity: 0; transform: translateY(10px) scale(0.99); }
+      5%,28%   { opacity: 1; transform: translateY(0) scale(1); }
+      34%,100% { opacity: 0; transform: translateY(-10px) scale(0.99); }
+    }
+    @keyframes bitS2 {
+      0%,30%   { opacity: 0; transform: translateY(10px) scale(0.99); }
+      37%,60%  { opacity: 1; transform: translateY(0) scale(1); }
+      66%,100% { opacity: 0; transform: translateY(-10px) scale(0.99); }
+    }
+    @keyframes bitS3 {
+      0%,62%   { opacity: 0; transform: translateY(10px) scale(0.99); }
+      69%,94%  { opacity: 1; transform: translateY(0) scale(1); }
+      99%,100% { opacity: 0; transform: translateY(10px) scale(0.99); }
+    }
+
+    /* progress rail */
+    .bit-prog {
+      width: 100%; height: 3px; margin-top: 10px;
+      background: rgba(29,78,137,0.16);
+      border-radius: 2px; overflow: hidden;
+    }
+    .bit-prog-fill {
+      height: 100%; border-radius: 2px;
+      background: #1D4E89;
+      animation: bitProg 15s ease-in-out infinite;
+    }
+    @keyframes bitProg {
+      0%,5%    { width: 10%; }
+      12%,30%  { width: 33%; }
+      40%,62%  { width: 66%; }
+      71%,96%  { width: 100%; }
+      100%     { width: 10%; }
+    }
+
+    /* checkbox tick — step 1 */
+    .bit-row-a1 { animation: bitRowA 15s ease-in-out infinite; }
+    .bit-row-a1 .bit-box { animation: bitCheckA 15s ease-in-out infinite; }
+    .bit-row-a1 .bit-box::after { animation: bitTickA 15s ease-in-out infinite; }
+    @keyframes bitRowA {
+      0%,9%    { border-color: rgba(20,60,100,0.10); background: rgba(255,255,255,0.66); }
+      14%,30%  { border-color: rgba(29,78,137,0.42); background: rgba(29,78,137,0.07); }
+      36%,100% { border-color: rgba(20,60,100,0.10); background: rgba(255,255,255,0.66); }
+    }
+    @keyframes bitCheckA {
+      0%,9%    { background: #fff;    border-color: #A9BCD2; }
+      14%,30%  { background: #1D4E89; border-color: #1D4E89; }
+      36%,100% { background: #fff;    border-color: #A9BCD2; }
+    }
+    @keyframes bitTickA {
+      0%,9%    { transform: rotate(45deg) scale(0); }
+      12%      { transform: rotate(45deg) scale(1.3); }
+      15%,30%  { transform: rotate(45deg) scale(1); }
+      36%,100% { transform: rotate(45deg) scale(0); }
+    }
+
+    /* checkbox tick — step 2 (two options) */
+    .bit-row-b1, .bit-row-b2 { animation: bitRowB 15s ease-in-out infinite; }
+    .bit-row-b1 .bit-box, .bit-row-b2 .bit-box { animation: bitCheckB 15s ease-in-out infinite; }
+    .bit-row-b1 .bit-box::after, .bit-row-b2 .bit-box::after { animation: bitTickB 15s ease-in-out infinite; }
+    .bit-row-b2, .bit-row-b2 .bit-box, .bit-row-b2 .bit-box::after { animation-delay: 1.1s; }
+    @keyframes bitRowB {
+      0%,41%   { border-color: rgba(20,60,100,0.10); background: rgba(255,255,255,0.66); }
+      46%,62%  { border-color: rgba(29,78,137,0.42); background: rgba(29,78,137,0.07); }
+      68%,100% { border-color: rgba(20,60,100,0.10); background: rgba(255,255,255,0.66); }
+    }
+    @keyframes bitCheckB {
+      0%,41%   { background: #fff;    border-color: #A9BCD2; }
+      46%,62%  { background: #1D4E89; border-color: #1D4E89; }
+      68%,100% { background: #fff;    border-color: #A9BCD2; }
+    }
+    @keyframes bitTickB {
+      0%,41%   { transform: rotate(45deg) scale(0); }
+      44%      { transform: rotate(45deg) scale(1.3); }
+      47%,62%  { transform: rotate(45deg) scale(1); }
+      68%,100% { transform: rotate(45deg) scale(0); }
+    }
+
     /* ── CARD 3 — AMAZON MUSIC IMAGES ── */
     .t3-sweep {
       position: absolute; inset: 0; z-index: 2; pointer-events: none;
@@ -1145,31 +1308,29 @@
 
   <!-- ═══ PORTFOLIO ═══ -->
   <div id="portfolio">
-    <div id="cursor-glow"></div>
 
     <nav>
       <a href="#" class="nav-logo">
-        <img src="images/miffy.png" alt="miffy" style="width:22px;height:22px;object-fit:contain;display:block;">
+        <img src="images/purpmiffy.png" alt="miffy" style="width:22px;height:22px;object-fit:contain;display:block;">
         <span class="logo-name">diya</span>
       </a>
       <ul class="nav-links">
         <li><a href="#">Work</a></li>
         <li><a href="sandlot.html">Sandbox</a></li>
-        <li><a href="https://drive.google.com/file/d/1dbvKrqRNuBisy0lqk2uoBBgtkCQalHIH/view?usp=sharing" target="_blank">Resume</a></li>
+        <li><a href="Diyas_Resume.pdf" target="_blank">Resume</a></li>
       </ul>
     </nav>
 
     <section class="hero">
       <div class="hero-left">
-        <p class="hero-label">I'm Diya</p>
         <h1 class="hero-heading">
-          <span class="h-line h-line-1">I design</span>
-          <span class="h-line h-line-2">AI experiences</span>
-          <span class="h-line h-line-3">people actually want</span>
+          <span class="h-line h-line-1">I'm Diya,</span>
+          <span class="h-line h-line-2">an AI-native product designer</span>
+          <span class="h-line h-line-3">working across interaction,<br>systems &amp; research.</span>
         </h1>
-        <p class="hero-sub-line">Currently at UC Berkeley IT, building products through AI, interaction design, and research.</p>
+        <p class="hero-sub-line">Currently designing at UC Berkeley IT, working on student information systems.</p>
       </div>
-      <img src="images/miffy.png" alt="Miffy" draggable="false" class="hero-miffy"/>
+      <img src="images/purpmiffy.png" alt="Miffy" draggable="false" class="hero-miffy"/>
     </section>
 
     <!-- ── WORK ── -->
@@ -1179,22 +1340,82 @@
 
         <!-- Card 1 -->
         <!-- Card 1 — SIS Platform -->
-        <a class="work-card work-card-link" href="sis.html">
-          <div class="work-thumb thumb-lg">
-            <div class="lg-bg">
-              <div class="lg-blob lg-blob-1"></div>
-              <div class="lg-blob lg-blob-2"></div>
-              <div class="lg-blob lg-blob-3"></div>
-              <div class="lg-blob lg-blob-4"></div>
+        <div class="work-card">
+          <div class="work-thumb thumb-bit">
+            <div class="bit-bg">
+              <div class="bit-blob bit-blob-1"></div>
+              <div class="bit-blob bit-blob-2"></div>
+              <div class="bit-blob bit-blob-3"></div>
+              <div class="bit-blob bit-blob-4"></div>
             </div>
-            <div class="lg-scene" style="display:flex; align-items:center; justify-content:center;">
-              <img src="images/appt-design-4.png" alt="Appointments Design 4" draggable="false" style="width:72%; border-radius:12px; box-shadow:0 8px 32px rgba(0,0,0,0.13); display:block; object-fit:cover;"/>
+            <div class="bit-scene">
+              <div class="bit-stack">
+
+                <div class="bit-card bit-card-s1">
+                  <div class="bit-notice">Notice: [Site-wide alert text]</div>
+                  <div class="bit-hdr">
+                    <span class="bit-hdr-l"><b>UC Berkeley</b><i>|</i>College of Letters &amp; Science</span>
+                    <span class="bit-hdr-r">L&amp;S Advising Homepage</span>
+                  </div>
+                  <div class="bit-body">
+                    <p class="bit-step">Step 1 of 3</p>
+                    <p class="bit-q">What do you need help with?</p>
+                    <div class="bit-row"><span class="bit-box"></span>A quick question, under 15 minutes</div>
+                    <div class="bit-row bit-row-a1"><span class="bit-box"></span>Changing my enrollment</div>
+                    <div class="bit-row"><span class="bit-box"></span>Degree planning or a graduation check</div>
+                    <div class="bit-row"><span class="bit-box"></span>Choosing or switching a major</div>
+                    <div class="bit-row"><span class="bit-box"></span>A form or petition</div>
+                    <div class="bit-row"><span class="bit-box"></span>Something personal affecting my classes</div>
+                  </div>
+                </div>
+
+                <div class="bit-card bit-card-s2">
+                  <div class="bit-notice">Notice: [Site-wide alert text]</div>
+                  <div class="bit-hdr">
+                    <span class="bit-hdr-l"><b>UC Berkeley</b><i>|</i>College of Letters &amp; Science</span>
+                    <span class="bit-hdr-r">L&amp;S Advising Homepage</span>
+                  </div>
+                  <div class="bit-body">
+                    <p class="bit-step">Step 2 of 3</p>
+                    <p class="bit-q">Do any of these apply to you?</p>
+                    <div class="bit-row"><span class="bit-box"></span>Student athlete</div>
+                    <div class="bit-row bit-row-b1"><span class="bit-box"></span>F-1 or J-1 visa holder</div>
+                    <div class="bit-row"><span class="bit-box"></span>Receiving financial aid</div>
+                    <div class="bit-row bit-row-b2"><span class="bit-box"></span>Registered with DSP</div>
+                    <div class="bit-row"><span class="bit-box"></span>Transfer student</div>
+                    <div class="bit-row"><span class="bit-box"></span>None of the above</div>
+                  </div>
+                </div>
+
+                <div class="bit-card bit-card-s3">
+                  <div class="bit-notice">Notice: [Site-wide alert text]</div>
+                  <div class="bit-hdr">
+                    <span class="bit-hdr-l"><b>UC Berkeley</b><i>|</i>College of Letters &amp; Science</span>
+                    <span class="bit-hdr-r">L&amp;S Advising Homepage</span>
+                  </div>
+                  <div class="bit-body">
+                    <p class="bit-step">Step 3 of 3</p>
+                    <p class="bit-q">Here is your plan</p>
+                    <div class="bit-plan-block">
+                      <p class="bit-plan-h">1. Do this first</p>
+                      <p class="bit-plan-s">Berkeley International Office — confirm a unit change won't affect your visa status.</p>
+                      <p class="bit-plan-s">Disabled Students' Program — check whether the change affects accommodations.</p>
+                    </div>
+                    <div class="bit-plan-block">
+                      <p class="bit-plan-h">2. Book your appointment</p>
+                      <p class="bit-plan-link">Book general appointment &rarr;</p>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+              <div class="bit-prog"><div class="bit-prog-fill"></div></div>
             </div>
           </div>
-          <p class="work-label">Berkeley Information Technology — Product Design Intern</p>
-          <h3 class="work-title">Student Information Systems</h3>
-          <p class="work-desc">Research and redesign of core student workflows for 45,000+ students.</p>
-        </a>
+          <p class="work-label">Berkeley Information Technology — Product Design Intern 2026</p>
+          <h3 class="work-title">Making Student Advising Easier to Navigate</h3>
+          <p class="work-desc">Redesigning systems for 20,000+ students through AI-assisted research, interaction design, and agentic prototyping.</p>
+        </div>
 
         <!-- Card 2 — Flourish AI -->
         <a class="work-card work-card-link" href="flourish.html">
@@ -1233,7 +1454,7 @@
 
             </div>
           </div>
-          <p class="work-label">Flourish AI — Product Design Intern</p>
+          <p class="work-label">Flourish AI — Product Design Intern 2025</p>
           <h3 class="work-title">AI Health Insights</h3>
           <p class="work-desc">Helping users uncover relationships between nutrition, symptoms, and wellness using AI.</p>
         </a>
@@ -1250,12 +1471,12 @@
             <video src="images/portfoli.mp4" autoplay muted loop playsinline></video>
           </div>
           <p class="work-label">EthiCAL — VP of Design 2026</p>
-          <h3 class="work-title">Shift Management and Scheduling</h3>
-          <p class="work-desc">Designed the scheduling flow for managing student staff and recurring shifts.</p>
+          <h3 class="work-title">Designing Smarter Shift Management</h3>
+          <p class="work-desc">Led the end-to-end scheduling experience for managing student staff, recurring shifts, and operational workflows.</p>
         </div>
 
         <!-- Card 4 -->
-        <div class="work-card">
+        <a class="work-card work-card-link" href="amazon-music.html">
           <div class="work-thumb thumb-3">
             <div class="thumb-3-mesh">
               <div class="t3b t3b-1"></div>
@@ -1274,10 +1495,10 @@
           <p class="work-label">Amazon Music — 2025</p>
           <h3 class="work-title">Consumer & Artist Collaboration</h3>
           <p class="work-desc">Top 10 finalist in an Amazon Music-sponsored designathon, exploring social discovery and interaction around live music.</p>
-        </div>
+        </a>
 
-        <!-- Card 5 — Perplexity -->
-        <div class="work-card">
+        <!-- Card 5 — Carbon Sustain -->
+        <a class="work-card work-card-link" href="carbon-sustain.html">
           <div class="work-thumb thumb-2">
             <div class="thumb-2-mesh">
               <div class="t2b t2b-1"></div>
@@ -1295,10 +1516,10 @@
               </div>
             </div>
           </div>
-          <p class="work-label">Carbon Sustain — UX Research Lead</p>
-          <h3 class="work-title">Sustainability Data Dashboards</h3>
-          <p class="work-desc">Made dense sustainability data legible in dashboards and visualizations, improving comprehension by 40%.</p>
-        </div>
+          <p class="work-label">Carbon Sustain — Product Designer 2024</p>
+          <h3 class="work-title">Making Carbon Data Actionable</h3>
+          <p class="work-desc">Redesigned key workflows across a B2B sustainability platform, making complex emissions data easier to understand and act on.</p>
+        </a>
 
       </div>
     </section>
@@ -1308,18 +1529,18 @@
       <div class="footer-inner">
         <div class="footer-main">
           <div class="footer-left">
-            <h2 class="footer-heading">I'm glad we could<br><span style="color:var(--orange);font-family:'Inter',sans-serif;">cross paths</span></h2>
-        <p class="footer-sub">Let's get in touch and build something <span id="footer-word">together</span><span class="footer-caret">|</span></p>
+            <h2 class="footer-heading">Let's build something<br><span style="color:var(--orange);font-family:'Inter',sans-serif;" id="footer-word">together</span><span class="footer-caret" style="color:var(--orange);">|</span></h2>
+        <p class="footer-sub">Always happy to chat~</p>
             <div class="footer-links">
               <a class="footer-link" href="mailto:diyamahapatra@berkeley.edu">email</a>
-              <a class="footer-link" href="#">linkedIn</a>
-              <a class="footer-link" href="https://drive.google.com/file/d/1dbvKrqRNuBisy0lqk2uoBBgtkCQalHIH/view?usp=sharing" target="_blank">resume</a>
+              <a class="footer-link" href="https://www.linkedin.com/in/diya-mahapatra/" target="_blank">linkedIn</a>
+              <a class="footer-link" href="Diyas_Resume.pdf" target="_blank">resume</a>
             </div>
           </div>
           <div class="footer-nav">
             <a class="footer-nav-link" href="diya-splash.html?skip">Work</a>
             <a class="footer-nav-link" href="sandlot.html">Sandbox</a>
-            <a class="footer-nav-link" href="https://drive.google.com/file/d/1dbvKrqRNuBisy0lqk2uoBBgtkCQalHIH/view?usp=sharing" target="_blank">Resume</a>
+            <a class="footer-nav-link" href="Diyas_Resume.pdf" target="_blank">Resume</a>
           </div>
         </div>
         <div class="footer-bottom">
@@ -1343,32 +1564,44 @@
     let mx = window.innerWidth/2, my = window.innerHeight/2, lx = mx, ly = my;
     window.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
 
-    const ZONES = [
-      [0.12,0.12,0.10,0.09,0.27,0.31,0.00, 40,98,57],
-      [0.88,0.09,0.09,0.10,0.21,0.29,1.30,258,50,72],
-      [0.50,0.52,0.11,0.10,0.38,0.24,2.50, 22,80,64],
-      [0.10,0.88,0.10,0.09,0.30,0.26,3.80, 16,85,47],
-      [0.84,0.77,0.10,0.11,0.25,0.36,5.00,348,68,65],
-    ];
+    /* Same hue family as the Carbon Sustain card (.t2b blobs): soft aqua
+       #BCD8D8, periwinkle #C0C8E8, warm creams #EDE4D0 / #EDE0D4. Those are
+       pastels at ~85% lightness, which white splash type would disappear
+       against — so the hues are carried over but sat around 60% lightness to
+       keep the wordmark legible. */
+    /* The exact three stops from the Flourish AI card (.thumb-1). The colours
+       never change — the motion comes from slowly swinging the gradient's axis
+       and sliding the middle stop, so it breathes without drifting off-palette. */
+    const STOPS = ['#BCD8D8', '#C0C8E8', '#EDE0D4'];
     let t = 0;
     function render() {
-      const W = cvs.width, H = cvs.height;
-      lx += (mx-lx)*0.04; ly += (my-ly)*0.04;
-      const mox = (lx/W-0.5)*0.06, moy = (ly/H-0.5)*0.05;
-      ctx.fillStyle = 'hsl(30,88%,56%)'; ctx.fillRect(0,0,W,H);
-      const R = Math.max(W,H)*0.88;
-      ZONES.forEach(([bx,by,ax,ay,fx,fy,ph,h,s,l]) => {
-        const nx=bx+Math.sin(t*fx+ph)*ax+mox, ny=by+Math.sin(t*fy+ph+1.05)*ay+moy;
-        const cx=nx*W, cy=ny*H;
-        const fpx=cx+Math.cos(t*0.20+ph)*R*0.12, fpy=cy+Math.sin(t*0.15+ph)*R*0.09;
-        const g=ctx.createRadialGradient(fpx,fpy,0,cx,cy,R);
-        g.addColorStop(0.00,`hsla(${h},${s}%,${Math.min(l+10,88)}%,0.90)`);
-        g.addColorStop(0.30,`hsla(${h},${s}%,${l}%,0.75)`);
-        g.addColorStop(0.65,`hsla(${h},${s}%,${Math.max(l-8,20)}%,0.22)`);
-        g.addColorStop(1.00,`hsla(${h},${s}%,${Math.max(l-14,15)}%,0.00)`);
-        ctx.fillStyle=g; ctx.fillRect(0,0,W,H);
-      });
-      t += 0.004;
+      try {
+        const W = cvs.width, H = cvs.height;
+        if (!W || !H) { requestAnimationFrame(render); return; }
+        lx += (mx-lx)*0.04; ly += (my-ly)*0.04;
+        const mox = (lx/W-0.5), moy = (ly/H-0.5);
+
+        /* Swing around the card's 135° diagonal, nudged by the cursor.
+           CSS angles aren't canvas angles: for a CSS angle a the direction is
+           (sin a, -cos a), so 135deg runs top-left → bottom-right. Using
+           (cos, sin) here would mirror the gradient off the card. */
+        const a = (135 + Math.sin(t*0.42)*13 + mox*9) * Math.PI/180;
+        const dirx = Math.sin(a), diry = -Math.cos(a);
+        const cx = W/2, cy = H/2;
+        const reach = (Math.abs(W*dirx) + Math.abs(H*diry))/2 * 1.16;
+        const dx = dirx*reach, dy = diry*reach;
+
+        const g = ctx.createLinearGradient(cx-dx, cy-dy, cx+dx, cy+dy);
+        /* 0.52 is the card's own midpoint; it drifts either side of it */
+        const mid = Math.min(Math.max(0.52 + Math.sin(t*0.55)*0.11 + moy*0.05, 0.18), 0.86);
+        g.addColorStop(0, STOPS[0]);
+        g.addColorStop(mid, STOPS[1]);
+        g.addColorStop(1, STOPS[2]);
+        ctx.fillStyle = g; ctx.fillRect(0,0,W,H);
+        t += 0.004;
+      } catch (err) {
+        console.warn('gradient render skipped a frame:', err);
+      }
       requestAnimationFrame(render);
     }
     render();
@@ -1456,68 +1689,21 @@
 
     /* ── CUSTOM CURSOR ── */
     const cursorEl = document.getElementById('custom-cursor');
-    let cx = -200, cy = -200, clx = cx, cly = cy;
-
     document.addEventListener('mousemove', e => {
-      cx = e.clientX; cy = e.clientY;
+      cursorEl.style.transform = `translate(${e.clientX}px, ${e.clientY}px) translate(-50%, -50%)`;
       cursorEl.style.opacity = '1';
     });
 
-    (function cursorLoop() {
-      clx += (cx - clx) * 0.14;
-      cly += (cy - cly) * 0.14;
-      cursorEl.style.transform = `translate(${clx.toFixed(1)}px, ${cly.toFixed(1)}px) translate(-50%, -50%)`;
-      requestAnimationFrame(cursorLoop);
-    })();
-
     const cursorLabelEl = cursorEl.querySelector('.cursor-label');
+    const LIVE_PROJECTS = ['flourish.html', 'amazon-music.html', 'carbon-sustain.html'];
     document.querySelectorAll('.work-card').forEach(card => {
-      const isFlourish = card.tagName === 'A' && card.getAttribute('href') === 'flourish.html';
+      const isLive = card.tagName === 'A' && LIVE_PROJECTS.includes(card.getAttribute('href'));
       card.addEventListener('mouseenter', () => {
-        cursorLabelEl.textContent = isFlourish ? 'View Project' : 'Coming Soon';
+        cursorLabelEl.textContent = isLive ? 'View Project' : 'Coming Soon';
         cursorEl.classList.add('expanded');
       });
       card.addEventListener('mouseleave', () => cursorEl.classList.remove('expanded'));
     });
-
-    /* ── CURSOR GLOW (hero + footer) ── */
-    const glowEl = document.getElementById('cursor-glow');
-    const portfolioEl = document.getElementById('portfolio');
-    let overFooter = false;
-
-    function updateGlow() {
-      const scrolled = portfolioEl.scrollTop;
-      const threshold = window.innerHeight * 0.85;
-      if (scrolled < threshold || overFooter) {
-        glowEl.classList.add('active');
-      } else {
-        glowEl.classList.remove('active');
-      }
-    }
-    portfolioEl.addEventListener('scroll', updateGlow, { passive: true });
-
-    const footerEl = document.querySelector('.site-footer');
-    footerEl.addEventListener('mouseenter', () => { overFooter = true;  updateGlow(); });
-    footerEl.addEventListener('mouseleave', () => { overFooter = false; updateGlow(); });
-
-    updateGlow();
-
-    let glowX = window.innerWidth / 2, glowY = window.innerHeight / 2;
-    let glowLx = glowX, glowLy = glowY;
-
-    document.addEventListener('mousemove', e => {
-      glowX = e.clientX;
-      glowY = e.clientY;
-    });
-
-    // Smooth-follow the cursor so the glow drifts rather than snaps
-    (function glowLoop() {
-      glowLx += (glowX - glowLx) * 0.07;
-      glowLy += (glowY - glowLy) * 0.07;
-      glowEl.style.setProperty('--mx', glowLx.toFixed(1) + 'px');
-      glowEl.style.setProperty('--my', glowLy.toFixed(1) + 'px');
-      requestAnimationFrame(glowLoop);
-    })();
 
     /* ── FOOTER WORD CYCLER ── */
     (function() {

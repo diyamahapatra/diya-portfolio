@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Flourish AI — Diya Mahapatra</title>
+  <title>Amazon Music — Diya Mahapatra</title>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300&family=Instrument+Serif:ital@0;1&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,700&display=swap" rel="stylesheet"/>
@@ -11,7 +11,7 @@
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
     :root {
-      --orange: #21A0A0;
+      --orange: #2596be;
       --black:  #0F0F0F;
       --gray:   #6B7280;
       --border: #E5E7EB;
@@ -190,15 +190,24 @@
       height: auto;
       display: block;
     }
-    .cs-hero-placeholder {
-      display: flex; flex-direction: column; align-items: center; gap: 10px;
+
+    /* placeholder graphic block */
+    .cs-placeholder {
+      width: 100%;
+      aspect-ratio: 16/9;
+      background: #F5F5F4;
+      border: 1px dashed var(--border);
+      display: flex; align-items: center; justify-content: center;
+      text-align: center;
+      padding: 24px;
     }
-    .cs-hero-placeholder-icon {
-      width: 48px; height: 48px; border-radius: 0;
-      background: var(--border);
-    }
-    .cs-hero-placeholder p {
-      font-size: 13px; color: var(--gray);
+    .cs-placeholder span {
+      font-size: 12px;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: var(--gray);
+      max-width: 320px;
+      line-height: 1.6;
     }
 
     /* overview grid */
@@ -227,7 +236,7 @@
 
     /* sections */
     .cs-section {
-      margin-bottom: 128px;
+      margin-bottom: 72px;
     }
     .cs-section-label {
       font-family: 'Lora', serif;
@@ -252,53 +261,6 @@
       margin-bottom: 16px;
     }
     .cs-section p:last-child { margin-bottom: 0; }
-    .cs-pullquote {
-      background: #F2F2F0;
-      border-radius: 10px;
-      padding: 24px 28px;
-      margin-top: 24px !important;
-      font-family: 'Lora', serif;
-      font-style: italic;
-      font-size: 19px;
-      line-height: 1.6;
-      color: var(--black);
-    }
-
-    /* comp scatter */
-    .comp-scatter-wrap {
-      position: relative;
-      left: -48px;
-      width: calc(100% + 328px);
-      margin: 36px 0 0;
-    }
-    .comp-scatter {
-      background: #F0EFED;
-      border-radius: 14px;
-      height: 320px;
-      position: relative;
-      overflow: hidden;
-    }
-    .comp-item {
-      position: absolute;
-      display: flex;
-      align-items: center;
-      gap: 11px;
-      user-select: none;
-    }
-    .comp-item img {
-      display: block;
-      border-radius: 8px;
-      object-fit: contain;
-      flex-shrink: 0;
-    }
-    .comp-item span {
-      font-family: 'Inter', sans-serif;
-      font-weight: 700;
-      color: #111;
-      white-space: nowrap;
-      letter-spacing: -0.025em;
-      line-height: 1;
-    }
 
     /* research quotes */
     .cs-quote-card {
@@ -353,23 +315,6 @@
       line-height: 1.7;
     }
 
-    /* image block */
-    .cs-img-block {
-      width: 100%;
-      border-radius: 0;
-      overflow: hidden;
-      margin: 32px 0;
-      background: #F3F4F6;
-      aspect-ratio: 16/9;
-      display: flex; align-items: center; justify-content: center;
-    }
-    .cs-img-block img { width: 100%; height: 100%; object-fit: cover; }
-    .cs-img-caption {
-      font-size: 12px; color: var(--gray);
-      margin-top: -20px; margin-bottom: 32px;
-      text-align: center;
-    }
-
     /* ── THE SOLUTION ── */
     .cs-solution-video-wrap {
       width: 100%;
@@ -389,10 +334,9 @@
       width: auto;
       height: auto;
       display: block;
-      clip-path: inset(6px 6px 0 0);
     }
     .cs-solution-video-placeholder {
-      aspect-ratio: 16/9;
+      width: 100%; height: 100%;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -404,74 +348,7 @@
       color: #555;
     }
 
-    /* ── IMPACT ── */
-    .cs-impact-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 48px;
-      align-items: center;
-      margin-top: 40px;
-    }
-    .cs-impact-proof img {
-      width: 100%;
-      display: block;
-      border-radius: 12px;
-    }
-    .cs-impact-metrics {
-      display: flex;
-      flex-direction: column;
-      gap: 44px;
-    }
-    .cs-metric-num {
-      display: block;
-      font-family: 'Lora', serif;
-      font-size: 66px;
-      font-weight: 700;
-      color: var(--black);
-      line-height: 1;
-      margin-bottom: 10px;
-      letter-spacing: -0.02em;
-    }
-    .cs-metric-label {
-      font-size: 14px;
-      line-height: 1.6;
-      color: var(--gray);
-      max-width: 220px;
-    }
-
-    /* ── DESIGN CARDS ── */
-    .cs-design-row {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 16px;
-      margin-bottom: 16px;
-    }
-    .cs-design-card {
-      background: #F5F4F1;
-      border-radius: 0;
-      padding: 28px 28px 0;
-      overflow: hidden;
-    }
-    .cs-design-card--wide {
-      /* full width, no extra styles needed */
-    }
-    .cs-design-card-text {
-      font-size: 14px;
-      line-height: 1.7;
-      color: #3A3A3A;
-      margin: 0 0 24px;
-    }
-    .cs-design-card-frame {
-      width: 100%;
-      aspect-ratio: 4/3;
-      background: #E4E2DD;
-      border-radius: 0;
-    }
-    .cs-design-card-frame--wide {
-      aspect-ratio: 16/7;
-    }
-
-    /* ── DIFF CARDS ── */
+    /* ── DIFF CARDS (Design Evolution) ── */
     .cs-diff { display: flex; flex-direction: column; }
     .cs-diff-row {
       display: flex;
@@ -480,12 +357,6 @@
       padding: 36px 0;
     }
     .cs-diff-row:first-child { padding-top: 0; }
-    .cs-diff-num {
-      display: block;
-      font-size: 11px; font-weight: 600;
-      letter-spacing: 0.12em; text-transform: uppercase;
-      color: var(--orange); margin-bottom: 10px;
-    }
     .cs-diff-title {
       font-family: 'Lora', serif;
       font-size: 16px; font-weight: 500;
@@ -495,165 +366,6 @@
     .cs-diff-desc {
       font-size: 16px; line-height: 1.75;
       color: #3D3D3D;
-    }
-    .cs-diff-pair {
-      display: grid;
-      grid-template-columns: 1fr 28px 1fr;
-      gap: 12px;
-      align-items: center;
-    }
-    .cs-diff-tag {
-      display: block;
-      font-size: 10.5px; font-weight: 600;
-      letter-spacing: 0.09em; text-transform: uppercase;
-      color: var(--gray); margin-bottom: 8px;
-    }
-    .cs-diff-img-wrap img {
-      width: 100%;
-      display: block;
-      border: 1px solid var(--border);
-      border-radius: 6px;
-    }
-    .cs-diff-arrow {
-      text-align: center;
-      font-size: 16px;
-      color: #C4C9D2;
-      line-height: 1;
-    }
-
-    /* ── DESIGN EVOLUTION ── */
-    .cs-evolution-questions {
-      margin-top: 28px;
-      display: flex;
-      flex-direction: column;
-      gap: 0;
-    }
-    .cs-evolution-q {
-      font-family: 'Lora', serif;
-      font-style: italic;
-      font-size: 22px;
-      line-height: 1.5;
-      color: var(--black);
-      margin: 0;
-      padding: 18px 0;
-      border-bottom: 1px solid var(--border);
-    }
-    .cs-evolution-q:first-child { border-top: 1px solid var(--border); }
-
-    /* ── RESEARCH SECTION ── */
-    .research-stats {
-      display: flex;
-      align-items: flex-start;
-      gap: 40px;
-      margin: 28px 0 40px;
-      padding-bottom: 36px;
-      border-bottom: 1px solid var(--border);
-    }
-    .research-stat-num {
-      font-family: 'Lora', serif;
-      font-size: 52px;
-      font-weight: 400;
-      line-height: 1;
-      color: var(--black);
-      margin-bottom: 4px;
-    }
-    .research-stat-label {
-      font-size: 12px;
-      color: var(--gray);
-      letter-spacing: 0.03em;
-    }
-    .research-conditions {
-      font-size: 14px;
-      color: var(--gray);
-      line-height: 1.75;
-      padding-top: 6px;
-    }
-    .findings-list { margin-bottom: 40px; }
-    .finding-row {
-      display: grid;
-      grid-template-columns: 32px 1fr;
-      gap: 20px;
-      align-items: baseline;
-      padding: 22px 0;
-      border-bottom: 1px solid var(--border);
-    }
-    .findings-list .finding-row:first-child { border-top: 1px solid var(--border); }
-    .finding-num {
-      font-size: 11px;
-      color: var(--gray);
-      font-weight: 500;
-      letter-spacing: 0.06em;
-      padding-top: 2px;
-    }
-    .finding-body { display: flex; flex-direction: column; gap: 4px; }
-    .finding-title {
-      font-size: 15px;
-      font-weight: 600;
-      color: var(--black);
-      line-height: 1.4;
-    }
-    .finding-desc {
-      font-size: 14px;
-      color: #3D3D3D;
-      line-height: 1.7;
-    }
-    .cs-quote {
-      margin: 28px 0;
-      padding-left: 18px;
-      border-left: 2px solid #C9C8C5;
-    }
-    .cs-quote blockquote {
-      font-family: 'Lora', serif;
-      font-size: 16px;
-      font-style: italic;
-      color: var(--black);
-      line-height: 1.7;
-      margin: 0 0 6px;
-    }
-    .cs-quote cite {
-      font-size: 12px;
-      color: var(--gray);
-      font-style: normal;
-      letter-spacing: 0.02em;
-    }
-    .synthesis-block {
-      margin: 48px 0 0;
-      padding: 52px 0;
-      text-align: center;
-      border-top: 1px solid var(--border);
-      border-bottom: 1px solid var(--border);
-    }
-    .synthesis-line {
-      font-family: 'Lora', serif;
-      font-size: clamp(19px, 2.2vw, 27px);
-      font-weight: 400;
-      color: var(--black);
-      line-height: 1.3;
-      margin: 0;
-    }
-    .synthesis-line.muted { color: var(--gray); font-style: italic; }
-    .synthesis-arrow {
-      display: block;
-      font-size: 18px;
-      color: #C9C9C9;
-      margin: 14px 0;
-      line-height: 1;
-    }
-    .synthesis-opp {
-      margin-top: 44px;
-    }
-    .synthesis-opp-label {
-      font-size: 11px;
-      font-weight: 600;
-      letter-spacing: 0.08em;
-      color: var(--gray);
-      text-transform: uppercase;
-      margin-bottom: 8px;
-    }
-    .synthesis-opp-text {
-      font-size: 16px;
-      color: var(--black);
-      font-weight: 500;
     }
 
     .work-thumb {
@@ -1210,16 +922,12 @@
       <ul class="cs-sidebar-links">
         <li><a href="#overview" class="active">Overview</a></li>
         <li><a href="#challenge">Context</a></li>
-        <li><a href="#owned">What I Owned</a></li>
+        <li><a href="#owned">How We Worked</a></li>
         <li><a href="#problem">The Problem</a></li>
         <li><a href="#research">Research</a></li>
-        <li><a href="#opportunity">Opportunity</a></li>
-        <li><a href="#strategy">Design</a></li>
-        <li><a href="#iteration">Testing & Iteration</a></li>
-        <li><a href="#evolution">Design Evolution</a></li>
         <li><a href="#solution">The Solution</a></li>
-        <li><a href="#impact">Impact</a></li>
-        <li><a href="#mvp2">Looking Ahead</a></li>
+        <li><a href="#testing">Testing</a></li>
+        <li><a href="#outcome">Outcome</a></li>
         <li><a href="#reflection">Reflection</a></li>
       </ul>
     </aside>
@@ -1229,23 +937,23 @@
     <div class="cs-content">
 
       <p class="cs-meta">
-        Flourish AI
+        AMAZON MUSIC
         <span>·</span>
-        Product Design Intern
+        ONE-DAY DESIGNATHON
         <span>·</span>
         2025
       </p>
 
-      <h1 class="cs-title">Making AI Health Insights Easier to Understand and Trust</h1>
+      <h1 class="cs-title">Turning Solo Streaming Into Shared Concert Experiences</h1>
 
       <!-- Hero image -->
       <div class="cs-hero-img">
-        <img src="images/hero.png" alt="Flourish AI — redesigned meal detail experience">
+        <img src="images/am-hero.png" alt="Amazon Music hero — concert detail, friend activity, and online concerts screens">
       </div>
 
       <!-- Intro + Jump button -->
       <div class="cs-intro-row">
-        <p class="cs-intro">Redesigned the core meal experience for an AI gut-health startup,<br>reducing insight interpretation time by 47% and improving trigger<br>identification by 34%.</p>
+        <p class="cs-intro">In a single day, our team of 4 designed a social concert-discovery concept for Amazon Music, placing top 10 out of 100+ teams and presenting it directly to a panel of Amazon Music judges.</p>
         <a href="#solution" class="cs-jump-btn">Jump to solution</a>
       </div>
 
@@ -1253,235 +961,173 @@
       <div class="cs-overview-grid" id="overview">
         <div class="cs-overview-item">
           <p class="cs-overview-label">Role</p>
-          <p class="cs-overview-value">Product Design Intern</p>
+          <p class="cs-overview-value">Product Designer</p>
         </div>
         <div class="cs-overview-item">
           <p class="cs-overview-label">Timeline</p>
-          <p class="cs-overview-value">Summer 2025</p>
+          <p class="cs-overview-value">1 Day (Designathon)</p>
         </div>
         <div class="cs-overview-item">
           <p class="cs-overview-label">Team</p>
-          <p class="cs-overview-value">2 Designers<br>2 Engineers<br>1 Product Manager</p>
+          <p class="cs-overview-value">4 Designers</p>
         </div>
         <div class="cs-overview-item">
           <p class="cs-overview-label">Skills</p>
-          <p class="cs-overview-value">Product Design<br>User Research<br>Prototyping</p>
+          <p class="cs-overview-value">Product Design<br>Rapid Research<br>Prototyping</p>
         </div>
       </div>
 
       <!-- Context -->
       <div class="cs-section" id="challenge">
         <p class="cs-section-label">Context</p>
-        <h2>Logging food was easy but understanding what it meant wasn't.</h2>
-        <p>Flourish uses AI to connect what users eat with how they feel.</p>
-        <div style="margin-top: 24px; margin-bottom: 24px;">
-          <img src="images/context-flow.png" alt="Logged meals plus symptoms, AI identifies potential patterns, personalized trigger insights" style="width:100%; display:block;">
-        </div>
-        <p>But those insights are only useful if users can log meals accurately and understand why the product surfaces certain patterns. My internship focused on strengthening both sides of that loop.</p>
+        <h2>One day to rethink how listeners and artists connect.</h2>
+        <p>For Amazon Music's one-day designathon, our team of 4 explored how the platform could create more meaningful interaction between listeners, artists, and the communities around them.</p>
       </div>
 
       <!-- What I Owned -->
-      <div class="cs-section" id="owned" style="margin-bottom: 88px;">
-        <p class="cs-section-label">What I Owned</p>
-        <h2>I took the core experience from research to shipped design, then explored what came next.</h2>
-        <div style="margin-top: 36px; display:flex; align-items:flex-start; justify-content:flex-start; gap:8px;">
-          <div style="border:1px solid #E0E2E6; background:#fff; padding:26px 22px; width:225px; flex-shrink:0;">
-            <img src="images/icon-research-book.svg" alt="" width="40" height="40" style="margin-bottom:16px; display:block;">
-            <p style="font-family:'Lora', serif; font-weight:600; font-size:14px; letter-spacing:0.8px; color:#0F0F0F; margin-bottom:10px;">Research &amp; Validation</p>
-            <p style="font-size:14px; line-height:1.6; color:#3D3D3D;">Synthesized user interviews and usability tests to identify where AI-generated insights created confusion or mistrust.</p>
-          </div>
-          <img src="images/icon-arrow-3.svg" alt="" style="width:28px; height:auto; flex-shrink:0; margin-top:100px;">
-          <div style="border:1px solid #E0E2E6; background:#fff; padding:26px 22px; width:225px; flex-shrink:0; margin-top:32px;">
-            <img src="images/icon-design-dropper.svg" alt="" width="30" height="30" style="margin-bottom:20px; display:block;">
-            <p style="font-family:'Lora', serif; font-weight:600; font-size:14px; letter-spacing:0.8px; color:#0F0F0F; margin-bottom:10px;">Core Product Design</p>
-            <p style="font-size:14px; line-height:1.6; color:#3D3D3D;">Led end-to-end design of the meal detail experience, including trigger scores, macro visualization, and editing flows.</p>
-          </div>
-          <img src="images/icon-arrow-4.svg" alt="" style="width:28px; height:auto; flex-shrink:0; margin-top:110px;">
-          <div style="border:1px solid #E0E2E6; background:#fff; padding:26px 22px; width:225px; flex-shrink:0;">
-            <img src="images/icon-data-exploration.svg" alt="" width="40" height="40" style="margin-bottom:16px; display:block;">
-            <p style="font-family:'Lora', serif; font-weight:600; font-size:14px; letter-spacing:0.8px; color:#0F0F0F; margin-bottom:10px;">Future Exploration</p>
-            <p style="font-size:14px; line-height:1.6; color:#3D3D3D;">Scoped Apple Health integrations to explore how I could connect meal data with broader health patterns.</p>
-          </div>
-        </div>
+      <div class="cs-section" id="owned">
+        <p class="cs-section-label">How We Worked</p>
+        <h2>No individual lanes. We moved as one team.</h2>
+        <p>With one day on the clock, we didn't split up by feature. All four of us moved through research synthesis, ideation, and design together, staying in sync so we could make decisions quickly.</p>
       </div>
 
       <!-- The Problem -->
-      <div class="cs-section" id="problem" style="margin-bottom: 108px;">
+      <div class="cs-section" id="problem">
         <p class="cs-section-label">The Problem</p>
-        <h2>Every app I audited stopped at the data.</h2>
-        <p>Across the 5 leading nutrition and meal-logging apps I audited, nutrition data was plentiful. What was missing was a clear connection between what I ate → how I felt → what I could do differently.</p>
+        <h2>Amazon Music grew past streaming but the engagement didn't follow.</h2>
+        <p>The platform now includes livestreams and creator tools, but these experiences remain fragmented. Listeners have no clear way to actively engage with creators, while creators have limited ways to build ongoing connections with their audience.</p>
 
-        <div style="margin-top: 32px;">
-          <img src="images/comp-analysis.png" alt="Competitive analysis quadrant chart — health data depth vs. next-step guidance, plotting Cronometer, ZOE, Function, NutriSense, and MyFitnessPal" style="width:100%; display:block; border-radius:0; background:#fff;">
+        <div style="margin-top: 32px; overflow: visible;">
+          <img src="images/am-problem-diagram.png" alt="Fragmented Amazon Music experience — streaming, livestreams, creator tools, and merch as disconnected touchpoints with no clear listener-to-creator connection" style="width:calc(100% + 307px); max-width:none; position:relative; left:-147px; display:block;">
+        </div>
         </div>
       </div>
 
       <!-- Research -->
-      <div class="cs-section" id="research" style="width: calc(100% + 20px);">
+      <div class="cs-section" id="research">
         <p class="cs-section-label">Research</p>
-        <h2>What 15 users told me</h2>
-        <p>Across the interviews, three needs consistently emerged:</p>
+        <h2>The data showed a consumption platform, not a connection platform.</h2>
+        <p>To ground the concept in real user needs, we combined sentiment analysis, market patterns, and firsthand listening behavior across listeners and creators.</p>
 
-        <div class="cs-quote-card">
-          <div class="cs-quote-entry">
-            <div class="cs-quote-glyph">"</div>
-            <p class="cs-quote-text">With so many trigger foods and different levels of them, it's impossible to keep track on my own. I need technology to remember for me, but it's falling short at connecting that to my symptoms.</p>
-            <p class="cs-quote-cite">IBS patient</p>
-          </div>
-          <div class="cs-quote-entry">
-            <div class="cs-quote-glyph">"</div>
-            <p class="cs-quote-text">I log everything and still have no idea what caused my flare-up last week. It feels like I'm just collecting data for nothing.</p>
-            <p class="cs-quote-cite">GERD patient</p>
-          </div>
+        <div style="margin-top: 32px; overflow: visible;">
+          <img src="images/am-research.png" alt="User research survey results — listeners and creators" style="width:100%; display:block;">
         </div>
 
-        <div class="cs-synthesis">
+        <div style="margin-top: 48px;">
+          <p>Together, these findings pointed toward lightweight ways to turn passive listening into shared experiences.</p>
+        </div>
+
+        <div style="margin-top: 24px; display:grid; grid-template-columns:repeat(3, 1fr); gap:40px;">
           <div>
-            <p class="cs-synthesis-title">Drowning in data</p>
-            <p class="cs-synthesis-desc">Dense nutrition breakdowns make "insights" feel like a chore, not help.</p>
+            <p style="font-family:'Lora', serif; font-weight:700; font-size:52px; color:var(--orange); line-height:1; margin-bottom:16px;">58</p>
+            <p style="font-size:15px; line-height:1.7; color:#3D3D3D;"><strong>of 61 respondents were listeners</strong>, giving us a strong signal into what music consumers valued most.</p>
           </div>
           <div>
-            <p class="cs-synthesis-title">Users needed insights specific to their body</p>
-            <p class="cs-synthesis-desc">Users wanted food triggers connected to their own symptoms, not generic nutrition rules.</p>
+            <p style="font-family:'Lora', serif; font-weight:700; font-size:52px; color:var(--orange); line-height:1; margin-bottom:16px;">60+</p>
+            <p style="font-size:15px; line-height:1.7; color:#3D3D3D;"><strong>poll selections</strong> favored year-end or monthly listening summaries, curated playlists, and offline access, while fewer than 15 went to livestream features.</p>
           </div>
           <div>
-            <p class="cs-synthesis-title">The cause → effect link was missing</p>
-            <p class="cs-synthesis-desc">Users couldn't connect what they ate to how they felt, making AI-generated insights harder to trust.</p>
+            <p style="font-family:'Lora', serif; font-weight:700; font-size:52px; color:var(--orange); line-height:1; margin-bottom:16px;">100%</p>
+            <p style="font-size:15px; line-height:1.7; color:#3D3D3D;">of creators surveyed prioritized <strong>playlist engagement metrics and collaborative playlist tools</strong> over follower counts.</p>
           </div>
         </div>
-      </div>
 
-      <!-- Opportunity -->
-      <div class="cs-section" id="opportunity">
-        <p class="cs-section-label">Opportunity</p>
-        <h2>Three ways to close that gap.</h2>
-        <div style="position:relative; left:0; width:calc(100% + 20px); margin-top: 32px;">
-          <img src="images/opportunity-cards.png" alt="Three opportunities: Explain the trigger, Reduce logging friction, Make nutrition glanceable" style="width:100%; display:block;">
+        <div style="margin-top: 48px;">
+          <p class="cs-section-label">Synthesis</p>
+          <h2>We synthesized 100+ responses into four design directions.</h2>
+        </div>
+
+        <div style="margin-top: 24px; overflow: visible;">
+          <img src="images/affinity.png" alt="Affinity map clustering 100+ user responses into research themes" style="width:100%; display:block;">
+        </div>
+
+        <div style="margin-top: 24px;">
+          <p>After affinity mapping insights from listeners and creators, we identified 4 recurring themes around connection, discovery, and engagement that informed our core design directions.</p>
+        </div>
+
+        <div style="margin-top: 24px; overflow: visible;">
+          <img src="images/opportunity-themes.png" alt="Four opportunity themes from synthesis — Feeling Close to Artists, Beyond the Concert, Low-Friction Social Interaction, Clear Feedback" style="width:100%; display:block;">
         </div>
       </div>
-
-      <!-- Design -->
-      <div class="cs-section" id="strategy">
-        <p class="cs-section-label">Design</p>
-        <h2>Each opportunity became a core part of the meal experience.</h2>
-        <p>None of it required adding more information. I explained the numbers already on screen, made them scannable, and took steps out of logging.</p>
-
-        <div style="margin-top: 40px;">
-          <img src="images/designs.png" alt="Design decisions" style="width:100%; display:block;">
-        </div>
-      </div>
-
-      <!-- Testing & Iteration -->
-      <div class="cs-section" id="iteration" style="margin-bottom: 96px;">
-        <p class="cs-section-label">Testing & Iteration</p>
-        <h2>The macro visualization wasn't working.</h2>
-        <p>In usability testing, users misread the circular indicators because the visual proportions didn't clearly communicate the relative scale of each macro.</p>
-        <p>I replaced them with horizontal bars, making differences easier to compare at a glance.</p>
-        <div style="position:relative; left:-30px; width:calc(100% + 40px); margin-top: 36px;">
-          <img src="images/iteration.png" alt="Iteration — circular vs horizontal progress indicators" style="width:100%; display:block;">
-        </div>
-      </div>
-
-      <!-- Design Evolution -->
-      <div class="cs-section" id="evolution">
-        <p class="cs-section-label">Design Evolution</p>
-        <h2>Two screens, before and after.</h2>
-        <div class="cs-diff">
-
-          <!-- Row 1: Macros -->
-          <div class="cs-diff-row">
-            <div style="display:flex; flex-direction:column; gap:10px;">
-              <p class="cs-diff-title">Nutrition was one dense line, with no sense of proportion.</p>
-              <p class="cs-diff-desc">The original card squeezed every macro into a single line of text, so nothing stood out and nothing was comparable. I rebuilt it around a clearer information hierarchy: meal context first, then a dedicated macro summary showing each value against its scale.</p>
-            </div>
-            <div style="max-width: 760px; width: 100%;">
-              <img src="images/diff-first.png" alt="From macro text to horizontal bars" style="width:100%; display:block;">
-            </div>
-          </div>
-
-          <!-- Row 2: Score -->
-          <div class="cs-diff-row">
-            <div style="display:flex; flex-direction:column; gap:10px;">
-              <p class="cs-diff-title">A score wasn't enough. Users needed to know what caused it.</p>
-              <p class="cs-diff-desc">Early designs showed trigger risk as a color-coded label like "Low" or "Moderate," which read more like a verdict than an explanation. The redesign pairs a numeric score with a one-line reason for it, plus an ingredient-level breakdown showing which foods contributed and where alternatives existed.</p>
-            </div>
-            <div style="max-width: 760px; width: 100%;">
-              <img src="images/diff-second.png" alt="From color dot to numeric score" style="width:100%; display:block;">
-            </div>
-          </div>
-
-
-</div>
-      </div>
-
 
       <!-- The Solution -->
       <div class="cs-section" id="solution">
         <p class="cs-section-label">The Solution</p>
-        <h2>Log a meal, and the screen explains itself.</h2>
-        <p>The redesigned meal detail screen: macros scaled so you can compare them, a trigger score with its reasoning attached, and ingredient-level detail on demand.</p>
-        <div class="cs-solution-video-wrap">
-          <video autoplay muted loop playsinline>
-            <source src="videos/solution-demo.mp4" type="video/mp4">
-          </video>
-          <div class="cs-solution-video-placeholder" id="solution-placeholder">
-            <span>Demo video coming soon</span>
+        <h2>From passive stream to shared moment</h2>
+
+        <div style="margin-top: 32px;">
+          <p class="cs-diff-title">Personalized Concert Discovery</p>
+          <p>Concert discovery was generic and had no connection to what someone actually listens to. We looked into surfacing upcoming concerts directly on the user's profile, personalized by listening history, with ticketing, a setlist preview, and attendance counts in one flow. This turned concert-going from a separate errand into an extension of the listening experience itself.</p>
+        </div>
+
+        <div style="margin-top: 24px; overflow: visible;">
+          <img src="images/am-design-1.png" alt="Amazon Music concert discovery and detail screens — personalized event feed, setlist preview, and ticketing flow" style="width:100%; display:block;">
+        </div>
+
+        <div style="margin-top: 48px;">
+          <p class="cs-diff-title">Friend Profile & Shared Artists</p>
+          <p>There was no way to see which concerts your friends actually cared about, or where your taste overlapped with theirs. So we decided to surface shared artists and friends' concert activity directly on profile pages. This made discovery social by default and you could see who around you was already excited about the same show and was attending so you could connect with them.</p>
+        </div>
+
+        <div style="margin-top: 24px; overflow: visible;">
+          <img src="images/am-design-2.png" alt="Friend profile screens — shared top artist match, friends' concert activity, and past shows attended together" style="width:100%; display:block;">
+        </div>
+
+        <div style="margin-top: 48px;">
+          <p class="cs-diff-title">Live Concert Experience</p>
+          <p>We explored how artist-hosted virtual concerts could feel more participatory than a traditional livestream. Live Mode added real-time reactions and chat, while Lyrics Mode created a more focused listening experience — giving artists new ways to engage their audience and fans different ways to experience the same performance.</p>
+        </div>
+
+        <div style="margin-top: 24px; overflow: visible;">
+          <img src="images/am-design-3.png" alt="Live concert screens — Live Mode with real-time reactions and chat, and Lyrics Mode with animated visuals" style="width:100%; display:block;">
+        </div>
+
+      </div>
+
+      <!-- Testing -->
+      <div class="cs-section" id="testing">
+        <p class="cs-section-label">Testing</p>
+        <h2>Would people actually use this?</h2>
+        <p>We tested the Figma prototype with people outside our team and asked them to react honestly.</p>
+
+        <div style="margin-top: 32px; display:grid; grid-template-columns:repeat(3, 1fr); gap:24px;">
+          <div style="border:1px solid var(--border); padding:28px 24px;">
+            <div style="width:44px; height:44px; background:var(--orange); display:flex; align-items:center; justify-content:center; margin-bottom:20px;">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+            </div>
+            <p style="font-family:'Lora', serif; font-weight:600; font-size:16px; color:var(--black); margin-bottom:12px;">User 1</p>
+            <p style="font-size:14px; line-height:1.7; color:#5C5C5C; font-style:italic;">"I love the visuals!! they make the music feel alive, but I wish there was a way to customize them to match my mood or preferences. :D"</p>
+          </div>
+          <div style="border:1px solid var(--border); padding:28px 24px;">
+            <div style="width:44px; height:44px; background:var(--orange); display:flex; align-items:center; justify-content:center; margin-bottom:20px;">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+            </div>
+            <p style="font-family:'Lora', serif; font-weight:600; font-size:16px; color:var(--black); margin-bottom:12px;">User 2</p>
+            <p style="font-size:14px; line-height:1.7; color:#5C5C5C; font-style:italic;">"The shared artist compatibility score is pretty cool maybe it'll be cooler if i can connect with fans attending the same concert."</p>
+          </div>
+          <div style="border:1px solid var(--border); padding:28px 24px;">
+            <div style="width:44px; height:44px; background:var(--orange); display:flex; align-items:center; justify-content:center; margin-bottom:20px;">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+            </div>
+            <p style="font-family:'Lora', serif; font-weight:600; font-size:16px; color:var(--black); margin-bottom:12px;">User 3</p>
+            <p style="font-size:14px; line-height:1.7; color:#5C5C5C; font-style:italic;">"The live chat during concerts is engaging it gets overwhelming when too many messages flood in idk maybe add filters."</p>
           </div>
         </div>
       </div>
 
-      <!-- Impact -->
-      <div class="cs-section" id="impact">
-        <p class="cs-section-label">Impact</p>
-        <h2>It shipped, and interpretation time dropped.</h2>
-        <p>The redesigned meal experience shipped in Flourish AI and was featured in the product's App Store preview. In a comparative usability study with 8 beta users, the redesign helped users interpret meal insights faster and more accurately identify their personal food triggers.</p>
-        <div style="margin-top: 36px; overflow: visible;">
-          <img src="images/impact.png" alt="Impact — usability study results and App Store feature" style="width: calc(100% - 180px); max-width: none; display: block; margin: 0 auto; border-radius: 0;">
-        </div>
-      </div>
-
-      <!-- Looking Ahead / MVP 2 -->
-      <div class="cs-section" id="mvp2">
-        <p class="cs-section-label">Looking Ahead</p>
-        <h2>Extending insights beyond individual meals.</h2>
-        <p>After the core experience shipped, I looked at what third-party health data could add. Pulling in signals like sleep, activity, and heart rate alongside logged meals and symptoms could surface patterns a user wouldn't catch on their own. These stayed deliberately small, just a single line naming the pattern with a way to look closer, instead of another dashboard of raw numbers.</p>
-        <div style="margin-top: 36px;">
-          <img src="images/mvp2.png" alt="MVP 2 — extending insights with Apple Health integration" style="width:100%; display:block;">
-        </div>
+      <!-- Outcome -->
+      <div class="cs-section" id="outcome">
+        <p class="cs-section-label">Outcome</p>
+        <h2>We presented our concept to leading designers at Amazon Music.</h2>
+        <p>Our team was selected as one of 10 finalists out of 100+ teams to present directly to a panel of Amazon Music designers. We walked them through our research, product thinking, and final concept, then received feedback on how the experience could evolve.</p>
       </div>
 
       <!-- Reflection -->
       <div class="cs-section" id="reflection">
         <p class="cs-section-label">Reflection</p>
-        <h2>What this project taught me.</h2>
-        <p>Shipping the meal detail redesign left me with a few principles I'll carry into future product work.</p>
-        <div style="margin-top: 36px; display:flex; flex-direction:column; gap:16px;">
-
-          <div style="border:1px solid var(--border); padding:24px 28px; display:flex; gap:20px; align-items:flex-start;">
-            <div style="flex-shrink:0; width:40px; height:40px; border-radius:50%; background:#8B5CF6; color:#fff; display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:700;">01</div>
-            <div>
-              <p class="cs-diff-title">AI insights are only useful when users can understand the "why."</p>
-              <p class="cs-diff-desc">Designing the trigger experience taught me that surfacing an AI-generated answer isn't enough. Giving users context behind a score and a clear next step made the insight more understandable and actionable.</p>
-            </div>
-          </div>
-
-          <div style="border:1px solid var(--border); padding:24px 28px; display:flex; gap:20px; align-items:flex-start;">
-            <div style="flex-shrink:0; width:40px; height:40px; border-radius:50%; background:#8B5CF6; color:#fff; display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:700;">02</div>
-            <div>
-              <p class="cs-diff-title">Simplifying data doesn't mean removing information.</p>
-              <p class="cs-diff-desc">Throughout the meal detail redesign, I learned to use hierarchy, progressive disclosure, and visualization to make dense health information easier to scan without sacrificing the detail users relied on.</p>
-            </div>
-          </div>
-
-          <div style="border:1px solid var(--border); padding:24px 28px; display:flex; gap:20px; align-items:flex-start;">
-            <div style="flex-shrink:0; width:40px; height:40px; border-radius:50%; background:#8B5CF6; color:#fff; display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:700;">03</div>
-            <div>
-              <p class="cs-diff-title">Design decisions don't end at the prototype.</p>
-              <p class="cs-diff-desc">Seeing the redesign move from Figma into the live product taught me to think beyond the ideal interaction. Shipping required balancing user needs with technical constraints, existing product patterns, and what could realistically be built within the internship timeline.</p>
-            </div>
-          </div>
-
-        </div>
+        <h2>What I took away from this designathon</h2>
+        <p>I went into this thinking we'd need to invent new social features, but the strongest ideas came from things people already cared about like shared artists, concert plans, and listening habits.</p>
+        <p>Working within a one-day timeline also forced us to move quickly and prioritize. We focused on a few strong signals from users, aligned on what mattered most, and spent our time designing and prototyping around them.</p>
       </div>
 
     </div>
@@ -1507,22 +1153,38 @@
         <p class="next-up-title">Student Information Systems</p>
       </div>
 
-      <a class="next-up-card" href="amazon-music.html">
-        <div class="work-thumb thumb-3">
-          <div class="thumb-3-mesh">
-            <div class="t3b t3b-1"></div>
-            <div class="t3b t3b-2"></div>
-            <div class="t3b t3b-3"></div>
-            <div class="t3b t3b-4"></div>
-            <div class="t3b t3b-5"></div>
+      <a class="next-up-card" href="flourish.html">
+        <div class="work-thumb thumb-1">
+          <div class="thumb-1-mesh">
+            <div class="t1b t1b-1"></div>
+            <div class="t1b t1b-2"></div>
+            <div class="t1b t1b-3"></div>
+            <div class="t1b t1b-4"></div>
           </div>
-          <div class="t3-sweep"></div>
-          <div class="t3-imgs">
-            <div class="t3-img-back"><img src="images/fry1.png" draggable="false" alt="Amazon Music"/></div>
-            <div class="t3-img-front"><img src="images/fry.png" draggable="false" alt="Amazon Music"/></div>
+          <div class="t1-sweep"></div>
+          <div class="f1-scene">
+            <div class="f1-nav">
+              <div class="f1-pill">
+                <div class="f1-nd f1-nd-1">01</div>
+                <div class="f1-sep"></div>
+                <div class="f1-nd f1-nd-2">02</div>
+                <div class="f1-sep"></div>
+                <div class="f1-nd f1-nd-3">03</div>
+              </div>
+              <div class="f1-labels">
+                <span class="f1-lbl f1-lbl-1">Symptom</span>
+                <span class="f1-lbl f1-lbl-2">Macro</span>
+                <span class="f1-lbl f1-lbl-3">Trend</span>
+              </div>
+            </div>
+            <div class="f1-cards-area">
+              <div class="f1-crd f1-crd-1"><img src="images/sym5.png" draggable="false"/></div>
+              <div class="f1-crd f1-crd-2"><img src="images/115.png"  draggable="false"/></div>
+              <div class="f1-crd f1-crd-3"><img src="images/sym4.png" draggable="false"/></div>
+            </div>
           </div>
         </div>
-        <p class="next-up-title">Amazon Music</p>
+        <p class="next-up-title">AI Health Insights</p>
       </a>
 
     </div>
@@ -1563,13 +1225,12 @@
     });
 
     /* ── SOLUTION VIDEO: hide placeholder when video plays ── */
-    const solVideo = document.querySelector('#solution video');
+    const solVideo = document.getElementById('solution-video');
     const solPlaceholder = document.getElementById('solution-placeholder');
     if (solVideo) {
       solVideo.addEventListener('playing', () => {
         if (solPlaceholder) solPlaceholder.style.display = 'none';
       });
-      // If the video src is missing, keep placeholder visible
       solVideo.addEventListener('error', () => {
         if (solPlaceholder) solPlaceholder.style.display = 'flex';
       });

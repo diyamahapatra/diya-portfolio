@@ -11,7 +11,7 @@
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
     :root {
-      --orange: #E53D00;
+      --orange: #8B5CF6;
       --black:  #0F0F0F;
       --gray:   #6B7280;
       --border: #E5E7EB;
@@ -266,30 +266,18 @@
       border-top: 1px solid var(--border); padding-top: 24px;
     }
     .footer-copy { font-size: 12px; color: var(--gray); }
-
-    /* cursor glow */
-    #cursor-glow {
-      position: fixed; inset: 0; pointer-events: none; z-index: 2;
-      opacity: 0; transition: opacity 0.6s var(--ease);
-      background: radial-gradient(
-        640px circle at var(--mx, 50%) var(--my, 50%),
-        rgba(229,61,0,0.18) 0%, rgba(229,61,0,0.07) 40%, transparent 70%
-      );
-    }
-    #cursor-glow.active { opacity: 1; }
   </style>
 </head>
 <body>
 
   <div id="custom-cursor"></div>
-  <div id="cursor-glow"></div>
 
   <nav>
-    <a class="nav-logo" href="diya-splash.html?skip"><img src="images/miffy.png" alt="miffy" style="width:22px;height:22px;object-fit:contain;display:block;">diya</a>
+    <a class="nav-logo" href="diya-splash.html?skip"><img src="images/purpmiffy.png" alt="miffy" style="width:22px;height:22px;object-fit:contain;display:block;">diya</a>
     <ul class="nav-links">
       <li><a href="diya-splash.html?skip" class="active">Work</a></li>
       <li><a href="sandlot.html">Sandbox</a></li>
-      <li><a href="https://drive.google.com/file/d/1dbvKrqRNuBisy0lqk2uoBBgtkCQalHIH/view?usp=sharing" target="_blank">Resume</a></li>
+      <li><a href="Diyas_Resume.pdf" target="_blank">Resume</a></li>
     </ul>
   </nav>
 
@@ -374,10 +362,9 @@
         <p class="cs-section-label">03 — What the Research Told Me</p>
         <h2>Four themes from an affinity map, GA4, and a live site audit</h2>
         <p>Placeholder — walk through your research methods and what each one surfaced. What were the four themes?</p>
-        <div class="cs-img-block">
-          <div style="display:flex;align-items:center;justify-content:center;width:100%;height:100%;">
-            <p style="font-size:13px;color:var(--gray);">Affinity map / research artifacts</p>
-          </div>
+        <p><strong>Synthesis.</strong> We affinity mapped 100+ user responses into categories to decide on a direction.</p>
+        <div class="cs-img-block" style="aspect-ratio:4840/2543;background:#fff;">
+          <img src="images/affinity.png" alt="Affinity map clustering 100+ user responses into research themes" style="object-fit:contain;"/>
         </div>
       </div>
 
@@ -457,14 +444,14 @@
           <p class="footer-sub">Let's get in touch and build something <span id="footer-word">together</span><span class="footer-caret">|</span></p>
           <div class="footer-links">
             <a class="footer-link" href="mailto:diyamahapatra@berkeley.edu">email</a>
-            <a class="footer-link" href="#">linkedIn</a>
-            <a class="footer-link" href="https://drive.google.com/file/d/1dbvKrqRNuBisy0lqk2uoBBgtkCQalHIH/view?usp=sharing" target="_blank">resume</a>
+            <a class="footer-link" href="https://www.linkedin.com/in/diya-mahapatra/" target="_blank">linkedIn</a>
+            <a class="footer-link" href="Diyas_Resume.pdf" target="_blank">resume</a>
           </div>
         </div>
         <div class="footer-nav">
           <a class="footer-nav-link" href="diya-splash.html?skip">Work</a>
           <a class="footer-nav-link" href="sandlot.html">Sandbox</a>
-          <a class="footer-nav-link" href="https://drive.google.com/file/d/1dbvKrqRNuBisy0lqk2uoBBgtkCQalHIH/view?usp=sharing" target="_blank">Resume</a>
+          <a class="footer-nav-link" href="Diyas_Resume.pdf" target="_blank">Resume</a>
         </div>
       </div>
       <div class="footer-bottom">
@@ -477,17 +464,10 @@
   <script>
     /* ── CUSTOM CURSOR ── */
     const cursorEl = document.getElementById('custom-cursor');
-    let cx = -200, cy = -200, clx = cx, cly = cy;
     document.addEventListener('mousemove', e => {
-      cx = e.clientX; cy = e.clientY;
+      cursorEl.style.transform = `translate(${e.clientX}px, ${e.clientY}px) translate(-50%, -50%)`;
       cursorEl.style.opacity = '1';
     });
-    (function cursorLoop() {
-      clx += (cx - clx) * 0.14;
-      cly += (cy - cly) * 0.14;
-      cursorEl.style.transform = `translate(${clx.toFixed(1)}px, ${cly.toFixed(1)}px) translate(-50%, -50%)`;
-      requestAnimationFrame(cursorLoop);
-    })();
 
     /* ── SIDEBAR ACTIVE STATE ON SCROLL ── */
     const sections = document.querySelectorAll('.cs-section, #overview');
@@ -504,23 +484,6 @@
     }, { rootMargin: '-20% 0px -70% 0px' });
 
     sections.forEach(s => io.observe(s));
-
-    /* ── CURSOR GLOW (footer only) ── */
-    const glowEl = document.getElementById('cursor-glow');
-    let overFooter = false;
-    let glowX = window.innerWidth / 2, glowY = window.innerHeight / 2;
-    let glowLx = glowX, glowLy = glowY;
-    document.addEventListener('mousemove', e => { glowX = e.clientX; glowY = e.clientY; });
-    (function glowLoop() {
-      glowLx += (glowX - glowLx) * 0.07;
-      glowLy += (glowY - glowLy) * 0.07;
-      glowEl.style.setProperty('--mx', glowLx.toFixed(1) + 'px');
-      glowEl.style.setProperty('--my', glowLy.toFixed(1) + 'px');
-      requestAnimationFrame(glowLoop);
-    })();
-    const footerEl = document.querySelector('.site-footer');
-    footerEl.addEventListener('mouseenter', () => { glowEl.classList.add('active'); });
-    footerEl.addEventListener('mouseleave', () => { glowEl.classList.remove('active'); });
 
     /* ── FOOTER WORD CYCLER ── */
     (function() {
