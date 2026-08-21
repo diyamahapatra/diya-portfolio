@@ -621,7 +621,44 @@
       border-top: 1px solid var(--border); padding-top: 24px;
     }
     .footer-copy { font-size: 12px; color: var(--gray); }
-  </style>
+  
+    /* ── MOBILE ──────────────────────────────────────────────
+       Scoped entirely to narrow viewports; desktop is untouched. */
+    @media (max-width: 820px) {
+      nav { padding: 0 18px; }
+      .nav-links { gap: 18px; }
+      .nav-links a { font-size: 13px; }
+
+      /* the sticky "on this page" rail needs a gutter a phone doesn't have */
+      .cs-sidebar { display: none; }
+      .cs-layout {
+        flex-direction: column;
+        max-width: 100%;
+        padding: 57px 20px 0;
+      }
+      .cs-content { max-width: 100%; }
+
+      /* every multi-column block becomes a single stack */
+      .cs-overview-grid,
+      .cs-synthesis,
+      .cs-impact-grid,
+      .cs-design-row,
+      .cs-diff-pair,
+      .next-up-grid,
+      .cs-persona-grid,
+      .cs-two-col { grid-template-columns: 1fr; }
+      .finding-row { grid-template-columns: 22px 1fr; }
+
+      /* oversized display numerals shrink to fit a 390px screen */
+      .cs-metric-num { font-size: 44px; }
+      .research-stat-num { font-size: 36px; }
+      .cs-synthesis-title { font-size: 28px; }
+
+      img, video { max-width: 100%; height: auto; }
+
+      .site-footer { padding: 56px 20px 40px; }
+    }
+</style>
 </head>
 <body>
 

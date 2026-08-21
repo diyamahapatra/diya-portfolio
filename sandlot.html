@@ -231,7 +231,21 @@
       .img-item, #custom-cursor { transition: none; }
       .hint-hand, .hint-arrow, .drag-hint { animation: none; opacity: 1; }
     }
-  </style>
+  
+    /* ── MOBILE ──────────────────────────────────────────────
+       The canvas already handles touch via pointer events; this only
+       tightens the chrome. Desktop is untouched. */
+    @media (max-width: 820px) {
+      nav { padding: 0 18px; }
+      .nav-links { gap: 18px; }
+      .nav-links a { font-size: 13px; }
+      /* a finger is coarser than a cursor — give the hint room above the bar */
+      .drag-hint { bottom: 28px; font-size: 10.5px; padding: 9px 16px 9px 13px; }
+      /* no hover state on touch, so the custom ring is just noise */
+      body, body * { cursor: auto; }
+      #custom-cursor { display: none; }
+    }
+</style>
 </head>
 <body>
 

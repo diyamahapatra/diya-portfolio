@@ -1282,7 +1282,36 @@
       font-size: 12px;
       color: var(--gray);
     }
-  </style>
+  
+    /* ── MOBILE ──────────────────────────────────────────────
+       Scoped entirely to narrow viewports; desktop is untouched. */
+    @media (max-width: 820px) {
+      nav { padding: 0 18px; }
+      .nav-links { gap: 18px; }
+      .nav-links a { font-size: 13px; }
+
+      .hero {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 88px 20px 48px;
+        gap: 20px;
+      }
+      .hero-separator { display: none; }
+      .hero-left, .hero-right { width: 100%; }
+
+      /* two-up work cards become a single column */
+      .work-section { padding: 36px 20px 90px; }
+      .work-grid {
+        grid-template-columns: 1fr;
+        column-gap: 0;
+        row-gap: 52px;
+      }
+
+      .site-footer { padding: 56px 20px 40px; }
+
+      img, video { max-width: 100%; height: auto; }
+    }
+</style>
 </head>
 <body>
 
