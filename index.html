@@ -20,87 +20,18 @@
 
     html, body {
       width: 100%; height: 100%;
-      overflow: hidden;
       font-family: 'Inter', system-ui, sans-serif;
       -webkit-font-smoothing: antialiased;
     }
 
     /* ═══════════════════════════════════════════
-       SPLASH
-    ═══════════════════════════════════════════ */
-    #splash {
-      position: fixed;
-      inset: 0;
-      z-index: 100;
-      /* same diagonal as the Flourish AI card (.thumb-1) */
-      background: linear-gradient(135deg, #BCD8D8 0%, #C0C8E8 52%, #EDE0D4 100%);
-      --cx: 50%; --cy: 50%;
-    }
-
-    @keyframes splash-go {
-      0%   { clip-path: circle(150% at var(--cx) var(--cy)); filter: brightness(1.0); }
-      8%   { clip-path: circle(160% at var(--cx) var(--cy)); filter: brightness(2.8); }
-      100% { clip-path: circle(0%   at var(--cx) var(--cy)); filter: brightness(0.9); }
-    }
-    #splash.away {
-      animation: splash-go 0.55s cubic-bezier(0.4, 0, 1, 1) forwards;
-      pointer-events: none;
-    }
-
-    #splash canvas {
-      display: block;
-      position: absolute;
-      inset: 0; width: 100%; height: 100%;
-    }
-
-    .splash-text {
-      position: absolute;
-      inset: 0; z-index: 10;
-      display: flex; flex-direction: column;
-      align-items: center; justify-content: center;
-      pointer-events: none; user-select: none;
-    }
-    .splash-label {
-      font-size: 11.5px; font-weight: 400;
-      letter-spacing: 0.22em; text-transform: uppercase;
-      color: rgba(255,255,255,0.88);
-      margin-bottom: 16px;
-    }
-    .splash-typing {
-      font-size: clamp(44px, 7.5vw, 90px);
-      font-weight: 600; color: #fff;
-      letter-spacing: -0.028em; line-height: 1;
-      display: flex; align-items: center;
-    }
-    .caret {
-      display: inline-block;
-      width: 3px; height: 0.76em;
-      background: #fff; border-radius: 2px;
-      margin-left: 4px; position: relative; top: 0.05em;
-      animation: blink 1.05s step-end infinite;
-    }
-    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
-
-    .skip-hint {
-      position: absolute; bottom: 32px; left: 50%;
-      transform: translateX(-50%);
-      font-size: 11px; font-weight: 400;
-      letter-spacing: 0.14em; text-transform: uppercase;
-      color: rgba(255,255,255,0.35);
-      white-space: nowrap;
-      animation: fadeIn 1s ease 2s both;
-    }
-    @keyframes fadeIn { from{opacity:0} to{opacity:1} }
-
-    /* ═══════════════════════════════════════════
-       PORTFOLIO  (sits underneath, revealed on splash-away)
+       PORTFOLIO
     ═══════════════════════════════════════════ */
     #portfolio {
       position: relative;
       width: 100%; height: 100%;
       overflow-y: auto;
       background: #fff;
-      opacity: 0;
     }
     #portfolio.visible { opacity: 1; }
 
@@ -1315,20 +1246,11 @@
 </head>
 <body>
 
-  <!-- custom cursor lives outside both so it works on splash + portfolio -->
+  <!-- custom cursor -->
   <div id="custom-cursor"><span class="cursor-label">Coming Soon</span></div>
 
-  <!-- ═══ SPLASH ═══ -->
-  <div id="splash">
-    <canvas id="c"></canvas>
-    <div class="splash-text">
-      <p class="splash-typing"><span id="typed"></span><span class="caret"></span></p>
-    </div>
-    <p class="skip-hint">Click anywhere to skip</p>
-  </div>
-
   <!-- ═══ PORTFOLIO ═══ -->
-  <div id="portfolio">
+  <div id="portfolio" class="visible">
 
     <nav>
       <a href="#" class="nav-logo">
@@ -1559,7 +1481,7 @@
             </div>
           </div>
           <div class="footer-nav">
-            <a class="footer-nav-link" href="/?skip">Work</a>
+            <a class="footer-nav-link" href="/">Work</a>
             <a class="footer-nav-link" href="/sandlot">Sandbox</a>
             <a class="footer-nav-link" href="Diyas_Resume.pdf" target="_blank">Resume</a>
           </div>
@@ -1575,125 +1497,6 @@
 
 
   <script>
-    /* ── GRADIENT ANIMATION ── */
-    const cvs = document.getElementById('c');
-    const ctx  = cvs.getContext('2d');
-    function resize() { cvs.width = cvs.offsetWidth || window.innerWidth; cvs.height = cvs.offsetHeight || window.innerHeight; }
-    resize();
-    window.addEventListener('resize', resize);
-
-    let mx = window.innerWidth/2, my = window.innerHeight/2, lx = mx, ly = my;
-    window.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
-
-    /* Same hue family as the Carbon Sustain card (.t2b blobs): soft aqua
-       #BCD8D8, periwinkle #C0C8E8, warm creams #EDE4D0 / #EDE0D4. Those are
-       pastels at ~85% lightness, which white splash type would disappear
-       against — so the hues are carried over but sat around 60% lightness to
-       keep the wordmark legible. */
-    /* The exact three stops from the Flourish AI card (.thumb-1). The colours
-       never change — the motion comes from slowly swinging the gradient's axis
-       and sliding the middle stop, so it breathes without drifting off-palette. */
-    const STOPS = ['#BCD8D8', '#C0C8E8', '#EDE0D4'];
-    let t = 0;
-    function render() {
-      try {
-        const W = cvs.width, H = cvs.height;
-        if (!W || !H) { requestAnimationFrame(render); return; }
-        lx += (mx-lx)*0.04; ly += (my-ly)*0.04;
-        const mox = (lx/W-0.5), moy = (ly/H-0.5);
-
-        /* Swing around the card's 135° diagonal, nudged by the cursor.
-           CSS angles aren't canvas angles: for a CSS angle a the direction is
-           (sin a, -cos a), so 135deg runs top-left → bottom-right. Using
-           (cos, sin) here would mirror the gradient off the card. */
-        const a = (135 + Math.sin(t*0.42)*13 + mox*9) * Math.PI/180;
-        const dirx = Math.sin(a), diry = -Math.cos(a);
-        const cx = W/2, cy = H/2;
-        const reach = (Math.abs(W*dirx) + Math.abs(H*diry))/2 * 1.16;
-        const dx = dirx*reach, dy = diry*reach;
-
-        const g = ctx.createLinearGradient(cx-dx, cy-dy, cx+dx, cy+dy);
-        /* 0.52 is the card's own midpoint; it drifts either side of it */
-        const mid = Math.min(Math.max(0.52 + Math.sin(t*0.55)*0.11 + moy*0.05, 0.18), 0.86);
-        g.addColorStop(0, STOPS[0]);
-        g.addColorStop(mid, STOPS[1]);
-        g.addColorStop(1, STOPS[2]);
-        ctx.fillStyle = g; ctx.fillRect(0,0,W,H);
-        t += 0.004;
-      } catch (err) {
-        console.warn('gradient render skipped a frame:', err);
-      }
-      requestAnimationFrame(render);
-    }
-    render();
-
-    /* ── SPLASH TYPEWRITER ──
-       Types "built for the future" once, holds, erases, then triggers
-       the water-splash reveal. No looping, no cycling.              */
-    const PHRASE  = 'hi, i\'m diya';
-    const typedEl = document.getElementById('typed');
-    let ci = 0, erasing = false;
-
-    function tick() {
-      erasing ? ci-- : ci++;
-      typedEl.textContent = PHRASE.slice(0, ci);
-
-      let delay = erasing ? 30 : 55;
-
-      if (!erasing && ci === PHRASE.length) {
-        // Fully typed — pause, then erase
-        erasing = true;
-        delay   = 900;
-      } else if (erasing && ci === 0) {
-        // Fully erased — short pause then splash away
-        setTimeout(() => reveal('50%', '50%'), 300);
-        return; // stop the loop
-      }
-
-      setTimeout(tick, delay);
-    }
-
-    setTimeout(tick, 700); // small delay before starting
-
-    /* ── SPLASH → PORTFOLIO TRANSITION ── */
-    const splash    = document.getElementById('splash');
-    const portfolio = document.getElementById('portfolio');
-    let done = false;
-
-    function reveal(cx='50%', cy='50%') {
-      if (done) return;
-      done = true;
-      splash.style.setProperty('--cx', cx);
-      splash.style.setProperty('--cy', cy);
-      portfolio.style.opacity = '1';
-      splash.classList.add('away');
-      splash.addEventListener('animationend', () => {
-        splash.style.display = 'none';
-        document.body.style.overflow = 'auto';
-        portfolio.classList.add('visible');
-      }, { once: true });
-    }
-
-    function skipSplash() {
-      if (done) return;
-      done = true;
-      splash.style.display = 'none';
-      document.body.style.overflow = 'auto';
-      portfolio.style.opacity = '1';
-      portfolio.classList.add('visible');
-    }
-
-    /* if returning from another page, skip the splash entirely */
-    if (new URLSearchParams(window.location.search).get('skip') !== null) {
-      skipSplash();
-    }
-
-    /* click to skip — collapses toward tap point */
-    splash.addEventListener('click', e => {
-      const cx = (e.clientX/window.innerWidth *100).toFixed(1)+'%';
-      const cy = (e.clientY/window.innerHeight*100).toFixed(1)+'%';
-      reveal(cx, cy);
-    });
 
     /* ── PORTFOLIO WORD TYPEWRITER ── */
 
