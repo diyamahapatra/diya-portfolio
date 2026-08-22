@@ -1519,9 +1519,16 @@
     });
 
     const cursorLabelEl = cursorEl.querySelector('.cursor-label');
-    const LIVE_PROJECTS = ['flourish.html', 'amazon-music.html', 'carbon-sustain.html'];
+    const LIVE_PROJECTS = ['flourish', 'amazon-music', 'carbon-sustain'];
+    /* Compare slugs, not raw hrefs — the links have been both "flourish.html"
+       and "/flourish", and matching on the literal string silently marked every
+       card "Coming Soon" the last time they changed. */
+    const slugOf = href => (href || '')
+      .split(/[?#]/)[0]
+      .replace(/^\//, '')
+      .replace(/\.html$/, '');
     document.querySelectorAll('.work-card').forEach(card => {
-      const isLive = card.tagName === 'A' && LIVE_PROJECTS.includes(card.getAttribute('href'));
+      const isLive = card.tagName === 'A' && LIVE_PROJECTS.includes(slugOf(card.getAttribute('href')));
       card.addEventListener('mouseenter', () => {
         cursorLabelEl.textContent = isLive ? 'View Project' : 'Coming Soon';
         cursorEl.classList.add('expanded');
