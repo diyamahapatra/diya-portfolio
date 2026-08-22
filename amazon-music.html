@@ -936,6 +936,96 @@
 
       .site-footer { padding: 56px 20px 40px; }
     }
+
+    /* ── THUMB-2 (Carbon Sustain) — ported for the Next Up card ── */
+    .thumb-2 {
+      background: #F8F5EF;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .thumb-2-mesh {
+      position: absolute; inset: -20%;
+      filter: blur(52px) saturate(0.85);
+      z-index: 0;
+    }
+    .t2b {
+      position: absolute; border-radius: 50%;
+      will-change: transform;
+    }
+    .t2b-1 { width: 65%; height: 65%; background: #BCD8D8; top: -15%; left: -15%; animation: t2f1 2.2s ease-in-out infinite alternate; }
+    .t2b-2 { width: 58%; height: 58%; background: #C0C8E8; top: -12%; right: -18%; animation: t2f2 1.9s ease-in-out infinite alternate; }
+    .t2b-3 { width: 75%; height: 75%; background: #EDE4D0; bottom: -18%; left: -15%; animation: t2f3 2.4s ease-in-out infinite alternate; }
+    .t2b-4 { width: 68%; height: 68%; background: #EDE0D4; bottom: -15%; right: -15%; animation: t2f4 1.8s ease-in-out infinite alternate; }
+    .t2b-5 { width: 55%; height: 55%; background: #F0E8D8; top: 20%; left: 18%; animation: t2f5 2.0s ease-in-out infinite alternate; }
+    @keyframes t2f1 { from { transform: translate(0,0)       scale(1);    } to { transform: translate(28%, 26%)   scale(1.22); } }
+    @keyframes t2f2 { from { transform: translate(0,0)       scale(1.1);  } to { transform: translate(-26%, 28%)  scale(0.82); } }
+    @keyframes t2f3 { from { transform: translate(0,0)       scale(0.9);  } to { transform: translate(24%, -26%)  scale(1.28); } }
+    @keyframes t2f4 { from { transform: translate(0,0)       scale(1.08); } to { transform: translate(-22%, -24%) scale(0.8);  } }
+    @keyframes t2f5 { from { transform: translate(0,0)       scale(1);    } to { transform: translate(-24%, 22%)  scale(1.3);  } }
+    .thumb-2-img-wrap {
+      position: absolute; inset: 0; z-index: 3;
+      display: flex; align-items: flex-start; justify-content: flex-start;
+      padding: 22% 0 0 8%;
+    }
+    .thumb-2-img-wrap img {
+      display: block; width: 100%; height: auto;
+    }
+    .t2-sweep {
+      position: absolute; inset: 0; z-index: 1; pointer-events: none;
+      background: linear-gradient(110deg, transparent 30%, rgba(255,255,255,0.07) 50%, transparent 70%);
+      animation: t2Sweep 5.2s ease-in-out infinite;
+    }
+    @keyframes t2Sweep { 0%,100% { transform: translateX(-130%); } 50% { transform: translateX(130%); } }
+    .t2-glass-frame {
+      width: 88%;
+      flex-shrink: 0;
+      transform: none;
+      background: rgba(255,255,255,0.22);
+      backdrop-filter: blur(12px) saturate(160%);
+      -webkit-backdrop-filter: blur(12px) saturate(160%);
+      border: 1px solid rgba(255,255,255,0.65);
+      box-shadow:
+        0 20px 56px rgba(50,80,110,0.26),
+        0 6px 18px rgba(50,80,110,0.12),
+        0 1px 4px rgba(50,80,110,0.08),
+        inset 0 1.5px 0 rgba(255,255,255,0.90);
+      border-radius: 14px;
+      padding: 9px;
+      position: relative;
+    }
+    .t2-glass-frame {
+      animation: t2Float 6s ease-in-out 1.1s infinite;
+    }
+    .t2-glass-frame::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0; height: 35%;
+      background: linear-gradient(180deg, rgba(255,255,255,0.08) 0%, transparent 100%);
+      border-radius: inherit; pointer-events: none; z-index: 1;
+    }
+    .t2-glass-frame img {
+      display: block; width: 100%; height: auto;
+      border-radius: 0;
+      position: relative;
+    }
+    .thumb-2.in-view .t2-frame-enter {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .thumb-2.in-view .t2-glass-frame {
+      animation: t2Float 6s ease-in-out 1.1s infinite;
+    }
+    .t2-frame-enter {
+      opacity: 0;
+      transform: translateY(32px);
+      transition: opacity 0.85s var(--ease) 0.25s, transform 0.85s var(--ease) 0.25s;
+    }
+    .t2-frame-enter {
+      opacity: 1;
+      transform: translateY(0);
+    }
 </style>
 </head>
 <body>
@@ -1036,7 +1126,6 @@
 
         <div style="margin-top: 32px; overflow: visible;">
           <img src="images/am-problem-diagram.png" alt="Fragmented Amazon Music experience — streaming, livestreams, creator tools, and merch as disconnected touchpoints with no clear listener-to-creator connection" style="width:calc(100% + 307px); max-width:none; position:relative; left:-147px; display:block;">
-        </div>
         </div>
       </div>
 
@@ -1175,20 +1264,26 @@
     <p class="next-up-label">Next Up…</p>
     <div class="next-up-grid">
 
-      <div class="next-up-card" style="cursor:default;">
-        <div class="work-thumb thumb-lg">
-          <div class="lg-bg">
-            <div class="lg-blob lg-blob-1"></div>
-            <div class="lg-blob lg-blob-2"></div>
-            <div class="lg-blob lg-blob-3"></div>
-            <div class="lg-blob lg-blob-4"></div>
+      <a class="next-up-card" href="/carbon-sustain">
+          <div class="work-thumb thumb-2">
+            <div class="thumb-2-mesh">
+              <div class="t2b t2b-1"></div>
+              <div class="t2b t2b-2"></div>
+              <div class="t2b t2b-3"></div>
+              <div class="t2b t2b-4"></div>
+              <div class="t2b t2b-5"></div>
+            </div>
+            <div class="t2-sweep"></div>
+            <div class="thumb-2-img-wrap">
+              <div class="t2-frame-enter">
+                <div class="t2-glass-frame">
+                  <img src="images/carbs.png" alt="Carbon Sustain" draggable="false"/>
+                </div>
+              </div>
+            </div>
           </div>
-          <div class="lg-scene" style="display:flex; align-items:center; justify-content:center;">
-            <img src="images/appt-design-4.png" alt="Appointments Design 4" draggable="false" style="width:72%; border-radius:12px; box-shadow:0 8px 32px rgba(0,0,0,0.13); display:block; object-fit:cover;"/>
-          </div>
-        </div>
-        <p class="next-up-title">Student Information Systems</p>
-      </div>
+          <p class="next-up-title">Making Carbon Data Actionable</p>
+        </a>
 
       <a class="next-up-card" href="/flourish">
         <div class="work-thumb thumb-1">
@@ -1319,7 +1414,7 @@
         if (e.isIntersecting) { e.target.classList.add('in-view'); nextUpIO.unobserve(e.target); }
       });
     }, { threshold: 0.2 });
-    document.querySelectorAll('.next-up-grid .thumb-1, .next-up-grid .thumb-3, .next-up-grid .thumb-lg').forEach(el => nextUpIO.observe(el));
+    document.querySelectorAll('.next-up-grid .thumb-1, .next-up-grid .thumb-2, .next-up-grid .thumb-3, .next-up-grid .thumb-lg').forEach(el => nextUpIO.observe(el));
 
   </script>
 
