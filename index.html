@@ -1402,8 +1402,8 @@
           <p class="work-desc">Helping users uncover relationships between nutrition, symptoms, and wellness using AI.</p>
         </a>
 
-        <!-- Card 3 — Ethical (green, video) -->
-        <div class="work-card">
+        <!-- Card 3 — Ethical (green, video) — links to the live site until the case study is written -->
+        <a class="work-card work-card-link" href="https://www.ethicalapparel.org/" target="_blank" rel="noopener noreferrer">
           <div class="work-thumb thumb-4">
             <div class="thumb-4-mesh">
               <div class="t4b t4b-1"></div>
@@ -1416,7 +1416,7 @@
           <p class="work-label">EthiCAL — VP of Design 2026</p>
           <h3 class="work-title">Designing Smarter Shift Management</h3>
           <p class="work-desc">Led the end-to-end scheduling experience for managing student staff, recurring shifts, and operational workflows.</p>
-        </div>
+        </a>
 
         <!-- Card 4 -->
         <a class="work-card work-card-link" href="/amazon-music">
@@ -1519,18 +1519,16 @@
     });
 
     const cursorLabelEl = cursorEl.querySelector('.cursor-label');
-    const LIVE_PROJECTS = ['flourish', 'amazon-music', 'carbon-sustain'];
-    /* Compare slugs, not raw hrefs — the links have been both "flourish.html"
-       and "/flourish", and matching on the literal string silently marked every
-       card "Coming Soon" the last time they changed. */
-    const slugOf = href => (href || '')
-      .split(/[?#]/)[0]
-      .replace(/^\//, '')
-      .replace(/\.html$/, '');
+    /* The card's own markup is the source of truth: if it links somewhere, it's
+       ready. A hardcoded list of live slugs drifted out of sync the moment the
+       hrefs changed format and silently labelled every card "Coming Soon". */
     document.querySelectorAll('.work-card').forEach(card => {
-      const isLive = card.tagName === 'A' && LIVE_PROJECTS.includes(slugOf(card.getAttribute('href')));
+      const href = card.tagName === 'A' ? (card.getAttribute('href') || '').trim() : '';
+      const isLive = href !== '' && href !== '#';
+      const isExternal = /^https?:\/\//i.test(href) && !href.includes(location.host);
+      const label = !isLive ? 'Coming Soon' : (isExternal ? 'Visit Site' : 'View Project');
       card.addEventListener('mouseenter', () => {
-        cursorLabelEl.textContent = isLive ? 'View Project' : 'Coming Soon';
+        cursorLabelEl.textContent = label;
         cursorEl.classList.add('expanded');
       });
       card.addEventListener('mouseleave', () => cursorEl.classList.remove('expanded'));
