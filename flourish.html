@@ -1211,6 +1211,7 @@
       .cs-design-row,
       .cs-diff-pair,
       .owned-grid,
+      .opp-grid,
       .impact-layout,
       .next-up-grid,
       .cs-persona-grid,
@@ -1365,10 +1366,13 @@
     /* ── IMPACT — metric cards, same treatment as What I Owned ── */
     .impact-layout {
       display: grid;
-      grid-template-columns: 1fr 300px;
-      gap: 22px;
+      /* capped so the metric cards don't stretch the full column width —
+         the copy only needs ~40 characters and the rest read as dead space */
+      grid-template-columns: minmax(0, 1fr) 272px;
+      gap: 20px;
       align-items: start;
       margin-top: 32px;
+      max-width: 700px;
     }
     .impact-metrics { display: grid; gap: 16px; }
     .impact-card {
@@ -1391,7 +1395,7 @@
       line-height: 1.6;
       color: #6E6E6E;
       margin-bottom: 0;
-      max-width: 34ch;
+      max-width: 30ch;
     }
     .impact-shot { margin: 0; }
     .impact-shot img {
@@ -1404,6 +1408,16 @@
       font-size: 12.5px;
       line-height: 1.5;
       color: #8E8E8E;
+    }
+
+    /* ── OPPORTUNITY — same card treatment as What I Owned ── */
+    /* two up with the third spanning, matching .owned-grid — the shared
+       .owned-card:last-child rule already stretches the final card */
+    .opp-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-top: 32px;
     }
 </style>
 </head>
@@ -1574,9 +1588,23 @@
       <div class="cs-section" id="opportunity">
         <p class="cs-section-label">Opportunity</p>
         <h2>Three ways to close that gap.</h2>
-        <div style="position:relative; left:0; width:calc(100% + 20px); margin-top: 32px;">
-          <img src="images/opportunity-cards.png" alt="Three opportunities: Explain the trigger, Make nutrition glanceable, Reduce logging friction" style="width:100%; display:block;">
-        </div>
+        <div class="opp-grid">
+            <div class="owned-card">
+              <svg class="owned-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.6-3.6"/></svg>
+              <h3 class="owned-title">Explain the trigger</h3>
+              <p class="owned-body">Don&rsquo;t just assign a score. Help users understand why a food may affect them using their own patterns and data.</p>
+            </div>
+            <div class="owned-card">
+              <svg class="owned-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 20V13"/><path d="M12 20V5"/><path d="M19 20v-9"/></svg>
+              <h3 class="owned-title">Make nutrition glanceable</h3>
+              <p class="owned-body">Turn dense nutrition data into visual summaries users can understand immediately.</p>
+            </div>
+            <div class="owned-card">
+              <svg class="owned-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20h4L19 9a2.1 2.1 0 0 0-3-3L5 17v3Z"/><path d="M14.5 6.5 17.5 9.5"/></svg>
+              <h3 class="owned-title">Reduce logging friction</h3>
+              <p class="owned-body">Reduce the effort required to log accurately through fewer taps, smarter defaults, and less mental overhead.</p>
+            </div>
+          </div>
       </div>
 
       <!-- Design -->
