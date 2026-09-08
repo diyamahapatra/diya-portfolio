@@ -1411,14 +1411,18 @@
     }
 
     /* ── OPPORTUNITY — same card treatment as What I Owned ── */
-    /* two up with the third spanning, matching .owned-grid — the shared
-       .owned-card:last-child rule already stretches the final card */
+    /* three across, as the original graphic was — the cards borrow the
+       What I Owned styling but not its full-width last child */
     .opp-grid {
       display: grid;
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: repeat(3, 1fr);
       gap: 16px;
       margin-top: 32px;
     }
+    .opp-grid .owned-card:last-child { grid-column: auto; }
+    /* titles sit in a narrower column here, so they come down a step */
+    .opp-grid .owned-title { font-size: 19px; margin-bottom: 8px; }
+    .opp-grid .owned-icon { margin-bottom: 18px; }
 </style>
 </head>
 <body>
