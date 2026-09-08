@@ -1320,42 +1320,44 @@
     .owned-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 20px;
-      margin-top: 36px;
+      gap: 16px;
+      margin-top: 32px;
     }
     .owned-card {
-      background: #F8F8F8;
-      border: 1px solid #EDEDED;
-      border-radius: 16px;
-      padding: 32px 34px 34px;
+      background: #FAFAFA;
+      border: 1px solid #ECECEC;
+      border-radius: 14px;
+      padding: 26px 28px 28px;
     }
     /* the third card runs the full width, mirroring the reference layout */
     .owned-card:last-child { grid-column: 1 / -1; }
     .owned-icon {
       display: block;
-      color: #9C9C9C;
-      margin-bottom: 26px;
+      color: #A2A2A2;
+      margin-bottom: 22px;
     }
     .owned-eyebrow {
-      font-size: 15px;
+      font-size: 13.5px;
       font-weight: 400;
-      color: #8C8C8C;
-      margin-bottom: 8px;
+      color: #8E8E8E;
+      margin-bottom: 6px;
     }
+    /* Lora at 400 — the same weight and tracking as .cs-title, so the cards
+       sit in the page's existing type rather than introducing a heavier cut */
     .owned-title {
       font-family: 'Lora', serif;
-      font-size: 30px;
-      font-weight: 500;
-      letter-spacing: -0.012em;
+      font-size: 24px;
+      font-weight: 400;
+      letter-spacing: -0.02em;
       line-height: 1.2;
-      color: #0F0F0F;
-      margin-bottom: 12px;
+      color: var(--black);
+      margin-bottom: 9px;
     }
     .owned-body {
-      font-size: 16.5px;
-      line-height: 1.62;
+      font-size: 15px;
+      line-height: 1.6;
       color: #6E6E6E;
-      max-width: 46ch;
+      max-width: 42ch;
     }
 </style>
 </head>
@@ -1456,19 +1458,19 @@
         <h2>I took the core experience from research to shipped design, then explored what came next.</h2>
         <div class="owned-grid">
             <div class="owned-card">
-              <svg class="owned-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.6-3.6"/></svg>
+              <svg class="owned-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.6-3.6"/></svg>
               <p class="owned-eyebrow">Interviews &amp; Usability Testing</p>
               <h3 class="owned-title">Research &amp; Validation</h3>
               <p class="owned-body">Synthesized user interviews and usability tests to identify where AI-generated insights created confusion or mistrust.</p>
             </div>
             <div class="owned-card">
-              <svg class="owned-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 3 9 5-9 5-9-5 9-5Z"/><path d="m3 13 9 5 9-5"/></svg>
+              <svg class="owned-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 3 9 5-9 5-9-5 9-5Z"/><path d="m3 13 9 5 9-5"/></svg>
               <p class="owned-eyebrow">End-to-End Ownership</p>
               <h3 class="owned-title">Core Product Design</h3>
               <p class="owned-body">Led end-to-end design of the meal detail experience, including trigger scores, macro visualization, and editing flows.</p>
             </div>
             <div class="owned-card">
-              <svg class="owned-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 17.5 9.5 11l4 4L21 7.5"/><path d="M15.5 7.5H21v5.5"/></svg>
+              <svg class="owned-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 17.5 9.5 11l4 4L21 7.5"/><path d="M15.5 7.5H21v5.5"/></svg>
               <p class="owned-eyebrow">Scoping What Came Next</p>
               <h3 class="owned-title">Future Exploration</h3>
               <p class="owned-body">Scoped Apple Health integrations to explore how I could connect meal data with broader health patterns.</p>
