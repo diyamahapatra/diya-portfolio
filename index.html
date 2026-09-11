@@ -1491,8 +1491,8 @@
       <div class="footer-inner">
         <div class="footer-main">
           <div class="footer-left">
-            <h2 class="footer-heading">Let's build something<br><span style="color:var(--orange);font-family:'Inter',sans-serif;" id="footer-word">together</span><span class="footer-caret" style="color:var(--orange);">|</span></h2>
-        <p class="footer-sub">Always happy to chat~</p>
+            <h2 class="footer-heading">I'm glad we could<br><span style="color:#8B5CF6">cross paths</span></h2>
+          <p class="footer-sub">Let's get in touch and build something <span id="footer-word">together</span><span class="footer-caret">|</span></p>
             <div class="footer-links">
               <a class="footer-link" href="mailto:diyamahapatra@berkeley.edu">email</a>
               <a class="footer-link" href="https://www.linkedin.com/in/diya-mahapatra/" target="_blank">linkedIn</a>
@@ -1619,18 +1619,22 @@
         for (var i = 0; i < cards.length; i++) cards[i].classList.add('revealed');
       }
       if (!document.documentElement.classList.contains('js-reveal')) { revealAll(); return; }
+      var fired = false;
       var io = new IntersectionObserver(function (entries) {
         entries.forEach(function (e) {
           if (!e.isIntersecting) return;
+          fired = true;
           /* stagger by column so a row arrives as a wave, not all at once */
           var idx = [].indexOf.call(cards, e.target);
           e.target.style.transitionDelay = (idx % 2) * 90 + 'ms';
           e.target.classList.add('revealed');
           io.unobserve(e.target);
         });
-      }, { rootMargin: '0px 0px -10% 0px', threshold: 0.15 });
+      }, { rootMargin: '0px 0px -12% 0px', threshold: 0 });
       for (var i = 0; i < cards.length; i++) io.observe(cards[i]);
-      window.addEventListener('load', function () { setTimeout(revealAll, 2500); });
+      window.addEventListener('load', function () {
+        setTimeout(function () { if (!fired) revealAll(); }, 2500);
+      });
     })();
 </script>
 </body>
