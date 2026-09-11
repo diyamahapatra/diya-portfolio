@@ -1426,7 +1426,29 @@
     /* titles sit in a narrower column here, so they come down a step */
     .opp-grid .owned-title { font-size: 19px; margin-bottom: 8px; }
     .opp-grid .owned-icon { margin-bottom: 18px; }
+
+    /* ── SCROLL REVEALS ──
+       Gated behind .js-reveal, which is only set when the browser supports
+       IntersectionObserver and the visitor hasn't asked for reduced motion.
+       Without that class nothing is hidden, so the page degrades to plain
+       static content rather than a blank column. */
+    .js-reveal .cs-section {
+      opacity: 0;
+      transform: translateY(16px);
+      transition: opacity 0.65s var(--ease), transform 0.65s var(--ease);
+    }
+    .js-reveal .cs-section.revealed { opacity: 1; transform: none; }
+    @media (prefers-reduced-motion: reduce) {
+      .js-reveal .cs-section { opacity: 1; transform: none; transition: none; }
+    }
 </style>
+  <script>
+    (function () {
+      var ok = 'IntersectionObserver' in window &&
+               !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (ok) document.documentElement.classList.add('js-reveal');
+    })();
+  </script>
 </head>
 <body>
 
@@ -1805,10 +1827,32 @@
   <script>
     /* ── CUSTOM CURSOR ── */
     const cursorEl = document.getElementById('custom-cursor');
-    document.addEventListener('mousemove', e => {
-      cursorEl.style.transform = `translate(${e.clientX}px, ${e.clientY}px) translate(-50%, -50%)`;
-      cursorEl.style.opacity = '1';
-    });
+    /* The ring eases toward the pointer instead of pinning to it — a few
+       frames of lag is what makes a custom cursor feel weighted rather than
+       stuck to the glass. Exact tracking under reduced-motion. */
+    (function () {
+      var EASE = 0.2;
+      var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      var x = 0, y = 0, tx = 0, ty = 0, raf = null, seeded = false;
+      function draw() {
+        cursorEl.style.transform = 'translate(' + x + 'px, ' + y + 'px) translate(-50%, -50%)';
+      }
+      function tick() {
+        x += (tx - x) * EASE;
+        y += (ty - y) * EASE;
+        draw();
+        if (Math.abs(tx - x) > 0.1 || Math.abs(ty - y) > 0.1) {
+          raf = requestAnimationFrame(tick);
+        } else { x = tx; y = ty; draw(); raf = null; }
+      }
+      document.addEventListener('mousemove', function (e) {
+        tx = e.clientX; ty = e.clientY;
+        cursorEl.style.opacity = '1';
+        if (!seeded) { x = tx; y = ty; seeded = true; draw(); return; }  // don't fly in from 0,0
+        if (reduced) { x = tx; y = ty; draw(); return; }
+        if (!raf) raf = requestAnimationFrame(tick);
+      });
+    })();
 
     /* ── SOLUTION VIDEO: hide placeholder when video plays ── */
     const solVideo = document.querySelector('#solution video');
@@ -1871,7 +1915,24 @@
     }, { threshold: 0.2 });
     document.querySelectorAll('.next-up-grid .thumb-1, .next-up-grid .thumb-2, .next-up-grid .thumb-3, .next-up-grid .thumb-lg').forEach(el => nextUpIO.observe(el));
 
-  </script>
+  
+    /* ── SCROLL REVEALS ── */
+    (function () {
+      var sections = document.querySelectorAll('.cs-section');
+      function revealAll() {
+        for (var i = 0; i < sections.length; i++) sections[i].classList.add('revealed');
+      }
+      if (!document.documentElement.classList.contains('js-reveal')) { revealAll(); return; }
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+          if (e.isIntersecting) { e.target.classList.add('revealed'); io.unobserve(e.target); }
+        });
+      }, { rootMargin: '0px 0px -12% 0px', threshold: 0.05 });
+      for (var i = 0; i < sections.length; i++) io.observe(sections[i]);
+      /* failsafe: never leave content hidden if something goes wrong */
+      window.addEventListener('load', function () { setTimeout(revealAll, 2500); });
+    })();
+</script>
 
 </body>
 </html>

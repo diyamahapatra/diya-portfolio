@@ -1242,7 +1242,26 @@
 
       img, video { max-width: 100%; height: auto; }
     }
+
+    /* ── WORK CARD REVEAL ──
+       Same .js-reveal gate as the case studies: no class, nothing hidden. */
+    .js-reveal .work-card {
+      opacity: 0;
+      transform: translateY(18px);
+      transition: opacity 0.6s var(--ease), transform 0.6s var(--ease);
+    }
+    .js-reveal .work-card.revealed { opacity: 1; transform: none; }
+    @media (prefers-reduced-motion: reduce) {
+      .js-reveal .work-card { opacity: 1; transform: none; transition: none; }
+    }
 </style>
+  <script>
+    (function () {
+      var ok = 'IntersectionObserver' in window &&
+               !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (ok) document.documentElement.classList.add('js-reveal');
+    })();
+  </script>
 </head>
 <body>
 
@@ -1513,10 +1532,32 @@
 
     /* ── CUSTOM CURSOR ── */
     const cursorEl = document.getElementById('custom-cursor');
-    document.addEventListener('mousemove', e => {
-      cursorEl.style.transform = `translate(${e.clientX}px, ${e.clientY}px) translate(-50%, -50%)`;
-      cursorEl.style.opacity = '1';
-    });
+    /* The ring eases toward the pointer instead of pinning to it — a few
+       frames of lag is what makes a custom cursor feel weighted rather than
+       stuck to the glass. Exact tracking under reduced-motion. */
+    (function () {
+      var EASE = 0.2;
+      var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      var x = 0, y = 0, tx = 0, ty = 0, raf = null, seeded = false;
+      function draw() {
+        cursorEl.style.transform = 'translate(' + x + 'px, ' + y + 'px) translate(-50%, -50%)';
+      }
+      function tick() {
+        x += (tx - x) * EASE;
+        y += (ty - y) * EASE;
+        draw();
+        if (Math.abs(tx - x) > 0.1 || Math.abs(ty - y) > 0.1) {
+          raf = requestAnimationFrame(tick);
+        } else { x = tx; y = ty; draw(); raf = null; }
+      }
+      document.addEventListener('mousemove', function (e) {
+        tx = e.clientX; ty = e.clientY;
+        cursorEl.style.opacity = '1';
+        if (!seeded) { x = tx; y = ty; seeded = true; draw(); return; }  // don't fly in from 0,0
+        if (reduced) { x = tx; y = ty; draw(); return; }
+        if (!raf) raf = requestAnimationFrame(tick);
+      });
+    })();
 
     const cursorLabelEl = cursorEl.querySelector('.cursor-label');
     /* The card's own markup is the source of truth: if it links somewhere, it's
@@ -1570,6 +1611,27 @@
       // start after a pause on the first word
       setTimeout(() => { deleting = true; tick(); }, PAUSE_AFTER);
     })();
-  </script>
+  
+    /* ── WORK CARD REVEAL, staggered ── */
+    (function () {
+      var cards = document.querySelectorAll('.work-card');
+      function revealAll() {
+        for (var i = 0; i < cards.length; i++) cards[i].classList.add('revealed');
+      }
+      if (!document.documentElement.classList.contains('js-reveal')) { revealAll(); return; }
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+          if (!e.isIntersecting) return;
+          /* stagger by column so a row arrives as a wave, not all at once */
+          var idx = [].indexOf.call(cards, e.target);
+          e.target.style.transitionDelay = (idx % 2) * 90 + 'ms';
+          e.target.classList.add('revealed');
+          io.unobserve(e.target);
+        });
+      }, { rootMargin: '0px 0px -10% 0px', threshold: 0.15 });
+      for (var i = 0; i < cards.length; i++) io.observe(cards[i]);
+      window.addEventListener('load', function () { setTimeout(revealAll, 2500); });
+    })();
+</script>
 </body>
 </html>
