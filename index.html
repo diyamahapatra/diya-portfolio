@@ -1248,11 +1248,29 @@
     .js-reveal .work-card {
       opacity: 0;
       transform: translateY(18px);
-      transition: opacity 0.6s var(--ease), transform 0.6s var(--ease);
+      transition: opacity 0.5s var(--ease), transform 0.5s var(--ease);
     }
     .js-reveal .work-card.revealed { opacity: 1; transform: none; }
     @media (prefers-reduced-motion: reduce) {
       .js-reveal .work-card { opacity: 1; transform: none; transition: none; }
+    }
+
+    /* ── CARD HOVER ──
+       The hovered card recedes and fades a little; its neighbours are left
+       alone. No blur — the haze is just opacity over a light page.
+       Written at .revealed specificity so it still wins after the reveal
+       rule has set transform:none on the same element. */
+    .work-card {
+      transition: transform 0.5s var(--ease), opacity 0.5s var(--ease);
+    }
+    .work-card:hover,
+    .js-reveal .work-card.revealed:hover {
+      transform: scale(0.972);
+      opacity: 0.86;
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .work-card:hover,
+      .js-reveal .work-card.revealed:hover { transform: none; opacity: 1; }
     }
 </style>
   <script>
