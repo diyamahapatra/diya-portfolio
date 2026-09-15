@@ -416,7 +416,10 @@
        The image sits flush at the START of the second column instead
        of the end this time — text ends at 204+420=624px at a 1280
        viewport, so a 66px gap (not the usual 48) puts the image's own
-       left edge at x:690. */
+       left edge at x:690. This is close to the real ceiling: the image
+       is 585px wide in a 1280px viewport, so anything past x:~690
+       starts pushing its right edge off-screen into horizontal scroll
+       (confirmed at x:710 — scrollWidth grew past the viewport). */
     .pillar-feature-reverse {
       display: grid;
       grid-template-columns: max-content 1fr;
