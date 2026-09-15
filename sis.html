@@ -383,7 +383,9 @@
        at exactly 50vw — same x as the Solution paragraph above it — not
        to size the image. calc(42.5vw - 48px) is "distance from the rail
        edge (7.5vw) to the content column (50vw), minus the gap"; the
-       image itself stays small inside that track via justify-self. */
+       image stays clear of the phase-num rail and sits flush against
+       the gap instead (justify-self: end), so it reads as paired with
+       the text beside it rather than stranded out in the margin. */
     .pillar-feature {
       display: grid;
       grid-template-columns: calc(42.5vw - 48px) 1fr;
@@ -394,9 +396,10 @@
       width: 85vw;
     }
     .pillar-feature-media {
-      width: 260px;
-      justify-self: start;
-      aspect-ratio: 4 / 5;
+      width: 380px;
+      max-width: 100%;
+      justify-self: end;
+      aspect-ratio: 3 / 2;
       background: #F5F5F5;
       border: 1px dashed #D8D8D8;
       display: flex; align-items: center; justify-content: center;
@@ -489,6 +492,9 @@
       color: var(--berk);
       margin-bottom: 6px;
     }
+    /* grey variant, for an eyebrow that shouldn't carry the same weight
+       as the Berkeley-blue section labels */
+    .cs-content .pillar-eyebrow.is-muted { color: var(--gray); }
     .cs-content .approach-label {
       font-family: 'Inter', system-ui, sans-serif;
       font-size: 14px;
@@ -782,9 +788,9 @@
         <div class="pillar-feature">
           <div class="pillar-feature-media"><span>Feature image</span></div>
           <div class="pillar-feature-text">
-            <p class="pillar-eyebrow">Findable</p>
-            <h3 class="pillar-title">Virtual Front Desk</h3>
-            <p class="cs-placeholder-note">What VFD does and who it serves.</p>
+            <p class="pillar-eyebrow is-muted">Appointments &amp; Advice</p>
+            <h3 class="pillar-title">Every Distinction Stated Outright</h3>
+            <p>Advising options grouped under labeled sections, with a side-by-side comparison of College and Major/Minor advising and a table surfacing the requirements students used to miss.</p>
           </div>
         </div>
         <div class="pillar">
