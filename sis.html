@@ -412,20 +412,26 @@
     .cs-section .pillar-feature-text h3.pillar-title { margin-bottom: 20px; }
 
     /* Second feature: text stays at x:300 (300 + 420 max-width = ends
-       at 720); the image moves to x:785 via a 65px gap (720 + 65 = 785)
-       rather than the previous 80px/x:800. Still runs off the right
-       edge of a 1280px viewport — accepted on purpose, per request,
-       rather than shrinking the box to avoid it. */
+       at 720), with a normal 48px gap after it (image at 768). Text at
+       x:300 plus the first image's own 585px width doesn't leave room
+       for a same-size image here without running past a 1280px
+       viewport — the last few rounds of "move it further right" chased
+       that edge until the page actually started scrolling sideways.
+       Rather than keep pushing that ceiling, this image is a fixed
+       500px (below), which comfortably fits: 768 + 500 = 1268. */
     .pillar-feature-reverse {
       display: grid;
       grid-template-columns: max-content 1fr;
-      gap: 65px;
+      gap: 48px;
       align-items: center;
       margin-top: 96px;
       margin-left: -26.56vw;
-      width: 83.5vw;
+      width: 75.6vw;
     }
-    .pillar-feature-reverse .pillar-feature-media { justify-self: start; }
+    .pillar-feature-reverse .pillar-feature-media {
+      justify-self: start;
+      width: 500px;
+    }
     .pillar-eyebrow {
       font-size: 13px;
       letter-spacing: 0.04em;
