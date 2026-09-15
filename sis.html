@@ -377,22 +377,23 @@
 
        The first grid track is sized to land the TEXT column's left edge
        at exactly 50vw — same x as the Solution paragraph above it — not
-       to size the image. The row bleeds further left than the hero
-       (49.5vw of margin, 92vw of width, versus the hero's 42.5vw/85vw)
-       purely to buy the image more room, stopping just shy of the
-       viewport edge; the 92vw width keeps the right edge at 92.5vw
-       either way, matching the hero and page gutter. */
+       to size the image. 49.7vw is close to the real ceiling here: the
+       row's own left edge is 50vw minus that, so anything past ~50vw
+       pushes the row (and the image flush against its far end) past the
+       left edge of the viewport and into horizontal scroll. The 92.2vw
+       width keeps the right edge at 92.5vw regardless, matching the hero
+       and page gutter. */
     .pillar-feature {
       display: grid;
-      grid-template-columns: calc(49.5vw - 48px) 1fr;
+      grid-template-columns: calc(49.7vw - 48px) 1fr;
       gap: 48px;
       align-items: center;
       margin-top: 144px;
-      margin-left: -49.5vw;
-      width: 92vw;
+      margin-left: -49.7vw;
+      width: 92.2vw;
     }
     .pillar-feature-media {
-      width: 575px;
+      width: 585px;
       max-width: 100%;
       justify-self: end;
       aspect-ratio: 4 / 3;
@@ -410,26 +411,26 @@
     .pillar-feature-text .pillar-eyebrow { margin-top: 0; }
     .cs-section .pillar-feature-text h3.pillar-title { margin-bottom: 20px; }
 
-    /* Second feature, a true mirror of the first: same row geometry
-       (same margin-left/width breakout, same two-track split) with text
-       and image just swapped into the opposite tracks. Text now sits in
-       the rail track the first image used — same left edge, so it lines
-       up with the image above it — and the image sits in the track the
-       first TEXT used, flush at that track's start (justify-self: start
-       instead of end) so it lands at x:50vw, the same x the A&A text
-       started at. It reuses .pillar-feature-media's width/aspect-ratio
-       as-is, so it's the same size as the first image without restating
-       the numbers. */
+    /* Second feature: text and image as a single close-set pair (not
+       stretched edge-to-edge like a literal mirror of the first row
+       would be — that put the text and image at opposite ends of a
+       92vw-wide row, which read as "off to the side" rather than a
+       feature), centered as a unit under the row above. Both tracks
+       size to their own content (max-content) instead of one of them
+       filling whatever's left, so justify-content: center centers the
+       pair rather than stretching one side across the empty space. The
+       row still uses the same bleed span as the first pillar so both
+       rows share one consistent container to center within. */
     .pillar-feature-reverse {
       display: grid;
-      grid-template-columns: calc(49.5vw - 48px) 1fr;
+      grid-template-columns: max-content max-content;
+      justify-content: center;
       gap: 48px;
       align-items: center;
       margin-top: 120px;
-      margin-left: -49.5vw;
-      width: 92vw;
+      margin-left: -49.7vw;
+      width: 92.2vw;
     }
-    .pillar-feature-reverse .pillar-feature-media { justify-self: start; }
     .pillar-eyebrow {
       font-size: 13px;
       letter-spacing: 0.04em;
