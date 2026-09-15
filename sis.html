@@ -583,6 +583,23 @@
     @media (max-width: 980px) {
       .cs-layout { padding: 57px 20px 0; }
     }
+
+    /* contents hugs the left edge, well clear of the phase number at 7.5vw */
+    .cs-sidebar { left: 24px; width: 120px; }
+
+    /* metadata: four columns kept close together rather than stretched
+       across the full container */
+    .cs-overview-grid {
+      grid-template-columns: repeat(4, minmax(0, auto));
+      justify-content: start;
+      column-gap: 56px;
+      row-gap: 20px;
+      max-width: 720px;
+    }
+
+    @media (max-width: 980px) {
+      .cs-overview-grid { grid-template-columns: repeat(2, minmax(0, auto)); column-gap: 40px; }
+    }
 </style>
   <script>
     (function () {
@@ -702,11 +719,7 @@
         <p class="cs-section-label">Research</p>
         <h2>Four themes from an affinity map, GA4, and a live site audit</h2>
         <p class="cs-placeholder-note">Walk through each method and what it surfaced. What were the four themes?</p>
-        <div class="cs-img-block" style="margin-top:28px;">
-          <img src="images/affinity.png" alt="Affinity map of 100+ student responses" style="width:100%; display:block;">
-          <p class="cs-img-caption">100+ responses affinity mapped into themes</p>
         </div>
-      </div>
   <div class="cs-section" id="insight">
         <p class="cs-section-label">The pivot</p>
         <h2>Situation-first, not category-first</h2>
@@ -738,9 +751,6 @@
         <p class="cs-section-label">Redesign</p>
         <h2>Virtual Front Desk</h2>
         <p class="cs-placeholder-note">What the page does and the problem it solves.</p>
-        <div class="cs-img-block" style="margin-top:28px;">
-          <img src="images/vfd-design-3.png" alt="Virtual Front Desk redesign" style="width:100%; display:block;">
-        </div>
         <p class="approach-label">Approach</p>
         <p class="cs-placeholder-note">The reasoning behind the layout and the decisions you made.</p>
       </div>
