@@ -369,68 +369,6 @@
     /* ── SOLUTION PILLARS (Sarah-style eyebrow + feature name) ── */
     .pillar { margin-top: 32px; }
 
-    /* First pillar as an image+text feature row, matching the reference:
-       the image sits in the phase-num rail (pulled left with a negative
-       margin, since it's nested inside the 520px content column and has
-       no other way to reach past it), text picks up where normal copy
-       sits. Stacks on mobile in the 980px breakpoint below.
-
-       The first grid track is sized to land the TEXT column's left edge
-       at exactly 50vw — same x as the Solution paragraph above it — not
-       to size the image. 49.7vw is close to the real ceiling here: the
-       row's own left edge is 50vw minus that, so anything past ~50vw
-       pushes the row (and the image flush against its far end) past the
-       left edge of the viewport and into horizontal scroll. The 92.2vw
-       width keeps the right edge at 92.5vw regardless, matching the hero
-       and page gutter. */
-    .pillar-feature {
-      display: grid;
-      grid-template-columns: calc(49.7vw - 48px) 1fr;
-      gap: 48px;
-      align-items: center;
-      margin-top: 144px;
-      margin-left: -49.7vw;
-      width: 92.2vw;
-    }
-    .pillar-feature-media {
-      width: 585px;
-      max-width: 100%;
-      justify-self: end;
-      aspect-ratio: 4 / 3;
-      background: #F5F5F5;
-      border: 1px dashed #D8D8D8;
-      display: flex; align-items: center; justify-content: center;
-    }
-    .pillar-feature-media span {
-      font-family: 'Inter', system-ui, sans-serif;
-      font-size: 13px; font-weight: 600;
-      letter-spacing: 0.08em; text-transform: uppercase;
-      color: #A8A8A8;
-    }
-    .pillar-feature-text { padding-top: 4px; max-width: 420px; }
-    .pillar-feature-text .pillar-eyebrow { margin-top: 0; }
-    .cs-section .pillar-feature-text h3.pillar-title { margin-bottom: 20px; }
-
-    /* Second feature: splitting the difference between a full 80px
-       shift (text at x:220, image matching row 1 at 585px) and no
-       shift at all (text at x:300, image shrunk to 500px) — a smaller
-       40px shift (text at x:260) paired with a slightly smaller image
-       (540px, down from 585 rather than down to 500) than the "match
-       exactly" version. 260 + 420(text) + 48(gap) + 540(image) = 1268,
-       a 12px buffer under the 1280px viewport. */
-    .pillar-feature-reverse {
-      display: grid;
-      grid-template-columns: max-content 1fr;
-      gap: 48px;
-      align-items: center;
-      margin-top: 96px;
-      margin-left: -29.69vw;
-      width: 78.8vw;
-    }
-    .pillar-feature-reverse .pillar-feature-media {
-      justify-self: start;
-      width: 540px;
-    }
     .pillar-eyebrow {
       font-size: 13px;
       letter-spacing: 0.04em;
@@ -655,31 +593,6 @@
       .phase-body { grid-column: 1; max-width: none; }
       .cs-layout { padding: 57px 20px 0; }
       .cs-sidebar { display: none; }
-      /* the breakout only makes sense once there's a left rail to reach
-         into — on a single column it just stacks like the other pillars */
-      .pillar-feature {
-        grid-template-columns: 1fr;
-        gap: 20px;
-        margin-top: 56px;
-        margin-left: 0;
-        width: auto;
-      }
-      .pillar-feature-text { max-width: none; }
-      .pillar-feature-media { width: 100%; justify-self: stretch; }
-      .pillar-feature-reverse {
-        grid-template-columns: 1fr;
-        gap: 20px;
-        margin-top: 56px;
-        margin-left: 0;
-        width: auto;
-      }
-      /* the desktop-only reverse override below has higher specificity
-         than the plain .pillar-feature-media reset just above, so it
-         needs its own mobile-width reset to actually stack full-width */
-      .pillar-feature-reverse .pillar-feature-media {
-        width: 100%;
-        justify-self: stretch;
-      }
     }
 
     /* ══════════════════════════════════════════════════════════
@@ -819,22 +732,16 @@
         <h2>Three pages, rebuilt around how students actually arrive.</h2>
         <p>A research-led redesign of three advising pages and a routing flow, built for a platform that couldn't support a single interactive element. <strong>Rather than explaining the college's structure more clearly, the redesign removes the need for students to understand it.</strong></p>
 
-        <div class="pillar-feature">
-          <div class="pillar-feature-media"><span>Feature image</span></div>
-          <div class="pillar-feature-text">
-            <p class="pillar-eyebrow is-muted">Appointments &amp; Advice</p>
-            <h3 class="pillar-title">Every Distinction Stated Outright</h3>
-            <p>Advising options grouped under labeled sections, with a side-by-side comparison of College and Major/Minor advising and a table surfacing the requirements students used to miss.</p>
-          </div>
+        <div class="pillar">
+          <p class="pillar-eyebrow is-muted">Appointments &amp; Advice</p>
+          <h3 class="pillar-title">Every Distinction Stated Outright</h3>
+          <p>Advising options grouped under labeled sections, with a side-by-side comparison of College and Major/Minor advising and a table surfacing the requirements students used to miss.</p>
         </div>
 
-        <div class="pillar-feature-reverse">
-          <div class="pillar-feature-text">
-            <p class="pillar-eyebrow is-muted">Virtual Front Desk</p>
-            <h3 class="pillar-title">One Service Instead of Two</h3>
-            <p>Two drop-in services that used the same form and the same Zoom link, merged into one and compared against the choice students can actually make: a quick question now, or a scheduled appointment.</p>
-          </div>
-          <div class="pillar-feature-media"><span>Feature image</span></div>
+        <div class="pillar">
+          <p class="pillar-eyebrow is-muted">Virtual Front Desk</p>
+          <h3 class="pillar-title">One Service Instead of Two</h3>
+          <p>Two drop-in services that used the same form and the same Zoom link, merged into one and compared against the choice students can actually make: a quick question now, or a scheduled appointment.</p>
         </div>
       </div>
         </div>
