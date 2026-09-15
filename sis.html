@@ -449,6 +449,22 @@
       .viz-grid-3, .viz-grid-4 { grid-template-columns: repeat(2, 1fr); }
       .viz-grid-2 { grid-template-columns: 1fr; }
     }
+
+    /* hero slot, empty until the real image lands */
+    .cs-hero-placeholder {
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      background: #F5F5F5;
+      border: 1px dashed #D8D8D8;
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 16px;
+    }
+    .cs-hero-placeholder span {
+      font-family: 'Inter', system-ui, sans-serif;
+      font-size: 13px; font-weight: 600;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      color: #A8A8A8;
+    }
 </style>
   <script>
     (function () {
@@ -500,8 +516,9 @@
       <h1 class="cs-title">Student Information System</h1>
 
       <!-- Hero image — VFD Design 3 from Figma -->
-      <div class="cs-hero-img" id="overview">
-        <img src="images/vfd-design-3.png" alt="SIS Platform — VFD Design 3"/>
+      <!-- Hero — placeholder until the final image is exported -->
+      <div class="cs-hero-placeholder" id="overview">
+        <span>Hero image</span>
       </div>
 
       <!-- Intro -->
