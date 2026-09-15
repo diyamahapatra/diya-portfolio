@@ -415,15 +415,14 @@
        left edge, same 96px gap above the previous .cs-section child).
        The image sits flush at the START of the second column instead
        of the end this time — text ends at 204+420=624px at a 1280
-       viewport, so a 276px gap (not the usual 48) puts the image's own
-       left edge around x:900, a clearly-visible shift rather than the
-       ~20px nudge before, which barely read as movement on a wide
-       screen. It runs off the right edge of a 1280px viewport — accepted
-       on purpose, per request, rather than shrinking the box to avoid it. */
+       viewport, so a 176px gap (not the usual 48) puts the image's own
+       left edge around x:800. It runs off the right edge of a 1280px
+       viewport — accepted on purpose, per request, rather than
+       shrinking the box to avoid it. */
     .pillar-feature-reverse {
       display: grid;
       grid-template-columns: max-content 1fr;
-      gap: 276px;
+      gap: 176px;
       align-items: center;
       margin-top: 96px;
       margin-left: -34.06vw;
