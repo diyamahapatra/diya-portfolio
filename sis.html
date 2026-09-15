@@ -411,18 +411,15 @@
     .pillar-feature-text .pillar-eyebrow { margin-top: 0; }
     .cs-section .pillar-feature-text h3.pillar-title { margin-bottom: 20px; }
 
-    /* Second feature: the image stays at x:800 (per the last round of
-       feedback); this time the TEXT moves instead, from x:204 to
-       x:300 — margin-left shifts the row's own left edge (and so the
-       text, which is just flush at that edge) by that same +96px, and
-       the gap shrinks by the same 96px (176 → 80) so the image doesn't
-       drift along with it: 300 + 420(text) + 80(gap) = 800, unchanged.
-       Still runs off the right edge of a 1280px viewport — accepted on
-       purpose, per request, rather than shrinking the box to avoid it. */
+    /* Second feature: text stays at x:300 (300 + 420 max-width = ends
+       at 720); the image moves to x:785 via a 65px gap (720 + 65 = 785)
+       rather than the previous 80px/x:800. Still runs off the right
+       edge of a 1280px viewport — accepted on purpose, per request,
+       rather than shrinking the box to avoid it. */
     .pillar-feature-reverse {
       display: grid;
       grid-template-columns: max-content 1fr;
-      gap: 80px;
+      gap: 65px;
       align-items: center;
       margin-top: 96px;
       margin-left: -26.56vw;
