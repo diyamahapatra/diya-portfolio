@@ -560,7 +560,9 @@
 
     /* ── TABLE OF CONTENTS ──
        Absent at the top of the page, then fades and slides in once you
-       are past the hero, rather than sitting there from the start. */
+       are past the hero, rather than sitting there from the start — and
+       fades back out when the footer arrives, so it never floats beside
+       the sign-off. */
     .cs-sidebar {
       position: fixed;
       left: 32px;
@@ -948,10 +950,17 @@
     (function () {
       var side = document.querySelector('.cs-sidebar');
       var hero = document.querySelector('.cs-hero-placeholder, .cs-hero-img');
+      var foot = document.querySelector('.site-footer');
       if (!side || !hero) return;
       function update() {
-        var past = hero.getBoundingClientRect().bottom < 40;
-        side.classList.toggle('is-visible', past);
+        /* Same 40px threshold at both ends, so the rail leaves the page the
+           way it arrived: gone while the hero is still up, gone again once
+           the footer has risen into view. */
+        var pastHero = hero.getBoundingClientRect().bottom < 40;
+        var atFooter = foot
+          ? foot.getBoundingClientRect().top < window.innerHeight - 40
+          : false;
+        side.classList.toggle('is-visible', pastHero && !atFooter);
       }
       update();
       window.addEventListener('scroll', update, { passive: true });
