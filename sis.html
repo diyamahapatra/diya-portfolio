@@ -411,27 +411,25 @@
     .pillar-feature-text .pillar-eyebrow { margin-top: 0; }
     .cs-section .pillar-feature-text h3.pillar-title { margin-bottom: 20px; }
 
-    /* Second feature: a close-set text+image pair (both tracks size to
-       their own content via max-content, rather than one stretching to
-       fill whatever's left) — stair-stepped down and to the right of
-       the first feature's image, same direction as before, just with
-       real breathing room this time instead of the corners literally
-       touching. margin-top (96px) is that gap above the previous
-       .cs-section child; margin-left is solved from "row's own left
-       edge + text's rendered width (420, it hits its max-width) + the
-       48px gap = the desired image position, 80px right of the first
-       image's own right edge (592px at a 1280 viewport)", expressed as
-       a vw offset from the row's natural 50vw position so it moves with
-       the rest of the vw-based layout. */
+    /* Second feature: text stays put (max-content, same left edge as
+       before — same 96px gap above the previous .cs-section child); the
+       image moves into a 1fr second track and sits flush at ITS right
+       edge (justify-self: end) instead of flush against the gap, so it
+       rides along as the row's own width grows. The row's width/margin
+       are widened just enough to carry the image's right edge close to
+       the viewport's own right edge (mirroring how far the first image
+       bleeds toward the LEFT edge), landing it under the A&A text
+       instead of tucked in close to the VFD text beside it. */
     .pillar-feature-reverse {
       display: grid;
-      grid-template-columns: max-content max-content;
+      grid-template-columns: max-content 1fr;
       gap: 48px;
       align-items: center;
       margin-top: 96px;
       margin-left: -34.06vw;
-      width: 83vw;
+      width: 83.5vw;
     }
+    .pillar-feature-reverse .pillar-feature-media { justify-self: end; }
     .pillar-eyebrow {
       font-size: 13px;
       letter-spacing: 0.04em;
@@ -513,8 +511,9 @@
       margin-bottom: 6px;
     }
     /* grey variant, for an eyebrow that shouldn't carry the same weight
-       as the Berkeley-blue section labels */
-    .cs-content .pillar-eyebrow.is-muted { color: var(--gray); }
+       as the Berkeley-blue section labels — lighter than --gray itself,
+       which reads too dark at 16px/600 next to these two other labels */
+    .cs-content .pillar-eyebrow.is-muted { color: #A0A6B0; }
     .cs-content .approach-label {
       font-family: 'Inter', system-ui, sans-serif;
       font-size: 14px;
