@@ -952,10 +952,12 @@
       var foot = document.querySelector('.site-footer');
       if (!side || !hero) return;
       function update() {
-        /* Same 40px threshold at both ends, so the rail leaves the page the
-           way it arrived: gone while the hero is still up, gone again once
-           the footer has risen into view. */
-        var pastHero = hero.getBoundingClientRect().bottom < 40;
+        /* The TOC threshold is deliberately looser going in than coming out:
+           you need to be well clear of the hero (300px past it) before the
+           rail shows, so it doesn't pop in the instant the hero edges off
+           screen — but it still leaves promptly, at 40px, once the footer
+           arrives. */
+        var pastHero = hero.getBoundingClientRect().bottom < -300;
         var atFooter = foot
           ? foot.getBoundingClientRect().top < window.innerHeight - 40
           : false;
