@@ -6,7 +6,7 @@
   <title>Advising Access — Diya Mahapatra</title>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300&family=Instrument+Serif:ital@0;1&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,700&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300&family=Spectral:ital,wght@0,200;0,300;0,400;1,300&family=Instrument+Serif:ital@0;1&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,700&display=swap" rel="stylesheet"/>
   <style>
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -147,21 +147,27 @@
     .cs-meta span { color: var(--border); }
 
     /* title */
+    /* Spectral rather than Lora because Lora has no weight under 400 and
+       the whole effect depends on the serif being thin — this is the
+       old Advising Access type system, ported back on request. */
     .cs-title {
-      font-family: 'Lora', serif;
-      font-size: clamp(25.2px, 2.9vw, 39.6px);
-      font-weight: 400;
-      letter-spacing: -0.02em;
-      line-height: 1.15;
-      color: var(--black);
+      font-family: 'Spectral', Georgia, serif;
+      font-size: clamp(32px, 5vw, 48px);
+      font-weight: 300;
+      letter-spacing: -0.4px;
+      line-height: 1.12;
+      color: #202020;
       margin-bottom: 24px;
     }
 
     /* intro paragraph */
     .cs-intro {
-      font-size: 15.3px;
-      line-height: 1.75;
-      color: #3D3D3D;
+      font-family: 'Spectral', Georgia, serif;
+      font-size: clamp(18px, 2.4vw, 22px);
+      font-weight: 300;
+      letter-spacing: -0.4px;
+      line-height: 1.5;
+      color: #202020;
       margin-bottom: 0;
     }
 
@@ -240,22 +246,26 @@
     .cs-section {
       margin-bottom: 128px;
     }
-    .cs-section-label {
-      font-family: 'Lora', serif;
-      font-size: 13px; font-weight: 400;
-      letter-spacing: 0.04em;
-      color: var(--gray);
-      margin-bottom: 12px;
+    /* labels: small, bold, sans, Berkeley Blue — the old system's
+       counterweight to the thin Spectral headline beside it. Scoped as
+       `.cs-section p.cs-section-label`, not just `.cs-section-label`,
+       so it outranks `.cs-section p` (same 2-selector specificity, but
+       ours needs to win the color, not the grey body-copy default). */
+    .cs-section p.cs-section-label {
+      font-family: 'Inter', system-ui, sans-serif;
+      font-size: 16px; font-weight: 600;
+      letter-spacing: 0;
+      color: var(--orange);
+      margin-bottom: 6px;
       display: block;
     }
     .cs-section h2 {
-      font-family: 'Lora', serif;
-      font-size: clamp(18.9px, 2.1vw, 24.3px);
-      /* 500 rather than 600 — Lora's semibold is much heavier than Inter's
-         at the same value and reads clotted at heading size */
-      font-weight: 500;
-      letter-spacing: -0.01em;
-      color: var(--black);
+      font-family: 'Spectral', Georgia, serif;
+      font-size: clamp(21px, 2.6vw, 27px);
+      font-weight: 300;
+      letter-spacing: -0.4px;
+      line-height: 1.3;
+      color: #202020;
       margin-bottom: 16px;
       line-height: 1.25;
     }
