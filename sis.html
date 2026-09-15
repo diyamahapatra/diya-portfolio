@@ -373,33 +373,28 @@
        the image sits in the phase-num rail (pulled left with a negative
        margin, since it's nested inside the 520px content column and has
        no other way to reach past it), text picks up where normal copy
-       sits. The -42.5vw/85vw pair mirrors the hero's own alignment math
-       (page gutter is 7.5vw, content column starts at 50vw — see the
-       "ALIGNMENT PASS" block below) rather than the stale 96px/32px
-       figures from the layout comment above, which a later cascade
-       rule overrides. Stacks on mobile in the 980px breakpoint below.
+       sits. Stacks on mobile in the 980px breakpoint below.
 
        The first grid track is sized to land the TEXT column's left edge
        at exactly 50vw — same x as the Solution paragraph above it — not
-       to size the image. calc(42.5vw - 48px) is "distance from the rail
-       edge (7.5vw) to the content column (50vw), minus the gap"; the
-       image stays clear of the phase-num rail and sits flush against
-       the gap instead (justify-self: end), so it reads as paired with
-       the text beside it rather than stranded out in the margin. */
+       to size the image. The row bleeds 5vw further left than the hero
+       (47.5vw of margin, 90vw of width, versus the hero's 42.5vw/85vw)
+       purely to buy the image more room; the 90vw width keeps the right
+       edge at 92.5vw either way, matching the hero and page gutter. */
     .pillar-feature {
       display: grid;
-      grid-template-columns: calc(42.5vw - 48px) 1fr;
+      grid-template-columns: calc(47.5vw - 48px) 1fr;
       gap: 48px;
       align-items: center;
       margin-top: 144px;
-      margin-left: -42.5vw;
-      width: 85vw;
+      margin-left: -47.5vw;
+      width: 90vw;
     }
     .pillar-feature-media {
-      width: 460px;
+      width: 560px;
       max-width: 100%;
       justify-self: end;
-      aspect-ratio: 3 / 2;
+      aspect-ratio: 2 / 1;
       background: #F5F5F5;
       border: 1px dashed #D8D8D8;
       display: flex; align-items: center; justify-content: center;
