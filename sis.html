@@ -465,6 +465,80 @@
       letter-spacing: 0.08em; text-transform: uppercase;
       color: #A8A8A8;
     }
+
+    /* ══════════════════════════════════════════════════════════
+       FULL-BLEED LAYOUT
+       Measured off the reference at a 1280 viewport: hero 95% of
+       the window, section numbers at x=96, content column starting
+       at exactly 50%. The old 1100px centred container is what was
+       leaving all the side whitespace.
+       ══════════════════════════════════════════════════════════ */
+    .cs-layout { max-width: none; display: block; padding: 57px 32px 0; }
+    .cs-main   { padding: 40px 0 24px; }
+    .cs-content { max-width: none; }
+
+    /* hero runs nearly edge to edge */
+    .cs-hero-placeholder, .cs-hero-img { width: 100%; }
+
+    .cs-content .cs-title,
+    .cs-content .cs-intro,
+    .cs-meta,
+    .cs-overview-grid { max-width: 900px; }
+
+    /* each phase: big italic number left, content in the right half */
+    .phase {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      column-gap: 0;
+      margin: 0 0 120px;
+    }
+    .phase-num {
+      grid-column: 1;
+      padding-left: 64px;     /* 32px page gutter + 64 = x:96, matching the reference */
+      font-family: 'Spectral', Georgia, serif;
+      font-style: italic;
+      font-weight: 300;
+      font-size: clamp(30px, 3.8vw, 48px);
+      letter-spacing: -0.4px;
+      color: var(--ink, #202020);
+      position: sticky;
+      top: 100px;
+      align-self: start;
+      margin: 0;
+    }
+    .phase-body { grid-column: 2; max-width: 520px; }
+    .phase-body .cs-section { margin-bottom: 72px; }
+    .phase-body .cs-section:last-child { margin-bottom: 0; }
+
+    /* ── TABLE OF CONTENTS ──
+       Absent at the top of the page, then fades and slides in once you
+       are past the hero, rather than sitting there from the start. */
+    .cs-sidebar {
+      position: fixed;
+      left: 32px;
+      top: 180px;
+      width: 150px;
+      padding: 0;
+      max-height: none;
+      overflow: visible;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(-14px);
+      transition: opacity 0.45s var(--ease), transform 0.45s var(--ease), visibility 0.45s;
+      z-index: 20;
+    }
+    .cs-sidebar.is-visible { opacity: 1; visibility: visible; transform: none; }
+    @media (prefers-reduced-motion: reduce) {
+      .cs-sidebar { transition: none; transform: none; }
+    }
+
+    @media (max-width: 980px) {
+      .phase { grid-template-columns: 1fr; column-gap: 0; }
+      .phase-num { position: static; margin-bottom: 20px; }
+      .phase-body { grid-column: 1; max-width: none; }
+      .cs-layout { padding: 57px 20px 0; }
+      .cs-sidebar { display: none; }
+    }
 </style>
   <script>
     (function () {
@@ -494,10 +568,10 @@
       <p class="cs-sidebar-label">On this page</p>
       <ul class="cs-sidebar-links">
         <li><a href="#overview" class="active">Overview</a></li>
-        <li><a href="#research">Research</a></li>
-        <li><a href="#ideation">Ideation</a></li>
-        <li><a href="#redesign">Redesign</a></li>
-        <li><a href="#takeaways">Takeaways</a></li>
+        <li><a href="#phase-research">Research</a></li>
+        <li><a href="#phase-ideation">Ideation</a></li>
+        <li><a href="#phase-redesign">Redesign</a></li>
+        <li><a href="#phase-takeaways">Takeaways</a></li>
       </ul>
     </aside>
 
@@ -545,14 +619,15 @@
       </div>
 
       <!-- ═══ PROBLEM ═══ -->
-      <div class="cs-section" id="problem">
+            <section class="phase" id="phase-problem">
+        <p class="phase-num">01. OVERVIEW</p>
+        <div class="phase-body">
+  <div class="cs-section" id="problem">
         <p class="cs-section-label">Problem</p>
         <h2>Placeholder — the problem in one sentence, ending on a stat.</h2>
         <p class="cs-placeholder-note">What was broken for students? Lead with the hook, then anchor it with a single compelling number.</p>
       </div>
-
-      <!-- ═══ SOLUTION — shown before the research, the way Sarah does ═══ -->
-      <div class="cs-section" id="solution">
+  <div class="cs-section" id="solution">
         <p class="cs-section-label">Solution</p>
         <h2>Three pages, rebuilt around how students actually arrive.</h2>
         <p class="cs-placeholder-note">One or two lines framing the three pieces below.</p>
@@ -573,9 +648,13 @@
           <p class="cs-placeholder-note">What F&amp;P does and who it serves.</p>
         </div>
       </div>
+        </div>
+      </section>
 
-      <!-- ═══ RESEARCH ═══ -->
-      <div class="cs-section" id="research">
+      <section class="phase" id="phase-research">
+        <p class="phase-num">02. RESEARCH</p>
+        <div class="phase-body">
+  <div class="cs-section" id="research">
         <p class="cs-section-label">Research</p>
         <h2>Four themes from an affinity map, GA4, and a live site audit</h2>
         <p class="cs-placeholder-note">Walk through each method and what it surfaced. What were the four themes?</p>
@@ -584,28 +663,34 @@
           <p class="cs-img-caption">100+ responses affinity mapped into themes</p>
         </div>
       </div>
-
-      <div class="cs-section" id="insight">
+  <div class="cs-section" id="insight">
         <p class="cs-section-label">The pivot</p>
         <h2>Situation-first, not category-first</h2>
         <p class="cs-placeholder-note">Describe the moment the direction changed. What reframed how you approached the architecture?</p>
       </div>
+        </div>
+      </section>
 
-      <!-- ═══ IDEATION ═══ -->
-      <div class="cs-section" id="ideation">
+      <section class="phase" id="phase-ideation">
+        <p class="phase-num">03. IDEATION</p>
+        <div class="phase-body">
+  <div class="cs-section" id="ideation">
         <p class="cs-section-label">Ideation</p>
         <h2>One shared design language across three pages</h2>
         <p class="cs-placeholder-note">How did you create cohesion? What patterns, components or principles carried through?</p>
       </div>
-
-      <div class="cs-section" id="ai">
+  <div class="cs-section" id="ai">
         <p class="cs-section-label">Ideation</p>
         <h2>Placeholder — what AI actually changed about the process</h2>
         <p class="cs-placeholder-note">Research synthesis, copy, ideation, prototyping? Be specific about what worked and what didn't.</p>
       </div>
+        </div>
+      </section>
 
-      <!-- ═══ REDESIGN — one module per page, mirroring Sarah's Redesign/Approach pairs ═══ -->
-      <div class="cs-section" id="redesign">
+      <section class="phase" id="phase-redesign">
+        <p class="phase-num">04. REDESIGN</p>
+        <div class="phase-body">
+  <div class="cs-section" id="redesign">
         <p class="cs-section-label">Redesign</p>
         <h2>Virtual Front Desk</h2>
         <p class="cs-placeholder-note">What the page does and the problem it solves.</p>
@@ -615,37 +700,41 @@
         <p class="approach-label">Approach</p>
         <p class="cs-placeholder-note">The reasoning behind the layout and the decisions you made.</p>
       </div>
-
-      <div class="cs-section" id="aa">
+  <div class="cs-section" id="aa">
         <p class="cs-section-label">Redesign</p>
         <h2>Advising &amp; Appointments</h2>
         <p class="cs-placeholder-note">Two concepts explored, one cut. What were the hypotheses behind each?</p>
         <p class="approach-label">Approach</p>
         <p class="cs-placeholder-note">Why concept 3 was cut, and what that decision was based on.</p>
       </div>
-
-      <div class="cs-section" id="fp">
+  <div class="cs-section" id="fp">
         <p class="cs-section-label">Redesign</p>
         <h2>Forms &amp; Petitions</h2>
         <p class="cs-placeholder-note">Two concepts, and the rationale for leading with search.</p>
         <p class="approach-label">Approach</p>
         <p class="cs-placeholder-note">Why search beat browse as the primary navigation pattern here.</p>
       </div>
+        </div>
+      </section>
 
-      <!-- ═══ TAKEAWAYS ═══ -->
-      <div class="cs-section" id="takeaways">
+      <section class="phase" id="phase-takeaways">
+        <p class="phase-num">05. TAKEAWAYS</p>
+        <div class="phase-body">
+  <div class="cs-section" id="takeaways">
         <p class="cs-section-label">Takeaways</p>
         <h2>Placeholder — the first thing this project taught you.</h2>
         <p class="cs-placeholder-note">Write it as a claim you believe, not a summary of what happened.</p>
         <h2 style="margin-top:36px;">Placeholder — the second thing.</h2>
         <p class="cs-placeholder-note">Same again: a position, not a recap.</p>
       </div>
-
-      <div class="cs-section" id="testing">
+  <div class="cs-section" id="testing">
         <p class="cs-section-label">Still open</p>
         <h2>What I'm watching for in testing</h2>
         <p class="cs-placeholder-note">What are you testing, with whom, and what would success look like?</p>
       </div>
+        </div>
+      </section>
+
 
     </div>
     </main>
@@ -766,6 +855,20 @@
       window.addEventListener('load', function () {
         setTimeout(function () { if (!fired) revealAll(); }, 2500);
       });
+    })();
+
+    /* ── TOC reveal ── */
+    (function () {
+      var side = document.querySelector('.cs-sidebar');
+      var hero = document.querySelector('.cs-hero-placeholder, .cs-hero-img');
+      if (!side || !hero) return;
+      function update() {
+        var past = hero.getBoundingClientRect().bottom < 40;
+        side.classList.toggle('is-visible', past);
+      }
+      update();
+      window.addEventListener('scroll', update, { passive: true });
+      window.addEventListener('resize', update);
     })();
 </script>
 </body>
