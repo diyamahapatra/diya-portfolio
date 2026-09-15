@@ -318,6 +318,37 @@
     @media (prefers-reduced-motion: reduce) {
       .js-reveal .cs-section { opacity: 1; transform: none; transition: none; }
     }
+
+    /* ── SOLUTION PILLARS (Sarah-style eyebrow + feature name) ── */
+    .pillar { margin-top: 32px; }
+    .pillar-eyebrow {
+      font-size: 13px;
+      letter-spacing: 0.04em;
+      color: var(--orange);
+      margin-bottom: 4px;
+    }
+    .cs-section h3.pillar-title {
+      font-family: 'Lora', serif;
+      font-size: 21.6px;
+      font-weight: 400;
+      letter-spacing: -0.02em;
+      color: var(--black);
+      margin-bottom: 8px;
+    }
+    /* ── "Approach" sub-head inside each Redesign module ── */
+    .approach-label {
+      font-family: 'Lora', serif;
+      font-size: 13px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--gray);
+      margin: 28px 0 8px;
+    }
+    /* unwritten copy, visibly marked so it can't ship by accident */
+    .cs-section p.cs-placeholder-note {
+      color: #9A9A9A;
+      font-style: italic;
+    }
 </style>
   <script>
     (function () {
@@ -347,16 +378,10 @@
       <p class="cs-sidebar-label">On this page</p>
       <ul class="cs-sidebar-links">
         <li><a href="#overview" class="active">Overview</a></li>
-        <li><a href="#problem">The Problem</a></li>
-        <li><a href="#role">Role & Constraints</a></li>
         <li><a href="#research">Research</a></li>
-        <li><a href="#insight">The Insight</a></li>
-        <li><a href="#system">Three Pages</a></li>
-        <li><a href="#aa">A&A Hypotheses</a></li>
-        <li><a href="#fp">Forms & Petitions</a></li>
-        <li><a href="#ai">AI as a Design Tool</a></li>
-        <li><a href="#testing">Usability Testing</a></li>
-        <li><a href="#next">What's Next</a></li>
+        <li><a href="#ideation">Ideation</a></li>
+        <li><a href="#redesign">Redesign</a></li>
+        <li><a href="#takeaways">Takeaways</a></li>
       </ul>
     </aside>
 
@@ -402,93 +427,107 @@
         </div>
       </div>
 
-      <!-- 1. The Problem -->
+      <!-- ═══ PROBLEM ═══ -->
       <div class="cs-section" id="problem">
-        <p class="cs-section-label">01 — The Problem</p>
-        <h2>Placeholder — hook + one stat</h2>
-        <p>Placeholder — what was broken for students? Lead with the hook, then anchor it with a single compelling stat.</p>
+        <p class="cs-section-label">Problem</p>
+        <h2>Placeholder — the problem in one sentence, ending on a stat.</h2>
+        <p class="cs-placeholder-note">What was broken for students? Lead with the hook, then anchor it with a single compelling number.</p>
       </div>
 
-      <!-- 2. Role & Constraints -->
-      <div class="cs-section" id="role">
-        <p class="cs-section-label">02 — Role & Constraints</p>
-        <h2>Intern. OmniUpdate. Three pages. Eight weeks.</h2>
-        <p>Placeholder — what was the scope of your work? What constraints shaped the design decisions you made?</p>
+      <!-- ═══ SOLUTION — shown before the research, the way Sarah does ═══ -->
+      <div class="cs-section" id="solution">
+        <p class="cs-section-label">Solution</p>
+        <h2>Three pages, rebuilt around how students actually arrive.</h2>
+        <p class="cs-placeholder-note">One or two lines framing the three pieces below.</p>
+
+        <div class="pillar">
+          <p class="pillar-eyebrow">Findable</p>
+          <h3 class="pillar-title">Virtual Front Desk</h3>
+          <p class="cs-placeholder-note">What VFD does and who it serves.</p>
+        </div>
+        <div class="pillar">
+          <p class="pillar-eyebrow">Situational</p>
+          <h3 class="pillar-title">Advising &amp; Appointments</h3>
+          <p class="cs-placeholder-note">What A&amp;A does and who it serves.</p>
+        </div>
+        <div class="pillar">
+          <p class="pillar-eyebrow">Searchable</p>
+          <h3 class="pillar-title">Forms &amp; Petitions</h3>
+          <p class="cs-placeholder-note">What F&amp;P does and who it serves.</p>
+        </div>
       </div>
 
-      <!-- 3. Research -->
+      <!-- ═══ RESEARCH ═══ -->
       <div class="cs-section" id="research">
-        <p class="cs-section-label">03 — What the Research Told Me</p>
+        <p class="cs-section-label">Research</p>
         <h2>Four themes from an affinity map, GA4, and a live site audit</h2>
-        <p>Placeholder — walk through your research methods and what each one surfaced. What were the four themes?</p>
-        <p><strong>Synthesis.</strong> We affinity mapped 100+ user responses into categories to decide on a direction.</p>
-        <div class="cs-img-block" style="aspect-ratio:4840/2543;background:#fff;">
-          <img src="images/affinity.png" alt="Affinity map clustering 100+ user responses into research themes" style="object-fit:contain;"/>
+        <p class="cs-placeholder-note">Walk through each method and what it surfaced. What were the four themes?</p>
+        <div class="cs-img-block" style="margin-top:28px;">
+          <img src="images/affinity.png" alt="Affinity map of 100+ student responses" style="width:100%; display:block;">
+          <p class="cs-img-caption">100+ responses affinity mapped into themes</p>
         </div>
       </div>
 
-      <!-- 4. The Insight -->
       <div class="cs-section" id="insight">
-        <p class="cs-section-label">04 — The Insight That Changed My Direction</p>
+        <p class="cs-section-label">The pivot</p>
         <h2>Situation-first, not category-first</h2>
-        <p>Placeholder — describe the pivot moment. What did you learn that reframed how you approached the architecture?</p>
+        <p class="cs-placeholder-note">Describe the moment the direction changed. What reframed how you approached the architecture?</p>
       </div>
 
-      <!-- 5. Three Pages, One System -->
-      <div class="cs-section" id="system">
-        <p class="cs-section-label">05 — Three Pages, One System</p>
-        <h2>VFD, A&A, and F&P — built on a shared design language</h2>
-        <p>Placeholder — how did you create cohesion across three distinct pages? What patterns, components, or principles carried through?</p>
-        <div class="cs-img-block">
-          <div style="display:flex;align-items:center;justify-content:center;width:100%;height:100%;">
-            <p style="font-size:13px;color:var(--gray);">Design system / shared components</p>
-          </div>
-        </div>
+      <!-- ═══ IDEATION ═══ -->
+      <div class="cs-section" id="ideation">
+        <p class="cs-section-label">Ideation</p>
+        <h2>One shared design language across three pages</h2>
+        <p class="cs-placeholder-note">How did you create cohesion? What patterns, components or principles carried through?</p>
       </div>
 
-      <!-- 6. A&A Hypotheses -->
-      <div class="cs-section" id="aa">
-        <p class="cs-section-label">06 — Designing A&A: Testing Three Hypotheses</p>
-        <h2>Two concepts explored, one cut — and why</h2>
-        <p>Placeholder — walk through concepts 1 and 2. What were the hypotheses behind each? Why did Design 3 get cut?</p>
-        <div class="cs-img-block">
-          <div style="display:flex;align-items:center;justify-content:center;width:100%;height:100%;">
-            <p style="font-size:13px;color:var(--gray);">A&A concepts 1 & 2</p>
-          </div>
-        </div>
-      </div>
-
-      <!-- 7. Forms & Petitions -->
-      <div class="cs-section" id="fp">
-        <p class="cs-section-label">07 — Designing Forms & Petitions: A Bet on Search</p>
-        <h2>Two concepts, one rationale for leading with search</h2>
-        <p>Placeholder — describe the two concepts and the reasoning behind betting on search as the primary navigation pattern.</p>
-        <div class="cs-img-block">
-          <div style="display:flex;align-items:center;justify-content:center;width:100%;height:100%;">
-            <p style="font-size:13px;color:var(--gray);">F&P concepts</p>
-          </div>
-        </div>
-      </div>
-
-      <!-- 8. AI as a Design Tool -->
       <div class="cs-section" id="ai">
-        <p class="cs-section-label">08 — How I Used AI as a Design Tool</p>
-        <h2>Placeholder — what role did AI play in your process?</h2>
-        <p>Placeholder — describe how you used AI in your design workflow. Was it for research synthesis, copy, ideation, prototyping? What worked and what didn't?</p>
+        <p class="cs-section-label">Ideation</p>
+        <h2>Placeholder — what AI actually changed about the process</h2>
+        <p class="cs-placeholder-note">Research synthesis, copy, ideation, prototyping? Be specific about what worked and what didn't.</p>
       </div>
 
-      <!-- 9. Usability Testing -->
+      <!-- ═══ REDESIGN — one module per page, mirroring Sarah's Redesign/Approach pairs ═══ -->
+      <div class="cs-section" id="redesign">
+        <p class="cs-section-label">Redesign</p>
+        <h2>Virtual Front Desk</h2>
+        <p class="cs-placeholder-note">What the page does and the problem it solves.</p>
+        <div class="cs-img-block" style="margin-top:28px;">
+          <img src="images/vfd-design-3.png" alt="Virtual Front Desk redesign" style="width:100%; display:block;">
+        </div>
+        <p class="approach-label">Approach</p>
+        <p class="cs-placeholder-note">The reasoning behind the layout and the decisions you made.</p>
+      </div>
+
+      <div class="cs-section" id="aa">
+        <p class="cs-section-label">Redesign</p>
+        <h2>Advising &amp; Appointments</h2>
+        <p class="cs-placeholder-note">Two concepts explored, one cut. What were the hypotheses behind each?</p>
+        <p class="approach-label">Approach</p>
+        <p class="cs-placeholder-note">Why concept 3 was cut, and what that decision was based on.</p>
+      </div>
+
+      <div class="cs-section" id="fp">
+        <p class="cs-section-label">Redesign</p>
+        <h2>Forms &amp; Petitions</h2>
+        <p class="cs-placeholder-note">Two concepts, and the rationale for leading with search.</p>
+        <p class="approach-label">Approach</p>
+        <p class="cs-placeholder-note">Why search beat browse as the primary navigation pattern here.</p>
+      </div>
+
+      <!-- ═══ TAKEAWAYS ═══ -->
+      <div class="cs-section" id="takeaways">
+        <p class="cs-section-label">Takeaways</p>
+        <h2>Placeholder — the first thing this project taught you.</h2>
+        <p class="cs-placeholder-note">Write it as a claim you believe, not a summary of what happened.</p>
+        <h2 style="margin-top:36px;">Placeholder — the second thing.</h2>
+        <p class="cs-placeholder-note">Same again: a position, not a recap.</p>
+      </div>
+
       <div class="cs-section" id="testing">
-        <p class="cs-section-label">09 — Usability Testing Plan</p>
-        <h2>What I'm watching for — and why</h2>
-        <p>Placeholder — what are you testing, with whom, and what specific behaviors or signals are you looking for? What would success look like?</p>
-      </div>
-
-      <!-- 10. What's Next -->
-      <div class="cs-section" id="next">
-        <p class="cs-section-label">10 — What I'd Do Next</p>
-        <h2>Placeholder — if you had more time</h2>
-        <p>Placeholder — what would you build, test, or revisit with another sprint? What open questions are still on the table?</p>
+        <p class="cs-section-label">Still open</p>
+        <h2>What I'm watching for in testing</h2>
+        <p class="cs-placeholder-note">What are you testing, with whom, and what would success look like?</p>
       </div>
 
     </div>
