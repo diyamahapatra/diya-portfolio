@@ -1127,8 +1127,10 @@
     }
 
     /* ── FOOTER ── */
-    /* ── FOOTER ── */
     .site-footer {
+      /* Pinned, not themed: the footer reads the same on every page, so the
+         accent stays purple even where --orange is the case study's colour. */
+      --footer-accent: #8B5CF6;
       background: #fff;
       border-top: 1px solid var(--border);
       padding: 80px 96px 56px;
@@ -1146,25 +1148,28 @@
       color: var(--black);
       margin-bottom: 10px;
     }
-    .footer-heading em {
-      font-style: italic;
-      font-family: 'Instrument Serif', serif;
-      font-weight: 400;
-      color: var(--orange);
+    .footer-word {
+      color: var(--footer-accent);
+      font-family: 'Inter', sans-serif;
     }
     .footer-sub {
-      font-size: 22px; font-weight: 400;
+      font-size: 22px;
+      font-weight: 400;
       color: #3D3D3D;
-      margin-top: 0; margin-bottom: 40px;
+      margin-top: 0;
+      margin-bottom: 40px;
     }
     .footer-caret {
       display: inline-block;
-      color: var(--orange);
+      color: var(--footer-accent);
       font-weight: 300;
       animation: caretBlink 0.8s step-end infinite;
       margin-left: 1px;
     }
     @keyframes caretBlink { 0%,100% { opacity: 1; } 50% { opacity: 0; } }
+    @media (prefers-reduced-motion: reduce) {
+      .footer-caret { animation: none; }
+    }
     .footer-main {
       display: flex;
       align-items: flex-start;
@@ -1173,7 +1178,8 @@
       margin-bottom: 56px;
     }
     .footer-left {
-      display: flex; flex-direction: column;
+      display: flex;
+      flex-direction: column;
     }
     .footer-links {
       display: flex;
@@ -1188,7 +1194,6 @@
       transition: color 0.18s;
     }
     .footer-link:hover { color: var(--black); }
-    .footer-divider { display: none; }
     .footer-nav {
       display: flex;
       flex-direction: column;
@@ -1205,7 +1210,9 @@
     }
     .footer-nav-link:hover { color: var(--black); }
     .footer-bottom {
-      display: flex; align-items: center; justify-content: space-between;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
       border-top: 1px solid var(--border);
       padding-top: 24px;
     }
@@ -1509,8 +1516,8 @@
       <div class="footer-inner">
         <div class="footer-main">
           <div class="footer-left">
-            <h2 class="footer-heading">Let's build something<br><span style="color:var(--orange);font-family:'Inter',sans-serif;" id="footer-word">together</span><span class="footer-caret" style="color:var(--orange);">|</span></h2>
-          <p class="footer-sub">Always happy to chat~</p>
+            <h2 class="footer-heading">Let's build something<br><span class="footer-word" id="footer-word">together</span><span class="footer-caret">|</span></h2>
+            <p class="footer-sub">Always happy to chat~</p>
             <div class="footer-links">
               <a class="footer-link" href="mailto:diyamahapatra@berkeley.edu">email</a>
               <a class="footer-link" href="https://www.linkedin.com/in/diya-mahapatra/" target="_blank">linkedIn</a>
