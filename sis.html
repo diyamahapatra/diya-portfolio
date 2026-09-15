@@ -413,23 +413,23 @@
 
     /* Second feature: a close-set text+image pair (both tracks size to
        their own content via max-content, rather than one stretching to
-       fill whatever's left) — but positioned so its image's top-left
-       corner touches the first feature's image's bottom-right corner,
-       a stair-step down rather than centered underneath it. margin-top:
-       0 closes the vertical gap to the previous .cs-section child
-       entirely (the two image corners touch); margin-left is solved
-       from "row's own left edge + text's rendered width (420, it hits
-       its max-width) + the 48px gap = the first image's right edge
-       (592px at a 1280 viewport, where the first image is 7 to 592)",
-       expressed as a vw offset from the row's natural 50vw position so
-       it moves with the rest of the vw-based layout. */
+       fill whatever's left) — stair-stepped down and to the right of
+       the first feature's image, same direction as before, just with
+       real breathing room this time instead of the corners literally
+       touching. margin-top (96px) is that gap above the previous
+       .cs-section child; margin-left is solved from "row's own left
+       edge + text's rendered width (420, it hits its max-width) + the
+       48px gap = the desired image position, 80px right of the first
+       image's own right edge (592px at a 1280 viewport)", expressed as
+       a vw offset from the row's natural 50vw position so it moves with
+       the rest of the vw-based layout. */
     .pillar-feature-reverse {
       display: grid;
       grid-template-columns: max-content max-content;
       gap: 48px;
       align-items: center;
-      margin-top: 0;
-      margin-left: -40.31vw;
+      margin-top: 96px;
+      margin-left: -34.06vw;
       width: 83vw;
     }
     .pillar-eyebrow {
