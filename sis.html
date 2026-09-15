@@ -411,25 +411,26 @@
     .pillar-feature-text .pillar-eyebrow { margin-top: 0; }
     .cs-section .pillar-feature-text h3.pillar-title { margin-bottom: 20px; }
 
-    /* Second feature: text and image as a single close-set pair (not
-       stretched edge-to-edge like a literal mirror of the first row
-       would be — that put the text and image at opposite ends of a
-       92vw-wide row, which read as "off to the side" rather than a
-       feature), centered as a unit under the row above. Both tracks
-       size to their own content (max-content) instead of one of them
-       filling whatever's left, so justify-content: center centers the
-       pair rather than stretching one side across the empty space. The
-       row still uses the same bleed span as the first pillar so both
-       rows share one consistent container to center within. */
+    /* Second feature: a close-set text+image pair (both tracks size to
+       their own content via max-content, rather than one stretching to
+       fill whatever's left) — but positioned so its image's top-left
+       corner touches the first feature's image's bottom-right corner,
+       a stair-step down rather than centered underneath it. margin-top:
+       0 closes the vertical gap to the previous .cs-section child
+       entirely (the two image corners touch); margin-left is solved
+       from "row's own left edge + text's rendered width (420, it hits
+       its max-width) + the 48px gap = the first image's right edge
+       (592px at a 1280 viewport, where the first image is 7 to 592)",
+       expressed as a vw offset from the row's natural 50vw position so
+       it moves with the rest of the vw-based layout. */
     .pillar-feature-reverse {
       display: grid;
       grid-template-columns: max-content max-content;
-      justify-content: center;
       gap: 48px;
       align-items: center;
-      margin-top: 120px;
-      margin-left: -49.7vw;
-      width: 92.2vw;
+      margin-top: 0;
+      margin-left: -40.31vw;
+      width: 83vw;
     }
     .pillar-eyebrow {
       font-size: 13px;
