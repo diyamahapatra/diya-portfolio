@@ -542,6 +542,47 @@
       .cs-layout { padding: 57px 20px 0; }
       .cs-sidebar { display: none; }
     }
+
+    /* ══════════════════════════════════════════════════════════
+       ALIGNMENT PASS
+       Everything hangs off one left edge. The hero sits at 85vw
+       centred, so its edge is 7.5vw — the page gutter is set to
+       match, and the hero then just fills the container.
+       ══════════════════════════════════════════════════════════ */
+    .cs-layout { padding: 57px 7.5vw 0; }
+    .cs-content .cs-hero-placeholder,
+    .cs-content .cs-hero-img {
+      width: 100%;
+      max-width: none;
+      margin-left: 0; margin-right: 0;
+    }
+    /* the phase number already starts at the container edge now */
+    .phase-num { padding-left: 0; }
+    /* title, intro and metadata share the container width, not a narrower one */
+    .cs-content .cs-title,
+    .cs-content .cs-intro,
+    .cs-meta,
+    .cs-overview-grid { max-width: none; }
+
+    /* metadata: no rules above or below */
+    .cs-overview-grid {
+      border-top: 0;
+      border-bottom: 0;
+      padding: 28px 0 56px;
+    }
+
+    /* brighter blue — Founders Rock, from the same Berkeley palette */
+    .cs-content { --berk: #3B7EA1; }
+
+    /* contents sits below the phase number so the two never collide */
+    .cs-sidebar {
+      left: 7.5vw;
+      top: 280px;
+    }
+
+    @media (max-width: 980px) {
+      .cs-layout { padding: 57px 20px 0; }
+    }
 </style>
   <script>
     (function () {
