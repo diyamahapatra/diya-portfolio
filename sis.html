@@ -411,25 +411,26 @@
     .pillar-feature-text .pillar-eyebrow { margin-top: 0; }
     .cs-section .pillar-feature-text h3.pillar-title { margin-bottom: 20px; }
 
-    /* Second feature: image restored to the first feature's own size
-       (585px, via the base .pillar-feature-media rule — no width
-       override here anymore) and a standard 48px gap, matching row 1.
-       That combination only fits a 1280px viewport if the text starts
-       at x:220 or earlier (220 + 420 + 48 + 585 = 1273, a 7px buffer) —
-       an 80px move left from its previous x:300, not the ~30px asked
-       for, because 30px alone (landing text at 270) would still run the
-       image 43px past the right edge and bring back the horizontal
-       scroll. */
+    /* Second feature: splitting the difference between a full 80px
+       shift (text at x:220, image matching row 1 at 585px) and no
+       shift at all (text at x:300, image shrunk to 500px) — a smaller
+       40px shift (text at x:260) paired with a slightly smaller image
+       (540px, down from 585 rather than down to 500) than the "match
+       exactly" version. 260 + 420(text) + 48(gap) + 540(image) = 1268,
+       a 12px buffer under the 1280px viewport. */
     .pillar-feature-reverse {
       display: grid;
       grid-template-columns: max-content 1fr;
       gap: 48px;
       align-items: center;
       margin-top: 96px;
-      margin-left: -32.81vw;
-      width: 82.3vw;
+      margin-left: -29.69vw;
+      width: 78.8vw;
     }
-    .pillar-feature-reverse .pillar-feature-media { justify-self: start; }
+    .pillar-feature-reverse .pillar-feature-media {
+      justify-self: start;
+      width: 540px;
+    }
     .pillar-eyebrow {
       font-size: 13px;
       letter-spacing: 0.04em;
