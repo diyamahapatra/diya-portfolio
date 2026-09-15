@@ -411,25 +411,23 @@
     .pillar-feature-text .pillar-eyebrow { margin-top: 0; }
     .cs-section .pillar-feature-text h3.pillar-title { margin-bottom: 20px; }
 
-    /* Second feature: text stays put (max-content, same left edge as
-       before — same 96px gap above the previous .cs-section child); the
-       image moves into a 1fr second track and sits flush at ITS right
-       edge (justify-self: end) instead of flush against the gap, so it
-       rides along as the row's own width grows. The row's width/margin
-       are widened just enough to carry the image's right edge close to
-       the viewport's own right edge (mirroring how far the first image
-       bleeds toward the LEFT edge), landing it under the A&A text
-       instead of tucked in close to the VFD text beside it. */
+    /* Second feature: text stays where it's been (max-content, same
+       left edge, same 96px gap above the previous .cs-section child).
+       The image sits flush at the START of the second column instead
+       of the end this time, landing it directly under the A&A text —
+       text ends at 204+420=624px at a 1280 viewport, so a 16px gap (not
+       the usual 48) puts the image's own left edge at exactly x:640,
+       the same x the A&A text itself starts at. */
     .pillar-feature-reverse {
       display: grid;
       grid-template-columns: max-content 1fr;
-      gap: 48px;
+      gap: 16px;
       align-items: center;
       margin-top: 96px;
       margin-left: -34.06vw;
       width: 83.5vw;
     }
-    .pillar-feature-reverse .pillar-feature-media { justify-self: end; }
+    .pillar-feature-reverse .pillar-feature-media { justify-self: start; }
     .pillar-eyebrow {
       font-size: 13px;
       letter-spacing: 0.04em;
