@@ -452,8 +452,12 @@
 
     /* hero slot, empty until the real image lands */
     .cs-hero-placeholder {
-      width: 100%;
-      aspect-ratio: 16 / 9;
+      /* 2.6:1 at 85% of the viewport — measured off the reference (1088x417
+         of 1280). vw rather than % so the 32px page padding doesn't shrink it. */
+      width: 85vw;
+      max-width: 100%;
+      margin-left: auto; margin-right: auto;
+      aspect-ratio: 2.6 / 1;
       background: #F5F5F5;
       border: 1px dashed #D8D8D8;
       display: flex; align-items: center; justify-content: center;
@@ -478,7 +482,7 @@
     .cs-content { max-width: none; }
 
     /* hero runs nearly edge to edge */
-    .cs-hero-placeholder, .cs-hero-img { width: 100%; }
+    .cs-hero-img { width: 85vw; max-width: 100%; margin: 0 auto; }
 
     .cs-content .cs-title,
     .cs-content .cs-intro,
@@ -495,10 +499,9 @@
     .phase-num {
       grid-column: 1;
       padding-left: 64px;     /* 32px page gutter + 64 = x:96, matching the reference */
-      font-family: 'Spectral', Georgia, serif;
-      font-style: italic;
-      font-weight: 300;
-      font-size: clamp(30px, 3.8vw, 48px);
+      font-family: 'Lora', Georgia, serif;
+      font-weight: 400;
+      font-size: clamp(28px, 3.4vw, 42px);
       letter-spacing: -0.4px;
       color: var(--ink, #202020);
       position: sticky;
