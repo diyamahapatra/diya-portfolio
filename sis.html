@@ -414,14 +414,13 @@
     /* Second feature: text stays where it's been (max-content, same
        left edge, same 96px gap above the previous .cs-section child).
        The image sits flush at the START of the second column instead
-       of the end this time, landing it directly under the A&A text —
-       text ends at 204+420=624px at a 1280 viewport, so a 16px gap (not
-       the usual 48) puts the image's own left edge at exactly x:640,
-       the same x the A&A text itself starts at. */
+       of the end this time — text ends at 204+420=624px at a 1280
+       viewport, so a 66px gap (not the usual 48) puts the image's own
+       left edge at x:690. */
     .pillar-feature-reverse {
       display: grid;
       grid-template-columns: max-content 1fr;
-      gap: 16px;
+      gap: 66px;
       align-items: center;
       margin-top: 96px;
       margin-left: -34.06vw;
