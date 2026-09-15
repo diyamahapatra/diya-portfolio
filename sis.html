@@ -368,6 +368,39 @@
 
     /* ── SOLUTION PILLARS (Sarah-style eyebrow + feature name) ── */
     .pillar { margin-top: 32px; }
+
+    /* First pillar as an image+text feature row, matching the reference:
+       the image sits in the phase-num rail (pulled left with a negative
+       margin, since it's nested inside the 520px content column and has
+       no other way to reach past it), text picks up where normal copy
+       sits. The -42.5vw/85vw pair mirrors the hero's own alignment math
+       (page gutter is 7.5vw, content column starts at 50vw — see the
+       "ALIGNMENT PASS" block below) rather than the stale 96px/32px
+       figures from the layout comment above, which a later cascade
+       rule overrides. Stacks on mobile in the 980px breakpoint below. */
+    .pillar-feature {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 48px;
+      align-items: start;
+      margin-top: 96px;
+      margin-left: -42.5vw;
+      width: 85vw;
+    }
+    .pillar-feature-media {
+      aspect-ratio: 4 / 5;
+      background: #F5F5F5;
+      border: 1px dashed #D8D8D8;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .pillar-feature-media span {
+      font-family: 'Inter', system-ui, sans-serif;
+      font-size: 13px; font-weight: 600;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      color: #A8A8A8;
+    }
+    .pillar-feature-text { padding-top: 4px; max-width: 420px; }
+    .pillar-feature-text .pillar-eyebrow { margin-top: 0; }
     .pillar-eyebrow {
       font-size: 13px;
       letter-spacing: 0.04em;
@@ -588,6 +621,16 @@
       .phase-body { grid-column: 1; max-width: none; }
       .cs-layout { padding: 57px 20px 0; }
       .cs-sidebar { display: none; }
+      /* the breakout only makes sense once there's a left rail to reach
+         into — on a single column it just stacks like the other pillars */
+      .pillar-feature {
+        grid-template-columns: 1fr;
+        gap: 20px;
+        margin-top: 56px;
+        margin-left: 0;
+        width: auto;
+      }
+      .pillar-feature-text { max-width: none; }
     }
 
     /* ══════════════════════════════════════════════════════════
@@ -720,17 +763,20 @@
   <div class="cs-section" id="problem">
         <p class="cs-section-label">Problem</p>
         <h2>Students had to understand how UC Berkeley's advising is structured before they could get help from it.</h2>
-        <p>Advising options sat in dropdown sections students opened one at a time. The difference between College and Major/Minor advisers was never stated. Requirements that determine whether a request can even proceed were buried near the bottom of the page.</p>
+        <p>Advising options sat in dropdown sections students opened one at a time. The difference between College and Major/Minor advisers was never stated. <strong>Requirements that determine whether a request can even proceed were buried near the bottom of the page.</strong></p>
       </div>
   <div class="cs-section" id="solution">
         <p class="cs-section-label">Solution</p>
         <h2>Three pages, rebuilt around how students actually arrive.</h2>
-        <p>A research-led redesign of three advising pages and a routing flow, built for a platform that couldn't support a single interactive element. Rather than explaining the college's structure more clearly, the redesign removes the need for students to understand it.</p>
+        <p>A research-led redesign of three advising pages and a routing flow, built for a platform that couldn't support a single interactive element. <strong>Rather than explaining the college's structure more clearly, the redesign removes the need for students to understand it.</strong></p>
 
-        <div class="pillar">
-          <p class="pillar-eyebrow">Findable</p>
-          <h3 class="pillar-title">Virtual Front Desk</h3>
-          <p class="cs-placeholder-note">What VFD does and who it serves.</p>
+        <div class="pillar-feature">
+          <div class="pillar-feature-media"><span>Feature image</span></div>
+          <div class="pillar-feature-text">
+            <p class="pillar-eyebrow">Findable</p>
+            <h3 class="pillar-title">Virtual Front Desk</h3>
+            <p class="cs-placeholder-note">What VFD does and who it serves.</p>
+          </div>
         </div>
         <div class="pillar">
           <p class="pillar-eyebrow">Situational</p>
