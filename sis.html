@@ -377,10 +377,16 @@
        (page gutter is 7.5vw, content column starts at 50vw — see the
        "ALIGNMENT PASS" block below) rather than the stale 96px/32px
        figures from the layout comment above, which a later cascade
-       rule overrides. Stacks on mobile in the 980px breakpoint below. */
+       rule overrides. Stacks on mobile in the 980px breakpoint below.
+
+       The first grid track is sized to land the TEXT column's left edge
+       at exactly 50vw — same x as the Solution paragraph above it — not
+       to size the image. calc(42.5vw - 48px) is "distance from the rail
+       edge (7.5vw) to the content column (50vw), minus the gap"; the
+       image itself stays small inside that track via justify-self. */
     .pillar-feature {
       display: grid;
-      grid-template-columns: minmax(200px, 300px) 1fr;
+      grid-template-columns: calc(42.5vw - 48px) 1fr;
       gap: 48px;
       align-items: center;
       margin-top: 96px;
@@ -388,6 +394,8 @@
       width: 85vw;
     }
     .pillar-feature-media {
+      width: 260px;
+      justify-self: start;
       aspect-ratio: 4 / 5;
       background: #F5F5F5;
       border: 1px dashed #D8D8D8;
@@ -631,6 +639,7 @@
         width: auto;
       }
       .pillar-feature-text { max-width: none; }
+      .pillar-feature-media { width: 100%; justify-self: stretch; }
     }
 
     /* ══════════════════════════════════════════════════════════
