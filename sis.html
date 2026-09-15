@@ -410,29 +410,26 @@
     .pillar-feature-text .pillar-eyebrow { margin-top: 0; }
     .cs-section .pillar-feature-text h3.pillar-title { margin-bottom: 20px; }
 
-    /* Second feature, mirrored: text stays on the left at its usual x:50vw
-       (the DOM just has text before media, so this needs no grid "order"
-       trick) — same anchor every other paragraph on the page uses — and
-       the image moves to the right instead. There's no rail to bleed into
-       on this side the way there is on the left (phase-num's column is a
-       left-side-only feature of the grid), so the image bleeds into the
-       page's own right gutter instead and ends up smaller than the first
-       feature's — the tradeoff for keeping the text aligned rather than
-       chasing a pixel-exact mirror. */
+    /* Second feature, a true mirror of the first: same row geometry
+       (same margin-left/width breakout, same two-track split) with text
+       and image just swapped into the opposite tracks. Text now sits in
+       the rail track the first image used — same left edge, so it lines
+       up with the image above it — and the image sits in the track the
+       first TEXT used, flush at that track's start (justify-self: start
+       instead of end) so it lands at x:50vw, the same x the A&A text
+       started at. It reuses .pillar-feature-media's width/aspect-ratio
+       as-is, so it's the same size as the first image without restating
+       the numbers. */
     .pillar-feature-reverse {
       display: grid;
-      grid-template-columns: 1fr minmax(160px, 260px);
+      grid-template-columns: calc(49.5vw - 48px) 1fr;
       gap: 48px;
       align-items: center;
       margin-top: 120px;
-      width: 47vw;
+      margin-left: -49.5vw;
+      width: 92vw;
     }
-    .pillar-feature-reverse .pillar-feature-media {
-      width: 260px;
-      justify-self: start;
-      aspect-ratio: 3 / 2;
-    }
-    .pillar-feature-reverse .pillar-feature-text { max-width: none; }
+    .pillar-feature-reverse .pillar-feature-media { justify-self: start; }
     .pillar-eyebrow {
       font-size: 13px;
       letter-spacing: 0.04em;
@@ -671,6 +668,7 @@
         grid-template-columns: 1fr;
         gap: 20px;
         margin-top: 56px;
+        margin-left: 0;
         width: auto;
       }
       /* the desktop-only reverse override below has higher specificity
