@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>About — Diya Mahapatra</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300&family=Lora:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --orange: #8B5CF6;
+      --black:  #0F0F0F;
+      --gray:   #6B7280;
+      --border: #E5E7EB;
+      --ease:   cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+
+    html, body {
+      width: 100%;
+      font-family: 'Inter', system-ui, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      background: #fff;
+      color: var(--black);
+    }
+
+    /* ── CUSTOM CURSOR ── */
+    body, body * { cursor: none; }
+    #custom-cursor {
+      position: fixed; pointer-events: none; z-index: 9999;
+      left: 0; top: 0; width: 28px; height: 28px;
+      border-radius: 50%; border: 1.5px solid var(--orange);
+      opacity: 0; will-change: transform;
+      transition: width 0.38s var(--ease), height 0.38s var(--ease);
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 40px; height: 57px;
+      border-bottom: 1px solid var(--border);
+      background: rgba(255,255,255,0.92);
+      backdrop-filter: blur(12px);
+    }
+    .nav-logo {
+      display: flex; align-items: center; gap: 8px;
+      font-size: 15px; font-weight: 600;
+      text-decoration: none; color: var(--black);
+      transition: transform 0.2s var(--ease);
+      transform-origin: left center;
+    }
+    .nav-logo:hover { transform: scale(1.06); }
+    .nav-links { list-style: none; display: flex; gap: 32px; }
+    .nav-links a {
+      font-size: 14px; color: var(--gray);
+      text-decoration: none; transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--black); }
+    .nav-links a.active { color: var(--black); font-weight: 500; }
+
+    /* ── LAYOUT ──
+       Text left, images right at roughly 1:2, measured off the reference:
+       a ~633px reading column beside a ~1283px image field at a 2000px
+       window, both inset ~27px from the page edges. */
+    .about {
+      padding: 57px 28px 0;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+      gap: 30px;
+      align-items: start;
+      max-width: 2000px;
+      margin: 0 auto;
+    }
+    .about-text { padding-top: 40px; max-width: 640px; }
+
+    .about-greeting {
+      font-family: 'Lora', Georgia, serif;
+      font-size: clamp(26px, 2.6vw, 34px);
+      font-weight: 500;
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+      color: var(--black);
+      margin-bottom: 20px;
+    }
+    .about-text p {
+      font-size: 15px;
+      line-height: 1.7;
+      color: var(--gray);
+      margin-bottom: 18px;
+    }
+    .about-text a {
+      color: var(--gray);
+      text-decoration: underline;
+      text-underline-offset: 2px;
+      transition: color 0.18s;
+    }
+    .about-text a:hover { color: var(--black); }
+
+    .about-list { list-style: none; margin: 0 0 18px; }
+    .about-list li {
+      font-size: 15px; line-height: 1.7; color: var(--gray);
+      padding-left: 18px; position: relative;
+    }
+    .about-list li::before {
+      content: '·';
+      position: absolute; left: 4px;
+      color: var(--gray);
+    }
+
+    /* ── EXPERIENCE / EDUCATION TABLES ── */
+    .about-h2 {
+      font-family: 'Lora', Georgia, serif;
+      font-size: 21px;
+      font-weight: 500;
+      letter-spacing: -0.01em;
+      color: var(--black);
+      margin: 38px 0 6px;
+    }
+    .cv-row {
+      display: flex; align-items: baseline; justify-content: space-between;
+      gap: 20px;
+      padding: 13px 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 15px;
+    }
+    .cv-place { color: var(--black); }
+    .cv-role  { color: var(--gray); }
+    .cv-year  {
+      color: var(--gray);
+      font-size: 14px;
+      letter-spacing: 0.02em;
+      flex-shrink: 0;
+      font-variant-numeric: tabular-nums;
+    }
+    /* unwritten detail, visibly marked so it can't ship by accident */
+    .todo { color: #9A9A9A; font-style: italic; }
+
+    /* ── IMAGE FIELD — one tall frame beside two stacked ── */
+    .about-shots {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: 1fr 1fr;
+      gap: 12px;
+      height: calc(100vh - 100px);
+      min-height: 620px;
+    }
+    .about-shots .frame:first-child { grid-row: 1 / span 2; }
+    .frame {
+      background: #F3F4F6;
+      border: 1px dashed #D8D8D8;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      gap: 10px;
+      overflow: hidden;
+    }
+    .frame img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .frame-icon {
+      width: 40px; height: 40px;
+      border: 1.5px solid #CFCFCF;
+      border-radius: 2px;
+    }
+    .frame-label {
+      font-size: 12px; font-weight: 600;
+      letter-spacing: 0.10em; text-transform: uppercase;
+      color: #A8A8A8;
+    }
+
+    /* ── FOOTER ── */
+    .site-footer {
+      --footer-accent: #8B5CF6;
+      background: #fff;
+      border-top: 1px solid var(--border);
+      padding: 80px 96px 56px;
+      margin-top: 96px;
+    }
+    .footer-inner { max-width: 1000px; margin: 0 auto; }
+    .footer-heading {
+      font-family: 'Lora', serif;
+      font-size: clamp(36px, 4.5vw, 64px);
+      font-weight: 500;
+      letter-spacing: -0.02em;
+      line-height: 1.08;
+      color: var(--black);
+      margin-bottom: 10px;
+    }
+    .footer-word { color: var(--footer-accent); font-family: 'Inter', sans-serif; }
+    .footer-sub {
+      font-size: 22px; font-weight: 400;
+      color: #3D3D3D;
+      margin-top: 0; margin-bottom: 40px;
+    }
+    .footer-caret {
+      display: inline-block;
+      color: var(--footer-accent);
+      font-weight: 300;
+      animation: caretBlink 0.8s step-end infinite;
+      margin-left: 1px;
+    }
+    @keyframes caretBlink { 0%,100% { opacity: 1; } 50% { opacity: 0; } }
+    @media (prefers-reduced-motion: reduce) { .footer-caret { animation: none; } }
+    .footer-main {
+      display: flex; align-items: flex-start; justify-content: space-between;
+      gap: 40px; margin-bottom: 56px;
+    }
+    .footer-left { display: flex; flex-direction: column; }
+    .footer-links { display: flex; flex-direction: column; gap: 6px; }
+    .footer-link {
+      font-size: 14px; font-weight: 400;
+      color: var(--gray); text-decoration: none;
+      transition: color 0.18s;
+    }
+    .footer-link:hover { color: var(--black); }
+    .footer-nav {
+      display: flex; flex-direction: column; align-items: flex-end;
+      gap: 8px; padding-top: 8px;
+    }
+    .footer-nav-link {
+      font-size: 13px; font-weight: 400;
+      color: var(--gray); text-decoration: none;
+      transition: color 0.18s;
+    }
+    .footer-nav-link:hover { color: var(--black); }
+    .footer-bottom {
+      display: flex; align-items: center; justify-content: space-between;
+      border-top: 1px solid var(--border);
+      padding-top: 24px;
+    }
+    .footer-copy { font-size: 12px; color: var(--gray); }
+
+    /* ── MOBILE ── */
+    @media (max-width: 900px) {
+      nav { padding: 0 18px; }
+      .nav-links { gap: 18px; }
+      .nav-links a { font-size: 13px; }
+
+      .about {
+        grid-template-columns: 1fr;
+        gap: 32px;
+        padding: 57px 20px 0;
+      }
+      .about-text { padding-top: 28px; max-width: none; }
+      /* the tall frame stops spanning; three equal frames stack instead */
+      .about-shots {
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: auto;
+        height: auto;
+        min-height: 0;
+      }
+      .about-shots .frame { aspect-ratio: 3 / 4; }
+      .about-shots .frame:first-child { grid-row: auto; grid-column: 1 / -1; aspect-ratio: 4 / 3; }
+      .site-footer { padding: 56px 20px 40px; margin-top: 64px; }
+      img { max-width: 100%; height: auto; }
+    }
+  </style>
+</head>
+<body>
+
+  <div id="custom-cursor"></div>
+
+  <nav>
+    <a class="nav-logo" href="/"><img src="images/purpmiffy.png" alt="miffy" style="width:22px;height:22px;object-fit:contain;display:block;">diya</a>
+    <ul class="nav-links">
+      <li><a href="/">Work</a></li>
+      <li><a href="/sandlot">Sandbox</a></li>
+      <li><a href="/about" class="active">About</a></li>
+      <li><a href="Diyas_Resume.pdf" target="_blank">Resume</a></li>
+    </ul>
+  </nav>
+
+  <main class="about">
+
+    <!-- ── LEFT: the written half ── -->
+    <div class="about-text">
+      <h1 class="about-greeting">Hi there, I&rsquo;m Diya.</h1>
+
+      <p>I&rsquo;m currently designing at UC Berkeley IT, working on advising tools and design systems for 30,000+ students. I&rsquo;m an AI-native product designer working across interaction, systems, and research.</p>
+
+      <p>Outside of design I&rsquo;m:</p>
+      <ul class="about-list">
+        <li class="todo">Something you actually do on weekends</li>
+        <li class="todo">A second one &mdash; specific beats impressive</li>
+        <li class="todo">A third</li>
+      </ul>
+
+      <p>Say hello at <a href="mailto:diyamahapatra@berkeley.edu">diyamahapatra@berkeley.edu</a> or via <a href="https://www.linkedin.com/in/diya-mahapatra/" target="_blank">LinkedIn</a>.</p>
+
+      <h2 class="about-h2">Experience</h2>
+      <div class="cv-row">
+        <span><span class="cv-place">UC Berkeley IT</span> <span class="cv-role">/ Product Design</span></span>
+        <span class="cv-year">2026</span>
+      </div>
+      <div class="cv-row">
+        <span><span class="cv-place">Flourish AI</span> <span class="cv-role">/ Product Design</span></span>
+        <span class="cv-year">2025</span>
+      </div>
+      <div class="cv-row">
+        <span><span class="cv-place">Amazon Music</span> <span class="cv-role">/ Product Design</span></span>
+        <span class="cv-year">2025</span>
+      </div>
+      <div class="cv-row">
+        <span><span class="cv-place">Carbon Sustain</span> <span class="cv-role">/ Product Design</span></span>
+        <span class="cv-year">2024</span>
+      </div>
+
+      <h2 class="about-h2">Education</h2>
+      <div class="cv-row">
+        <span><span class="cv-place">UC Berkeley</span> <span class="cv-role todo">/ your major</span></span>
+        <span class="cv-year todo">year</span>
+      </div>
+    </div>
+
+    <!-- ── RIGHT: the image field ── -->
+    <div class="about-shots">
+      <div class="frame">
+        <div class="frame-icon"></div>
+        <p class="frame-label">Portrait</p>
+      </div>
+      <div class="frame">
+        <div class="frame-icon"></div>
+        <p class="frame-label">Photo</p>
+      </div>
+      <div class="frame">
+        <div class="frame-icon"></div>
+        <p class="frame-label">Photo</p>
+      </div>
+    </div>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-main">
+        <div class="footer-left">
+          <h2 class="footer-heading">Let's build something<br><span class="footer-word" id="footer-word">together</span><span class="footer-caret">|</span></h2>
+          <p class="footer-sub">Always happy to chat~</p>
+          <div class="footer-links">
+            <a class="footer-link" href="mailto:diyamahapatra@berkeley.edu">email</a>
+            <a class="footer-link" href="https://www.linkedin.com/in/diya-mahapatra/" target="_blank">linkedIn</a>
+            <a class="footer-link" href="Diyas_Resume.pdf" target="_blank">resume</a>
+          </div>
+        </div>
+        <div class="footer-nav">
+          <a class="footer-nav-link" href="/">Work</a>
+          <a class="footer-nav-link" href="/sandlot">Sandbox</a>
+          <a class="footer-nav-link" href="Diyas_Resume.pdf" target="_blank">Resume</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p class="footer-copy">© 2026 Diya Mahapatra</p>
+        <p class="footer-copy">made with thai iced tea 🧋 · designed on Figma, coded with Claude Code</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    /* ── CUSTOM CURSOR ── */
+    const cursorEl = document.getElementById('custom-cursor');
+    (function () {
+      var EASE = 0.2;
+      var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      var x = 0, y = 0, tx = 0, ty = 0, raf = null, seeded = false;
+      function draw() {
+        cursorEl.style.transform = 'translate(' + x + 'px, ' + y + 'px) translate(-50%, -50%)';
+      }
+      function tick() {
+        x += (tx - x) * EASE;
+        y += (ty - y) * EASE;
+        draw();
+        if (Math.abs(tx - x) > 0.1 || Math.abs(ty - y) > 0.1) {
+          raf = requestAnimationFrame(tick);
+        } else { x = tx; y = ty; draw(); raf = null; }
+      }
+      document.addEventListener('mousemove', function (e) {
+        tx = e.clientX; ty = e.clientY;
+        cursorEl.style.opacity = '1';
+        if (!seeded) { x = tx; y = ty; seeded = true; draw(); return; }
+        if (reduced) { x = tx; y = ty; draw(); return; }
+        if (!raf) raf = requestAnimationFrame(tick);
+      });
+    })();
+
+    /* ── FOOTER WORD CYCLER ── */
+    (function() {
+      const words = ['together', 'great', 'magical', 'inspiring'];
+      const el = document.getElementById('footer-word');
+      if (!el) return;
+      let wi = 0, charI = words[0].length, deleting = false;
+      const TYPE_SPEED = 80, DELETE_SPEED = 45, PAUSE_AFTER = 1800, PAUSE_BEFORE = 220;
+      function tick() {
+        const current = words[wi];
+        if (deleting) {
+          charI--;
+          el.textContent = current.slice(0, charI);
+          if (charI === 0) { deleting = false; wi = (wi + 1) % words.length; setTimeout(tick, PAUSE_BEFORE); return; }
+          setTimeout(tick, DELETE_SPEED);
+        } else {
+          charI++;
+          el.textContent = words[wi].slice(0, charI);
+          if (charI === words[wi].length) { setTimeout(() => { deleting = true; tick(); }, PAUSE_AFTER); return; }
+          setTimeout(tick, TYPE_SPEED);
+        }
+      }
+      setTimeout(() => { deleting = true; tick(); }, PAUSE_AFTER);
+    })();
+  </script>
+</body>
+</html>
