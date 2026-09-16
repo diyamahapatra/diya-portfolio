@@ -17,6 +17,7 @@
       --border: #E5E7EB;
       --ease:   cubic-bezier(0.25, 0.46, 0.45, 0.94);
       --rail:   220px;   /* fixed contents rail, same idea as the SIS study */
+      --nudge:  60px;    /* optical offset right of true centre — see .cs-content */
     }
 
     html, body {
@@ -133,17 +134,29 @@
       transition: color 0.18s;
     }
     .cs-sidebar-top:hover { color: var(--black); }
+    /* Fixed rather than absolute so it runs the full height of the window
+       alongside the rail, instead of being boxed by the aside's padding. */
+    .cs-sidebar::after {
+      content: '';
+      position: fixed;
+      left: var(--rail);
+      top: 57px;
+      bottom: 0;
+      border-left: 1px dotted #D6D6D6;
+      pointer-events: none;
+    }
 
     /* ── MAIN CONTENT ── */
     .cs-main {
       padding: 48px 0 24px;
     }
-    /* Centred on the window, but never allowed to slide left far enough to
-       run under the fixed rail — below roughly 1300px the max() flips and the
-       column simply clears the rail instead of centring. */
+    /* Geometrically the column centres on the window, but the rail sitting
+       off to the left makes that read as left-heavy — so it gets nudged right
+       to sit optically centred. The max() floor keeps it clear of the dotted
+       rule when the window is too narrow to both centre and clear. */
     .cs-content {
       max-width: 840px;
-      margin-left: max(228px, calc((100% - 840px) / 2));
+      margin-left: max(252px, calc((100% - 840px) / 2 + var(--nudge)));
       margin-right: 20px;
     }
 
