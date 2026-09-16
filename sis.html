@@ -261,38 +261,6 @@
       max-width: 360px;
     }
 
-    /* ── "A GOOD IDEA IS…" style list — three stacked claims ── */
-    .claims { margin-top: 48px; }
-    .cs-body p.claims-label {
-      font-family: 'Inter', system-ui, sans-serif;
-      font-size: 12px; font-weight: 600;
-      letter-spacing: 0.10em; text-transform: uppercase;
-      color: var(--gray);
-      margin-bottom: 28px;
-      max-width: none;
-    }
-    .claim {
-      padding: 24px 0;
-      border-top: 1px solid var(--border);
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) minmax(0, 1.6fr);
-      gap: 40px;
-      align-items: baseline;
-    }
-    .claim:last-child { border-bottom: 1px solid var(--border); }
-    .claim h3 {
-      font-family: 'Spectral', Georgia, serif;
-      font-size: 18px; font-weight: 300;
-      letter-spacing: -0.4px;
-      line-height: 1.35;
-      color: var(--ink);
-    }
-    .claim p {
-      font-size: 14px;
-      line-height: 1.7;
-      color: #3D3D3D;
-      margin: 0;
-    }
 
     /* ── FEATURE CARDS ──
        Two-up tinted cards rather than four full-width blocks stacked down
@@ -353,52 +321,16 @@
     }
 
 
-    /* ── CLOSING CTA ── */
-    .closing {
-      margin-top: 112px;
-      padding-top: 56px;
-      border-top: 1px solid var(--border);
-    }
-    .closing h2 {
-      font-family: 'Spectral', Georgia, serif;
-      font-size: clamp(22px, 2.6vw, 28px);
-      font-weight: 300;
-      letter-spacing: -0.4px;
-      line-height: 1.25;
-      color: var(--ink);
-      margin-bottom: 16px;
-    }
-    .closing p {
-      font-size: 14px;
-      line-height: 1.75;
-      color: #3D3D3D;
-      margin-bottom: 24px;
-    }
-    .closing a {
-      font-family: 'Inter', system-ui, sans-serif;
-      font-size: 13px; font-weight: 600;
-      color: #fff;
-      background: var(--orange);
-      border-radius: 100px;
-      padding: 11px 22px;
-      text-decoration: none;
-      display: inline-block;
-      transition: opacity 0.18s;
-    }
-    .closing a:hover { opacity: 0.86; }
 
     /* ── SCROLL REVEALS ── */
-    .js-reveal .cs-section,
-    .js-reveal .closing {
+    .js-reveal .cs-section {
       opacity: 0;
       transform: translateY(14px);
       transition: opacity 0.6s var(--ease), transform 0.6s var(--ease);
     }
-    .js-reveal .cs-section.revealed,
-    .js-reveal .closing.revealed { opacity: 1; transform: none; }
+    .js-reveal .cs-section.revealed { opacity: 1; transform: none; }
     @media (prefers-reduced-motion: reduce) {
-      .js-reveal .cs-section,
-      .js-reveal .closing { opacity: 1; transform: none; transition: none; }
+      .js-reveal .cs-section { opacity: 1; transform: none; transition: none; }
     }
 
     /* ── FOOTER ── */
@@ -488,7 +420,6 @@
          shreds "Open Berkeley (Drupal)" — one column has room to read */
       .meta-tools-cols { grid-template-columns: 1fr; }
       .cs-section { margin-bottom: 72px; }
-      .claim { grid-template-columns: 1fr; gap: 10px; }
       /* one card per row on a phone; the shot stops bleeding sideways */
       .feature-grid { grid-template-columns: 1fr; gap: 16px; }
       .feature { padding: 30px 24px 0; }
@@ -526,9 +457,6 @@
       <li><a href="#overview" class="active">Overview</a></li>
       <li><a href="#problem">The Problem</a></li>
       <li><a href="#solution">Solution</a></li>
-      <li><a href="#context">Context</a></li>
-      <li><a href="#insights">Insights</a></li>
-      <li><a href="#outcome">The Outcome</a></li>
     </ul>
     <a class="rail-top" href="#top">Back to top</a>
   </aside>
@@ -618,64 +546,6 @@
       </div>
     </section>
 
-    <!-- CONTEXT -->
-    <section class="cs-section" id="context">
-      <p class="cs-label">Context</p>
-      <h2>Students arrive with a situation, not a category.</h2>
-      <p>A student doesn't wake up needing "College advising." They need to drop a class after the deadline, or figure out whether a summer course transfers, or ask whether their double major still works. The site was organized around the college's internal structure — the answer to a question nobody was asking.</p>
-      <p class="todo">Add the enrollment numbers, the advising team structure, and what the site was actually built on (Open Berkeley / Drupal constraints).</p>
-      <div class="shot">
-        <div class="ph-icon"></div>
-        <p class="ph-text">The site as it was</p>
-      </div>
-    </section>
-
-    <!-- INSIGHTS -->
-    <section class="cs-section" id="insights">
-      <p class="cs-label">Insights</p>
-      <h2>Four themes from an affinity map, GA4, and a live site audit.</h2>
-      <p class="todo">Walk through each method and what it surfaced — how many students, what the GA4 data showed about where people dropped off, and what the audit found.</p>
-
-      <div class="claims">
-        <p class="claims-label">What students needed</p>
-        <div class="claim">
-          <h3>To be told the difference.</h3>
-          <p class="todo">The distinction between College and Major/Minor advising, stated plainly rather than implied by page structure.</p>
-        </div>
-        <div class="claim">
-          <h3>To know if they qualify.</h3>
-          <p class="todo">Requirements surfaced before the request, not buried in prose at the bottom of the page.</p>
-        </div>
-        <div class="claim">
-          <h3>To pick a moment, not a service.</h3>
-          <p class="todo">A choice framed around time and urgency — a quick question now, or a scheduled appointment.</p>
-        </div>
-      </div>
-
-      <div class="shot">
-        <div class="ph-icon"></div>
-        <p class="ph-text">Affinity map</p>
-      </div>
-    </section>
-
-    <!-- THE OUTCOME -->
-    <section class="cs-section" id="outcome">
-      <p class="cs-label">The Outcome</p>
-      <h2>Shipping into a live site used by 20,000 students.</h2>
-      <p class="todo">What happened when it shipped — what you measured or expect to measure, what feedback you got from the advising team, and what you're watching for in testing.</p>
-      <div class="shot shot--tall">
-        <div class="ph-icon"></div>
-        <p class="ph-text">Outcome</p>
-      </div>
-    </section>
-
-    <!-- CLOSING -->
-    <div class="closing">
-      <h2>Want to hear more?</h2>
-      <p>Happy to walk through the research, the concept that got cut, and what it's like designing inside a platform that can't run a single line of conditional logic.</p>
-      <a href="mailto:diyamahapatra@berkeley.edu">Get in touch</a>
-    </div>
-
   </main>
 
   <footer class="site-footer">
@@ -731,9 +601,8 @@
     })();
 
     /* ── RAIL ACTIVE STATE ON SCROLL ──
-       A section without data-toc falls back to its own id; "The Brief"
-       maps up to Overview, since the rail lists six items and the page
-       has one more block than that. */
+       A section can point at a rail item other than its own id via
+       data-toc; without it, it falls back to its own id. */
     (function () {
       var sections = document.querySelectorAll('.cs-section, #overview');
       var railLinks = document.querySelectorAll('.rail-links a');
@@ -753,7 +622,7 @@
 
     /* ── SCROLL REVEALS ── */
     (function () {
-      var blocks = document.querySelectorAll('.cs-section, .closing');
+      var blocks = document.querySelectorAll('.cs-section');
       function revealAll() {
         for (var i = 0; i < blocks.length; i++) blocks[i].classList.add('revealed');
       }
