@@ -16,6 +16,7 @@
       --gray:   #6B7280;
       --border: #E5E7EB;
       --ease:   cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      --rail:   220px;   /* fixed contents rail, same idea as the SIS study */
     }
 
     html, body {
@@ -69,71 +70,82 @@
     .nav-links a:hover { color: var(--black); }
     .nav-links a.active { color: var(--black); font-weight: 500; }
 
-    /* ── LAYOUT ── */
+    /* ── LAYOUT ──
+       The contents rail is pinned to the far left and out of the flow, so
+       the reading column is free to centre on the window rather than on
+       whatever space the rail left behind. */
     .cs-layout {
-      display: flex;
+      display: block;
       padding-top: 57px;
       min-height: 100vh;
-      max-width: 1100px;
-      margin: 0 auto;
     }
 
-    /* ── SIDEBAR ── */
+    /* ── CONTENTS RAIL ── */
     .cs-sidebar {
-      width: 180px;
-      flex-shrink: 0;
-      align-self: flex-start;
-      padding: 48px 24px 48px 0;
-      position: sticky;
+      position: fixed;
+      left: 24px;
       top: 57px;
-      max-height: calc(100vh - 57px);
-      overflow-y: auto;
+      bottom: 0;
+      width: calc(var(--rail) - 48px);
+      padding: 34px 0 28px;
+      display: flex;
+      flex-direction: column;
+      z-index: 50;
     }
     .cs-sidebar-label {
-      font-size: 11px; font-weight: 600;
+      font-family: 'Inter', system-ui, sans-serif;
+      font-size: 12px; font-weight: 600;
       letter-spacing: 0.10em; text-transform: uppercase;
-      color: var(--gray);
-      margin-bottom: 16px;
+      color: var(--black);
+      text-decoration: none;
+      display: block;
+      margin-bottom: 26px;
+      transition: color 0.18s;
     }
+    a.cs-sidebar-label:hover { color: var(--orange); }
     .cs-sidebar-links {
       list-style: none;
-      display: flex; flex-direction: column; gap: 2px;
+      display: flex; flex-direction: column; gap: 0;
+      /* 13 entries is taller than a short window — let it scroll on its own */
+      overflow-y: auto;
+      min-height: 0;
     }
     .cs-sidebar-links a {
       font-family: 'Inter', system-ui, sans-serif;
-      font-size: 13.1px; color: var(--gray);
+      font-size: 12px; font-weight: 500;
+      letter-spacing: 0.10em; text-transform: uppercase;
+      color: #969696;
       text-decoration: none;
-      padding: 5px 0;
+      padding: 9px 0;
       display: block;
       transition: color 0.18s;
-      border-left: 2px solid transparent;
-      padding-left: 10px;
-      margin-left: -12px;
     }
     .cs-sidebar-links a:hover { color: var(--black); }
-    .cs-sidebar-links a.active {
-      color: var(--black); font-weight: 500;
-      border-left-color: var(--black);
+    .cs-sidebar-links a.active { color: var(--orange); }
+    .cs-sidebar-top {
+      margin-top: auto;
+      padding-top: 20px;
+      font-family: 'Inter', system-ui, sans-serif;
+      font-size: 12px; font-weight: 600;
+      letter-spacing: 0.10em; text-transform: uppercase;
+      color: var(--gray);
+      text-decoration: none;
+      transition: color 0.18s;
     }
+    .cs-sidebar-top:hover { color: var(--black); }
 
     /* ── MAIN CONTENT ── */
     .cs-main {
-      flex: 1;
-      padding: 48px 0 24px 48px;
+      padding: 48px 0 24px;
     }
+    /* Centred on the window, but never allowed to slide left far enough to
+       run under the fixed rail — below roughly 1300px the max() flips and the
+       column simply clears the rail instead of centring. */
     .cs-content {
-      width: 100%;
       max-width: 840px;
+      margin-left: max(228px, calc((100% - 840px) / 2));
+      margin-right: 20px;
     }
-
-    /* metadata */
-    .cs-meta {
-      font-size: 13px; color: var(--gray);
-      margin-bottom: 14px;
-      display: flex; align-items: center; gap: 8px;
-      letter-spacing: 0.02em;
-    }
-    .cs-meta span { color: var(--border); }
 
     /* title */
     .cs-title {
@@ -1248,11 +1260,14 @@
       /* the sticky "on this page" rail needs a gutter a phone doesn't have */
       .cs-sidebar { display: none; }
       .cs-layout {
-        flex-direction: column;
         max-width: 100%;
         padding: 57px 20px 0;
       }
-      .cs-content { max-width: 100%; }
+      .cs-content {
+        max-width: 100%;
+        margin-left: 0;
+        margin-right: 0;
+      }
 
       /* every multi-column block becomes a single stack */
       .cs-overview-grid,
@@ -1510,11 +1525,11 @@
     </ul>
   </nav>
 
-  <div class="cs-layout">
+  <div class="cs-layout" id="top">
 
     <!-- Sidebar -->
     <aside class="cs-sidebar">
-      <p class="cs-sidebar-label">On this page</p>
+      <a class="cs-sidebar-label" href="/">&larr; Home</a>
       <ul class="cs-sidebar-links">
         <li><a href="#overview" class="active">Overview</a></li>
         <li><a href="#challenge">Context</a></li>
@@ -1530,19 +1545,12 @@
         <li><a href="#mvp2">Looking Ahead</a></li>
         <li><a href="#reflection">Reflection</a></li>
       </ul>
+      <a class="cs-sidebar-top" href="#top">Back to top</a>
     </aside>
 
     <!-- Main -->
     <main class="cs-main">
     <div class="cs-content">
-
-      <p class="cs-meta">
-        Flourish AI
-        <span>·</span>
-        Product Design Intern
-        <span>·</span>
-        2025
-      </p>
 
       <h1 class="cs-title">Making AI Health Insights Easier to Understand and Trust</h1>
 
