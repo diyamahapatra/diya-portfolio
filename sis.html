@@ -11,7 +11,8 @@
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
     :root {
-      --orange: #003262;   /* Berkeley Blue — this case study's accent */
+      --orange: #003262;   /* Berkeley Blue — solid fills, where white text sits on top */
+      --accent: #3B7EA1;   /* Founders Rock — the brighter Berkeley blue, for eyebrow labels */
       --ink:    #202020;   /* headline near-black */
       --black:  #0F0F0F;
       --gray:   #6B7280;
@@ -102,7 +103,7 @@
       margin-bottom: 26px;
       transition: color 0.18s;
     }
-    .rail-label:hover { color: var(--orange); }
+    .rail-label:hover { color: var(--accent); }
     .rail-links { list-style: none; display: flex; flex-direction: column; gap: 0; }
     .rail-links a {
       font-family: 'Inter', system-ui, sans-serif;
@@ -115,7 +116,7 @@
       transition: color 0.18s;
     }
     .rail-links a:hover { color: var(--ink); }
-    .rail-links a.active { color: var(--orange); }
+    .rail-links a.active { color: var(--accent); }
     .rail-top {
       margin-top: auto;
       font-family: 'Inter', system-ui, sans-serif;
@@ -197,7 +198,7 @@
       font-family: 'Inter', system-ui, sans-serif;
       font-size: 12px; font-weight: 600;
       letter-spacing: 0.10em; text-transform: uppercase;
-      color: var(--orange);
+      color: var(--accent);
       margin-bottom: 8px;
     }
     .cs-meta-value {
@@ -207,7 +208,7 @@
     }
 
     /* ── SECTIONS — label, headline, body, image ── */
-    .cs-section { margin-bottom: 104px; }
+    .cs-section { margin-bottom: 72px; }
     .cs-section:last-child { margin-bottom: 0; }
     /* Two classes + the element, so it genuinely outranks `.cs-section p`
        — `p.cs-label` alone only *ties* with it, and loses on source order. */
@@ -215,7 +216,7 @@
       font-family: 'Inter', system-ui, sans-serif;
       font-size: 12px; font-weight: 600;
       letter-spacing: 0.10em; text-transform: uppercase;
-      color: var(--orange);
+      color: var(--accent);
       margin-bottom: 8px;
       max-width: none;
       display: block;
