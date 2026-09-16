@@ -352,30 +352,6 @@
       flex: 1;
     }
 
-    /* ── "MORE COMING SOON" notice ── */
-    .notice {
-      margin-top: 96px;
-      padding: 40px 44px;
-      background: #FAFAFA;
-      border: 1px solid #ECECEC;
-    }
-    /* matches .cs-body p.cs-label's specificity and comes after it, so the
-       notice's own label stays grey rather than picking up the accent */
-    .notice p.cs-label { color: var(--gray); }
-    .notice h2 {
-      font-family: 'Spectral', Georgia, serif;
-      font-size: 20px; font-weight: 300;
-      letter-spacing: -0.4px;
-      line-height: 1.4;
-      color: var(--ink);
-      margin-bottom: 18px;
-    }
-    .notice p {
-      font-size: 14px;
-      line-height: 1.75;
-      color: #3D3D3D;
-      margin: 0;
-    }
 
     /* ── CLOSING CTA ── */
     .closing {
@@ -517,7 +493,6 @@
       .feature-grid { grid-template-columns: 1fr; gap: 16px; }
       .feature { padding: 30px 24px 0; }
       .feature .shot { margin: 24px -22px 0 22px; min-height: 160px; }
-      .notice { padding: 28px 22px; }
       .shot--square { max-width: 100%; }
       .site-footer { padding: 56px 20px 40px; }
       img, video { max-width: 100%; height: auto; }
@@ -640,12 +615,6 @@
           <p class="ph-text">Routing Flow</p>
         </div>
       </div>
-      </div>
-
-      <div class="notice">
-        <p class="cs-label">More coming soon…</p>
-        <h2>You're looking at a snippet of the process.</h2>
-        <p>The routing flow, the concept that got cut, and the usability testing round are still being written up. Check back for the full version.</p>
       </div>
     </section>
 
