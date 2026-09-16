@@ -294,16 +294,34 @@
       margin: 0;
     }
 
-    /* ── FEATURE BLOCK — a sub-headline inside Solution, like the
-           reference's "Give rich feedback on-the-go" ── */
-    .feature { margin-top: 80px; }
+    /* ── FEATURE CARDS ──
+       Two-up tinted cards rather than four full-width blocks stacked down
+       the page — the same density as the reference, so a recruiter sees
+       the whole solution in about one screen instead of scrolling past
+       four of them. Text sits top-left, the screenshot is anchored to the
+       card's bottom-right corner. An odd card out spans the full row. */
+    .feature-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-top: 72px;
+    }
+    .feature {
+      background: #F4F4F2;
+      padding: 40px 40px 0;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+    /* a lone last card fills the row instead of leaving a gap beside it */
+    .feature:last-child:nth-child(odd) { grid-column: 1 / -1; }
     .feature h3 {
       font-family: 'Spectral', Georgia, serif;
       font-size: 20px; font-weight: 300;
       letter-spacing: -0.4px;
       line-height: 1.35;
       color: var(--ink);
-      margin-bottom: 18px;
+      margin-bottom: 14px;
     }
     .cs-body p.feature-eyebrow {
       font-family: 'Inter', system-ui, sans-serif;
@@ -315,9 +333,21 @@
     }
     .feature p {
       font-size: 14px;
-      line-height: 1.75;
-      color: #3D3D3D;
+      line-height: 1.7;
+      color: #6E6E6E;
       margin: 0;
+      max-width: 46ch;
+    }
+    /* the shot hangs off the card's bottom-right, inset from the left */
+    .feature .shot {
+      margin: 36px -40px 0 48px;
+      min-height: 280px;
+      aspect-ratio: auto;
+      background: #EBEBE8;
+      border: 1px dashed #D2D2CD;
+      border-right: 0;
+      border-bottom: 0;
+      flex: 1;
     }
 
     /* ── "MORE COMING SOON" notice ── */
@@ -481,6 +511,10 @@
       .meta-tools-cols { grid-template-columns: 1fr; }
       .cs-section { margin-bottom: 72px; }
       .claim { grid-template-columns: 1fr; gap: 10px; }
+      /* one card per row on a phone; the shot stops bleeding sideways */
+      .feature-grid { grid-template-columns: 1fr; gap: 16px; }
+      .feature { padding: 30px 24px 0; }
+      .feature .shot { margin: 24px -22px 0 22px; min-height: 160px; }
       .notice { padding: 28px 22px; }
       .shot--square { max-width: 100%; }
       .site-footer { padding: 56px 20px 40px; }
@@ -568,9 +602,9 @@
       <h2>Three pages, rebuilt around how students actually arrive.</h2>
       <p>A research-led redesign of three advising pages and a routing flow, built for a platform that couldn't support a single interactive element. Rather than explaining the college's structure more clearly, the redesign removes the need for students to understand it.</p>
 
+      <div class="feature-grid">
       <div class="feature">
         <p class="feature-eyebrow">Appointments &amp; Advice</p>
-        <h3>Every Distinction Stated Outright</h3>
         <p>Advising options grouped under labeled sections, with a side-by-side comparison of College and Major/Minor advising and a table surfacing the requirements students used to miss.</p>
         <div class="shot">
           <div class="ph-icon"></div>
@@ -580,7 +614,6 @@
 
       <div class="feature">
         <p class="feature-eyebrow">Virtual Front Desk</p>
-        <h3>One Service Instead of Two</h3>
         <p>Two drop-in services that used the same form and the same Zoom link, merged into one and compared against the choice students can actually make: a quick question now, or a scheduled appointment.</p>
         <div class="shot">
           <div class="ph-icon"></div>
@@ -590,7 +623,6 @@
 
       <div class="feature">
         <p class="feature-eyebrow">Forms &amp; Petitions</p>
-        <h3>Search Before Browse</h3>
         <p class="todo">Two concepts, and the rationale for leading with search — why search beat browse as the primary pattern on this page.</p>
         <div class="shot">
           <div class="ph-icon"></div>
@@ -600,12 +632,12 @@
 
       <div class="feature">
         <p class="feature-eyebrow">Routing Flow</p>
-        <h3>Questions About You, Not About Us</h3>
         <p>A guided flow that asks students about their own situation and points them to the right adviser, form, or campus office.</p>
         <div class="shot">
           <div class="ph-icon"></div>
           <p class="ph-text">Routing Flow</p>
         </div>
+      </div>
       </div>
 
       <div class="notice">
