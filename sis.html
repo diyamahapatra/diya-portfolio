@@ -244,6 +244,15 @@
       color: #9A9A9A;
       font-style: italic;
     }
+    /* a quiet attribution line — two classes plus the element so it wins
+       against `.cs-section p`'s body colour and spacing */
+    .cs-body p.cs-credit {
+      font-size: 13px;
+      line-height: 1.6;
+      color: #8E8E8E;
+      margin-top: 22px;
+      margin-bottom: 0;
+    }
 
     /* image placeholders — content width, 16:9, like the reference */
     .shot {
@@ -256,6 +265,20 @@
       margin-top: 40px;
     }
     .shot--tall { aspect-ratio: 4 / 3; }
+    /* three screenshots across, sized to fit the reading column rather
+       than dominate it — each ends up ~350px at a 1440 window */
+    .shot-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-top: 40px;
+    }
+    .shot-row .shot {
+      margin-top: 0;
+      aspect-ratio: 4 / 3;
+      gap: 8px;
+    }
+    .shot-row .ph-icon { width: 32px; height: 32px; }
     .shot--square {
       aspect-ratio: 1 / 1;
       max-width: 360px;
@@ -422,6 +445,8 @@
       .cs-section { margin-bottom: 72px; }
       /* one card per row on a phone; the shot stops bleeding sideways */
       .feature-grid { grid-template-columns: 1fr; gap: 16px; }
+      /* three across is unreadable on a phone — stack to two */
+      .shot-row { grid-template-columns: 1fr 1fr; gap: 10px; }
       .feature { padding: 30px 24px 0; }
       .feature .shot { margin: 24px -22px 0 22px; min-height: 160px; }
       .shot--square { max-width: 100%; }
@@ -457,6 +482,8 @@
       <li><a href="#overview" class="active">Overview</a></li>
       <li><a href="#problem">The Problem</a></li>
       <li><a href="#solution">Solution</a></li>
+      <li><a href="#context">Context</a></li>
+      <li><a href="#research">Research</a></li>
     </ul>
     <a class="rail-top" href="#top">Back to top</a>
   </aside>
@@ -543,6 +570,47 @@
           <p class="ph-text">Routing Flow</p>
         </div>
       </div>
+      </div>
+    </section>
+
+    <!-- CONTEXT -->
+    <section class="cs-section" id="context">
+      <p class="cs-label">Context</p>
+      <h2>The advising site is where students go when something has gone wrong.</h2>
+      <p>L&amp;S is Berkeley's largest college. Its advising site is where students go to book appointments, check deadlines, find petitions, and reach an adviser (usually at the point where something is already time-sensitive). The team was migrating from Drupal 7 to Drupal 10 and wanted to evaluate the experience before rebuilding it.</p>
+      <p class="cs-credit">Clients: [name redacted], Senior College Adviser &middot; [name redacted], Associate Director of Advising &amp; Student Success</p>
+
+      <div class="shot-row">
+        <div class="shot">
+          <div class="ph-icon"></div>
+          <p class="ph-text">Screenshot</p>
+        </div>
+        <div class="shot">
+          <div class="ph-icon"></div>
+          <p class="ph-text">Screenshot</p>
+        </div>
+        <div class="shot">
+          <div class="ph-icon"></div>
+          <p class="ph-text">Screenshot</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- THE STARTING POINT -->
+    <section class="cs-section" id="starting-point" data-toc="context">
+      <p class="cs-label">The Starting Point</p>
+      <h2>261 survey responses, a migration deadline, and no assigned pages.</h2>
+      <p>The team had collected student feedback but had not analyzed it. There was no brief naming which pages to redesign and the site was large and served many different needs, so finding where design could matter most was part of the work.</p>
+    </section>
+
+    <!-- RESEARCH -->
+    <section class="cs-section" id="research">
+      <p class="cs-label">Research</p>
+      <h2>Making sense of 261 student voices</h2>
+      <p>Five open-ended questions across 261 responses was more than I could hand-code in a twelve-week internship, so I used AskAI in Google Sheets for first-pass thematic coding. My first version forced one theme per response, which meant a comment naming two problems was counted as naming one. I rewrote the formulas to allow multiple themes per row and re-ran the set. Total cost: <strong>$0.34</strong>.</p>
+      <div class="shot">
+        <div class="ph-icon"></div>
+        <p class="ph-text">Thematic coding</p>
       </div>
     </section>
 
