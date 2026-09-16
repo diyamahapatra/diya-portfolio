@@ -132,9 +132,14 @@
       padding: 48px 0 24px 0;
       margin-left: 244px;
     }
+    /* 64px of padding on each side, like the reference (emmiwu.com/figma)
+       — its body text sits with a generous, roughly symmetric gutter
+       inside its own container rather than running flush to the edges. */
     .cs-content {
       width: 100%;
       max-width: 840px;
+      padding: 0 64px;
+      box-sizing: border-box;
     }
 
     /* metadata */
@@ -1297,7 +1302,7 @@
         padding: 57px 20px 0;
       }
       .cs-main { margin-left: 0; }
-      .cs-content { max-width: 100%; }
+      .cs-content { max-width: 100%; padding: 0; }
 
       /* every multi-column block becomes a single stack */
       .cs-overview-grid,
