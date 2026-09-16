@@ -221,7 +221,10 @@
       text-transform: uppercase;
       line-height: 1.1;
       color: var(--ink);
-      margin: 0 0 44px;
+      /* Top margin collapses against the previous section's 72px bottom
+         margin, so this has to exceed it to actually open the gap —
+         a chapter break should read as a bigger pause than a section one. */
+      margin: 120px 0 44px;
     }
 
     /* ── SECTIONS — label, headline, body, image ── */
