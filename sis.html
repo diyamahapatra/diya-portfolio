@@ -216,22 +216,22 @@
       max-width: none;
       display: block;
     }
+    /* No width cap on either — the reference runs its headline and body
+       the full width of the reading column rather than a narrow measure. */
     .cs-section h2 {
       font-family: 'Spectral', Georgia, serif;
-      font-size: clamp(21px, 2.6vw, 27px);
+      font-size: clamp(19px, 2vw, 23px);
       font-weight: 300;
       letter-spacing: -0.4px;
-      line-height: 1.35;
+      line-height: 1.4;
       color: var(--ink);
-      margin-bottom: 20px;
-      max-width: 34ch;
+      margin-bottom: 16px;
     }
     .cs-section p {
-      font-size: 14.4px;
+      font-size: 14px;
       line-height: 1.75;
       color: #3D3D3D;
-      margin-bottom: 16px;
-      max-width: 72ch;
+      margin-bottom: 14px;
     }
     .cs-section p:last-child { margin-bottom: 0; }
     /* unwritten copy, visibly marked so it can't ship by accident */
@@ -277,7 +277,7 @@
     .claim:last-child { border-bottom: 1px solid var(--border); }
     .claim h3 {
       font-family: 'Spectral', Georgia, serif;
-      font-size: 20px; font-weight: 300;
+      font-size: 18px; font-weight: 300;
       letter-spacing: -0.4px;
       line-height: 1.35;
       color: var(--ink);
@@ -294,7 +294,7 @@
     .feature { margin-top: 80px; }
     .feature h3 {
       font-family: 'Spectral', Georgia, serif;
-      font-size: 22px; font-weight: 300;
+      font-size: 20px; font-weight: 300;
       letter-spacing: -0.4px;
       line-height: 1.35;
       color: var(--ink);
@@ -309,10 +309,9 @@
       max-width: none;
     }
     .feature p {
-      font-size: 14.4px;
+      font-size: 14px;
       line-height: 1.75;
       color: #3D3D3D;
-      max-width: 72ch;
       margin: 0;
     }
 
@@ -328,18 +327,16 @@
     .notice p.cs-label { color: var(--gray); }
     .notice h2 {
       font-family: 'Spectral', Georgia, serif;
-      font-size: 22px; font-weight: 300;
+      font-size: 20px; font-weight: 300;
       letter-spacing: -0.4px;
-      line-height: 1.35;
+      line-height: 1.4;
       color: var(--ink);
       margin-bottom: 14px;
-      max-width: 34ch;
     }
     .notice p {
-      font-size: 14.4px;
+      font-size: 14px;
       line-height: 1.75;
       color: #3D3D3D;
-      max-width: 72ch;
       margin: 0;
     }
 
@@ -351,7 +348,7 @@
     }
     .closing h2 {
       font-family: 'Spectral', Georgia, serif;
-      font-size: clamp(26px, 3.2vw, 34px);
+      font-size: clamp(22px, 2.6vw, 28px);
       font-weight: 300;
       letter-spacing: -0.4px;
       line-height: 1.25;
@@ -359,10 +356,9 @@
       margin-bottom: 16px;
     }
     .closing p {
-      font-size: 14.4px;
+      font-size: 14px;
       line-height: 1.75;
       color: #3D3D3D;
-      max-width: 62ch;
       margin-bottom: 24px;
     }
     .closing a {
@@ -512,9 +508,9 @@
     <a class="rail-label" href="/">&larr; Home</a>
     <ul class="rail-links">
       <li><a href="#overview" class="active">Overview</a></li>
+      <li><a href="#problem">The Problem</a></li>
       <li><a href="#context">Context</a></li>
       <li><a href="#insights">Insights</a></li>
-      <li><a href="#problem">The Problem</a></li>
       <li><a href="#solution">Solution</a></li>
       <li><a href="#outcome">The Outcome</a></li>
     </ul>
@@ -554,11 +550,15 @@
       </div>
     </div>
 
-    <!-- THE BRIEF -->
-    <section class="cs-section" id="brief" data-toc="overview">
-      <p class="cs-label">The Brief</p>
-      <h2>How do you help 20,000 students find the right kind of advising on a site that can't ask them anything?</h2>
-      <p>Three L&amp;S advising pages and a routing flow, rebuilt for a platform that couldn't support a single interactive element — no quiz, no filter, no conditional logic. Just structure, language, and order.</p>
+    <!-- THE PROBLEM -->
+    <section class="cs-section" id="problem">
+      <p class="cs-label">Problem</p>
+      <h2>Students had to understand how UC Berkeley's advising is structured before they could get help from it.</h2>
+      <p>Advising options sat in dropdown sections students opened one at a time. The difference between College and Major/Minor advisers was never stated. Requirements that determine whether a request can even proceed were buried near the bottom of the page.</p>
+      <div class="shot">
+        <div class="ph-icon"></div>
+        <p class="ph-text">Before — the original page</p>
+      </div>
     </section>
 
     <!-- CONTEXT -->
@@ -598,17 +598,6 @@
       <div class="shot">
         <div class="ph-icon"></div>
         <p class="ph-text">Affinity map</p>
-      </div>
-    </section>
-
-    <!-- THE PROBLEM -->
-    <section class="cs-section" id="problem">
-      <p class="cs-label">The Problem</p>
-      <h2>Students had to understand how UC Berkeley's advising is structured before they could get help from it.</h2>
-      <p>Advising options sat in dropdown sections students opened one at a time. The difference between College and Major/Minor advisers was never stated. <strong>Requirements that determine whether a request can even proceed were buried near the bottom of the page.</strong></p>
-      <div class="shot">
-        <div class="ph-icon"></div>
-        <p class="ph-text">Before — the original page</p>
       </div>
     </section>
 
