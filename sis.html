@@ -345,15 +345,48 @@
 
 
 
-    /* ── SCROLL REVEALS ── */
+    /* ── SCROLL REVEALS ──
+       Transform and opacity only — both composite on the GPU, so none of
+       this triggers layout while the page is scrolling. Everything is
+       gated behind .js-reveal, which the head script only sets when the
+       visitor hasn't asked for reduced motion. */
     .js-reveal .cs-section {
       opacity: 0;
       transform: translateY(14px);
       transition: opacity 0.6s var(--ease), transform 0.6s var(--ease);
     }
     .js-reveal .cs-section.revealed { opacity: 1; transform: none; }
+
+    /* the solution cards drift in from their own side of the grid, so the
+       set assembles inward rather than all rising together */
+    .js-reveal .feature {
+      opacity: 0;
+      transform: translateX(-30px);
+      transition: opacity 0.65s var(--ease), transform 0.65s var(--ease);
+    }
+    .js-reveal .feature:nth-child(even) { transform: translateX(30px); }
+    .js-reveal .feature.revealed { opacity: 1; transform: none; }
+    /* a beat between the two halves of each row */
+    .js-reveal .feature:nth-child(2) { transition-delay: 0.10s; }
+    .js-reveal .feature:nth-child(3) { transition-delay: 0.05s; }
+    .js-reveal .feature:nth-child(4) { transition-delay: 0.15s; }
+
+    /* the three context screenshots step in left to right */
+    .js-reveal .shot-row .shot {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.55s var(--ease), transform 0.55s var(--ease);
+    }
+    .js-reveal .shot-row .shot.revealed { opacity: 1; transform: none; }
+    .js-reveal .shot-row .shot:nth-child(2) { transition-delay: 0.10s; }
+    .js-reveal .shot-row .shot:nth-child(3) { transition-delay: 0.20s; }
+
     @media (prefers-reduced-motion: reduce) {
-      .js-reveal .cs-section { opacity: 1; transform: none; transition: none; }
+      .js-reveal .cs-section,
+      .js-reveal .feature,
+      .js-reveal .shot-row .shot {
+        opacity: 1; transform: none; transition: none;
+      }
     }
 
     /* ── FOOTER ── */
@@ -447,6 +480,11 @@
       .feature-grid { grid-template-columns: 1fr; gap: 16px; }
       /* three across is unreadable on a phone — stack to two */
       .shot-row { grid-template-columns: 1fr 1fr; gap: 10px; }
+      /* cards are full-width here, so a sideways entrance would push the
+         page 10px wider mid-animation and flash a scrollbar — rise instead */
+      .js-reveal .feature,
+      .js-reveal .feature:nth-child(even) { transform: translateY(20px); }
+      .js-reveal .feature.revealed { transform: none; }
       .feature { padding: 30px 24px 0; }
       .feature .shot { margin: 24px -22px 0 22px; min-height: 160px; }
       .shot--square { max-width: 100%; }
@@ -688,9 +726,13 @@
       sections.forEach(function (s) { io.observe(s); });
     })();
 
-    /* ── SCROLL REVEALS ── */
+    /* ── SCROLL REVEALS ──
+       The cards and screenshots are observed individually, not just via
+       their parent section: the grid's second row is usually still below
+       the fold when the section itself comes into view, so letting the
+       section trigger them would spend the animation off-screen. */
     (function () {
-      var blocks = document.querySelectorAll('.cs-section');
+      var blocks = document.querySelectorAll('.cs-section, .feature, .shot-row .shot');
       function revealAll() {
         for (var i = 0; i < blocks.length; i++) blocks[i].classList.add('revealed');
       }
