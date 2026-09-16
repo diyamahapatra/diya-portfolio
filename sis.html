@@ -42,7 +42,7 @@
       color: var(--black);
     }
     html { scroll-behavior: smooth; }
-    .cs-section, #overview { scroll-margin-top: 90px; }
+    .cs-section, .phase-mark { scroll-margin-top: 90px; }
 
     /* ── CUSTOM CURSOR ── */
     body, body * { cursor: none; }
@@ -296,6 +296,7 @@
       gap: 8px;
     }
     .shot-row .ph-icon { width: 32px; height: 32px; }
+    .shot-row--2 { grid-template-columns: 1fr 1fr; }
     .shot--square {
       aspect-ratio: 1 / 1;
       max-width: 360px;
@@ -534,13 +535,11 @@
   <aside class="cs-rail">
     <a class="rail-label" href="/">&larr; Home</a>
     <ul class="rail-links">
-      <li><a href="#overview" class="active">Overview</a></li>
-      <li><a href="#problem">The Problem</a></li>
-      <li><a href="#solution">Solution</a></li>
-      <li><a href="#context">Context</a></li>
-      <li><a href="#research">Research</a></li>
-      <li><a href="#root-cause">The Root Cause</a></li>
-      <li><a href="#ideation">Ideation</a></li>
+      <li><a href="#phase-overview" class="active">Overview</a></li>
+      <li><a href="#phase-context">Context</a></li>
+      <li><a href="#phase-research">Research</a></li>
+      <li><a href="#phase-build">Build</a></li>
+      <li><a href="#phase-prototyping">Prototyping</a></li>
     </ul>
     <a class="rail-top" href="#top">Back to top</a>
   </aside>
@@ -578,17 +577,17 @@
       </div>
     </div>
 
-    <p class="phase-mark">01. Overview</p>
+    <p class="phase-mark" id="phase-overview">01. Overview</p>
 
     <!-- THE PROBLEM -->
-    <section class="cs-section" id="problem">
+    <section class="cs-section" id="problem" data-toc="phase-overview">
       <p class="cs-label">Problem</p>
       <h2>Students had to understand how UC Berkeley's advising is structured before they could get help from it.</h2>
       <p>Advising options sat in dropdown sections students opened one at a time. The difference between College and Major/Minor advisers was never stated. Requirements that determine whether a request can even proceed were buried near the bottom of the page.</p>
     </section>
 
     <!-- SOLUTION -->
-    <section class="cs-section" id="solution">
+    <section class="cs-section" id="solution" data-toc="phase-overview">
       <p class="cs-label">Solution</p>
       <h2>Three pages, rebuilt around how students actually arrive.</h2>
       <p>A research-led redesign of three advising pages and a routing flow, built for a platform that couldn't support a single interactive element. Rather than explaining the college's structure more clearly, the redesign removes the need for students to understand it.</p>
@@ -632,10 +631,10 @@
       </div>
     </section>
 
-    <p class="phase-mark">02. Context</p>
+    <p class="phase-mark" id="phase-context">02. Context</p>
 
     <!-- CONTEXT -->
-    <section class="cs-section" id="context">
+    <section class="cs-section" id="context" data-toc="phase-context">
       <p class="cs-label">Context</p>
       <h2>The advising site is where students go when something has gone wrong.</h2>
       <p>L&amp;S is Berkeley's largest college. Its advising site is where students go to book appointments, check deadlines, find petitions, and reach an adviser (usually at the point where something is already time-sensitive). The team was migrating from Drupal 7 to Drupal 10 and wanted to evaluate the experience before rebuilding it.</p>
@@ -658,16 +657,16 @@
     </section>
 
     <!-- THE STARTING POINT -->
-    <section class="cs-section" id="starting-point" data-toc="context">
+    <section class="cs-section" id="starting-point" data-toc="phase-context">
       <p class="cs-label">The Starting Point</p>
       <h2>261 survey responses, a migration deadline, and no assigned pages.</h2>
       <p>The team had collected student feedback but had not analyzed it. There was no brief naming which pages to redesign and the site was large and served many different needs, so finding where design could matter most was part of the work.</p>
     </section>
 
-    <p class="phase-mark">03. Research</p>
+    <p class="phase-mark" id="phase-research">03. Research</p>
 
     <!-- RESEARCH -->
-    <section class="cs-section" id="research">
+    <section class="cs-section" id="research" data-toc="phase-research">
       <p class="cs-label">Research</p>
       <h2>Making sense of 261 student voices</h2>
       <p>Five open-ended questions across 261 responses was more than I could hand-code in a twelve-week internship, so I used AskAI in Google Sheets for first-pass thematic coding. My first version forced one theme per response, which meant a comment naming two problems was counted as naming one. I rewrote the formulas to allow multiple themes per row and re-ran the set. Total cost: <strong>$0.34</strong>.</p>
@@ -678,7 +677,7 @@
     </section>
 
     <!-- RESEARCH, cont. — where the analytics came in -->
-    <section class="cs-section" id="where-lost" data-toc="research">
+    <section class="cs-section" id="where-lost" data-toc="phase-research">
       <h2>Where students actually got lost</h2>
       <p>Survey insights told me students were frustrated but not <strong>where</strong>. I pulled Google Analytics to see what they were actually doing: 101,353 sessions across 46,473 users, with Appointments &amp; Advice the single most-visited page at 8,884 sessions. Cross-referencing what students said against where they went pointed at three areas: Appointments &amp; Advice, Virtual Front Desk, and Forms &amp; Petitions. I presented that prioritization to the clients and they agreed.</p>
       <p>The brief had initially asked for a heuristic evaluation. The research pointed at problems it couldn't solve because the issues lived across whole journeys, not in isolated interface flaws, so I mapped the end-to-end journeys instead.</p>
@@ -688,15 +687,8 @@
       </div>
     </section>
 
-    <!-- THE ROOT CAUSE -->
-    <section class="cs-section" id="root-cause">
-      <p class="cs-label">The Root Cause</p>
-      <h2>The pages were organized around how the college works, not what a student arrives needing.</h2>
-      <p>Students had to translate their own situation into Berkeley's advising vocabulary before the site would help them. That translation step is where every journey broke down.</p>
-    </section>
-
     <!-- IDEATION -->
-    <section class="cs-section" id="ideation">
+    <section class="cs-section" id="ideation" data-toc="phase-research">
       <p class="cs-label">Ideation</p>
       <h2>Four directions</h2>
       <p>I started with exploring four ways to reduce how much students needed to understand Berkeley&rsquo;s advising structure for the advice and appointments page before finding the right service. Three concepts used guided questions to route students, while one focused on making the existing information easier to scan.</p>
@@ -739,6 +731,54 @@
         </div>
       </div>
       </div>
+    </section>
+
+    <p class="phase-mark" id="phase-build">04. Build</p>
+
+    <!-- WHAT SURVIVED -->
+    <section class="cs-section" id="what-survived" data-toc="phase-build">
+      <h2>What survived</h2>
+      <p>The version that made it into Open Berkeley isn't the one I designed in Figma. The single &ldquo;Get Advising&rdquo; call to action became a link under L&amp;S College Advising, and the services came back onto the page alongside it &mdash; now under labeled sections instead of dropdowns. What stayed was the principle: no student should have to infer a distinction the page could just state. The College vs. Major/Minor comparison became its own table. Special considerations became a three-column table of who's affected, what applies, and what to do first.</p>
+      <div class="shot-row shot-row--2">
+        <div class="shot">
+          <div class="ph-icon"></div>
+          <p class="ph-text">Appointments &amp; Advice</p>
+        </div>
+        <div class="shot">
+          <div class="ph-icon"></div>
+          <p class="ph-text">Comparison tables</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- A DIFFERENT KIND OF NO -->
+    <section class="cs-section" id="different-no" data-toc="phase-build">
+      <h2>A different kind of no</h2>
+      <p>The second focus point was the Virtual Front Desk page. It asked students to choose between two services. Through research I had found out that they both use the same intake form and the same Zoom link, so I merged them into one routing form to kill the confusion &mdash; only internal staff needed to know the difference. I also replaced the giant Venn diagram with a table students could act on.</p>
+      <div class="shot">
+        <div class="ph-icon"></div>
+        <p class="ph-text">Annotations</p>
+      </div>
+    </section>
+
+    <!-- THE ROUTING -->
+    <section class="cs-section" id="routing" data-toc="phase-build">
+      <h2>The routing had to live somewhere</h2>
+      <p>If the page couldn't ask students anything, the questions had to live outside it. I prototyped the flow in Qualtrics, which handles multi-select and multi-step branching &mdash; a student could indicate several things at once and be routed on the combination.</p>
+      <p>The clients asked for Calendly instead, since most of the advising platform already ran on it. Calendly routes only on single-select questions, and each route resolves to exactly one destination, so the flow had to be flattened to one question at a time. I rebuilt it in Figma to make it testable. Forms &amp; Petitions came off the plan to make room for this.</p>
+      <div class="shot">
+        <div class="ph-icon"></div>
+        <p class="ph-text">Qualtrics vs. Calendly</p>
+      </div>
+    </section>
+
+    <p class="phase-mark" id="phase-prototyping">05. Prototyping</p>
+
+    <!-- MAKING IT REAL -->
+    <section class="cs-section" id="making-real" data-toc="phase-prototyping">
+      <h2>Making it real enough to test</h2>
+      <p>Testing the design meant testing the interaction, not screenshots of it. The forms list had to remember both which tab was open and which section was expanded &mdash; 36 variants. Each drop-in calendar needed 10 states. I drove the Figma API through Claude Code to generate the component sets and wire the variant logic, which made it feasible at all.</p>
+      <p>It also produced the hardest bug of the project. The prototype lagged a full click behind, so clicking one accordion appeared to open the previous one. I verified all 72 interactions three times before finding the cause was an animation setting, not my wiring.</p>
     </section>
 
   </main>
@@ -799,7 +839,7 @@
        A section can point at a rail item other than its own id via
        data-toc; without it, it falls back to its own id. */
     (function () {
-      var sections = document.querySelectorAll('.cs-section, #overview');
+      var sections = document.querySelectorAll('.cs-section');
       var railLinks = document.querySelectorAll('.rail-links a');
       var io = new IntersectionObserver(function (entries) {
         entries.forEach(function (entry) {
