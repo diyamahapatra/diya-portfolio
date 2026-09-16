@@ -207,6 +207,22 @@
       color: var(--gray);
     }
 
+    /* ── PHASE MARKER ──
+       The big serif word that introduces a run of sections, carried over
+       from the earlier version of this page — italic this time. Sized
+       just under .cs-title so it reads as a chapter mark, not a rival
+       headline. */
+    .phase-mark {
+      font-family: 'Spectral', Georgia, serif;
+      font-size: clamp(26px, 3.2vw, 34px);
+      font-weight: 300;
+      font-style: italic;
+      letter-spacing: -0.4px;
+      line-height: 1.1;
+      color: var(--ink);
+      margin: 0 0 44px;
+    }
+
     /* ── SECTIONS — label, headline, body, image ── */
     .cs-section { margin-bottom: 72px; }
     .cs-section:last-child { margin-bottom: 0; }
@@ -560,6 +576,8 @@
         </div>
       </div>
     </div>
+
+    <p class="phase-mark">Overview</p>
 
     <!-- THE PROBLEM -->
     <section class="cs-section" id="problem">
