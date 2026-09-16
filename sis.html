@@ -303,6 +303,73 @@
     }
     .shot-row .ph-icon { width: 32px; height: 32px; }
     .shot-row--2 { grid-template-columns: 1fr 1fr; }
+    /* a modest one-off placeholder, not a full-width band */
+    .shot--half { max-width: 560px; }
+
+    /* ── IMPACT STATS — big accent numeral over a bolded lead-in ── */
+    .stat-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 48px;
+      margin-top: 44px;
+    }
+    /* two classes + element, or `.cs-section p` wins and renders this
+       as 14px grey body copy */
+    .cs-body p.stat-num {
+      font-family: 'Lora', Georgia, serif;
+      font-size: clamp(40px, 5vw, 60px);
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      line-height: 1;
+      color: var(--accent);
+      margin-bottom: 20px;
+    }
+    .cs-body p.stat-body {
+      font-size: 14px;
+      line-height: 1.75;
+      color: #3D3D3D;
+      margin: 0;
+      max-width: none;
+    }
+    .stat-body strong { color: var(--ink); }
+
+    /* ── LIMITATIONS — two up, the third running the full row ── */
+    .lim-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-top: 44px;
+    }
+    .lim-card {
+      background: #FAFAFA;
+      border: 1px solid #ECECEC;
+      padding: 30px 32px 32px;
+    }
+    .lim-card:last-child { grid-column: 1 / -1; }
+    .lim-icon { display: block; color: #A2A2A2; margin-bottom: 24px; }
+    .cs-body p.lim-eyebrow {
+      font-size: 13.5px;
+      font-weight: 400;
+      color: #8E8E8E;
+      margin: 0 0 8px;
+      max-width: none;
+    }
+    .lim-title {
+      font-family: 'Spectral', Georgia, serif;
+      font-size: 21px;
+      font-weight: 300;
+      letter-spacing: -0.4px;
+      line-height: 1.25;
+      color: var(--ink);
+      margin-bottom: 10px;
+    }
+    .cs-body p.lim-body {
+      font-size: 13.5px;
+      line-height: 1.7;
+      color: #6E6E6E;
+      margin: 0;
+      max-width: 46ch;
+    }
     .shot--square {
       aspect-ratio: 1 / 1;
       max-width: 360px;
@@ -504,6 +571,9 @@
       .feature-grid { grid-template-columns: 1fr; gap: 16px; }
       /* three across is unreadable on a phone — stack to two */
       .shot-row { grid-template-columns: 1fr 1fr; gap: 10px; }
+      .stat-row { grid-template-columns: 1fr; gap: 32px; }
+      .lim-grid { grid-template-columns: 1fr; }
+      .shot--half { max-width: none; }
       /* cards are full-width here, so a sideways entrance would push the
          page 10px wider mid-animation and flash a scrollbar — rise instead */
       .js-reveal .feature,
@@ -545,6 +615,7 @@
       <li><a href="#phase-context">Context</a></li>
       <li><a href="#phase-research">Research</a></li>
       <li><a href="#phase-design">Design Iterations</a></li>
+      <li><a href="#phase-testing">Testing</a></li>
     </ul>
     <a class="rail-top" href="#top">Back to top</a>
   </aside>
@@ -792,6 +863,87 @@
       <h2>Making it real enough to test</h2>
       <p>Testing the design meant testing the interaction, not screenshots of it. The forms list had to remember both which tab was open and which section was expanded &mdash; 36 variants. Each drop-in calendar needed 10 states. I drove the Figma API through Claude Code to generate the component sets and wire the variant logic, which made it feasible at all.</p>
       <p>It also produced the hardest bug of the project. The prototype lagged a full click behind, so clicking one accordion appeared to open the previous one. I verified all 72 interactions three times before finding the cause was an animation setting, not my wiring.</p>
+      <div class="shot shot--half">
+        <div class="ph-icon"></div>
+        <p class="ph-text">Component sets</p>
+      </div>
+    </section>
+
+    <p class="phase-mark" id="phase-testing">05. Testing</p>
+
+    <!-- METHOD -->
+    <section class="cs-section" id="method" data-toc="phase-testing">
+      <p class="cs-label">Method</p>
+      <h2>Nine students, one week</h2>
+      <p>I wrote the discussion guide and ran nine moderated usability sessions over a week in August. Participants were given a scenario and asked to show how they would resolve it rather than being told what to click, then shown the current pages for comparison. Sessions ran remotely over Zoom, with screen control passed to the participant for each task. Eleven were scheduled and two did not show.</p>
+      <p>Recruitment went out to roughly 23,000 students through an interest email pointing to a short screener, which collected class standing and how often students used the advising site. That let me select across class years and usage levels rather than taking whoever replied first. Participants ranged from incoming first-years to fifth-years and included transfer and out-of-state students.</p>
+    </section>
+
+    <!-- ANALYSIS -->
+    <section class="cs-section" id="analysis" data-toc="phase-testing">
+      <p class="cs-label">Analysis</p>
+      <h2>From recordings to recommendations</h2>
+      <p>I transcribed and tagged the sessions in Dovetail, reviewing its AI-generated tags against the recordings and correcting them. Tagging by page and theme let me count how often each issue appeared and pull verbatim quotes behind every recommendation.</p>
+      <p>The redesign was preferred consistently. Removing the dropdowns drew the most praise, and seven of nine participants referenced the comparison tables positively.</p>
+      <p>The routing flow was where it broke. Seven of eight participants who reached a redirect looked at the calendar before the message telling them to go elsewhere. One concluded the page was broken. That traces back to the Qualtrics-to-Calendly switch: Calendly renders a scheduling interface even on routes that never end in a booking.</p>
+      <div class="shot">
+        <div class="ph-icon"></div>
+        <p class="ph-text">Session findings</p>
+      </div>
+    </section>
+
+    <!-- IMPACT -->
+    <section class="cs-section" id="impact" data-toc="phase-testing">
+      <p class="cs-label">Impact</p>
+      <h2>What changed for students.</h2>
+      <div class="stat-row">
+        <div>
+          <p class="stat-num">4 &rarr; 0</p>
+          <p class="stat-body"><strong>judgment calls.</strong> Students used to figure out which adviser they needed before they could book. Now they answer questions about their own situation.</p>
+        </div>
+        <div>
+          <p class="stat-num">2 &rarr; 1</p>
+          <p class="stat-body"><strong>services.</strong> We deleted a choice that shouldn't have existed &mdash; both used the same form and the same Zoom link.</p>
+        </div>
+        <div>
+          <p class="stat-num">1</p>
+          <p class="stat-body"><strong>critical failure caught pre-launch.</strong> Seven of eight read an empty calendar as a broken page. We found it before students did.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- AI WORKFLOW -->
+    <section class="cs-section" id="ai-workflow" data-toc="phase-testing">
+      <p class="cs-label">AI Workflow</p>
+      <h2>Reliable at volume, unreliable at meaning</h2>
+      <p>AskAI coded 261 responses in an afternoon, but my first pass forced one theme per response. Claude Code generated component sets I couldn't have built by hand, and also caused a bug that cost a full debugging session. Dovetail tagged nine sessions and read a statement of clarity as confusion.</p>
+      <p>Every failure was the same kind: fast and accurate at volume, unreliable the moment meaning was involved.</p>
+    </section>
+
+    <!-- LIMITATIONS -->
+    <section class="cs-section" id="limitations" data-toc="phase-testing">
+      <p class="cs-label">Limitations</p>
+      <h2>What this study can't tell you</h2>
+      <div class="lim-grid">
+        <div class="lim-card">
+          <svg class="lim-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 19v-1.5a3.5 3.5 0 0 0-3.5-3.5h-5A3.5 3.5 0 0 0 4 17.5V19"/><circle cx="10" cy="7.5" r="3.2"/><path d="M19 19v-1.4a3.4 3.4 0 0 0-2.5-3.2"/></svg>
+          <p class="lim-eyebrow">Recruitment</p>
+          <h3 class="lim-title">Prior users only</h3>
+          <p class="lim-body">The screener selected for students who had used the site before, so first-time users are underrepresented.</p>
+        </div>
+        <div class="lim-card">
+          <svg class="lim-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 19c0-6 5-6 7-10"/><path d="M12 9V4"/><path d="m9.5 6.5 2.5-2.5 2.5 2.5"/></svg>
+          <p class="lim-eyebrow">Routing flow</p>
+          <h3 class="lim-title">One path tested</h3>
+          <p class="lim-body">Participants were directed into the flow and all walked the same route, so I have no evidence about any other outcome.</p>
+        </div>
+        <div class="lim-card">
+          <svg class="lim-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="3.4"/><path d="M5.5 19.5a6.5 6.5 0 0 1 13 0"/></svg>
+          <p class="lim-eyebrow">Analysis</p>
+          <h3 class="lim-title">A single coder</h3>
+          <p class="lim-body">Tagging and synthesis were done by one researcher with no second coder to check against.</p>
+        </div>
+      </div>
     </section>
 
   </main>
