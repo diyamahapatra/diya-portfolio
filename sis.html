@@ -26,7 +26,11 @@
          (1440 - 268 - 68 = 1104, exactly the reference's column). */
       --rail:   199px;
       --gutter: 69px;
-      --edge:   85px;
+      /* Viewport-relative, not fixed: the reference keeps roughly an eighth
+         of the window as right-hand whitespace, so the reading column pulls
+         further back as the window grows rather than chasing the edge. The
+         hero ignores this and still bleeds to the right edge. */
+      --edge:   12vw;
     }
 
     html, body {
