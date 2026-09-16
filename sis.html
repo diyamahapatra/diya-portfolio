@@ -187,13 +187,6 @@
       max-width: 900px;
       margin-bottom: 80px;
     }
-    /* Tools runs longest, so its values break into two sub-columns under
-       one label instead of one tall stack that drags the row down. */
-    .meta-tools-cols {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, auto));
-      column-gap: 40px;
-    }
     .cs-meta-label {
       font-family: 'Inter', system-ui, sans-serif;
       font-size: 12px; font-weight: 600;
@@ -563,9 +556,6 @@
         padding: 36px 20px 80px;
       }
       .cs-meta-grid { grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 64px; }
-      /* two sub-columns inside a half-width cell leaves ~60px each, which
-         shreds "Open Berkeley (Drupal)" — one column has room to read */
-      .meta-tools-cols { grid-template-columns: 1fr; }
       .cs-section { margin-bottom: 72px; }
       /* one card per row on a phone; the shot stops bleeding sideways */
       .feature-grid { grid-template-columns: 1fr; gap: 16px; }
@@ -630,27 +620,24 @@
   <!-- ── READING COLUMN ── -->
   <main class="cs-body">
 
-    <h1 class="cs-title">A research-led redesign of how 20,000+ UC Berkeley students find and book academic advising.</h1>
+    <h1 class="cs-title">Helping 20,000+ Berkeley students find the right advisor without having to understand Berkeley&rsquo;s advising system first.</h1>
 
     <div class="cs-meta-grid" id="overview">
+      <div>
+        <p class="cs-meta-label">Role</p>
+        <p class="cs-meta-value">Product Design Intern, UC Berkeley IT</p>
+      </div>
       <div>
         <p class="cs-meta-label">Timeline</p>
         <p class="cs-meta-value">Summer 2026</p>
       </div>
       <div>
-        <p class="cs-meta-label">Role</p>
-        <p class="cs-meta-value">Product Design Intern<br>UC Berkeley IT</p>
+        <p class="cs-meta-label">Scope</p>
+        <p class="cs-meta-value">Research, IA, interaction design, usability testing</p>
       </div>
       <div>
-        <p class="cs-meta-label">Scope</p>
-        <p class="cs-meta-value">3 pages + routing flow</p>
-      </div>
-      <div class="meta-tools">
         <p class="cs-meta-label">Tools</p>
-        <div class="meta-tools-cols">
-          <p class="cs-meta-value">Figma<br>Miro<br>Dovetail</p>
-          <p class="cs-meta-value">Claude Code<br>Open Berkeley (Drupal)</p>
-        </div>
+        <p class="cs-meta-value">Figma, Miro, Dovetail, Claude Code, Open Berkeley</p>
       </div>
     </div>
 
