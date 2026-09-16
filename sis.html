@@ -179,8 +179,15 @@
       justify-content: start;
       column-gap: 56px;
       row-gap: 18px;
-      max-width: 760px;
+      max-width: 900px;
       margin-bottom: 80px;
+    }
+    /* Tools runs longest, so its values break into two sub-columns under
+       one label instead of one tall stack that drags the row down. */
+    .meta-tools-cols {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, auto));
+      column-gap: 40px;
     }
     .cs-meta-label {
       font-family: 'Inter', system-ui, sans-serif;
@@ -468,6 +475,9 @@
         padding: 36px 20px 80px;
       }
       .cs-meta-grid { grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 64px; }
+      /* two sub-columns inside a half-width cell leaves ~60px each, which
+         shreds "Open Berkeley (Drupal)" — one column has room to read */
+      .meta-tools-cols { grid-template-columns: 1fr; }
       .cs-section { margin-bottom: 72px; }
       .claim { grid-template-columns: 1fr; gap: 10px; }
       .notice { padding: 28px 22px; }
@@ -525,7 +535,7 @@
     <div class="cs-meta-grid" id="overview">
       <div>
         <p class="cs-meta-label">Timeline</p>
-        <p class="cs-meta-value">Spring 2026</p>
+        <p class="cs-meta-value">Summer 2026</p>
       </div>
       <div>
         <p class="cs-meta-label">Role</p>
@@ -535,9 +545,12 @@
         <p class="cs-meta-label">Scope</p>
         <p class="cs-meta-value">3 pages + routing flow<br>A&amp;A · VFD · F&amp;P</p>
       </div>
-      <div>
+      <div class="meta-tools">
         <p class="cs-meta-label">Tools</p>
-        <p class="cs-meta-value">Figma<br>Miro<br>Dovetail<br>Claude Code<br>Open Berkeley (Drupal)</p>
+        <div class="meta-tools-cols">
+          <p class="cs-meta-value">Figma<br>Miro<br>Dovetail</p>
+          <p class="cs-meta-value">Claude Code<br>Open Berkeley (Drupal)</p>
+        </div>
       </div>
     </div>
 
