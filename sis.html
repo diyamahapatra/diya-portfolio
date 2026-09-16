@@ -538,8 +538,7 @@
       <li><a href="#phase-overview" class="active">Overview</a></li>
       <li><a href="#phase-context">Context</a></li>
       <li><a href="#phase-research">Research</a></li>
-      <li><a href="#phase-build">Build</a></li>
-      <li><a href="#phase-prototyping">Prototyping</a></li>
+      <li><a href="#phase-design">Design Iterations</a></li>
     </ul>
     <a class="rail-top" href="#top">Back to top</a>
   </aside>
@@ -733,10 +732,11 @@
       </div>
     </section>
 
-    <p class="phase-mark" id="phase-build">04. Build</p>
+    <p class="phase-mark" id="phase-design">04. Design Iterations</p>
 
     <!-- WHAT SURVIVED -->
-    <section class="cs-section" id="what-survived" data-toc="phase-build">
+    <section class="cs-section" id="what-survived" data-toc="phase-design">
+      <p class="cs-label">Build</p>
       <h2>What survived</h2>
       <p>The version that made it into Open Berkeley isn't the one I designed in Figma. The single &ldquo;Get Advising&rdquo; call to action became a link under L&amp;S College Advising, and the services came back onto the page alongside it &mdash; now under labeled sections instead of dropdowns. What stayed was the principle: no student should have to infer a distinction the page could just state. The College vs. Major/Minor comparison became its own table. Special considerations became a three-column table of who's affected, what applies, and what to do first.</p>
       <div class="shot-row shot-row--2">
@@ -752,7 +752,8 @@
     </section>
 
     <!-- A DIFFERENT KIND OF NO -->
-    <section class="cs-section" id="different-no" data-toc="phase-build">
+    <section class="cs-section" id="different-no" data-toc="phase-design">
+      <p class="cs-label">Build</p>
       <h2>A different kind of no</h2>
       <p>The second focus point was the Virtual Front Desk page. It asked students to choose between two services. Through research I had found out that they both use the same intake form and the same Zoom link, so I merged them into one routing form to kill the confusion &mdash; only internal staff needed to know the difference. I also replaced the giant Venn diagram with a table students could act on.</p>
       <div class="shot">
@@ -762,7 +763,8 @@
     </section>
 
     <!-- THE ROUTING -->
-    <section class="cs-section" id="routing" data-toc="phase-build">
+    <section class="cs-section" id="routing" data-toc="phase-design">
+      <p class="cs-label">Build</p>
       <h2>The routing had to live somewhere</h2>
       <p>If the page couldn't ask students anything, the questions had to live outside it. I prototyped the flow in Qualtrics, which handles multi-select and multi-step branching &mdash; a student could indicate several things at once and be routed on the combination.</p>
       <p>The clients asked for Calendly instead, since most of the advising platform already ran on it. Calendly routes only on single-select questions, and each route resolves to exactly one destination, so the flow had to be flattened to one question at a time. I rebuilt it in Figma to make it testable. Forms &amp; Petitions came off the plan to make room for this.</p>
@@ -772,10 +774,9 @@
       </div>
     </section>
 
-    <p class="phase-mark" id="phase-prototyping">05. Prototyping</p>
-
     <!-- MAKING IT REAL -->
-    <section class="cs-section" id="making-real" data-toc="phase-prototyping">
+    <section class="cs-section" id="making-real" data-toc="phase-design">
+      <p class="cs-label">Prototyping</p>
       <h2>Making it real enough to test</h2>
       <p>Testing the design meant testing the interaction, not screenshots of it. The forms list had to remember both which tab was open and which section was expanded &mdash; 36 variants. Each drop-in calendar needed 10 states. I drove the Figma API through Claude Code to generate the component sets and wire the variant logic, which made it feasible at all.</p>
       <p>It also produced the hardest bug of the project. The prototype lagged a full click behind, so clicking one accordion appeared to open the previous one. I verified all 72 interactions three times before finding the cause was an animation setting, not my wiring.</p>
