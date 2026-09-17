@@ -1088,21 +1088,20 @@
     }
 
     /* ── CARD HOVER ──
-       The hovered card recedes and fades a little; its neighbours are left
-       alone. No blur — the haze is just opacity over a light page.
-       Written at .revealed specificity so it still wins after the reveal
-       rule has set transform:none on the same element. */
+       The hovered card stays put and just fades a little; its neighbours are
+       left alone. No scale — it shouldn't recede. No blur either; the haze is
+       just opacity over a light page.
+       Written at .revealed specificity so it still beats the reveal rule's
+       opacity:1 on the same element.
+       No reduced-motion override: nothing moves any more, and a slow opacity
+       fade is not the kind of motion that setting is guarding against — so
+       those visitors keep the hover feedback too. */
     .work-card {
-      transition: transform 0.5s var(--ease), opacity 0.5s var(--ease);
+      transition: opacity 0.5s var(--ease);
     }
     .work-card:hover,
     .js-reveal .work-card.revealed:hover {
-      transform: scale(0.972);
       opacity: 0.86;
-    }
-    @media (prefers-reduced-motion: reduce) {
-      .work-card:hover,
-      .js-reveal .work-card.revealed:hover { transform: none; opacity: 1; }
     }
 </style>
   <script>
