@@ -377,6 +377,12 @@
       overflow: hidden;
     }
     .f1-crd img { display: block; width: 100%; height: auto; border-radius: 14px; }
+    /* Both keep the Symptom card's glass treatment from .f1-crd above; they
+       only sit smaller in the frame. Width drives it — height follows each
+       image's own ratio, and land1 is portrait, so 68% would overrun. */
+    .f1-crd-1,
+    .f1-crd-3 { width: 46%; }
+
     .f1-crd-2 {
       width: auto; height: 91%;
       border: 1px solid rgba(255,255,255,0.65);
@@ -1021,9 +1027,9 @@
               </div>
             </div>
             <div class="f1-cards-area">
-              <div class="f1-crd f1-crd-1"><img src="images/sym5.png" draggable="false"/></div>
+              <div class="f1-crd f1-crd-1"><img src="images/land.png" draggable="false" alt=""/></div>
               <div class="f1-crd f1-crd-2"><img src="images/115.png"  draggable="false"/></div>
-              <div class="f1-crd f1-crd-3"><img src="images/sym4.png" draggable="false"/></div>
+              <div class="f1-crd f1-crd-3"><img src="images/land1.png" draggable="false" alt=""/></div>
             </div>
           </div>
         </div>
