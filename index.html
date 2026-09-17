@@ -1042,9 +1042,9 @@
     /* ── CARD HOVER ──
        The hovered card stays put and fades; its neighbours are left alone. No
        scale, no blur — the haze is just opacity over a light page.
-       Scoped to a.work-card on purpose: the fade IS the click affordance now
-       that the cursor no longer labels each card, so a card you cannot open
-       must not do it. The unfinished one gets the "Coming Soon" cursor.
+       Every card fades, the unfinished one included — it still reads as a
+       response to the pointer. What separates them is the cursor: only the
+       unfinished card expands it to "Coming Soon".
        Both selectors are needed to clear the reveal rule's opacity:1 —
        .js-reveal .work-card.revealed is (0,3,0) and would otherwise win.
        No reduced-motion override: nothing moves, and a slow opacity fade is
@@ -1053,14 +1053,14 @@
     .work-card {
       transition: opacity 0.35s var(--ease);
     }
-    /* .js-reveal .work-card is (0,2,0) and sets a 0.5s opacity transition for
-       the scroll-in; this is (0,2,1) so the hover reads snappier, while the
-       transform stays on the reveal's own timing. */
-    .js-reveal a.work-card {
+    /* Same (0,2,0) as the reveal rule above, but later in the sheet, so it
+       wins: the hover reads snappier while the transform keeps the reveal's
+       own timing. */
+    .js-reveal .work-card {
       transition: opacity 0.22s var(--ease), transform 0.5s var(--ease);
     }
-    a.work-card:hover,
-    .js-reveal a.work-card.revealed:hover {
+    .work-card:hover,
+    .js-reveal .work-card.revealed:hover {
       opacity: 0.75;
     }
 </style>
