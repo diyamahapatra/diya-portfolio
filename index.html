@@ -561,11 +561,14 @@
     /* center: warm cream drift */
     .t2b-5 { width: 55%; height: 55%; background: #F0E8D8; top: 20%; left: 18%; }
 
+    /* carbonproper is drawn at the card's own 16/11, so it fills edge to edge
+       — no inset, no side gaps, nothing cropped. */
     .thumb-2-img-wrap {
       position: absolute; inset: 0; z-index: 3;
-      display: flex; align-items: flex-start; justify-content: flex-start;
-      padding: 22% 0 0 8%;
+      display: block;
+      padding: 0;
     }
+    .t2-frame-enter { width: 100%; height: 100%; }
     .thumb-2-img-wrap img {
       display: block; width: 100%; height: auto;
     }
@@ -574,32 +577,26 @@
 
     /* Bare image on a soft shadow — no white border, fill or pad ring. */
     .t2-glass-frame {
-      width: 88%;
-      flex-shrink: 0;
-      border-radius: 14px;
+      width: 100%;
+      height: 100%;
+      border-radius: 0;
       overflow: hidden;
-      box-shadow:
-        0 20px 56px rgba(50,80,110,0.26),
-        0 6px 18px rgba(50,80,110,0.12),
-        0 1px 4px rgba(50,80,110,0.08);
       position: relative;
     }
     .t2-glass-frame img {
-      display: block; width: 100%; height: auto;
-      border-radius: inherit;
+      display: block;
+      width: 100%; height: 100%;
+      object-fit: cover;
+      border-radius: 0;
       position: relative;
     }
 
     /* ── THUMB-2 ENTRANCE + FLOAT ── */
     .t2-frame-enter {
       opacity: 0;
-      transform: translateY(32px);
-      transition: opacity 0.85s var(--ease) 0.25s, transform 0.85s var(--ease) 0.25s;
+      transition: opacity 0.85s var(--ease) 0.25s;
     }
-    .thumb-2.in-view .t2-frame-enter {
-      opacity: 1;
-      transform: translateY(0);
-    }
+    .thumb-2.in-view .t2-frame-enter { opacity: 1; }
 
 
     .thumb-3 {
