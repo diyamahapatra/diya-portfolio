@@ -84,14 +84,17 @@
     /* ── CONTENTS RAIL ── */
     .cs-sidebar {
       position: fixed;
-      left: 24px;
+      left: 0;
       top: 57px;
       bottom: 0;
-      width: calc(var(--rail) - 48px);
-      padding: 34px 0 28px;
+      width: var(--rail);
+      padding: 34px 24px 28px;
       display: flex;
       flex-direction: column;
       z-index: 50;
+      /* opaque on purpose: section borders below are full-bleed, and without
+         a backdrop they draw a line straight across the contents list */
+      background: #fff;
     }
     .cs-sidebar-label {
       font-family: 'Inter', system-ui, sans-serif;
@@ -1126,7 +1129,15 @@
     .next-up-section {
       background: #fff;
       border-top: 1px solid var(--border);
-      padding: 64px 56px 88px;
+      /* no side padding — the label and grid carry the column's own margins */
+      padding: 64px 0 88px;
+    }
+    /* same geometry as .cs-content, so the cards line up under the copy */
+    .next-up-label,
+    .next-up-grid {
+      max-width: 840px;
+      margin-left: max(252px, calc((100% - 840px) / 2 + var(--nudge)));
+      margin-right: 20px;
     }
     .next-up-label {
       text-align: center;
@@ -1139,8 +1150,6 @@
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 32px;
-      max-width: 1000px;
-      margin: 0 auto;
     }
     .next-up-card {
       display: block;
@@ -1276,11 +1285,14 @@
         max-width: 100%;
         padding: 57px 20px 0;
       }
-      .cs-content {
+      .cs-content,
+      .next-up-label,
+      .next-up-grid {
         max-width: 100%;
         margin-left: 0;
         margin-right: 0;
       }
+      .next-up-section { padding: 48px 20px 64px; }
 
       /* every multi-column block becomes a single stack */
       .cs-overview-grid,
