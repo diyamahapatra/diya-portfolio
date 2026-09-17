@@ -1040,20 +1040,28 @@
     }
 
     /* ── CARD HOVER ──
-       The hovered card stays put and just fades a little; its neighbours are
-       left alone. No scale — it shouldn't recede. No blur either; the haze is
-       just opacity over a light page.
-       Written at .revealed specificity so it still beats the reveal rule's
-       opacity:1 on the same element.
-       No reduced-motion override: nothing moves any more, and a slow opacity
-       fade is not the kind of motion that setting is guarding against — so
-       those visitors keep the hover feedback too. */
+       The hovered card stays put and fades; its neighbours are left alone. No
+       scale, no blur — the haze is just opacity over a light page.
+       Scoped to a.work-card on purpose: the fade IS the click affordance now
+       that the cursor no longer labels each card, so a card you cannot open
+       must not do it. The unfinished one gets the "Coming Soon" cursor.
+       Both selectors are needed to clear the reveal rule's opacity:1 —
+       .js-reveal .work-card.revealed is (0,3,0) and would otherwise win.
+       No reduced-motion override: nothing moves, and a slow opacity fade is
+       not the kind of motion that setting guards against, so those visitors
+       keep the affordance too. */
     .work-card {
-      transition: opacity 0.5s var(--ease);
+      transition: opacity 0.35s var(--ease);
     }
-    .work-card:hover,
-    .js-reveal .work-card.revealed:hover {
-      opacity: 0.86;
+    /* .js-reveal .work-card is (0,2,0) and sets a 0.5s opacity transition for
+       the scroll-in; this is (0,2,1) so the hover reads snappier, while the
+       transform stays on the reveal's own timing. */
+    .js-reveal a.work-card {
+      transition: opacity 0.22s var(--ease), transform 0.5s var(--ease);
+    }
+    a.work-card:hover,
+    .js-reveal a.work-card.revealed:hover {
+      opacity: 0.62;
     }
 </style>
   <script>
@@ -1332,9 +1340,15 @@
           fired = true;
           /* stagger by column so a row arrives as a wave, not all at once */
           var idx = [].indexOf.call(cards, e.target);
-          e.target.style.transitionDelay = (idx % 2) * 90 + 'ms';
-          e.target.classList.add('revealed');
-          io.unobserve(e.target);
+          var card = e.target;
+          card.style.transitionDelay = (idx % 2) * 90 + 'ms';
+          card.classList.add('revealed');
+          /* The stagger belongs to the entrance only. Left in place it is an
+             inline style, so it outranks the stylesheet and would delay the
+             hover fade by up to 90ms afterwards — which reads as lag on the
+             one cue telling people the card is clickable. */
+          setTimeout(function () { card.style.transitionDelay = ''; }, 800);
+          io.unobserve(card);
         });
       }, { rootMargin: '0px 0px -12% 0px', threshold: 0 });
       for (var i = 0; i < cards.length; i++) io.observe(cards[i]);
