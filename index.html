@@ -533,42 +533,33 @@
     }
 
 
+    /* Solid, not a mesh: the old pale-blue/cream blobs were the same family
+       as Flourish's, so the two cards read alike. This green is sampled from
+       the dashboard's own buttons and charts. */
     .thumb-2 {
-      background: #F8F5EF;
+      background: #58763C;
       position: relative;
       overflow: hidden;
       display: flex;
       align-items: center;
       justify-content: center;
     }
-    .thumb-2-mesh {
-      position: absolute; inset: -20%;
-      filter: blur(52px) saturate(0.85);
-      z-index: 0;
-    }
-    .t2b {
-      position: absolute; border-radius: 50%;
-      will-change: transform;
-    }
     /* top-left: soft aqua */
-    .t2b-1 { width: 65%; height: 65%; background: #BCD8D8; top: -15%; left: -15%; }
     /* top-right: periwinkle */
-    .t2b-2 { width: 58%; height: 58%; background: #C0C8E8; top: -12%; right: -18%; }
     /* bottom-left: warm cream (large, dominant) */
-    .t2b-3 { width: 75%; height: 75%; background: #EDE4D0; bottom: -18%; left: -15%; }
     /* bottom-right: cream-blush */
-    .t2b-4 { width: 68%; height: 68%; background: #EDE0D4; bottom: -15%; right: -15%; }
     /* center: warm cream drift */
-    .t2b-5 { width: 55%; height: 55%; background: #F0E8D8; top: 20%; left: 18%; }
 
     /* carbonproper is drawn at the card's own 16/11, so it fills edge to edge
        — no inset, no side gaps, nothing cropped. */
     .thumb-2-img-wrap {
       position: absolute; inset: 0; z-index: 3;
-      display: block;
+      display: flex; align-items: center; justify-content: center;
       padding: 0;
     }
-    .t2-frame-enter { width: 100%; height: 100%; }
+    /* 81% of the card == the 529px it used to render at, but centred and
+       whole, instead of inset from one side and bleeding off the bottom. */
+    .t2-frame-enter { width: 81%; flex-shrink: 0; }
     .thumb-2-img-wrap img {
       display: block; width: 100%; height: auto;
     }
@@ -578,16 +569,15 @@
     /* Bare image on a soft shadow — no white border, fill or pad ring. */
     .t2-glass-frame {
       width: 100%;
-      height: 100%;
-      border-radius: 0;
+      height: auto;
+      border-radius: 10px;
       overflow: hidden;
       position: relative;
     }
     .t2-glass-frame img {
       display: block;
-      width: 100%; height: 100%;
-      object-fit: cover;
-      border-radius: 0;
+      width: 100%; height: auto;
+      border-radius: inherit;
       position: relative;
     }
 
@@ -1136,13 +1126,6 @@
         <!-- Card 3 — Carbon Sustain -->
         <a class="work-card work-card-link" href="/carbon-sustain">
           <div class="work-thumb thumb-2">
-            <div class="thumb-2-mesh">
-              <div class="t2b t2b-1"></div>
-              <div class="t2b t2b-2"></div>
-              <div class="t2b t2b-3"></div>
-              <div class="t2b t2b-4"></div>
-              <div class="t2b t2b-5"></div>
-            </div>
             <div class="thumb-2-img-wrap">
               <div class="t2-frame-enter">
                 <div class="t2-glass-frame">
