@@ -611,7 +611,7 @@
 
 
     .thumb-3 {
-      background: #7E83E7;
+      background: #2596BE;
       overflow: hidden;
       position: relative;
       display: flex;
@@ -1268,10 +1268,14 @@
     document.querySelectorAll('.work-card').forEach(card => {
       const href = card.tagName === 'A' ? (card.getAttribute('href') || '').trim() : '';
       const isLive = href !== '' && href !== '#';
-      const isExternal = /^https?:\/\//i.test(href) && !href.includes(location.host);
-      const label = !isLive ? 'Coming Soon' : (isExternal ? 'Visit Site' : 'View Project');
+      /* Only the unfinished card expands the cursor. A project you can open
+         already announces itself by fading on hover, and the whole card is the
+         hit target — a "View Project" pill on top of that just restates it.
+         "Coming Soon" is different: it tells you the click won't do anything,
+         which the card cannot say on its own. */
+      if (isLive) return;
       card.addEventListener('mouseenter', () => {
-        cursorLabelEl.textContent = label;
+        cursorLabelEl.textContent = 'Coming Soon';
         cursorEl.classList.add('expanded');
       });
       card.addEventListener('mouseleave', () => cursorEl.classList.remove('expanded'));
