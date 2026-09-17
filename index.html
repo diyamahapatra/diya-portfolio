@@ -436,8 +436,10 @@
     /* Both keep the Symptom card's glass treatment from .f1-crd above; they
        only sit smaller in the frame. Width drives it — height follows each
        image's own ratio, and land1 is portrait, so 68% would overrun. */
-    .f1-crd-1,
-    .f1-crd-3 { width: 56%; }
+    .f1-crd-1 { width: 56%; }
+    /* land1 is a light bit of UI — a short form — so it carries less and
+       doesn't need the same presence as the meal card. */
+    .f1-crd-3 { width: 44%; }
 
     .f1-crd-2 {
       width: auto;
