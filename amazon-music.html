@@ -610,7 +610,7 @@
       66.1%,100% { color:rgba(140,70,95,0.9); }
     }
     .thumb-3 {
-      background: #FEF8F4;
+      background: #8C86E8;
       overflow: hidden;
       position: relative;
       display: flex;
@@ -751,32 +751,18 @@
       .t3-img-front { transform: translateY(28%);  opacity: 1; }
     }
 
-    .thumb-3-mesh {
-      position: absolute; inset: -20%;
-      filter: blur(45px) saturate(0.9);
-      z-index: 0;
-    }
-    .t3b {
-      position: absolute; border-radius: 50%;
-      will-change: transform;
-    }
-    .t3b-1 {
       width: 70%; height: 70%; background: #E8B8B4;
       top: -10%; left: -10%;
     }
-    .t3b-2 {
       width: 60%; height: 60%; background: #B8CAE4;
       top: 5%; right: -15%;
     }
-    .t3b-3 {
       width: 65%; height: 65%; background: #F2D0C8;
       bottom: -12%; left: 10%;
     }
-    .t3b-4 {
       width: 50%; height: 50%; background: #C8D8EE;
       top: 28%; left: 22%;
     }
-    .t3b-5 {
       width: 45%; height: 45%; background: #FEF8F4;
       bottom: 10%; right: 5%;
     }
@@ -984,15 +970,13 @@
     /* Solid, not a mesh: the old pale-blue/cream blobs were the same family
        as Flourish's, so the two cards read alike. This green is sampled from
        the dashboard's own buttons and charts. */
+    /* Solid, in the blue/violet family of the personal brand rather than the
+       project's own green — the cards should read as one portfolio. */
     .thumb-2 {
+      background: #A9C9F5;
       /* Green mesh, not the old pale-blue/cream one that clashed with
          Flourish. Layered radials rather than blob divs, so it's static and
          costs no DOM. Greens sampled from the dashboard itself. */
-      background:
-        radial-gradient(115% 95%  at 12% 8%,   #D5E4C9 0%, rgba(213,228,201,0) 62%),
-        radial-gradient(105% 85%  at 88% 15%,  #A6C79A 0%, rgba(166,199,154,0) 58%),
-        radial-gradient(125% 105% at 55% 100%, #86AE7C 0%, rgba(134,174,124,0) 66%),
-        #B4C9A6;
       position: relative;
       overflow: hidden;
       display: flex;
