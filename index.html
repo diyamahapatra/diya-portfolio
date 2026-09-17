@@ -6,7 +6,7 @@
   <title>Diya Mahapatra — AI Product Designer</title>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300&family=Instrument+Serif:ital@0;1&family=Lora:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300&family=Instrument+Serif:ital@0;1&family=Sorts+Mill+Goudy:ital@0;1&family=Lora:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet"/>
   <style>
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -307,23 +307,18 @@
       justify-content: center;
     }
 
-    .work-label {
-      font-size: 11px; font-weight: 600;
-      letter-spacing: 0.12em; text-transform: uppercase;
-      color: var(--gray); margin-bottom: 8px;
-    }
-
+    /* Two lines only — a plain bold name over one grey line of description. */
     .work-title {
-      font-family: 'Lora', serif;
-      font-size: clamp(20px, 1.8vw, 26px);
-      font-weight: 500; letter-spacing: -0.01em;
-      color: var(--black); line-height: 1.2;
-      margin-bottom: 10px;
+      font-family: 'Inter', system-ui, sans-serif;
+      font-size: 15px;
+      font-weight: 600; letter-spacing: 0;
+      color: var(--black); line-height: 1.45;
+      margin-bottom: 2px;
     }
 
     .work-desc {
-      font-size: 14px; color: var(--gray);
-      line-height: 1.65; max-width: 480px;
+      font-size: 15px; color: var(--gray);
+      line-height: 1.55; max-width: 560px;
     }
 
     /* ── placeholder thumbnail backgrounds — pastel palette ── */
@@ -750,202 +745,24 @@
     @keyframes lgPf2 { from { transform: translateY(-3px); } to { transform: translateY(3px);  } }
     @keyframes lgPf3 { from { transform: translateY(0);  } to { transform: translateY(-5px); } }
 
-    /* ── THUMB BIT — Berkeley IT advising router ── */
+    /* ── THUMB BIT — solid Berkeley blue, wordmark only ── */
     .thumb-bit {
-      background: #EDF2F8;
+      background: #003262;        /* Berkeley Blue */
       position: relative; overflow: hidden;
       display: flex; align-items: center; justify-content: center;
     }
-    .bit-bg { position: absolute; inset: -25%; z-index: 0; }
-    .bit-blob { position: absolute; border-radius: 50%; will-change: transform; }
-    .bit-blob-1 { width: 62%; height: 62%; background: #B9CFE9; top: -6%;  left: -8%;  filter: blur(44px); animation: bitb1 4.2s ease-in-out infinite alternate; }
-    .bit-blob-2 { width: 54%; height: 54%; background: #F7E2AC; top: 8%;   right: -10%; filter: blur(40px); animation: bitb2 5.0s ease-in-out infinite alternate; }
-    .bit-blob-3 { width: 74%; height: 74%; background: #DCE9F6; bottom: -12%; left: 4%; filter: blur(46px); animation: bitb3 3.8s ease-in-out infinite alternate; }
-    .bit-blob-4 { width: 46%; height: 46%; background: #FFFFFF; top: 34%;  left: 32%; filter: blur(38px); animation: bitb4 4.6s ease-in-out infinite alternate; }
-    @keyframes bitb1 { to { transform: translate(22%, 18%) scale(1.18); } }
-    @keyframes bitb2 { to { transform: translate(-20%, 22%) scale(0.88); } }
-    @keyframes bitb3 { to { transform: translate(18%, -20%) scale(1.14); } }
-    @keyframes bitb4 { to { transform: translate(-16%, 14%) scale(1.12); } }
-
-    .bit-scene {
-      position: relative; z-index: 2;
-      width: 80%;
-      display: flex; flex-direction: column;
-      animation: bitFloat 6s ease-in-out infinite;
-    }
-    .bit-stack { display: grid; }
-    .bit-card {
-      grid-area: 1 / 1; align-self: center;
-      width: 100%;
-      background: rgba(255,255,255,0.92);
-      backdrop-filter: blur(14px) saturate(160%);
-      -webkit-backdrop-filter: blur(14px) saturate(160%);
-      border: 0;
-      border-radius: 10px;
-      overflow: hidden;
-      box-shadow: 0 14px 44px rgba(18,48,88,0.20),
-                  0 0 0 1px rgba(0,50,98,0.10);
-    }
-
-    /* ── UC Berkeley page chrome ── */
-    .bit-notice {
-      background: #3B7EA1; color: #fff;
-      font-size: 5.7px; letter-spacing: 0.02em;
-      padding: 3.4px 10px;
-    }
-    .bit-hdr {
-      background: #003262; color: #fff;
-      padding: 7px 10px;
-      display: flex; align-items: center; justify-content: space-between;
-    }
-    .bit-hdr-l {
-      font-family: 'Lora', serif;
-      font-size: 9px; letter-spacing: 0.01em;
-      display: flex; align-items: center; gap: 4.5px;
-      white-space: nowrap;
-    }
-    .bit-hdr-l b { font-weight: 700; }
-    .bit-hdr-l i { font-style: normal; opacity: 0.55; font-weight: 300; }
-    .bit-hdr-r {
-      font-size: 5.1px; letter-spacing: 0.02em;
-      opacity: 0.92; white-space: nowrap;
-    }
-
-    .bit-body { padding: 13px 14px 15px; }
-
-    .bit-step {
-      font-size: 8.5px; font-weight: 700;
-      letter-spacing: 0.14em; text-transform: uppercase;
-      color: #7C8CA1; margin-bottom: 4.5px;
-    }
-    .bit-q {
-      font-family: 'Lora', serif;
-      font-size: 14px; font-weight: 500;
-      color: #123A63; letter-spacing: -0.01em;
-      margin-bottom: 10px;
-    }
-    .bit-row {
-      display: flex; align-items: center; gap: 9px;
-      padding: 6.5px 10px; margin-top: 5.5px;
-      border: 1px solid rgba(20,60,100,0.10);
-      border-radius: 6px;
-      background: rgba(255,255,255,0.66);
-      font-size: 9.5px; color: #3D4A5C;
-      white-space: nowrap; overflow: hidden;
-    }
-    .bit-box {
-      width: 11.5px; height: 11.5px; flex-shrink: 0;
-      border-radius: 3px;
-      border: 1.4px solid #A9BCD2;
-      background: #fff;
-      position: relative;
-    }
-    .bit-box::after {
-      content: ''; position: absolute;
-      left: 3.1px; top: 0.4px;
-      width: 3.4px; height: 6.9px;
-      border: solid #fff; border-width: 0 1.5px 1.5px 0;
-      transform: rotate(45deg) scale(0);
-    }
-
-    .bit-plan-block {
-      border: 1px solid rgba(29,78,137,0.32);
-      border-radius: 7px;
-      background: rgba(255,255,255,0.62);
-      padding: 9px 11px; margin-top: 7px;
-    }
-    .bit-plan-h {
-      font-size: 9.5px; font-weight: 700;
-      color: #1D4E89; margin-bottom: 4.5px;
-    }
-    .bit-plan-s {
-      font-size: 8.5px; color: #5A6A7D;
-      line-height: 1.45; margin-bottom: 3.5px;
-    }
-    .bit-plan-link {
-      font-size: 8.5px; font-weight: 700;
-      color: #1D4E89;
-    }
-
-    .bit-card-s1 { animation: bitS1 15s ease-in-out infinite; }
-    .bit-card-s2 { animation: bitS2 15s ease-in-out infinite; }
-    .bit-card-s3 { animation: bitS3 15s ease-in-out infinite; }
-    @keyframes bitS1 {
-      0%       { opacity: 0; transform: translateY(10px) scale(0.99); }
-      5%,28%   { opacity: 1; transform: translateY(0) scale(1); }
-      34%,100% { opacity: 0; transform: translateY(-10px) scale(0.99); }
-    }
-    @keyframes bitS2 {
-      0%,30%   { opacity: 0; transform: translateY(10px) scale(0.99); }
-      37%,60%  { opacity: 1; transform: translateY(0) scale(1); }
-      66%,100% { opacity: 0; transform: translateY(-10px) scale(0.99); }
-    }
-    @keyframes bitS3 {
-      0%,62%   { opacity: 0; transform: translateY(10px) scale(0.99); }
-      69%,94%  { opacity: 1; transform: translateY(0) scale(1); }
-      99%,100% { opacity: 0; transform: translateY(10px) scale(0.99); }
-    }
-
-    /* progress rail */
-    .bit-prog {
-      width: 100%; height: 3px; margin-top: 10px;
-      background: rgba(29,78,137,0.16);
-      border-radius: 2px; overflow: hidden;
-    }
-    .bit-prog-fill {
-      height: 100%; border-radius: 2px;
-      background: #1D4E89;
-      animation: bitProg 15s ease-in-out infinite;
-    }
-    @keyframes bitProg {
-      0%,5%    { width: 10%; }
-      12%,30%  { width: 33%; }
-      40%,62%  { width: 66%; }
-      71%,96%  { width: 100%; }
-      100%     { width: 10%; }
-    }
-
-    /* checkbox tick — step 1 */
-    .bit-row-a1 { animation: bitRowA 15s ease-in-out infinite; }
-    .bit-row-a1 .bit-box { animation: bitCheckA 15s ease-in-out infinite; }
-    .bit-row-a1 .bit-box::after { animation: bitTickA 15s ease-in-out infinite; }
-    @keyframes bitRowA {
-      0%,9%    { border-color: rgba(20,60,100,0.10); background: rgba(255,255,255,0.66); }
-      14%,30%  { border-color: rgba(29,78,137,0.42); background: rgba(29,78,137,0.07); }
-      36%,100% { border-color: rgba(20,60,100,0.10); background: rgba(255,255,255,0.66); }
-    }
-    @keyframes bitCheckA {
-      0%,9%    { background: #fff;    border-color: #A9BCD2; }
-      14%,30%  { background: #1D4E89; border-color: #1D4E89; }
-      36%,100% { background: #fff;    border-color: #A9BCD2; }
-    }
-    @keyframes bitTickA {
-      0%,9%    { transform: rotate(45deg) scale(0); }
-      12%      { transform: rotate(45deg) scale(1.3); }
-      15%,30%  { transform: rotate(45deg) scale(1); }
-      36%,100% { transform: rotate(45deg) scale(0); }
-    }
-
-    /* checkbox tick — step 2 (two options) */
-    .bit-row-b1, .bit-row-b2 { animation: bitRowB 15s ease-in-out infinite; }
-    .bit-row-b1 .bit-box, .bit-row-b2 .bit-box { animation: bitCheckB 15s ease-in-out infinite; }
-    .bit-row-b1 .bit-box::after, .bit-row-b2 .bit-box::after { animation: bitTickB 15s ease-in-out infinite; }
-    .bit-row-b2, .bit-row-b2 .bit-box, .bit-row-b2 .bit-box::after { animation-delay: 1.1s; }
-    @keyframes bitRowB {
-      0%,41%   { border-color: rgba(20,60,100,0.10); background: rgba(255,255,255,0.66); }
-      46%,62%  { border-color: rgba(29,78,137,0.42); background: rgba(29,78,137,0.07); }
-      68%,100% { border-color: rgba(20,60,100,0.10); background: rgba(255,255,255,0.66); }
-    }
-    @keyframes bitCheckB {
-      0%,41%   { background: #fff;    border-color: #A9BCD2; }
-      46%,62%  { background: #1D4E89; border-color: #1D4E89; }
-      68%,100% { background: #fff;    border-color: #A9BCD2; }
-    }
-    @keyframes bitTickB {
-      0%,41%   { transform: rotate(45deg) scale(0); }
-      44%      { transform: rotate(45deg) scale(1.3); }
-      47%,62%  { transform: rotate(45deg) scale(1); }
-      68%,100% { transform: rotate(45deg) scale(0); }
+    .bit-wordmark {
+      /* Sorts Mill Goudy revives Goudy's Californian — the face UC Berkeley's
+         own Berkeley Oldstyle was cut from — so it reads as the university's
+         type without standing in for the licensed wordmark itself. */
+      font-family: 'Sorts Mill Goudy', Georgia, serif;
+      font-size: clamp(30px, 4.2vw, 54px);
+      font-weight: 400;
+      letter-spacing: 0.005em;
+      line-height: 1;
+      color: #fff;
+      text-align: center;
+      padding: 0 24px;
     }
 
     /* ── CARD 3 — AMAZON MUSIC IMAGES ── */
@@ -1337,77 +1154,8 @@
         <!-- Card 1 — SIS Platform -->
         <div class="work-card">
           <div class="work-thumb thumb-bit">
-            <div class="bit-bg">
-              <div class="bit-blob bit-blob-1"></div>
-              <div class="bit-blob bit-blob-2"></div>
-              <div class="bit-blob bit-blob-3"></div>
-              <div class="bit-blob bit-blob-4"></div>
-            </div>
-            <div class="bit-scene">
-              <div class="bit-stack">
-
-                <div class="bit-card bit-card-s1">
-                  <div class="bit-notice">Notice: [Site-wide alert text]</div>
-                  <div class="bit-hdr">
-                    <span class="bit-hdr-l"><b>UC Berkeley</b><i>|</i>College of Letters &amp; Science</span>
-                    <span class="bit-hdr-r">L&amp;S Advising Homepage</span>
-                  </div>
-                  <div class="bit-body">
-                    <p class="bit-step">Step 1 of 3</p>
-                    <p class="bit-q">What do you need help with?</p>
-                    <div class="bit-row"><span class="bit-box"></span>A quick question, under 15 minutes</div>
-                    <div class="bit-row bit-row-a1"><span class="bit-box"></span>Changing my enrollment</div>
-                    <div class="bit-row"><span class="bit-box"></span>Degree planning or a graduation check</div>
-                    <div class="bit-row"><span class="bit-box"></span>Choosing or switching a major</div>
-                    <div class="bit-row"><span class="bit-box"></span>A form or petition</div>
-                    <div class="bit-row"><span class="bit-box"></span>Something personal affecting my classes</div>
-                  </div>
-                </div>
-
-                <div class="bit-card bit-card-s2">
-                  <div class="bit-notice">Notice: [Site-wide alert text]</div>
-                  <div class="bit-hdr">
-                    <span class="bit-hdr-l"><b>UC Berkeley</b><i>|</i>College of Letters &amp; Science</span>
-                    <span class="bit-hdr-r">L&amp;S Advising Homepage</span>
-                  </div>
-                  <div class="bit-body">
-                    <p class="bit-step">Step 2 of 3</p>
-                    <p class="bit-q">Do any of these apply to you?</p>
-                    <div class="bit-row"><span class="bit-box"></span>Student athlete</div>
-                    <div class="bit-row bit-row-b1"><span class="bit-box"></span>F-1 or J-1 visa holder</div>
-                    <div class="bit-row"><span class="bit-box"></span>Receiving financial aid</div>
-                    <div class="bit-row bit-row-b2"><span class="bit-box"></span>Registered with DSP</div>
-                    <div class="bit-row"><span class="bit-box"></span>Transfer student</div>
-                    <div class="bit-row"><span class="bit-box"></span>None of the above</div>
-                  </div>
-                </div>
-
-                <div class="bit-card bit-card-s3">
-                  <div class="bit-notice">Notice: [Site-wide alert text]</div>
-                  <div class="bit-hdr">
-                    <span class="bit-hdr-l"><b>UC Berkeley</b><i>|</i>College of Letters &amp; Science</span>
-                    <span class="bit-hdr-r">L&amp;S Advising Homepage</span>
-                  </div>
-                  <div class="bit-body">
-                    <p class="bit-step">Step 3 of 3</p>
-                    <p class="bit-q">Here is your plan</p>
-                    <div class="bit-plan-block">
-                      <p class="bit-plan-h">1. Do this first</p>
-                      <p class="bit-plan-s">Berkeley International Office — confirm a unit change won't affect your visa status.</p>
-                      <p class="bit-plan-s">Disabled Students' Program — check whether the change affects accommodations.</p>
-                    </div>
-                    <div class="bit-plan-block">
-                      <p class="bit-plan-h">2. Book your appointment</p>
-                      <p class="bit-plan-link">Book general appointment &rarr;</p>
-                    </div>
-                  </div>
-                </div>
-
-              </div>
-              <div class="bit-prog"><div class="bit-prog-fill"></div></div>
-            </div>
+            <p class="bit-wordmark">Berkeley IT</p>
           </div>
-          <p class="work-label">Berkeley Information Technology — Product Design Intern 2026</p>
           <h3 class="work-title">Making Student Advising Easier to Navigate</h3>
           <p class="work-desc">Redesigning systems for 20,000+ students through AI-assisted research, interaction design, and agentic prototyping.</p>
         </div>
@@ -1449,7 +1197,6 @@
 
             </div>
           </div>
-          <p class="work-label">Flourish AI — Product Design Intern 2025</p>
           <h3 class="work-title">AI Health Insights</h3>
           <p class="work-desc">Helping users uncover relationships between nutrition, symptoms, and wellness using AI.</p>
         </a>
@@ -1473,7 +1220,6 @@
               </div>
             </div>
           </div>
-          <p class="work-label">Carbon Sustain — Product Designer 2024</p>
           <h3 class="work-title">Making Carbon Data Actionable</h3>
           <p class="work-desc">Redesigned key workflows across a B2B sustainability platform, making complex emissions data easier to understand and act on.</p>
         </a>
@@ -1495,7 +1241,6 @@
             </div>
 
           </div>
-          <p class="work-label">Amazon Music — 2025</p>
           <h3 class="work-title">Consumer & Artist Collaboration</h3>
           <p class="work-desc">Top 10 finalist in an Amazon Music-sponsored designathon, exploring social discovery and interaction around live music.</p>
         </a>
@@ -1511,7 +1256,6 @@
             </div>
             <video src="images/portfoli.mp4" autoplay muted loop playsinline></video>
           </div>
-          <p class="work-label">EthiCAL — VP of Design 2026</p>
           <h3 class="work-title">Designing Smarter Shift Management</h3>
           <p class="work-desc">Led the end-to-end scheduling experience for managing student staff, recurring shifts, and operational workflows.</p>
         </a>
