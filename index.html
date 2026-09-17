@@ -905,41 +905,36 @@
       background: #fff;
       border-top: 1px solid var(--border);
       padding: 80px 96px 56px;
-      position: relative;
-      overflow: hidden;
     }
 
     /* ── FOOTER SCRATCH-OFF ──
        Three stacked layers: the colour sits underneath, a white canvas covers
        it, and the real footer content rides on top. Moving the pointer erases
        into the canvas, so you wipe the colour into view. The canvas never
-       takes pointer events, so links stay clickable and touch still scrolls. */
+       takes pointer events, so links stay clickable and touch still scrolls.
+       Kept identical on every page — this footer is shared furniture. */
+    .site-footer { position: relative; overflow: hidden; }
+    .footer-inner { position: relative; z-index: 2; }
     .footer-reveal {
       position: absolute; inset: 0; z-index: 0;
       pointer-events: none;
-      /* kept pale on purpose — the footer text sits over this and has to stay
-         readable even when the whole thing is wiped clear */
+      /* violet only, and deliberately pale: the footer text sits over this and
+         has to stay readable even when the whole thing is wiped clear */
       background:
         radial-gradient(70% 90% at 12% 18%, #C4B5FD 0%, rgba(196,181,253,0) 64%),
-        radial-gradient(65% 85% at 88% 12%, #FDE68A 0%, rgba(253,230,138,0) 60%),
-        radial-gradient(85% 95% at 62% 105%, #A5B4FC 0%, rgba(165,180,252,0) 64%),
-        linear-gradient(125deg, #EDE9FE 0%, #FEF3C7 100%);
+        radial-gradient(65% 85% at 88% 12%, #DDD6FE 0%, rgba(221,214,254,0) 60%),
+        radial-gradient(85% 95% at 62% 105%, #A78BFA 0%, rgba(167,139,250,0) 64%),
+        linear-gradient(125deg, #F5F3FF 0%, #EDE9FE 100%);
     }
     .footer-veil {
       position: absolute; inset: 0; z-index: 1;
       pointer-events: none;
       display: block;
     }
-    .footer-inner {
-      max-width: 1000px;
-      margin: 0 auto;
-      position: relative;
-      z-index: 2;
-    }
-    /* no scratch layer at all when motion is unwelcome — handled in JS too */
     @media (prefers-reduced-motion: reduce) {
       .footer-reveal, .footer-veil { display: none; }
     }
+
     .footer-heading {
       font-family: 'Lora', serif;
       font-size: clamp(28px, 3.2vw, 44px);

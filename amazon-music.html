@@ -836,6 +836,34 @@
       border-top: 1px solid var(--border);
       padding: 80px 96px 56px;
     }
+
+    /* ── FOOTER SCRATCH-OFF ──
+       Three stacked layers: the colour sits underneath, a white canvas covers
+       it, and the real footer content rides on top. Moving the pointer erases
+       into the canvas, so you wipe the colour into view. The canvas never
+       takes pointer events, so links stay clickable and touch still scrolls.
+       Kept identical on every page — this footer is shared furniture. */
+    .site-footer { position: relative; overflow: hidden; }
+    .footer-inner { position: relative; z-index: 2; }
+    .footer-reveal {
+      position: absolute; inset: 0; z-index: 0;
+      pointer-events: none;
+      /* violet only, and deliberately pale: the footer text sits over this and
+         has to stay readable even when the whole thing is wiped clear */
+      background:
+        radial-gradient(70% 90% at 12% 18%, #C4B5FD 0%, rgba(196,181,253,0) 64%),
+        radial-gradient(65% 85% at 88% 12%, #DDD6FE 0%, rgba(221,214,254,0) 60%),
+        radial-gradient(85% 95% at 62% 105%, #A78BFA 0%, rgba(167,139,250,0) 64%),
+        linear-gradient(125deg, #F5F3FF 0%, #EDE9FE 100%);
+    }
+    .footer-veil {
+      position: absolute; inset: 0; z-index: 1;
+      pointer-events: none;
+      display: block;
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .footer-reveal, .footer-veil { display: none; }
+    }
     .footer-inner {
       max-width: 1000px;
       margin: 0 auto;
@@ -1322,6 +1350,8 @@
 
 
   <footer class="site-footer">
+    <div class="footer-reveal" aria-hidden="true"></div>
+    <canvas class="footer-veil" aria-hidden="true"></canvas>
     <div class="footer-inner">
       <div class="footer-main">
         <div class="footer-left">
@@ -1456,6 +1486,98 @@
       window.addEventListener('load', function () {
         setTimeout(function () { if (!fired) revealAll(); }, 2500);
       });
+    })();
+
+    /* ── FOOTER SCRATCH-OFF ──
+       Erases into a white canvas as the pointer moves, then heals back so the
+       next visitor gets a clean slate. The rAF loop only runs while there is
+       something to heal, so an idle footer costs nothing. */
+    (function () {
+      var footer = document.querySelector('.site-footer');
+      var canvas = footer && footer.querySelector('.footer-veil');
+      if (!canvas) return;
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+      var ctx = canvas.getContext('2d');
+      var w = 0, h = 0, raf = null, idleFrames = 0, last = null;
+      var RADIUS = 52, HEAL = 0.030, IDLE_STOP = 260;
+
+      function fillVeil() {
+        ctx.save();
+        ctx.setTransform(1, 0, 0, 1, 0, 0);
+        ctx.globalCompositeOperation = 'source-over';
+        ctx.fillStyle = '#fff';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.restore();
+      }
+
+      function resize() {
+        var dpr = Math.min(window.devicePixelRatio || 1, 2);
+        var r = footer.getBoundingClientRect();
+        w = r.width; h = r.height;
+        if (!w || !h) return;
+        canvas.width = Math.round(w * dpr);
+        canvas.height = Math.round(h * dpr);
+        canvas.style.width = w + 'px';
+        canvas.style.height = h + 'px';
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        fillVeil();
+        last = null;
+      }
+
+      function hole(x, y) {
+        var g = ctx.createRadialGradient(x, y, 0, x, y, RADIUS);
+        g.addColorStop(0, 'rgba(0,0,0,0.60)');
+        g.addColorStop(0.65, 'rgba(0,0,0,0.28)');
+        g.addColorStop(1, 'rgba(0,0,0,0)');
+        ctx.fillStyle = g;
+        ctx.beginPath();
+        ctx.arc(x, y, RADIUS, 0, Math.PI * 2);
+        ctx.fill();
+      }
+
+      function wipe(x, y) {
+        ctx.globalCompositeOperation = 'destination-out';
+        if (last) {
+          /* interpolate, or a fast flick leaves a dotted trail instead of a stroke */
+          var dx = x - last.x, dy = y - last.y;
+          var steps = Math.max(1, Math.ceil(Math.sqrt(dx * dx + dy * dy) / 14));
+          for (var i = 1; i <= steps; i++) hole(last.x + dx * i / steps, last.y + dy * i / steps);
+        } else {
+          hole(x, y);
+        }
+        last = { x: x, y: y };
+        idleFrames = 0;
+        start();
+      }
+
+      function frame() {
+        ctx.globalCompositeOperation = 'source-over';
+        ctx.fillStyle = 'rgba(255,255,255,' + HEAL + ')';
+        ctx.fillRect(0, 0, w, h);
+        idleFrames++;
+        if (idleFrames > IDLE_STOP) { fillVeil(); raf = null; return; }
+        raf = requestAnimationFrame(frame);
+      }
+
+      function start() { if (raf === null) raf = requestAnimationFrame(frame); }
+
+      footer.addEventListener('pointermove', function (e) {
+        var r = footer.getBoundingClientRect();
+        wipe(e.clientX - r.left, e.clientY - r.top);
+      }, { passive: true });
+
+      /* re-entering elsewhere shouldn't drag a streak across the whole footer */
+      footer.addEventListener('pointerleave', function () { last = null; });
+      footer.addEventListener('pointerdown', function (e) {
+        var r = footer.getBoundingClientRect();
+        last = null;
+        wipe(e.clientX - r.left, e.clientY - r.top);
+      }, { passive: true });
+
+      resize();
+      if ('ResizeObserver' in window) new ResizeObserver(resize).observe(footer);
+      else window.addEventListener('resize', resize);
     })();
 </script>
 
