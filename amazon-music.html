@@ -964,7 +964,14 @@
        as Flourish's, so the two cards read alike. This green is sampled from
        the dashboard's own buttons and charts. */
     .thumb-2 {
-      background: #DDE3D8;
+      /* Green mesh, not the old pale-blue/cream one that clashed with
+         Flourish. Layered radials rather than blob divs, so it's static and
+         costs no DOM. Greens sampled from the dashboard itself. */
+      background:
+        radial-gradient(115% 95%  at 12% 8%,   #D5E4C9 0%, rgba(213,228,201,0) 62%),
+        radial-gradient(105% 85%  at 88% 15%,  #A6C79A 0%, rgba(166,199,154,0) 58%),
+        radial-gradient(125% 105% at 55% 100%, #86AE7C 0%, rgba(134,174,124,0) 66%),
+        #B4C9A6;
       position: relative;
       overflow: hidden;
       display: flex;
