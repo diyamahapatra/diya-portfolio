@@ -537,7 +537,7 @@
        as Flourish's, so the two cards read alike. This green is sampled from
        the dashboard's own buttons and charts. */
     .thumb-2 {
-      background: #58763C;
+      background: #DDE3D8;
       position: relative;
       overflow: hidden;
       display: flex;
@@ -552,14 +552,15 @@
 
     /* carbonproper is drawn at the card's own 16/11, so it fills edge to edge
        — no inset, no side gaps, nothing cropped. */
+    /* Sits low and runs off the bottom edge, so the dashboard reads as tucked
+       into the card rather than floating inside it. Centred horizontally so
+       the side margins are even. */
     .thumb-2-img-wrap {
       position: absolute; inset: 0; z-index: 3;
-      display: flex; align-items: center; justify-content: center;
-      padding: 0;
+      display: flex; align-items: flex-start; justify-content: center;
+      padding: 24% 0 0;
     }
-    /* 81% of the card == the 529px it used to render at, but centred and
-       whole, instead of inset from one side and bleeding off the bottom. */
-    .t2-frame-enter { width: 81%; flex-shrink: 0; }
+    .t2-frame-enter { width: 86%; flex-shrink: 0; }
     .thumb-2-img-wrap img {
       display: block; width: 100%; height: auto;
     }
@@ -570,7 +571,8 @@
     .t2-glass-frame {
       width: 100%;
       height: auto;
-      border-radius: 10px;
+      /* bottom corners fall outside the card, so only the top pair round */
+      border-radius: 10px 10px 0 0;
       overflow: hidden;
       position: relative;
     }
