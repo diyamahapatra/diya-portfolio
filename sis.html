@@ -38,7 +38,7 @@
       width: 100%;
       font-family: 'Inter', system-ui, sans-serif;
       -webkit-font-smoothing: antialiased;
-      background: #fff;
+      background: #FAF9F7;
       color: var(--black);
     }
     html { scroll-behavior: smooth; }
@@ -60,7 +60,7 @@
       display: flex; align-items: center; justify-content: space-between;
       padding: 0 40px; height: 57px;
       border-bottom: 1px solid var(--border);
-      background: rgba(255,255,255,0.92);
+      background: rgba(250,249,247,0.92);
       backdrop-filter: blur(12px);
     }
     .nav-logo {
@@ -478,7 +478,7 @@
       /* Pinned, not themed: the footer reads the same on every page, so the
          accent stays purple even where --orange is the case study's colour. */
       --footer-accent: #8B5CF6;
-      background: #fff;
+      background: #FAF9F7;
       border-top: 1px solid var(--border);
       padding: 80px 96px 56px;
     }
@@ -1118,7 +1118,7 @@
         ctx.save();
         ctx.setTransform(1, 0, 0, 1, 0, 0);
         ctx.globalCompositeOperation = 'source-over';
-        ctx.fillStyle = '#fff';
+        ctx.fillStyle = '#FAF9F7';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
         ctx.restore();
       }
@@ -1165,7 +1165,7 @@
 
       function frame() {
         ctx.globalCompositeOperation = 'source-over';
-        ctx.fillStyle = 'rgba(255,255,255,' + HEAL + ')';
+        ctx.fillStyle = 'rgba(250,249,247,' + HEAL + ')';
         ctx.fillRect(0, 0, w, h);
         idleFrames++;
         if (idleFrames > IDLE_STOP) { fillVeil(); raf = null; return; }

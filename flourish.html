@@ -24,7 +24,7 @@
       width: 100%;
       font-family: 'Inter', system-ui, sans-serif;
       -webkit-font-smoothing: antialiased;
-      background: #fff;
+      background: #FAF9F7;
       color: var(--black);
     }
     html {
@@ -50,7 +50,7 @@
       display: flex; align-items: center; justify-content: space-between;
       padding: 0 40px; height: 57px;
       border-bottom: 1px solid var(--border);
-      background: rgba(255,255,255,0.92);
+      background: rgba(250,249,247,0.92);
       backdrop-filter: blur(12px);
     }
     .nav-logo {
@@ -94,7 +94,7 @@
       z-index: 50;
       /* opaque on purpose: section borders below are full-bleed, and without
          a backdrop they draw a line straight across the contents list */
-      background: #fff;
+      background: #FAF9F7;
     }
     .cs-sidebar-label {
       font-family: 'Inter', system-ui, sans-serif;
@@ -1063,7 +1063,7 @@
 
     /* ── NEXT UP ── */
     .next-up-section {
-      background: #fff;
+      background: #FAF9F7;
       border-top: 1px solid var(--border);
       /* no side padding — the label and grid carry the column's own margins */
       padding: 64px 0 88px;
@@ -1120,7 +1120,7 @@
       /* Pinned, not themed: the footer reads the same on every page, so the
          accent stays purple even where --orange is the case study's colour. */
       --footer-accent: #8B5CF6;
-      background: #fff;
+      background: #FAF9F7;
       border-top: 1px solid var(--border);
       padding: 80px 96px 56px;
     }
@@ -1947,7 +1947,7 @@
         ctx.save();
         ctx.setTransform(1, 0, 0, 1, 0, 0);
         ctx.globalCompositeOperation = 'source-over';
-        ctx.fillStyle = '#fff';
+        ctx.fillStyle = '#FAF9F7';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
         ctx.restore();
       }
@@ -1994,7 +1994,7 @@
 
       function frame() {
         ctx.globalCompositeOperation = 'source-over';
-        ctx.fillStyle = 'rgba(255,255,255,' + HEAL + ')';
+        ctx.fillStyle = 'rgba(250,249,247,' + HEAL + ')';
         ctx.fillRect(0, 0, w, h);
         idleFrames++;
         if (idleFrames > IDLE_STOP) { fillVeil(); raf = null; return; }

@@ -20,7 +20,7 @@
 
     html { scroll-behavior: smooth; }
     @media (prefers-reduced-motion: reduce) {
-      html { scroll-behavior: auto; }
+      html, #portfolio { scroll-behavior: auto; }
     }
 
     html, body {
@@ -36,7 +36,10 @@
       position: relative;
       width: 100%; height: 100%;
       overflow-y: auto;
-      background: #fff;
+      /* the document does not scroll on this page — this element does, so
+         the smooth fallback has to live here, not on html */
+      scroll-behavior: smooth;
+      background: #FAF9F7;
     }
     #portfolio.visible { opacity: 1; }
 
@@ -45,7 +48,7 @@
       display: flex; align-items: center; justify-content: space-between;
       padding: 20px 56px;
       position: sticky; top: 0;
-      background: rgba(255,255,255,0.92);
+      background: rgba(250,249,247,0.92);
       backdrop-filter: blur(12px);
       -webkit-backdrop-filter: blur(12px);
       z-index: 60;
@@ -876,7 +879,7 @@
       /* Pinned, not themed: the footer reads the same on every page, so the
          accent stays purple even where --orange is the case study's colour. */
       --footer-accent: #8B5CF6;
-      background: #fff;
+      background: #FAF9F7;
       border-top: 1px solid var(--border);
       padding: 80px 96px 56px;
     }
@@ -1376,7 +1379,7 @@
         ctx.save();
         ctx.setTransform(1, 0, 0, 1, 0, 0);
         ctx.globalCompositeOperation = 'source-over';
-        ctx.fillStyle = '#fff';
+        ctx.fillStyle = '#FAF9F7';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
         ctx.restore();
       }
@@ -1423,7 +1426,7 @@
 
       function frame() {
         ctx.globalCompositeOperation = 'source-over';
-        ctx.fillStyle = 'rgba(255,255,255,' + HEAL + ')';
+        ctx.fillStyle = 'rgba(250,249,247,' + HEAL + ')';
         ctx.fillRect(0, 0, w, h);
         idleFrames++;
         if (idleFrames > IDLE_STOP) { fillVeil(); raf = null; return; }
@@ -1448,6 +1451,77 @@
       resize();
       if ('ResizeObserver' in window) new ResizeObserver(resize).observe(footer);
       else window.addEventListener('resize', resize);
+    })();
+
+    /* ── EASED IN-PAGE SCROLL ──
+       CSS scroll-behavior:smooth has a fixed, short duration you cannot tune,
+       which is what made the jump to Selected Work feel abrupt. This drives the
+       scroll itself so it can be longer and properly eased. The CSS value stays
+       as the no-JS fallback, but has to be switched off while this runs or the
+       browser would try to smooth each frame of our own animation. */
+    (function () {
+      var reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+      function easeInOutCubic(t) {
+        return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+      }
+
+      /* This page scrolls an inner element (#portfolio), not the document, so
+         window.scrollTo would silently do nothing. Find whatever actually
+         scrolls above the target and drive that. */
+      function scrollerFor(el) {
+        var n = el.parentElement;
+        while (n && n !== document.body && n !== document.documentElement) {
+          var oy = getComputedStyle(n).overflowY;
+          if ((oy === 'auto' || oy === 'scroll') && n.scrollHeight > n.clientHeight) return n;
+          n = n.parentElement;
+        }
+        return document.scrollingElement || document.documentElement;
+      }
+
+      function glideTo(target, hash) {
+        var offset = parseFloat(getComputedStyle(target).scrollMarginTop) || 0;
+        var box = scrollerFor(target);
+        var isDoc = (box === document.scrollingElement || box === document.documentElement);
+
+        var startY = isDoc ? (window.pageYOffset || box.scrollTop) : box.scrollTop;
+        var boxTop = isDoc ? 0 : box.getBoundingClientRect().top;
+        var endY = target.getBoundingClientRect().top - boxTop + startY - offset;
+        endY = Math.max(0, Math.min(endY, box.scrollHeight - box.clientHeight));
+        var dist = endY - startY;
+        if (Math.abs(dist) < 2) return;
+
+        /* longer trips take longer, within reason */
+        var dur = Math.min(1200, Math.max(650, Math.abs(dist) * 0.95));
+        var prev = box.style.scrollBehavior;
+        box.style.scrollBehavior = 'auto';
+        var t0 = null;
+
+        function step(now) {
+          if (t0 === null) t0 = now;
+          var p = Math.min((now - t0) / dur, 1);
+          var y = startY + dist * easeInOutCubic(p);
+          if (isDoc) window.scrollTo(0, y); else box.scrollTop = y;
+          if (p < 1) { requestAnimationFrame(step); return; }
+          box.style.scrollBehavior = prev;
+          /* keep the URL shareable without triggering a second jump */
+          if (hash) history.replaceState(null, '', hash);
+        }
+        requestAnimationFrame(step);
+      }
+
+      document.addEventListener('click', function (e) {
+        if (reduced.matches) return;
+        if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+        var a = e.target.closest && e.target.closest('a[href^="#"]');
+        if (!a) return;
+        var hash = a.getAttribute('href');
+        if (!hash || hash === '#') return;
+        var target = document.getElementById(hash.slice(1));
+        if (!target) return;
+        e.preventDefault();
+        glideTo(target, hash);
+      });
     })();
 </script>
 </body>
