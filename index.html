@@ -18,6 +18,11 @@
       --ease:   cubic-bezier(0.25, 0.46, 0.45, 0.94);
     }
 
+    html { scroll-behavior: smooth; }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+    }
+
     html, body {
       width: 100%; height: 100%;
       font-family: 'Inter', system-ui, sans-serif;
@@ -274,6 +279,9 @@
     .work-section {
       padding: 48px 56px 140px;
       border-top: 1px solid var(--border);
+      /* the nav is sticky and 63px tall, so an unadjusted anchor jump would
+         park this section's top edge underneath it */
+      scroll-margin-top: 72px;
     }
 
 
@@ -1079,7 +1087,7 @@
         <span class="logo-name">diya</span>
       </a>
       <ul class="nav-links">
-        <li><a href="/" class="active">Work</a></li>
+        <li><a href="#projects" class="active">Work</a></li>
         <li><a href="/sandlot">Sandbox</a></li>
         <li><a href="Diya-Mahapatra-Product-Designer-Resume.pdf" target="_blank">Resume</a></li>
       </ul>
@@ -1203,7 +1211,7 @@
             </div>
           </div>
           <div class="footer-nav">
-            <a class="footer-nav-link" href="/">Work</a>
+            <a class="footer-nav-link" href="#projects">Work</a>
             <a class="footer-nav-link" href="/sandlot">Sandbox</a>
             <a class="footer-nav-link" href="Diya-Mahapatra-Product-Designer-Resume.pdf" target="_blank">Resume</a>
           </div>
