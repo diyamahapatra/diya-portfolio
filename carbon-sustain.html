@@ -527,10 +527,12 @@
       color: inherit;
       cursor: pointer;
     }
+    /* No background here: this rule is (0,2,0) and would beat .thumb-2 /
+       .thumb-3, blanking each card's own colour. It used to be harmless
+       because the colour came from child blob divs painted on top. */
     .next-up-grid .work-thumb {
       border-radius: 0;
       border: 1px solid var(--border);
-      background: #fff;
       margin-bottom: 18px;
       transition: transform 0.4s var(--ease);
     }
