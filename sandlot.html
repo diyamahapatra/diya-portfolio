@@ -34,25 +34,21 @@
     body, body * { cursor: none; }
     #custom-cursor {
       position: fixed; pointer-events: none; z-index: 9999;
-      left: 0; top: 0; width: 28px; height: 28px;
-      border-radius: 50%;
-      border: 1.5px solid var(--orange);
-      background: transparent;
+      left: 0; top: 0; width: 24px; height: 24px;
+      border-radius: 50%; background: #8B5CF6;
       opacity: 0; will-change: transform;
       transition: width 0.26s var(--ease), height 0.26s var(--ease),
-                  border-width 0.26s var(--ease), background 0.22s var(--ease),
+                  background 0.22s var(--ease),
                   box-shadow 0.26s var(--ease);
     }
     /* hovering the canvas: ring thickens slightly — "this is grabbable" */
     #custom-cursor.over-canvas {
-      border-width: 2.5px;
       box-shadow: 0 0 0 4px rgba(139,92,246,0.10);
     }
     /* actively dragging: collapse to a filled dot with a soft halo */
     #custom-cursor.grabbing {
       width: 12px; height: 12px;
-      border-width: 2px;
-      background: var(--orange);
+      background: #8B5CF6;
       box-shadow: 0 0 0 7px rgba(139,92,246,0.16);
     }
 
