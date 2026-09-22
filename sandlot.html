@@ -28,30 +28,6 @@
       overscroll-behavior: none;
     }
 
-    /* ── CUSTOM CURSOR ──
-       Idle it's an open ring; on mouse-down it contracts into a filled dot,
-       which reads as "gripping" the canvas. */
-    body, body * { cursor: none; }
-    #custom-cursor {
-      position: fixed; pointer-events: none; z-index: 9999;
-      left: 0; top: 0; width: 20px; height: 20px;
-      border-radius: 50%; background: #8B5CF6;
-      opacity: 0; will-change: transform;
-      transition: width 0.26s var(--ease), height 0.26s var(--ease),
-                  background 0.22s var(--ease),
-                  box-shadow 0.26s var(--ease);
-    }
-    /* hovering the canvas: ring thickens slightly — "this is grabbable" */
-    #custom-cursor.over-canvas {
-      box-shadow: 0 0 0 4px rgba(139,92,246,0.10);
-    }
-    /* actively dragging: collapse to a filled dot with a soft halo */
-    #custom-cursor.grabbing {
-      width: 12px; height: 12px;
-      background: #8B5CF6;
-      box-shadow: 0 0 0 7px rgba(139,92,246,0.16);
-    }
-
     /* ── NAV ── */
     nav {
       position: fixed; top: 0; left: 0; right: 0; z-index: 10;
@@ -76,7 +52,11 @@
     .nav-links a.active { color: var(--black); font-weight: 500; }
 
     /* ── VIEWPORT: the fixed window you look through ── */
+    /* The grab affordance rides the native cursor now that the purple ring is
+       gone — open hand over the canvas, closed hand while panning. */
+    body.is-panning, body.is-panning * { cursor: grabbing !important; }
     .canvas-viewport {
+      cursor: grab;
       position: fixed; inset: 0;
       overflow: hidden;
       touch-action: none;             /* we handle panning ourselves via pointer events */
@@ -224,7 +204,7 @@
     }
 
     @media (prefers-reduced-motion: reduce) {
-      .img-item, #custom-cursor { transition: none; }
+      .img-item { transition: none; }
       .hint-hand, .hint-arrow, .drag-hint { animation: none; opacity: 1; }
     }
   
@@ -237,15 +217,10 @@
       .nav-links a { font-size: 13px; }
       /* a finger is coarser than a cursor — give the hint room above the bar */
       .drag-hint { bottom: 28px; font-size: 10.5px; padding: 9px 16px 9px 13px; }
-      /* no hover state on touch, so the custom ring is just noise */
-      body, body * { cursor: auto; }
-      #custom-cursor { display: none; }
     }
 </style>
 </head>
 <body>
-
-  <div id="custom-cursor" aria-hidden="true"></div>
 
   <nav>
     <a class="nav-logo" href="/"><img src="images/purpmiffy.png" alt="miffy" style="width:22px;height:22px;object-fit:contain;display:block;">diya</a>
@@ -317,12 +292,6 @@
   </div>
 
   <script>
-    /* ── custom cursor ── */
-    const cursorEl = document.getElementById('custom-cursor');
-    document.addEventListener('mousemove', e => {
-      cursorEl.style.transform = `translate(${e.clientX}px, ${e.clientY}px) translate(-50%, -50%)`;
-      cursorEl.style.opacity = '1';
-    });
 
     /* ── infinite pannable canvas ──
        The plane is tiled with copies of the collection and the translation is
@@ -466,9 +435,6 @@
     }
     function startLoop() { if (!raf) raf = requestAnimationFrame(tick); }
 
-    viewport.addEventListener('pointerenter', () => cursorEl.classList.add('over-canvas'));
-    viewport.addEventListener('pointerleave', () => cursorEl.classList.remove('over-canvas'));
-
     viewport.addEventListener('pointerdown', e => {
       if (e.button !== 0) return;
       dragging = true; moved = false;
@@ -477,11 +443,7 @@
       vx = vy = 0;
       if (raf) { cancelAnimationFrame(raf); raf = null; }
       if (nudgeRaf) { cancelAnimationFrame(nudgeRaf); nudgeRaf = null; }
-      /* Paint the grab state before capturing: setPointerCapture can throw for
-         a pointer the browser no longer considers active, and if it does the
-         cursor must not be left stuck in its open-ring state. */
       document.body.classList.add('is-panning');
-      cursorEl.classList.add('grabbing');
       try { viewport.setPointerCapture(pointerId); } catch (err) {}
     });
 
@@ -506,7 +468,6 @@
       } catch (err) {}
       pointerId = null;
       document.body.classList.remove('is-panning');
-      cursorEl.classList.remove('grabbing');
       startLoop();
     }
     viewport.addEventListener('pointerup', endDrag);

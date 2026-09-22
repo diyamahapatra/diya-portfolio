@@ -241,43 +241,6 @@
       transform: translateY(0);
     }
 
-    /* ── CUSTOM CURSOR ── */
-    body, body * { cursor: none; }
-    #portfolio, #portfolio * { cursor: none; }
-
-    #custom-cursor {
-      position: fixed;
-      pointer-events: none;
-      z-index: 9999;
-      left: 0; top: 0;
-      width: 20px; height: 20px;
-      border-radius: 50%; background: #8B5CF6;
-      display: flex; align-items: center; justify-content: center;
-      overflow: hidden;
-      opacity: 0;
-      will-change: transform;
-      transition:
-        width  0.38s var(--ease),
-        height 0.38s var(--ease),
-        border-radius 0.38s var(--ease),
-        background 0.28s var(--ease);
-    }
-    .cursor-label {
-      font-size: 9.5px; font-weight: 600;
-      letter-spacing: 0.10em; text-transform: uppercase;
-      color: #fff;
-      opacity: 0;
-      white-space: nowrap;
-      transition: opacity 0.18s var(--ease);
-    }
-    #custom-cursor.expanded {
-      width: 112px;
-      height: 36px;
-      border-radius: 100px;
-      background: #8B5CF6;
-    }
-    #custom-cursor.expanded .cursor-label { opacity: 1; }
-
     /* ── WORK SECTION ── */
     .work-section {
       padding: 48px 56px 140px;
@@ -287,7 +250,6 @@
       scroll-margin-top: 72px;
     }
 
-
     .work-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -295,10 +257,10 @@
       row-gap: 72px;
     }
 
-    .work-card {
-      cursor: pointer;
-    }
+    /* the hand only where a click does something — the unfinished card is a
+       plain <div>, so it keeps the default arrow */
     a.work-card {
+      cursor: pointer;
       display: block;
       text-decoration: none;
       color: inherit;
@@ -555,7 +517,6 @@
       66.1%,100% { color:rgba(140,70,95,0.9); }
     }
 
-
     /* Solid, not a mesh: the old pale-blue/cream blobs were the same family
        as Flourish's, so the two cards read alike. This green is sampled from
        the dashboard's own buttons and charts. */
@@ -617,7 +578,6 @@
       transition: opacity 0.85s var(--ease) 0.25s;
     }
     .thumb-2.in-view .t2-frame-enter { opacity: 1; }
-
 
     .thumb-3 {
       background: #D2D2FF;
@@ -1047,8 +1007,7 @@
        The hovered card stays put and fades; its neighbours are left alone. No
        scale, no blur — the haze is just opacity over a light page.
        Every card fades, the unfinished one included — it still reads as a
-       response to the pointer. What separates them is the cursor: only the
-       unfinished card expands it to "Coming Soon".
+       response to the pointer.
        Both selectors are needed to clear the reveal rule's opacity:1 —
        .js-reveal .work-card.revealed is (0,3,0) and would otherwise win.
        No reduced-motion override: nothing moves, and a slow opacity fade is
@@ -1077,9 +1036,6 @@
   </script>
 </head>
 <body>
-
-  <!-- custom cursor -->
-  <div id="custom-cursor" aria-hidden="true"><span class="cursor-label">Coming Soon</span></div>
 
   <!-- ═══ PORTFOLIO ═══ -->
   <div id="portfolio" class="visible">
@@ -1228,7 +1184,6 @@
 
   </div>
 
-
   <script>
 
     /* ── PORTFOLIO WORD TYPEWRITER ── */
@@ -1242,55 +1197,6 @@
     ['.thumb-1', '.thumb-2', '.thumb-3', '.thumb-lg'].forEach(sel => {
       const el = document.querySelector(sel);
       if (el) inViewIO.observe(el);
-    });
-
-    /* ── CUSTOM CURSOR ── */
-    const cursorEl = document.getElementById('custom-cursor');
-    /* The ring eases toward the pointer instead of pinning to it — a few
-       frames of lag is what makes a custom cursor feel weighted rather than
-       stuck to the glass. Exact tracking under reduced-motion. */
-    (function () {
-      var EASE = 0.2;
-      var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-      var x = 0, y = 0, tx = 0, ty = 0, raf = null, seeded = false;
-      function draw() {
-        cursorEl.style.transform = 'translate(' + x + 'px, ' + y + 'px) translate(-50%, -50%)';
-      }
-      function tick() {
-        x += (tx - x) * EASE;
-        y += (ty - y) * EASE;
-        draw();
-        if (Math.abs(tx - x) > 0.1 || Math.abs(ty - y) > 0.1) {
-          raf = requestAnimationFrame(tick);
-        } else { x = tx; y = ty; draw(); raf = null; }
-      }
-      document.addEventListener('mousemove', function (e) {
-        tx = e.clientX; ty = e.clientY;
-        cursorEl.style.opacity = '1';
-        if (!seeded) { x = tx; y = ty; seeded = true; draw(); return; }  // don't fly in from 0,0
-        if (reduced) { x = tx; y = ty; draw(); return; }
-        if (!raf) raf = requestAnimationFrame(tick);
-      });
-    })();
-
-    const cursorLabelEl = cursorEl.querySelector('.cursor-label');
-    /* The card's own markup is the source of truth: if it links somewhere, it's
-       ready. A hardcoded list of live slugs drifted out of sync the moment the
-       hrefs changed format and silently labelled every card "Coming Soon". */
-    document.querySelectorAll('.work-card').forEach(card => {
-      const href = card.tagName === 'A' ? (card.getAttribute('href') || '').trim() : '';
-      const isLive = href !== '' && href !== '#';
-      /* Only the unfinished card expands the cursor. A project you can open
-         already announces itself by fading on hover, and the whole card is the
-         hit target — a "View Project" pill on top of that just restates it.
-         "Coming Soon" is different: it tells you the click won't do anything,
-         which the card cannot say on its own. */
-      if (isLive) return;
-      card.addEventListener('mouseenter', () => {
-        cursorLabelEl.textContent = 'Coming Soon';
-        cursorEl.classList.add('expanded');
-      });
-      card.addEventListener('mouseleave', () => cursorEl.classList.remove('expanded'));
     });
 
     /* ── FOOTER WORD CYCLER ── */

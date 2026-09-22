@@ -26,16 +26,6 @@
       color: var(--black);
     }
 
-    /* ── CUSTOM CURSOR ── */
-    body, body * { cursor: none; }
-    #custom-cursor {
-      position: fixed; pointer-events: none; z-index: 9999;
-      left: 0; top: 0; width: 20px; height: 20px;
-      border-radius: 50%; background: #8B5CF6;
-      opacity: 0; will-change: transform;
-      transition: width 0.38s var(--ease), height 0.38s var(--ease);
-    }
-
     /* ── NAV ── */
     nav {
       position: fixed; top: 0; left: 0; right: 0; z-index: 100;
@@ -298,8 +288,6 @@
 </head>
 <body>
 
-  <div id="custom-cursor" aria-hidden="true"></div>
-
   <nav>
     <a class="nav-logo" href="/"><img src="images/purpmiffy.png" alt="miffy" style="width:22px;height:22px;object-fit:contain;display:block;">diya</a>
     <ul class="nav-links">
@@ -397,31 +385,6 @@
   </footer>
 
   <script>
-    /* ── CUSTOM CURSOR ── */
-    const cursorEl = document.getElementById('custom-cursor');
-    (function () {
-      var EASE = 0.2;
-      var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-      var x = 0, y = 0, tx = 0, ty = 0, raf = null, seeded = false;
-      function draw() {
-        cursorEl.style.transform = 'translate(' + x + 'px, ' + y + 'px) translate(-50%, -50%)';
-      }
-      function tick() {
-        x += (tx - x) * EASE;
-        y += (ty - y) * EASE;
-        draw();
-        if (Math.abs(tx - x) > 0.1 || Math.abs(ty - y) > 0.1) {
-          raf = requestAnimationFrame(tick);
-        } else { x = tx; y = ty; draw(); raf = null; }
-      }
-      document.addEventListener('mousemove', function (e) {
-        tx = e.clientX; ty = e.clientY;
-        cursorEl.style.opacity = '1';
-        if (!seeded) { x = tx; y = ty; seeded = true; draw(); return; }
-        if (reduced) { x = tx; y = ty; draw(); return; }
-        if (!raf) raf = requestAnimationFrame(tick);
-      });
-    })();
 
     /* ── FOOTER WORD CYCLER ── */
     (function() {
