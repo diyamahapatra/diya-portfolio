@@ -34,16 +34,6 @@
       scroll-margin-top: 77px;
     }
 
-    /* ── CUSTOM CURSOR ── */
-    body, body * { cursor: none; }
-    #custom-cursor {
-      position: fixed; pointer-events: none; z-index: 9999;
-      left: 0; top: 0; width: 20px; height: 20px;
-      border-radius: 50%; background: #8B5CF6;
-      opacity: 0; will-change: transform;
-      transition: width 0.38s var(--ease), height 0.38s var(--ease);
-    }
-
     /* ── NAV ── */
     nav {
       position: fixed; top: 0; left: 0; right: 0; z-index: 100;
@@ -172,25 +162,26 @@
     }
 
     /* intro row with jump button */
+    /* stacked, not split: the CTA sits under the paragraph on the same left
+       edge as everything else, instead of floating opposite it */
     .cs-intro-row {
-      display: flex;
-      align-items: flex-start;
-      justify-content: space-between;
-      gap: 24px;
       margin-bottom: 24px;
     }
+    /* a text link, not a pill — the pill read as SaaS marketing next to the
+       editorial type everywhere else on the page */
     .cs-jump-btn {
-      flex-shrink: 0;
       display: inline-block;
-      margin-top: 4px;
-      font-size: 13px; font-weight: 600;
-      color: #fff;
-      background: var(--orange);
-      border-radius: 100px;
-      padding: 10px 20px;
+      margin-top: 16px;
+      font-size: 14px; font-weight: 500;
+      letter-spacing: 0.01em;
+      color: var(--orange);
+      background: none;
+      border: 0;
+      border-bottom: 1px solid currentColor;
+      border-radius: 0;
+      padding: 0 0 2px;
       text-decoration: none;
-      white-space: nowrap;
-      transition: opacity 0.18s, transform 0.18s;
+      transition: opacity 0.18s;
     }
     .cs-jump-btn:hover { opacity: 1; }
 
@@ -246,11 +237,16 @@
     .cs-section {
       margin-bottom: 128px;
     }
-    .cs-section-label {
-      font-family: 'Lora', serif;
-      font-size: 13px; font-weight: 400;
-      letter-spacing: 0.04em;
-      color: var(--gray);
+    /* Caps treatment matched to the contents rail: uppercase needs the wider
+       0.10em tracking, or the letters crowd at this size.
+       Selector is p.cs-section-label, not .cs-section-label: `.cs-section p`
+       is (0,1,1) and silently outranks a lone class, which is why the size
+       here was resolving to 14.4px instead of 13px. */
+    .cs-section p.cs-section-label {
+      font-family: 'Inter', system-ui, sans-serif;
+      font-size: 12px; font-weight: 500;
+      letter-spacing: 0.10em; text-transform: uppercase;
+      color: var(--orange);
       margin-bottom: 12px;
       display: block;
     }
@@ -272,6 +268,12 @@
       margin-bottom: 16px;
     }
     .cs-section p:last-child { margin-bottom: 0; }
+    /* the reflection paragraph is one long unbroken block (the longest single
+       paragraph in the case study), so it gets a bit more air between lines
+       than the 1.75 baseline to stay easy to read straight through.
+       :not() excludes the "REFLECTION" eyebrow label, which is also a <p>
+       inside this section. */
+    #reflection p:not(.cs-section-label) { line-height: 2; }
     .cs-pullquote {
       background: #F2F2F0;
       border-radius: 10px;
@@ -393,8 +395,7 @@
     /* ── THE SOLUTION ── */
     .cs-solution-video-wrap {
       width: 100%;
-      background: #fff;
-      border: 1px solid var(--border);
+      background: #DCF1F5;
       border-radius: 0;
       overflow: hidden;
       margin-bottom: 8px;
@@ -409,7 +410,9 @@
       width: auto;
       height: auto;
       display: block;
-      clip-path: inset(6px 6px 0 0);
+      /* `round` on the existing inset clips the video's own corners;
+         border-radius alone would not cut the painted video surface */
+      clip-path: inset(6px 6px 0 0 round 20px);
     }
     .cs-solution-video-placeholder {
       aspect-ratio: 16/9;
@@ -1341,22 +1344,27 @@
       gap: 16px;
       margin-top: 32px;
     }
+    /* white paper on the warm cream page — #FAFAFA was within 3 points of the
+       #faf9f7 background, so the cards had no edge. White reads as a lifted
+       surface and the warm-grey hairline gives it a definite boundary. */
     .owned-card {
-      background: #FAFAFA;
-      border: 1px solid #ECECEC;
+      background: #FFFFFF;
+      border: 1px solid #E5E1D9;
       border-radius: 0;
       padding: 26px 28px 28px;
     }
     /* the third card runs the full width, mirroring the reference layout */
-    .owned-card:last-child { grid-column: 1 / -1; }
+    /* was there to stop an orphaned third card sitting half-width; with two
+       cards it wrongly made the second span the full row instead */
     .owned-icon {
       display: block;
       color: #A2A2A2;
       margin-bottom: 22px;
     }
     /* scoped to .owned-card so it outranks `.cs-section p` */
+    /* tracks the body size, as it did at the original 13.5px */
     .owned-card .owned-eyebrow {
-      font-size: 13.5px;
+      font-size: 12px;
       font-weight: 400;
       color: #8E8E8E;
       margin-bottom: 6px;
@@ -1365,7 +1373,7 @@
        sit in the page's existing type rather than introducing a heavier cut */
     .owned-title {
       font-family: 'Lora', serif;
-      font-size: 21.6px;
+      font-size: 16.6px;
       font-weight: 400;
       letter-spacing: -0.02em;
       line-height: 1.2;
@@ -1373,7 +1381,7 @@
       margin-bottom: 9px;
     }
     .owned-card .owned-body {
-      font-size: 13.5px;
+      font-size: 12px;
       line-height: 1.6;
       color: #6E6E6E;
       max-width: 42ch;
@@ -1392,8 +1400,8 @@
     }
     .impact-metrics { display: grid; gap: 16px; }
     .impact-card {
-      background: #FAFAFA;
-      border: 1px solid #ECECEC;
+      background: #FFFFFF;
+      border: 1px solid #E5E1D9;
       border-radius: 0;
       padding: 26px 28px 28px;
     }
@@ -1417,7 +1425,7 @@
     .impact-shot img {
       display: block; width: 100%;
       border-radius: 0;
-      border: 1px solid #ECECEC;
+      border: 1px solid #E5E1D9;
     }
     .impact-shot figcaption {
       margin-top: 10px;
@@ -1435,10 +1443,30 @@
       gap: 16px;
       margin-top: 32px;
     }
-    .opp-grid .owned-card:last-child { grid-column: auto; }
-    /* titles sit in a narrower column here, so they come down a step */
-    .opp-grid .owned-title { font-size: 19px; margin-bottom: 8px; }
-    .opp-grid .owned-icon { margin-bottom: 18px; }
+    /* Opportunity cards follow the current Figma frame: the sand #F0E9E1 fill
+       is gone, the cards are now a hairline-outlined box with an icon chip.
+       Kept as real text rather than a flattened export so it stays selectable
+       and readable to a screen reader — the frame is type, not imagery.
+       The frame draws the box on the page cream with a cool #E9EAEB stroke;
+       here it takes the same white ground and warm hairline as What I Owned
+       so the two card sets read as one system and neither dissolves into the
+       #faf9f7 page.
+       Type and padding are deliberately NOT overridden — the cards inherit
+       .owned-card / .owned-title / .owned-body wholesale so the two sets are
+       typographically identical. The chip below is the only override left. */
+
+    /* chip inverted from the frame's white-on-cream: on a white card a white
+       chip would disappear, so the cream moves to the chip. The 22px bottom
+       margin matches .owned-icon, so the gap down to the title is the same. */
+    .opp-grid .owned-icon {
+      color: #0F0F0F;
+      background: #F3F1EC;
+      border-radius: 9px;
+      padding: 8px;
+      box-sizing: content-box;
+      width: 18px; height: 18px;
+      margin-bottom: 22px;
+    }
 
     /* ── SCROLL REVEALS ──
        Gated behind .js-reveal, which is only set when the browser supports
@@ -1464,8 +1492,6 @@
   </script>
 </head>
 <body>
-
-  <div id="custom-cursor" aria-hidden="true"></div>
 
   <nav>
     <a class="nav-logo" href="/"><img src="images/purpmiffy.png" alt="miffy" style="width:22px;height:22px;object-fit:contain;display:block;">diya</a>
@@ -1510,8 +1536,8 @@
 
       <!-- Intro + Jump button -->
       <div class="cs-intro-row">
-        <p class="cs-intro">Redesigned the core meal experience for an AI gut-health startup,<br>reducing insight interpretation time by 47% and improving trigger<br>identification by 34%.</p>
-        <a href="#solution" class="cs-jump-btn">Jump to solution</a>
+        <p class="cs-intro">Redesigned the core meal experience for an AI gut-health startup, reducing insight interpretation time by 47% and improving trigger identification by 34%.</p>
+        <a href="#solution" class="cs-jump-btn">Jump to solution ↓</a>
       </div>
 
       <!-- Overview grid -->
@@ -1548,7 +1574,7 @@
       <!-- What I Owned -->
       <div class="cs-section" id="owned" style="margin-bottom: 88px;">
         <p class="cs-section-label">What I Owned</p>
-        <h2>I took the core experience from research to shipped design, then explored what came next.</h2>
+        <h2>I took the core experience from research to shipped design.</h2>
         <div class="owned-grid">
             <div class="owned-card">
               <svg class="owned-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.6-3.6"/></svg>
@@ -1561,12 +1587,6 @@
               <p class="owned-eyebrow">End-to-End Ownership</p>
               <h3 class="owned-title">Core Product Design</h3>
               <p class="owned-body">Led end-to-end design of the meal detail experience, including trigger scores, macro visualization, and editing flows.</p>
-            </div>
-            <div class="owned-card">
-              <svg class="owned-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 17.5 9.5 11l4 4L21 7.5"/><path d="M15.5 7.5H21v5.5"/></svg>
-              <p class="owned-eyebrow">Scoping What Came Next</p>
-              <h3 class="owned-title">Future Exploration</h3>
-              <p class="owned-body">Scoped Apple Health integrations to explore how I could connect meal data with broader health patterns.</p>
             </div>
           </div>
       </div>
@@ -1670,7 +1690,6 @@
           <!-- Row 1: Macros -->
           <div class="cs-diff-row">
             <div style="display:flex; flex-direction:column; gap:10px;">
-              <p class="cs-diff-title">Nutrition was one dense line, with no sense of proportion.</p>
               <p class="cs-diff-desc">The original card squeezed every macro into a single line of text, so nothing stood out and nothing was comparable. I rebuilt it around a clearer information hierarchy: meal context first, then a dedicated macro summary showing each value against its scale.</p>
             </div>
             <div style="max-width: 760px; width: 100%;">
@@ -1681,7 +1700,6 @@
           <!-- Row 2: Score -->
           <div class="cs-diff-row">
             <div style="display:flex; flex-direction:column; gap:10px;">
-              <p class="cs-diff-title">A score wasn't enough. Users needed to know what caused it.</p>
               <p class="cs-diff-desc">Early designs showed trigger risk as a color-coded label like "Low" or "Moderate," which read more like a verdict than an explanation. The redesign pairs a numeric score with a one-line reason for it, plus an ingredient-level breakdown showing which foods contributed and where alternatives existed.</p>
             </div>
             <div style="max-width: 760px; width: 100%;">
@@ -1689,10 +1707,8 @@
             </div>
           </div>
 
-
 </div>
       </div>
-
 
       <!-- The Solution -->
       <div class="cs-section" id="solution">
@@ -1773,7 +1789,6 @@
     </div>
   </section>
 
-
   <footer class="site-footer">
     <div class="footer-reveal" aria-hidden="true"></div>
     <canvas class="footer-veil" aria-hidden="true"></canvas>
@@ -1801,34 +1816,6 @@
   </footer>
 
   <script>
-    /* ── CUSTOM CURSOR ── */
-    const cursorEl = document.getElementById('custom-cursor');
-    /* The ring eases toward the pointer instead of pinning to it — a few
-       frames of lag is what makes a custom cursor feel weighted rather than
-       stuck to the glass. Exact tracking under reduced-motion. */
-    (function () {
-      var EASE = 0.2;
-      var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-      var x = 0, y = 0, tx = 0, ty = 0, raf = null, seeded = false;
-      function draw() {
-        cursorEl.style.transform = 'translate(' + x + 'px, ' + y + 'px) translate(-50%, -50%)';
-      }
-      function tick() {
-        x += (tx - x) * EASE;
-        y += (ty - y) * EASE;
-        draw();
-        if (Math.abs(tx - x) > 0.1 || Math.abs(ty - y) > 0.1) {
-          raf = requestAnimationFrame(tick);
-        } else { x = tx; y = ty; draw(); raf = null; }
-      }
-      document.addEventListener('mousemove', function (e) {
-        tx = e.clientX; ty = e.clientY;
-        cursorEl.style.opacity = '1';
-        if (!seeded) { x = tx; y = ty; seeded = true; draw(); return; }  // don't fly in from 0,0
-        if (reduced) { x = tx; y = ty; draw(); return; }
-        if (!raf) raf = requestAnimationFrame(tick);
-      });
-    })();
 
     /* ── SOLUTION VIDEO: hide placeholder when video plays ── */
     const solVideo = document.querySelector('#solution video');
