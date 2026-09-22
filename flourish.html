@@ -1264,7 +1264,6 @@
       .cs-diff-pair,
       .owned-grid,
       .opp-grid,
-      .impact-layout,
       .next-up-grid,
       .cs-persona-grid,
       .cs-two-col { grid-template-columns: 1fr; }
@@ -1385,53 +1384,6 @@
       line-height: 1.6;
       color: #6E6E6E;
       max-width: 42ch;
-    }
-
-    /* ── IMPACT — metric cards, same treatment as What I Owned ── */
-    .impact-layout {
-      display: grid;
-      /* capped so the metric cards don't stretch the full column width —
-         the copy only needs ~40 characters and the rest read as dead space */
-      grid-template-columns: minmax(0, 1fr) 272px;
-      gap: 20px;
-      align-items: start;
-      margin-top: 32px;
-      max-width: 700px;
-    }
-    .impact-metrics { display: grid; gap: 16px; }
-    .impact-card {
-      background: #FFFFFF;
-      border: 1px solid #E5E1D9;
-      border-radius: 0;
-      padding: 26px 28px 28px;
-    }
-    .impact-card .impact-figure {
-      font-family: 'Lora', serif;
-      font-size: 42px;
-      font-weight: 400;
-      letter-spacing: -0.03em;
-      line-height: 1;
-      color: var(--black);
-      margin-bottom: 10px;
-    }
-    .impact-card .impact-desc {
-      font-size: 13.5px;
-      line-height: 1.6;
-      color: #6E6E6E;
-      margin-bottom: 0;
-      max-width: 30ch;
-    }
-    .impact-shot { margin: 0; }
-    .impact-shot img {
-      display: block; width: 100%;
-      border-radius: 0;
-      border: 1px solid #E5E1D9;
-    }
-    .impact-shot figcaption {
-      margin-top: 10px;
-      font-size: 12.5px;
-      line-height: 1.5;
-      color: #8E8E8E;
     }
 
     /* ── OPPORTUNITY — same card treatment as What I Owned ── */
@@ -1730,22 +1682,9 @@
         <p class="cs-section-label">Impact</p>
         <h2>It shipped, and interpretation time dropped.</h2>
         <p>The redesigned meal experience shipped in Flourish AI and was featured in the product's App Store preview. In a comparative usability study with 8 beta users, the redesign helped users interpret meal insights faster and more accurately identify their personal food triggers.</p>
-        <div class="impact-layout">
-            <div class="impact-metrics">
-              <div class="impact-card">
-                <p class="impact-figure">47%</p>
-                <p class="impact-desc">reduction in time spent interpreting meal insights</p>
-              </div>
-              <div class="impact-card">
-                <p class="impact-figure">34%</p>
-                <p class="impact-desc">increase in users correctly identifying personal food triggers</p>
-              </div>
-            </div>
-            <figure class="impact-shot">
-              <img src="images/impact-appstore.png" alt="The shipped meal detail experience shown in Flourish AI's App Store preview" draggable="false"/>
-              <figcaption>Shipped experience featured in Flourish AI&rsquo;s App Store preview</figcaption>
-            </figure>
-          </div>
+        <div style="margin-top: 32px;">
+          <img src="images/impact2.png" alt="47% reduction in time spent interpreting meal insights, 34% increase in users correctly identifying personal food triggers, shown against the redesigned meal detail and trigger insight screens" style="width:100%; display:block;">
+        </div>
       </div>
 
       <!-- Reflection -->
