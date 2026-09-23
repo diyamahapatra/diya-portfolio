@@ -16,6 +16,8 @@
       --gray:   #6B7280;
       --border: #E5E7EB;
       --ease:   cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      --rail:   220px;   /* fixed contents rail, same as the Flourish study */
+      --nudge:  90px;    /* optical offset right of true centre — see .cs-content */
     }
 
     html, body {
@@ -59,71 +61,85 @@
     .nav-links a:hover { color: var(--black); }
     .nav-links a.active { color: var(--black); font-weight: 500; }
 
-    /* ── LAYOUT ── */
+    /* ── LAYOUT ──
+       The contents rail is pinned to the far left and out of the flow, so
+       the reading column is free to centre on the window rather than on
+       whatever space the rail left behind. */
     .cs-layout {
-      display: flex;
+      display: block;
       padding-top: 57px;
       min-height: 100vh;
-      max-width: 1100px;
-      margin: 0 auto;
     }
 
-    /* ── SIDEBAR ── */
+    /* ── CONTENTS RAIL ── */
     .cs-sidebar {
-      width: 180px;
-      flex-shrink: 0;
-      align-self: flex-start;
-      padding: 48px 24px 48px 0;
-      position: sticky;
+      position: fixed;
+      left: 0;
       top: 57px;
-      max-height: calc(100vh - 57px);
-      overflow-y: auto;
-    }
-    .cs-sidebar-label {
-      font-size: 11px; font-weight: 600;
-      letter-spacing: 0.10em; text-transform: uppercase;
-      color: var(--gray);
-      margin-bottom: 16px;
+      bottom: 0;
+      width: var(--rail);
+      padding: 34px 24px 28px;
+      display: flex;
+      flex-direction: column;
+      z-index: 50;
+      /* opaque on purpose: section borders below are full-bleed, and without
+         a backdrop they draw a line straight across the contents list */
+      background: #FAF9F7;
     }
     .cs-sidebar-links {
       list-style: none;
-      display: flex; flex-direction: column; gap: 2px;
+      display: flex; flex-direction: column; gap: 0;
+      overflow-y: auto;
+      min-height: 0;
     }
     .cs-sidebar-links a {
       font-family: 'Inter', system-ui, sans-serif;
-      font-size: 13.1px; color: var(--gray);
+      font-size: 12px; font-weight: 500;
+      letter-spacing: 0.10em; text-transform: uppercase;
+      color: #969696;
       text-decoration: none;
-      padding: 5px 0;
+      padding: 9px 0;
       display: block;
       transition: color 0.18s;
-      border-left: 2px solid transparent;
-      padding-left: 10px;
-      margin-left: -12px;
     }
     .cs-sidebar-links a:hover { color: var(--black); }
-    .cs-sidebar-links a.active {
-      color: var(--black); font-weight: 500;
-      border-left-color: var(--black);
+    .cs-sidebar-links a.active { color: var(--orange); }
+    .cs-sidebar-top {
+      margin-top: auto;
+      padding-top: 20px;
+      font-family: 'Inter', system-ui, sans-serif;
+      font-size: 12px; font-weight: 600;
+      letter-spacing: 0.10em; text-transform: uppercase;
+      color: var(--gray);
+      text-decoration: none;
+      transition: color 0.18s;
+    }
+    .cs-sidebar-top:hover { color: var(--black); }
+    /* Fixed rather than absolute so it runs the full height of the window
+       alongside the rail, instead of being boxed by the aside's padding. */
+    .cs-sidebar::after {
+      content: '';
+      position: fixed;
+      left: var(--rail);
+      top: 57px;
+      bottom: 0;
+      border-left: 1px dotted #D6D6D6;
+      pointer-events: none;
     }
 
     /* ── MAIN CONTENT ── */
     .cs-main {
-      flex: 1;
-      padding: 48px 0 24px 48px;
+      padding: 48px 0 24px;
     }
+    /* Geometrically the column centres on the window, but the rail sitting
+       off to the left makes that read as left-heavy — so it gets nudged right
+       to sit optically centred. The max() floor keeps it clear of the dotted
+       rule when the window is too narrow to both centre and clear. */
     .cs-content {
-      width: 100%;
       max-width: 840px;
+      margin-left: max(252px, calc((100% - 840px) / 2 + var(--nudge)));
+      margin-right: 20px;
     }
-
-    /* metadata */
-    .cs-meta {
-      font-size: 13px; color: var(--gray);
-      margin-bottom: 14px;
-      display: flex; align-items: center; gap: 8px;
-      letter-spacing: 0.02em;
-    }
-    .cs-meta span { color: var(--border); }
 
     /* title */
     .cs-title {
@@ -227,7 +243,7 @@
 
     /* sections */
     .cs-section {
-      margin-bottom: 120px;
+      margin-bottom: 128px;
     }
     /* Caps treatment matched to the contents rail: uppercase needs the wider
        0.10em tracking, or the letters crowd at this size.
@@ -501,7 +517,15 @@
     .next-up-section {
       background: #FAF9F7;
       border-top: 1px solid var(--border);
-      padding: 64px 56px 88px;
+      /* no side padding — the label and grid carry the column's own margins */
+      padding: 64px 0 88px;
+    }
+    /* same geometry as .cs-content, so the cards line up under the copy */
+    .next-up-label,
+    .next-up-grid {
+      max-width: 840px;
+      margin-left: max(252px, calc((100% - 840px) / 2 + var(--nudge)));
+      margin-right: 20px;
     }
     .next-up-label {
       text-align: center;
@@ -514,8 +538,6 @@
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 32px;
-      max-width: 1000px;
-      margin: 0 auto;
     }
     .next-up-card {
       display: block;
@@ -682,11 +704,17 @@
       /* the sticky "on this page" rail needs a gutter a phone doesn't have */
       .cs-sidebar { display: none; }
       .cs-layout {
-        flex-direction: column;
         max-width: 100%;
         padding: 57px 20px 0;
       }
-      .cs-content { max-width: 100%; }
+      .cs-content,
+      .next-up-label,
+      .next-up-grid {
+        max-width: 100%;
+        margin-left: 0;
+        margin-right: 0;
+      }
+      .next-up-section { padding: 48px 20px 64px; }
 
       /* every multi-column block becomes a single stack */
       .cs-overview-grid,
@@ -743,11 +771,10 @@
     </ul>
   </nav>
 
-  <div class="cs-layout">
+  <div class="cs-layout" id="top">
 
     <!-- Sidebar -->
     <aside class="cs-sidebar">
-      <p class="cs-sidebar-label">On this page</p>
       <ul class="cs-sidebar-links">
         <li><a href="#overview" class="active">Overview</a></li>
         <li><a href="#challenge">Context</a></li>
@@ -760,16 +787,12 @@
         <li><a href="#outcome">Outcome</a></li>
         <li><a href="#reflection">Reflection</a></li>
       </ul>
+      <a class="cs-sidebar-top" href="#top">Back to top</a>
     </aside>
 
     <!-- Main -->
     <main class="cs-main">
     <div class="cs-content">
-
-      <p class="cs-meta">
-        CARBON SUSTAIN
-        B2B SUSTAINABILITY PLATFORM
-      </p>
 
       <h1 class="cs-title">Making complex carbon data easier to understand and act on.</h1>
 
@@ -840,7 +863,7 @@
         <h2>Users could understand what their emissions were, but struggled to understand what to do next.</h2>
         <p>We spoke with 18 sustainability professionals across companies and analyst roles to understand how emissions data was reported, interpreted, and used to make decisions. We paired these conversations with competitive analysis and affinity mapping to identify recurring gaps in the experience.</p>
 
-        <div style="margin-top: 32px; max-width:520px; margin-left:auto; margin-right:auto; background:rgba(215,38,38,0.19); padding:32px 28px 38px;">
+        <div style="margin-top: 32px; max-width:520px; margin-right:auto; background:rgba(215,38,38,0.19); padding:32px 28px 38px;">
           <div style="display:inline-flex; align-items:center; gap:14px; background:rgba(215,38,38,0.77); border-radius:100px; padding:14px 30px 14px 22px; margin-bottom:38px;">
             <svg width="22" height="19" viewBox="0 0 70.5833 60.9583" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M0 60.9583L35.2917 0L70.5833 60.9583H0ZM35.2917 51.3333C36.2007 51.3333 36.9632 51.0253 37.5792 50.4093C38.1952 49.7933 38.5021 49.0319 38.5 48.125C38.4979 47.2181 38.1899 46.4567 37.576 45.8407C36.9621 45.2247 36.2007 44.9167 35.2917 44.9167C34.3826 44.9167 33.6212 45.2247 33.0073 45.8407C32.3935 46.4567 32.0855 47.2181 32.0833 48.125C32.0812 49.0319 32.3892 49.7944 33.0073 50.4125C33.6255 51.0307 34.3869 51.3376 35.2917 51.3333ZM32.0833 41.7083H38.5V25.6667H32.0833V41.7083Z" fill="#E8B931"/></svg>
             <span style="font-family:'Inter', sans-serif; font-weight:600; font-size:20px; color:#fff;">KEY ISSUES</span>
@@ -924,7 +947,7 @@
           <p>The original landing page introduced Carbon Sustain without giving users a strong path forward. I reorganized the page around a clearer value proposition, brought the carbon calculator into the primary journey, and simplified navigation so users could quickly understand what the platform offered.</p>
         </div>
 
-        <div style="margin-top: 24px; width:calc(100% + 90px); overflow:visible;">
+        <div style="margin-top: 24px; width:100%;">
           <img src="images/carbon-landing.png" alt="Before and after — original Carbon Sustain landing page versus redesigned landing page with clearer value proposition and calculator surfaced" style="width:100%; display:block;">
         </div>
 
@@ -946,7 +969,7 @@
           <p>Charts were paired with labels and contextual cues so users could understand the state of their footprint without relying on raw numbers or color alone.</p>
         </div>
 
-        <div style="margin-top: 24px; width:calc(100% + 90px); overflow:visible;">
+        <div style="margin-top: 24px; width:100%;">
           <img src="images/carbon-dashboard.png" alt="Before and after — original Carbon Sustain dashboard with competing visual weight versus redesigned dashboard with clear hierarchy, emissions comparison chart, and progress tracking" style="width:100%; display:block;">
         </div>
       </div>
