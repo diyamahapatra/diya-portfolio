@@ -6,7 +6,7 @@
   <title>Advising Access — Diya Mahapatra</title>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300&family=Spectral:ital,wght@0,200;0,300;0,400;1,300&family=Lora:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300&family=Lora:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet"/>
   <style>
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -20,18 +20,11 @@
       --ease:   cubic-bezier(0.25, 0.46, 0.45, 0.94);
 
       /* ── TEMPLATE GEOMETRY ──
-         Measured off the reference (emmiwu.com/figma) at a 1440 viewport:
-         a 199px left rail for the contents, the hero bleeding from that
-         rail to the right edge of the window, and the reading column
-         inset a further 69px from the rail with a 68px right margin
-         (1440 - 268 - 68 = 1104, exactly the reference's column). */
-      --rail:   199px;
-      --gutter: 69px;
-      /* Viewport-relative, not fixed: the reference keeps roughly an eighth
-         of the window as right-hand whitespace, so the reading column pulls
-         further back as the window grows rather than chasing the edge. The
-         hero ignores this and still bleeds to the right edge. */
-      --edge:   12vw;
+         Matched to the Flourish study: a fixed 220px contents rail with the
+         reading column capped at 840px and nudged right of true centre, so
+         all three case studies share one measure. */
+      --rail:   220px;   /* fixed contents rail, same as the Flourish study */
+      --nudge:  90px;    /* optical offset right of true centre — see .cs-body */
     }
 
     html, body {
@@ -74,14 +67,28 @@
        section list beneath it, and a back-to-top pinned at the bottom. */
     .cs-rail {
       position: fixed;
-      left: 24px;
+      left: 0;
       top: 57px;
       bottom: 0;
-      width: calc(var(--rail) - 48px);
-      padding: 34px 0 28px;
+      width: var(--rail);
+      padding: 34px 24px 28px;
+      /* opaque on purpose: section borders below are full-bleed, and without
+         a backdrop they draw a line straight across the contents list */
+      background: #FAF9F7;
       display: flex;
       flex-direction: column;
       z-index: 50;
+    }
+    /* Fixed rather than absolute so it runs the full height of the window
+       alongside the rail, instead of being boxed by the aside's padding. */
+    .cs-rail::after {
+      content: '';
+      position: fixed;
+      left: var(--rail);
+      top: 57px;
+      bottom: 0;
+      border-left: 1px dotted #D6D6D6;
+      pointer-events: none;
     }
     .rail-links { list-style: none; display: flex; flex-direction: column; gap: 0; }
     .rail-links a {
@@ -110,11 +117,13 @@
     /* ── HERO — bleeds from the rail to the right edge of the window ── */
     .cs-hero {
       margin-top: 57px;
-      margin-left: var(--rail);
-      height: 640px;
+      max-width: 840px;
+      margin-left: max(252px, calc((100% - 840px) / 2 + var(--nudge)));
+      margin-right: 20px;
+      /* proportioned like the Flourish hero rather than a fixed 640px slab */
+      aspect-ratio: 1.7;
       background: #F3F4F6;
       border: 1px dashed #D8D8D8;
-      border-right: 0;
       display: flex; align-items: center; justify-content: center;
       gap: 12px;
       flex-direction: column;
@@ -138,18 +147,24 @@
 
     /* ── READING COLUMN ── */
     .cs-body {
-      margin-left: calc(var(--rail) + var(--gutter));
-      margin-right: var(--edge);
+      /* Geometrically the column centres on the window, but the rail sitting
+         off to the left makes that read as left-heavy — so it gets nudged
+         right to sit optically centred. The max() floor keeps it clear of
+         the dotted rule when the window is too narrow to both centre and
+         clear. */
+      max-width: 840px;
+      margin-left: max(252px, calc((100% - 840px) / 2 + var(--nudge)));
+      margin-right: 20px;
       padding: 56px 0 120px;
     }
 
     /* title + metadata */
     .cs-title {
-      font-family: 'Spectral', Georgia, serif;
-      font-size: clamp(28px, 4.2vw, 40px);
-      font-weight: 300;
-      letter-spacing: -0.4px;
-      line-height: 1.12;
+      font-family: 'Lora', Georgia, serif;
+      font-size: clamp(25.2px, 2.9vw, 39.6px);
+      font-weight: 400;
+      letter-spacing: -0.02em;
+      line-height: 1.15;
       color: var(--ink);
       margin-bottom: 32px;
     }
@@ -185,9 +200,9 @@
        just under .cs-title so it reads as a chapter mark, not a rival
        headline. */
     .phase-mark {
-      font-family: 'Spectral', Georgia, serif;
+      font-family: 'Lora', Georgia, serif;
       font-size: clamp(28px, 3.6vw, 40px);
-      font-weight: 300;
+      font-weight: 400;
       font-style: italic;
       letter-spacing: 0;
       text-transform: uppercase;
@@ -203,7 +218,7 @@
     #phase-overview { margin-top: 115px; }
 
     /* ── SECTIONS — label, headline, body, image ── */
-    .cs-section { margin-bottom: 72px; }
+    .cs-section { margin-bottom: 128px; }
     .cs-section:last-child { margin-bottom: 0; }
     /* Two classes + the element, so it genuinely outranks `.cs-section p`
        — `p.cs-label` alone only *ties* with it, and loses on source order. */
@@ -219,19 +234,21 @@
     /* No width cap on either — the reference runs its headline and body
        the full width of the reading column rather than a narrow measure. */
     .cs-section h2 {
-      font-family: 'Spectral', Georgia, serif;
-      font-size: clamp(19px, 2vw, 23px);
-      font-weight: 300;
-      letter-spacing: -0.4px;
-      line-height: 1.4;
+      font-family: 'Lora', Georgia, serif;
+      font-size: clamp(18.9px, 2.1vw, 24.3px);
+      /* 500 rather than 600 — Lora's semibold is much heavier than Inter's
+         at the same value and reads clotted at heading size */
+      font-weight: 500;
+      letter-spacing: -0.01em;
+      line-height: 1.25;
       color: var(--ink);
       margin-bottom: 18px;
     }
     .cs-section p {
-      font-size: 14px;
+      font-size: 14.4px;
       line-height: 1.75;
       color: #3D3D3D;
-      margin-bottom: 14px;
+      margin-bottom: 16px;
     }
     .cs-section p:last-child { margin-bottom: 0; }
     /* unwritten copy, visibly marked so it can't ship by accident */
@@ -327,10 +344,10 @@
       max-width: none;
     }
     .lim-title {
-      font-family: 'Spectral', Georgia, serif;
+      font-family: 'Lora', Georgia, serif;
       font-size: 21px;
-      font-weight: 300;
-      letter-spacing: -0.4px;
+      font-weight: 500;
+      letter-spacing: -0.01em;
       line-height: 1.25;
       color: var(--ink);
       margin-bottom: 10px;
@@ -369,9 +386,9 @@
     /* a lone last card fills the row instead of leaving a gap beside it */
     .feature:last-child:nth-child(odd) { grid-column: 1 / -1; }
     .feature h3 {
-      font-family: 'Spectral', Georgia, serif;
-      font-size: 20px; font-weight: 300;
-      letter-spacing: -0.4px;
+      font-family: 'Lora', Georgia, serif;
+      font-size: 20px; font-weight: 500;
+      letter-spacing: -0.01em;
       line-height: 1.35;
       color: var(--ink);
       margin-bottom: 14px;
@@ -556,11 +573,14 @@
 
       .cs-rail { display: none; }
       .cs-hero {
+        max-width: none;
         margin-left: 0;
+        margin-right: 0;
+        aspect-ratio: auto;
         height: 300px;
-        border-right: 1px dashed #D8D8D8;
       }
       .cs-body {
+        max-width: none;
         margin-left: 0;
         margin-right: 0;
         padding: 36px 20px 80px;
