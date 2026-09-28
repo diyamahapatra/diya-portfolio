@@ -1355,18 +1355,18 @@
     /* the third card runs the full width, mirroring the reference layout */
     /* was there to stop an orphaned third card sitting half-width; with two
        cards it wrongly made the second span the full row instead */
+    /* One icon treatment for both card sets: a cream chip in the top-left.
+       On a white card a white chip would disappear, so the cream sits on the
+       chip rather than behind it. */
     .owned-icon {
       display: block;
-      color: #A2A2A2;
+      color: #0F0F0F;
+      background: #F3F1EC;
+      border-radius: 9px;
+      padding: 8px;
+      box-sizing: content-box;
+      width: 18px; height: 18px;
       margin-bottom: 22px;
-    }
-    /* scoped to .owned-card so it outranks `.cs-section p` */
-    /* tracks the body size, as it did at the original 13.5px */
-    .owned-card .owned-eyebrow {
-      font-size: 12px;
-      font-weight: 400;
-      color: #8E8E8E;
-      margin-bottom: 6px;
     }
     /* Lora at 400 — the same weight and tracking as .cs-title, so the cards
        sit in the page's existing type rather than introducing a heavier cut */
@@ -1406,19 +1406,6 @@
        Type and padding are deliberately NOT overridden — the cards inherit
        .owned-card / .owned-title / .owned-body wholesale so the two sets are
        typographically identical. The chip below is the only override left. */
-
-    /* chip inverted from the frame's white-on-cream: on a white card a white
-       chip would disappear, so the cream moves to the chip. The 22px bottom
-       margin matches .owned-icon, so the gap down to the title is the same. */
-    .opp-grid .owned-icon {
-      color: #0F0F0F;
-      background: #F3F1EC;
-      border-radius: 9px;
-      padding: 8px;
-      box-sizing: content-box;
-      width: 18px; height: 18px;
-      margin-bottom: 22px;
-    }
 
     /* ── SCROLL REVEALS ──
        Gated behind .js-reveal, which is only set when the browser supports
@@ -1530,13 +1517,11 @@
         <div class="owned-grid">
             <div class="owned-card">
               <svg class="owned-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.6-3.6"/></svg>
-              <p class="owned-eyebrow">Interviews &amp; Usability Testing</p>
               <h3 class="owned-title">Research &amp; Validation</h3>
               <p class="owned-body">Synthesized user interviews and usability tests to identify where AI-generated insights created confusion or mistrust.</p>
             </div>
             <div class="owned-card">
               <svg class="owned-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 3 9 5-9 5-9-5 9-5Z"/><path d="m3 13 9 5 9-5"/></svg>
-              <p class="owned-eyebrow">End-to-End Ownership</p>
               <h3 class="owned-title">Core Product Design</h3>
               <p class="owned-body">Led end-to-end design of the meal detail experience, including trigger scores, macro visualization, and editing flows.</p>
             </div>
