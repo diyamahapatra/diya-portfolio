@@ -1010,7 +1010,9 @@
   
     /* ── MOBILE ──────────────────────────────────────────────
        Scoped entirely to narrow viewports; desktop is untouched. */
-    .themes-figure { max-width: 84%; }
+    /* centred in the column rather than flush left: at 84% the left-aligned
+       version read as lopsided against the full-width exhibits around it */
+    .themes-figure { max-width: 84%; margin-left: auto; margin-right: auto; }
     @media (max-width: 820px) {
       nav { padding: 0 18px; }
       .nav-links { gap: 18px; }
