@@ -297,6 +297,48 @@
     }
     .cs-section p:last-child { margin-bottom: 0; }
 
+    /* ── CARD COMPONENT ──
+       Shared with What I Owned / Opportunity on the Flourish study: a cream
+       icon chip in the top-left, one Lora heading, then the body. */
+    .owned-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-top: 32px;
+    }
+    .owned-card {
+      background: #FFFFFF;
+      border: 1px solid #E5E1D9;
+      border-radius: 0;
+      padding: 26px 28px 28px;
+    }
+    .owned-icon {
+      display: block;
+      color: #0F0F0F;
+      background: #F3F1EC;
+      border-radius: 9px;
+      padding: 8px;
+      box-sizing: content-box;
+      width: 18px; height: 18px;
+      margin-bottom: 22px;
+    }
+    .owned-title {
+      font-family: 'Lora', serif;
+      font-size: 16.6px;
+      font-weight: 400;
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+      color: var(--black);
+      margin-bottom: 9px;
+    }
+    /* scoped so it outranks `.cs-section p` */
+    .owned-card .owned-body {
+      font-size: 12px;
+      line-height: 1.6;
+      color: #6E6E6E;
+      margin-bottom: 0;
+    }
+
     /* ── DIFF-STYLE SUB-BLOCKS ── */
     .cs-diff-title {
       font-family: 'Lora', serif;
@@ -863,19 +905,22 @@
         <h2>Carbon data was available. Understanding what to do with it wasn't.</h2>
         <p>Carbon Sustain surfaced detailed emissions information, but the experience made it difficult for non-experts to understand the product's value, navigate key workflows, and interpret complex sustainability data.</p>
 
-        <div style="margin-top: 32px; display:grid; grid-template-columns:repeat(3, 1fr); gap:24px;">
-          <div style="background:#fff; border:1px solid #E0E2E6; padding:32px 22px;">
-            <p style="font-family:'Lora', serif; font-weight:700; font-size:16px; color:#3E8E5A; letter-spacing:0.8px; margin-bottom:14px;">Unclear Next Steps</p>
-            <p style="font-size:15px; line-height:1.55; color:#3D3D3D;">Key actions lacked hierarchy, leaving users unsure where to go or what to do next.</p>
-          </div>
-          <div style="background:#fff; border:1px solid #E0E2E6; padding:32px 22px;">
-            <p style="font-family:'Lora', serif; font-weight:700; font-size:16px; color:#3E8E5A; letter-spacing:0.8px; margin-bottom:14px;">Complex Information</p>
-            <p style="font-size:15px; line-height:1.55; color:#3D3D3D;">Dense carbon metrics lacked enough context to help non-experts understand.</p>
-          </div>
-          <div style="background:#fff; border:1px solid #E0E2E6; padding:32px 22px;">
-            <p style="font-family:'Lora', serif; font-weight:700; font-size:16px; color:#3E8E5A; letter-spacing:0.8px; margin-bottom:14px;">Inconsistent Experience</p>
-            <p style="font-size:15px; line-height:1.55; color:#3D3D3D;">Fragmented navigation patterns made the platform feel less trustworthy.</p>
-          </div>
+        <div class="owned-grid">
+            <div class="owned-card">
+              <svg class="owned-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+              <h3 class="owned-title">Unclear Next Steps</h3>
+              <p class="owned-body">Key actions lacked hierarchy, leaving users unsure where to go or what to do next.</p>
+            </div>
+            <div class="owned-card">
+              <svg class="owned-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
+              <h3 class="owned-title">Complex Information</h3>
+              <p class="owned-body">Dense carbon metrics lacked enough context to help non-experts understand.</p>
+            </div>
+            <div class="owned-card">
+              <svg class="owned-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/><polyline points="21 16 21 21 16 21"/><line x1="15" y1="15" x2="21" y2="21"/><line x1="4" y1="4" x2="9" y2="9"/></svg>
+              <h3 class="owned-title">Inconsistent Experience</h3>
+              <p class="owned-body">Fragmented navigation patterns made the platform feel less trustworthy.</p>
+            </div>
         </div>
       </div>
 
@@ -932,28 +977,22 @@
         <h2>Designing complex data to work for more people.</h2>
         <p>Accessibility shaped the visual system from the beginning rather than being treated as a final check. Because Carbon Sustain relies heavily on charts, metrics, and dense sustainability data, I focused on making information legible and understandable without depending on color or visual complexity alone.</p>
 
-        <div style="margin-top: 32px; display:grid; grid-template-columns:repeat(3, 1fr); gap:16px;">
-          <div style="border:1.5px solid #E0E1E5; border-radius:12px; padding:20px;">
-            <div style="width:38px; height:38px; background:#3E8E5A; border-radius:9px; display:flex; align-items:center; justify-content:center; margin-bottom:14px;">
-              <img src="images/icon-contrast.svg" alt="" width="17" height="17">
+        <div class="owned-grid">
+            <div class="owned-card">
+              <svg class="owned-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 3v18a9 9 0 0 0 0-18z" fill="currentColor" stroke="none"/></svg>
+              <h3 class="owned-title">Contrast &amp; Legibility</h3>
+              <p class="owned-body">Used accessible contrast for key text, controls, and data while maintaining Carbon Sustain's muted brand palette.</p>
             </div>
-            <p style="font-family:'Lora', serif; font-weight:600; font-size:16px; color:#0F0F0F; margin-bottom:8px; line-height:1.36;">Contrast &amp; Legibility</p>
-            <p style="font-size:13px; line-height:1.55; color:#414651;">Used accessible contrast for key text, controls, and data while maintaining Carbon Sustain's muted brand palette.</p>
-          </div>
-          <div style="border:1.5px solid #E0E1E5; border-radius:12px; padding:20px;">
-            <div style="width:38px; height:38px; background:#3E8E5A; border-radius:9px; display:flex; align-items:center; justify-content:center; margin-bottom:14px;">
-              <img src="images/icon-color.svg" alt="" width="17" height="17">
+            <div class="owned-card">
+              <svg class="owned-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+              <h3 class="owned-title">More Than Color</h3>
+              <p class="owned-body">Paired chart colors with labels, values, and contextual cues so users could interpret emissions data without relying on color alone.</p>
             </div>
-            <p style="font-family:'Lora', serif; font-weight:600; font-size:16px; color:#0F0F0F; margin-bottom:8px; line-height:1.36;">More Than Color</p>
-            <p style="font-size:13px; line-height:1.55; color:#414651;">Paired chart colors with labels, values, and contextual cues so users could interpret emissions data without relying on color alone.</p>
-          </div>
-          <div style="border:1.5px solid #E0E1E5; border-radius:12px; padding:20px;">
-            <div style="width:38px; height:38px; background:#3E8E5A; border-radius:9px; display:flex; align-items:center; justify-content:center; margin-bottom:14px;">
-              <img src="images/icon-hierarchy.svg" alt="" width="17" height="17">
+            <div class="owned-card">
+              <svg class="owned-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="17" y1="10" x2="3" y2="10"/><line x1="21" y1="6" x2="3" y2="6"/><line x1="21" y1="14" x2="3" y2="14"/><line x1="17" y1="18" x2="3" y2="18"/></svg>
+              <h3 class="owned-title">Hierarchy &amp; Readability</h3>
+              <p class="owned-body">Established consistent type scales, spacing, and component patterns to make dense dashboards easier to scan and reduce cognitive load.</p>
             </div>
-            <p style="font-family:'Lora', serif; font-weight:600; font-size:16px; color:#0F0F0F; margin-bottom:8px; line-height:1.36;">Hierarchy &amp; Readability</p>
-            <p style="font-size:13px; line-height:1.55; color:#414651;">Established consistent type scales, spacing, and component patterns to make dense dashboards easier to scan and reduce cognitive load.</p>
-          </div>
         </div>
       </div>
 
