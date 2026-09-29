@@ -1139,6 +1139,9 @@
       /* Pinned, not themed: the footer reads the same on every page, so the
          accent stays purple even where --orange is the case study's colour. */
       --footer-accent: #8B5CF6;
+      /* darker than --gray: at 4.72:1 this still clears AA on the ramp's
+         deepest stop once the veil has been wiped clear */
+      --footer-ink: #2E3137;
       background: #FAF9F7;
       border-top: 1px solid var(--border);
       padding: 80px 96px 56px;
@@ -1151,22 +1154,46 @@
        takes pointer events, so links stay clickable and touch still scrolls.
        Kept identical on every page — this footer is shared furniture. */
     .site-footer { position: relative; overflow: hidden; }
-    .footer-inner { position: relative; z-index: 2; }
+    .footer-inner { position: relative; z-index: 3; }
     .footer-reveal {
       position: absolute; inset: 0; z-index: 0;
       pointer-events: none;
-      /* violet only, and deliberately pale: the footer text sits over this and
-         has to stay readable even when the whole thing is wiped clear */
+      /* A vertical haze rather than a flat wash: cream at the top where the
+         heading sits, deepening to violet at the foot. The blooms are wide and
+         low-opacity so the ramp reads as atmosphere rather than as bands.
+         The darkest stop is held at #BCA6F5 because the footer text rides on
+         top of this and still has to clear contrast once fully wiped. */
       background:
-        radial-gradient(70% 90% at 12% 18%, #C4B5FD 0%, rgba(196,181,253,0) 64%),
-        radial-gradient(65% 85% at 88% 12%, #DDD6FE 0%, rgba(221,214,254,0) 60%),
-        radial-gradient(85% 95% at 62% 105%, #A78BFA 0%, rgba(167,139,250,0) 64%),
-        linear-gradient(125deg, #F5F3FF 0%, #EDE9FE 100%);
+        radial-gradient(120% 75% at 50% 0%,  rgba(255,255,255,0.92) 0%, rgba(255,255,255,0) 58%),
+        radial-gradient(85% 60% at 12% 34%,  rgba(167,139,250,0.40) 0%, rgba(167,139,250,0) 64%),
+        radial-gradient(80% 58% at 88% 26%,  rgba(196,181,253,0.45) 0%, rgba(196,181,253,0) 62%),
+        radial-gradient(110% 70% at 60% 108%, rgba(139,92,246,0.34) 0%, rgba(139,92,246,0) 66%),
+        linear-gradient(180deg, #FAF9F7 0%, #EFEAFE 22%, #DCCEFB 52%, #C0A8F6 80%, #A98AF2 100%);
     }
+    /* Held at 82% rather than filled translucent in the canvas: the heal loop
+       repaints the veil every frame, so a translucent fill would accumulate
+       back to solid. Fading it here keeps that logic untouched and leaves the
+       gradient showing through as haze until someone wipes it clear. */
     .footer-veil {
       position: absolute; inset: 0; z-index: 1;
       pointer-events: none;
       display: block;
+      opacity: 0.42;
+    }
+    /* Film grain over the whole footer, in both states. soft-light keeps it as
+       texture on the colour instead of a grey film across the type. */
+    .site-footer::after {
+      content: '';
+      position: absolute; inset: 0;
+      z-index: 2;
+      pointer-events: none;
+      opacity: 0.42;
+      mix-blend-mode: soft-light;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      background-size: 200px 200px;
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .site-footer::after { opacity: 0.28; }
     }
     @media (prefers-reduced-motion: reduce) {
       .footer-reveal, .footer-veil { display: none; }
@@ -1229,7 +1256,7 @@
     .footer-link {
       font-size: 14px;
       font-weight: 400;
-      color: var(--gray);
+      color: var(--footer-ink);
       text-decoration: none;
       transition: color 0.18s;
     }
@@ -1244,7 +1271,7 @@
     .footer-nav-link {
       font-size: 13px;
       font-weight: 400;
-      color: var(--gray);
+      color: var(--footer-ink);
       text-decoration: none;
       transition: color 0.18s;
     }
@@ -1258,7 +1285,7 @@
     }
     .footer-copy {
       font-size: 12px;
-      color: var(--gray);
+      color: var(--footer-ink);
     }
   
     /* ── MOBILE ──────────────────────────────────────────────
