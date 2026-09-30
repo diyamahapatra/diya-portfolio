@@ -611,6 +611,352 @@
     }
     .more-cta:hover { border-bottom-color: var(--orange); }
 
+
+    /* ── NEXT UP ──
+       Lifted wholesale from the other case studies so the four pages end
+       the same way: the thumbnails are the same CSS scenes, not stills. */
+
+
+    .work-thumb {
+      width: 100%;
+      aspect-ratio: 16 / 11;
+      border-radius: 0;
+      overflow: hidden;
+      margin-bottom: 22px;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+
+    /* ── placeholder thumbnail backgrounds — pastel palette ── */
+
+    /* ── THUMB 1 — warm ivory/sage gradient (matches Research quote card) ── */
+    .thumb-1 {
+      background: linear-gradient(135deg, #BCD8D8 0%, #C0C8E8 52%, #EDE0D4 100%);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .thumb-1-mesh {
+      display: none;
+    }
+
+    .t1b { position: absolute; border-radius: 50%; will-change: transform; }
+
+    .t1b-1 { width: 70%; height: 70%; background: #F5EDE6; top: -10%; left: -10%; animation: t1m1 3.5s ease-in-out infinite alternate; }
+
+    .t1b-2 { width: 60%; height: 60%; background: #DDD0EE; top: 0%; right: -15%; animation: t1m2 4.5s ease-in-out infinite alternate; }
+
+    .t1b-3 { width: 65%; height: 65%; background: #C8C0E8; bottom: -15%; left: 15%; animation: t1m3 4.0s ease-in-out infinite alternate; }
+
+    .t1b-4 { width: 55%; height: 55%; background: #FAF4F0; top: 20%; left: 25%; animation: t1m4 5.0s ease-in-out infinite alternate; }
+
+    @keyframes t1m1 { to { transform: translate(18%, 20%); } }
+
+    @keyframes t1m2 { to { transform: translate(-20%, 16%); } }
+
+    @keyframes t1m3 { to { transform: translate(16%, -18%); } }
+
+    @keyframes t1m4 { to { transform: translate(-14%, -12%); } }
+
+
+    .f1-scene {
+      position: absolute; inset: 0; z-index: 2;
+      display: flex; align-items: center;
+      padding: 6% 5% 6% 5%;
+      gap: 14px;
+    }
+
+
+    /* Left nav pill */
+    .f1-nav {
+      display: flex; align-items: center; gap: 10px;
+      flex-shrink: 0;
+      opacity: 0; transform: translateY(10px);
+      transition: opacity 0.6s ease 0.3s, transform 0.6s ease 0.3s;
+    }
+
+    .thumb-1.in-view .f1-nav { opacity: 1; transform: translateY(0); }
+
+
+    .f1-pill {
+      background: rgba(255,255,255,0.38);
+      backdrop-filter: blur(18px) saturate(180%);
+      -webkit-backdrop-filter: blur(18px) saturate(180%);
+      border: 1px solid rgba(255,255,255,0.72);
+      box-shadow: 0 4px 18px rgba(160,120,130,0.10),
+                  inset 0 1.5px 0 rgba(255,255,255,0.88),
+                  inset 0 -1px 0 rgba(255,255,255,0.28);
+      border-radius: 100px;
+      padding: 6px;
+      display: flex; flex-direction: column; align-items: center;
+      gap: 0;
+      position: relative; overflow: hidden;
+    }
+
+    .f1-pill::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0; height: 50%;
+      background: linear-gradient(180deg, rgba(255,255,255,0.13) 0%, transparent 100%);
+      border-radius: inherit; pointer-events: none; z-index: 0;
+    }
+
+    .f1-nd {
+      width: 30px; height: 30px; border-radius: 50%;
+      background: rgba(255,255,255,0.55);
+      border: 1px solid rgba(255,255,255,0.62);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.72);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 8px; font-weight: 700; letter-spacing: 0.02em;
+      color: rgba(0,0,0,0.70);
+      flex-shrink: 0; position: relative; z-index: 1;
+    }
+
+    .f1-sep { width: 1px; height: 11px; background: rgba(160,120,140,0.22); position: relative; z-index: 1; }
+
+
+    .f1-labels {
+      display: flex; flex-direction: column; gap: 0;
+    }
+
+    .f1-lbl {
+      height: 30px;
+      display: flex; align-items: center;
+      font-size: 8.5px; font-weight: 600;
+      letter-spacing: 0.13em; text-transform: uppercase;
+      color: rgba(0,0,0,0.62);
+      position: relative; z-index: 1;
+    }
+
+    /* gap between labels mirrors sep height */
+    .f1-lbl + .f1-lbl { margin-top: 11px; }
+
+
+    /* Cards display area */
+    .f1-cards-area {
+      flex: 1; position: relative;
+      height: 100%; overflow: hidden;
+      display: flex; align-items: center; justify-content: center;
+    }
+
+    .f1-crd {
+      position: absolute;
+      width: 68%; border-radius: 24px;
+      opacity: 0; transform: translateY(100%);
+      will-change: transform, opacity;
+      box-shadow: 0 8px 32px rgba(100,70,90,0.20), 0 2px 10px rgba(100,70,90,0.10);
+      background: rgba(255,255,255,0.18);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      padding: 14px;
+      overflow: hidden;
+    }
+
+    .f1-crd img {
+      display: block; width: 100%; height: auto;
+      border-radius: 14px;
+    }
+
+    /* Both keep the Symptom card's glass treatment from .f1-crd above; they
+       only sit smaller in the frame. Width drives it — height follows each
+       image's own ratio, and land1 is portrait, so 68% would overrun. */
+    .f1-crd-1 { width: 56%; }
+
+    /* land1 is a light bit of UI — a short form — so it carries less and
+       doesn't need the same presence as the meal card. */
+    .f1-crd-3 { width: 44%; }
+
+
+    .f1-crd-2 {
+      width: auto;
+      height: 91%;
+      background: rgba(255,255,255,0.22);
+      backdrop-filter: blur(10px) saturate(160%);
+      -webkit-backdrop-filter: blur(10px) saturate(160%);
+      box-shadow: 0 8px 32px rgba(100,70,90,0.20), 0 2px 10px rgba(100,70,90,0.10);
+      padding: 13px;
+      border-radius: 28px;
+      display: flex;
+      overflow: visible;
+      position: relative;
+    }
+
+    .f1-crd-2::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0; height: 50%;
+      background: linear-gradient(180deg, rgba(255,255,255,0.10) 0%, transparent 100%);
+      border-radius: inherit; pointer-events: none;
+    }
+
+    .f1-crd-2 img {
+      height: 100%;
+      width: auto;
+      display: block;
+      border-radius: 0;
+    }
+
+
+    /* ── THUMB-1 LIQUID GLASS LAYERS ── */
+    /* Sweep shimmer overlay — sits between mesh and scene */
+    .t1-sweep {
+      position: absolute; inset: 0; z-index: 1; pointer-events: none;
+      background: linear-gradient(110deg, transparent 30%, rgba(255,255,255,0.07) 50%, transparent 70%);
+      animation: t1Sweep 4.8s ease-in-out infinite;
+    }
+
+    @keyframes t1Sweep { 0%,100% { transform: translateX(-130%); } 50% { transform: translateX(130%); } }
+
+
+    /* 10.5s cycle — one card visible at a time, pops up from bottom */
+    .thumb-1.in-view .f1-crd-1 { animation: crdPop1 10.5s var(--ease) 0.4s infinite; }
+
+    .thumb-1.in-view .f1-crd-2 { animation: crdPop2 10.5s var(--ease) 0.4s infinite; }
+
+    .thumb-1.in-view .f1-crd-3 { animation: crdPop3 10.5s var(--ease) 0.4s infinite; }
+
+
+    /* Nav dot highlights — synced to card cycle */
+    .thumb-1.in-view .f1-nd-1 { animation: nd1 10.5s var(--ease) 0.4s infinite; }
+
+    .thumb-1.in-view .f1-nd-2 { animation: nd2 10.5s var(--ease) 0.4s infinite; }
+
+    .thumb-1.in-view .f1-nd-3 { animation: nd3 10.5s var(--ease) 0.4s infinite; }
+
+
+    /* Label highlights — synced */
+    .thumb-1.in-view .f1-lbl-1 { animation: lb1 10.5s var(--ease) 0.4s infinite; }
+
+    .thumb-1.in-view .f1-lbl-2 { animation: lb2 10.5s var(--ease) 0.4s infinite; }
+
+    .thumb-1.in-view .f1-lbl-3 { animation: lb3 10.5s var(--ease) 0.4s infinite; }
+
+
+    /* ── NEXT UP ── */
+    .next-up-section {
+      background: #FAF9F7;
+      border-top: 1px solid var(--border);
+      /* no side padding — the label and grid carry the column's own margins */
+      padding: 64px 0 88px;
+    }
+
+    /* same geometry as .cs-content, so the cards line up under the copy */
+    .next-up-label,
+    .next-up-grid {
+      max-width: 840px;
+      margin-left: max(252px, calc((100% - 840px) / 2 + var(--nudge)));
+      margin-right: 20px;
+    }
+
+    .next-up-label {
+      text-align: center;
+      font-size: 12px; font-weight: 600;
+      letter-spacing: 0.16em; text-transform: uppercase;
+      color: var(--gray);
+      margin-bottom: 40px;
+    }
+
+    .next-up-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 32px;
+    }
+
+    .next-up-card {
+      display: block;
+      text-decoration: none;
+      color: inherit;
+      cursor: pointer;
+    }
+
+    /* No background here: this rule is (0,2,0) and would beat .thumb-2 /
+       .thumb-3, blanking each card's own colour. It used to be harmless
+       because the colour came from child blob divs painted on top. */
+    .next-up-grid .work-thumb {
+      border-radius: 0;
+      border: 1px solid var(--border);
+      margin-bottom: 18px;
+      transition: transform 0.4s var(--ease);
+    }
+
+    .next-up-card:hover .work-thumb {
+      transform: translateY(-3px);
+    }
+
+    .next-up-title {
+      font-family: 'Lora', serif;
+      font-size: 17.1px; font-weight: 500;
+      letter-spacing: -0.01em;
+      color: var(--black);
+    }
+
+
+    /* ── THUMB-2 (Carbon Sustain) — ported for the Next Up card ── */
+    /* Solid, not a mesh: the old pale-blue/cream blobs were the same family
+       as Flourish's, so the two cards read alike. This green is sampled from
+       the dashboard's own buttons and charts. */
+    /* Solid, in the blue/violet family of the personal brand rather than the
+       project's own green — the cards should read as one portfolio. */
+    .thumb-2 {
+      background: #A6CFD5;
+      /* Green mesh, not the old pale-blue/cream one that clashed with
+         Flourish. Layered radials rather than blob divs, so it's static and
+         costs no DOM. Greens sampled from the dashboard itself. */
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* carbonproper is drawn at the card's own 16/11, so it fills edge to edge
+       — no inset, no side gaps, nothing cropped. */
+    /* Sits low and runs off the bottom edge, so the dashboard reads as tucked
+       into the card rather than floating inside it. Centred horizontally so
+       the side margins are even. */
+    .thumb-2-img-wrap {
+      position: absolute; inset: 0; z-index: 3;
+      display: flex; align-items: flex-start; justify-content: center;
+      padding: 24% 0 0;
+    }
+
+    .t2-frame-enter { width: 86%; flex-shrink: 0; }
+
+    .thumb-2-img-wrap img {
+      display: block; width: 100%; height: auto;
+    }
+
+    .t2-glass-frame {
+      width: 100%;
+      height: auto;
+      /* bottom corners fall outside the card, so only the top pair round */
+      border-radius: 10px 10px 0 0;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .t2-glass-frame::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0; height: 35%;
+      background: linear-gradient(180deg, rgba(255,255,255,0.08) 0%, transparent 100%);
+      border-radius: inherit; pointer-events: none; z-index: 1;
+    }
+
+    .t2-glass-frame img {
+      display: block;
+      width: 100%; height: auto;
+      border-radius: inherit;
+      position: relative;
+    }
+
+    .thumb-2.in-view .t2-frame-enter { opacity: 1; }
+
+    .t2-frame-enter {
+      opacity: 0;
+      transition: opacity 0.85s var(--ease) 0.25s;
+    }
+
     @media (max-width: 900px) {
       nav { padding: 0 18px; }
       .nav-links { gap: 18px; }
@@ -631,6 +977,10 @@
         padding: 36px 20px 80px;
       }
       .cs-meta-grid { grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 64px; }
+      .next-up-label,
+      .next-up-grid { max-width: 100%; margin-left: 0; margin-right: 0; }
+      .next-up-section { padding: 48px 20px 64px; }
+      .next-up-grid { grid-template-columns: 1fr; }
       .proj { grid-template-columns: 1fr; gap: 22px; margin-top: 44px; }
       .cs-section { margin-bottom: 72px; }
       /* one card per row on a phone; the shot stops bleeding sideways */
@@ -796,6 +1146,60 @@
 
   </main>
 
+  <section class="next-up-section">
+    <p class="next-up-label">Next Up&hellip;</p>
+    <div class="next-up-grid">
+
+      <a class="next-up-card" href="/flourish">
+        <div class="work-thumb thumb-1">
+          <div class="thumb-1-mesh">
+            <div class="t1b t1b-1"></div>
+            <div class="t1b t1b-2"></div>
+            <div class="t1b t1b-3"></div>
+            <div class="t1b t1b-4"></div>
+          </div>
+          <div class="t1-sweep"></div>
+          <div class="f1-scene">
+            <div class="f1-nav">
+              <div class="f1-pill">
+                <div class="f1-nd f1-nd-1">01</div>
+                <div class="f1-sep"></div>
+                <div class="f1-nd f1-nd-2">02</div>
+                <div class="f1-sep"></div>
+                <div class="f1-nd f1-nd-3">03</div>
+              </div>
+              <div class="f1-labels">
+                <span class="f1-lbl f1-lbl-1">Meal</span>
+                <span class="f1-lbl f1-lbl-2">Macro</span>
+                <span class="f1-lbl f1-lbl-3">Trend</span>
+              </div>
+            </div>
+            <div class="f1-cards-area">
+              <div class="f1-crd f1-crd-1"><img src="images/land.png" draggable="false" alt=""/></div>
+              <div class="f1-crd f1-crd-2"><img src="images/landfinal.png" draggable="false" alt=""/></div>
+              <div class="f1-crd f1-crd-3"><img src="images/land1.png" draggable="false" alt=""/></div>
+            </div>
+          </div>
+        </div>
+        <p class="next-up-title">AI Health Insights</p>
+      </a>
+
+      <a class="next-up-card" href="/carbon-sustain">
+          <div class="work-thumb thumb-2">
+            <div class="thumb-2-img-wrap">
+              <div class="t2-frame-enter">
+                <div class="t2-glass-frame">
+                  <img src="images/carbs.png" alt="Carbon Sustain" draggable="false"/>
+                </div>
+              </div>
+            </div>
+          </div>
+          <p class="next-up-title">Making Carbon Data Actionable</p>
+        </a>
+
+    </div>
+  </section>
+
   <footer class="site-footer">
     <div class="footer-reveal" aria-hidden="true"></div>
     <canvas class="footer-veil" aria-hidden="true"></canvas>
@@ -843,6 +1247,17 @@
       }, { rootMargin: '-15% 0px -70% 0px' });
       sections.forEach(function (s) { io.observe(s); });
     })();
+
+    /* ── NEXT UP thumbs in-view ──
+       The thumbnails are CSS scenes that start hidden and fade in when the
+       card reaches the viewport, same as on the other case studies. Without
+       this observer they sit at opacity 0 and the cards look empty. */
+    const nextUpIO = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) { e.target.classList.add('in-view'); nextUpIO.unobserve(e.target); }
+      });
+    }, { threshold: 0.2 });
+    document.querySelectorAll('.next-up-grid .thumb-1, .next-up-grid .thumb-2, .next-up-grid .thumb-3, .next-up-grid .thumb-lg').forEach(el => nextUpIO.observe(el));
 
     /* ── SCROLL REVEALS ──
        The cards and screenshots are observed individually, not just via
