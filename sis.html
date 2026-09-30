@@ -138,7 +138,7 @@
 
     /* ── HERO — bleeds from the rail to the right edge of the window ── */
     .cs-hero {
-      margin-top: 57px;
+      margin-top: 0;
       max-width: 840px;
       margin-left: max(252px, calc((100% - 840px) / 2 + var(--nudge)));
       margin-right: 20px;
@@ -176,6 +176,8 @@
     }
 
     /* title + metadata */
+    /* Above the hero, the way the other case studies open. It sits outside
+       .cs-body now, so it carries the same column geometry as .cs-hero. */
     .cs-title {
       font-family: 'Lora', Georgia, serif;
       font-size: clamp(25.2px, 2.9vw, 39.6px);
@@ -183,7 +185,12 @@
       letter-spacing: -0.02em;
       line-height: 1.15;
       color: var(--ink);
-      margin-bottom: 32px;
+      max-width: 840px;
+      margin-top: 57px;
+      margin-left: max(252px, calc((100% - 840px) / 2 + var(--nudge)));
+      margin-right: 20px;
+      margin-bottom: 28px;
+      scroll-margin-top: 90px;
     }
     /* Columns sized to their own content and packed to the left, rather
        than four equal shares stretched across the full 1104px column —
@@ -504,11 +511,14 @@
     }
 
     /* ── PROJECT BLOCKS — locked visual left, copy right ── */
-    /* Title and body above the shot, the way the other case studies set up
-       every exhibit — the two-column version buried the title beside it. */
-    .proj { margin-top: 64px; }
-    .proj .locked { margin-top: 24px; }
-    .proj:first-of-type { margin-top: 32px; }
+    .proj {
+      display: grid;
+      grid-template-columns: 1.25fr 1fr;
+      gap: 40px;
+      align-items: center;
+      margin-top: 56px;
+    }
+    .proj:first-of-type { margin-top: 40px; }
     .proj-copy .proj-title {
       font-family: 'Lora', Georgia, serif;
       font-size: 21px;
@@ -520,9 +530,10 @@
     }
     /* two selectors, or `.cs-section p` takes the colour and the width cap */
     .cs-body .proj-copy p.proj-body {
-      font-size: 14.4px;
-      line-height: 1.75;
-      color: #3D3D3D;
+      font-size: 14px;
+      line-height: 1.7;
+      color: var(--gray);
+      max-width: none;
       margin: 0;
     }
 
@@ -962,6 +973,14 @@
       .nav-links a { font-size: 13px; }
 
       .cs-rail { display: none; }
+      .cs-title {
+        max-width: none;
+        margin-left: 0;
+        margin-right: 0;
+        padding: 0 20px;
+        /* the nav is fixed and 57px tall — 40px ran the first line under it */
+        margin-top: 85px;
+      }
       .cs-hero {
         max-width: none;
         margin-left: 0;
@@ -980,7 +999,7 @@
       .next-up-grid { max-width: 100%; margin-left: 0; margin-right: 0; }
       .next-up-section { padding: 48px 20px 64px; }
       .next-up-grid { grid-template-columns: 1fr; }
-      .proj { margin-top: 48px; }
+      .proj { grid-template-columns: 1fr; gap: 22px; margin-top: 44px; }
       .cs-section { margin-bottom: 72px; }
       /* one card per row on a phone; the shot stops bleeding sideways */
       .feature-grid { grid-template-columns: 1fr; gap: 16px; }
@@ -1031,15 +1050,15 @@
     <a class="rail-top" href="#top">Back to top</a>
   </aside>
 
-  <!-- ── HERO (full bleed off the rail) ── -->
-  <div class="cs-hero cs-hero--bit" id="top">
+  <h1 class="cs-title" id="top">Helping 20,000+ Berkeley students find the right advisor without having to understand Berkeley&rsquo;s advising system first.</h1>
+
+  <!-- ── HERO ── -->
+  <div class="cs-hero cs-hero--bit">
     <p class="bit-wordmark">Berkeley IT</p>
   </div>
 
   <!-- ── READING COLUMN ── -->
   <main class="cs-body">
-
-    <h1 class="cs-title">Helping 20,000+ Berkeley students find the right advisor without having to understand Berkeley&rsquo;s advising system first.</h1>
 
     <div class="cs-meta-grid">
       <div>
@@ -1078,43 +1097,43 @@
       <h2>What I designed.</h2>
 
         <div class="proj">
-          <div class="proj-copy">
-            <p class="proj-title">Design System</p>
-            <p class="proj-body">A 90+ component system with best-practice standards, built through AI assistant workflows, which is what made 600+ prototype interactions feasible to build and put in front of stakeholders.</p>
-          </div>
           <div class="locked locked--shot">
             <img src="images/sis-design-system.png" alt="The advising design system on a desktop display, blurred — the components are internal to UC Berkeley">
             <span class="locked-badge" aria-hidden="true"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="10.5" width="16" height="10.5" rx="2"/><path d="M8 10.5V7a4 4 0 0 1 8 0v3.5"/></svg></span>
           </div>
+          <div class="proj-copy">
+            <p class="proj-title">Design System</p>
+            <p class="proj-body">A 90+ component system with best-practice standards, built through AI assistant workflows, which is what made 600+ prototype interactions feasible to build and put in front of stakeholders.</p>
+          </div>
         </div>
         <div class="proj">
-          <div class="proj-copy">
-            <p class="proj-title">Appointments &amp; Advice</p>
-            <p class="proj-body">Services grouped into clear sections, with College vs. Major/Minor advising compared side by side and special cases surfaced upfront.</p>
-          </div>
           <div class="locked locked--shot">
             <img src="images/sis-appointments.png" alt="The redesigned Appointments &amp; Advice page on a desktop display, blurred — the design is internal to UC Berkeley">
             <span class="locked-badge" aria-hidden="true"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="10.5" width="16" height="10.5" rx="2"/><path d="M8 10.5V7a4 4 0 0 1 8 0v3.5"/></svg></span>
           </div>
+          <div class="proj-copy">
+            <p class="proj-title">Appointments &amp; Advice</p>
+            <p class="proj-body">Services grouped into clear sections, with College vs. Major/Minor advising compared side by side and special cases surfaced upfront.</p>
+          </div>
         </div>
         <div class="proj">
-          <div class="proj-copy">
-            <p class="proj-title">Virtual Front Desk</p>
-            <p class="proj-body">Two overlapping drop-in services consolidated into one, leaving students with a clearer choice between quick help and a scheduled appointment.</p>
-          </div>
           <div class="locked locked--shot">
             <img src="images/sis-virtual-front-desk.png" alt="The redesigned Virtual Front Desk page on a desktop display, blurred — the design is internal to UC Berkeley">
             <span class="locked-badge" aria-hidden="true"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="10.5" width="16" height="10.5" rx="2"/><path d="M8 10.5V7a4 4 0 0 1 8 0v3.5"/></svg></span>
           </div>
+          <div class="proj-copy">
+            <p class="proj-title">Virtual Front Desk</p>
+            <p class="proj-body">Two overlapping drop-in services consolidated into one, leaving students with a clearer choice between quick help and a scheduled appointment.</p>
+          </div>
         </div>
         <div class="proj">
-          <div class="proj-copy">
-            <p class="proj-title">Routing Flow</p>
-            <p class="proj-body">A guided flow asks students about their situation and recommends the appropriate advising path instead of asking them to choose a service themselves.</p>
-          </div>
           <div class="locked locked--shot">
             <img src="images/sis-routing-flow.png" alt="The end of the routing flow on a desktop display, blurred — the design is internal to UC Berkeley">
             <span class="locked-badge" aria-hidden="true"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="10.5" width="16" height="10.5" rx="2"/><path d="M8 10.5V7a4 4 0 0 1 8 0v3.5"/></svg></span>
+          </div>
+          <div class="proj-copy">
+            <p class="proj-title">Routing Flow</p>
+            <p class="proj-body">A guided flow asks students about their situation and recommends the appropriate advising path instead of asking them to choose a service themselves.</p>
           </div>
         </div>
     </section>
