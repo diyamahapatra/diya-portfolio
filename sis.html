@@ -186,7 +186,7 @@
       line-height: 1.15;
       color: var(--ink);
       max-width: 840px;
-      margin-top: 57px;
+      margin-top: 82px;
       margin-left: max(252px, calc((100% - 840px) / 2 + var(--nudge)));
       margin-right: 20px;
       margin-bottom: 28px;
@@ -965,6 +965,58 @@
     .t2-frame-enter {
       opacity: 0;
       transition: opacity 0.85s var(--ease) 0.25s;
+    }
+
+
+    /* The Flourish thumb's phone cards, nav dots and labels are driven by
+       these; without them the card animations never run and the scene
+       renders as a bare gradient. */
+    @keyframes crdPop1 {
+      0%         { opacity:0; transform:translateY(100%); }
+      7%         { opacity:1; transform:translateY(0); }
+      27%        { opacity:1; transform:translateY(0); }
+      33%        { opacity:0; transform:translateY(-12%); }
+      33.1%,100% { opacity:0; transform:translateY(100%); }
+    }
+    @keyframes crdPop2 {
+      0%,33%     { opacity:0; transform:translateY(100%); }
+      40%        { opacity:1; transform:translateY(0); }
+      60%        { opacity:1; transform:translateY(0); }
+      66%        { opacity:0; transform:translateY(-12%); }
+      66.1%,100% { opacity:0; transform:translateY(100%); }
+    }
+    @keyframes crdPop3 {
+      0%,66%  { opacity:0; transform:translateY(100%); }
+      73%     { opacity:1; transform:translateY(0); }
+      93%     { opacity:1; transform:translateY(0); }
+      99%     { opacity:0; transform:translateY(-12%); }
+      100%    { opacity:0; transform:translateY(100%); }
+    }
+    @keyframes lb1 {
+      0%,33%     { color:rgba(0,0,0,0.92); }
+      33.1%,100% { color:rgba(0,0,0,0.62); }
+    }
+    @keyframes lb2 {
+      0%,33%     { color:rgba(0,0,0,0.62); }
+      33.1%,66%  { color:rgba(0,0,0,0.92); }
+      66.1%,100% { color:rgba(0,0,0,0.62); }
+    }
+    @keyframes lb3 {
+      0%,66%     { color:rgba(0,0,0,0.62); }
+      66.1%,100% { color:rgba(0,0,0,0.92); }
+    }
+    @keyframes nd1 {
+      0%,33%     { background:#fff; color:rgba(0,0,0,0.92); }
+      33.1%,100% { background:rgba(255,255,255,0.50); color:rgba(0,0,0,0.70); }
+    }
+    @keyframes nd2 {
+      0%,33%     { background:rgba(255,255,255,0.50); color:rgba(0,0,0,0.70); }
+      33.1%,66%  { background:#fff; color:rgba(0,0,0,0.92); }
+      66.1%,100% { background:rgba(255,255,255,0.50); color:rgba(0,0,0,0.70); }
+    }
+    @keyframes nd3 {
+      0%,66%     { background:rgba(255,255,255,0.50); color:rgba(0,0,0,0.70); }
+      66.1%,100% { background:#fff; color:rgba(0,0,0,0.92); }
     }
 
     @media (max-width: 900px) {
