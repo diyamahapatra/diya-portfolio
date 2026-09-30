@@ -198,16 +198,13 @@
        one block. Capped so it stays compact on a wide window. */
     .cs-meta-grid {
       display: grid;
-      grid-template-columns: repeat(4, minmax(0, auto));
+      grid-template-columns: repeat(5, minmax(0, auto));
       justify-content: start;
-      column-gap: 56px;
+      column-gap: 40px;
       row-gap: 18px;
       max-width: 900px;
       margin-bottom: 80px;
     }
-    /* the fifth field is a sentence, not a word, so it takes its own row
-       under the four columns instead of squeezing the strip to five */
-    .cs-meta-team { grid-column: 1 / -1; max-width: 640px; }
     .cs-meta-label {
       font-family: 'Inter', system-ui, sans-serif;
       font-size: 12px; font-weight: 600;
@@ -1112,7 +1109,7 @@
     <div class="cs-meta-grid">
       <div>
         <p class="cs-meta-label">Role</p>
-        <p class="cs-meta-value">Product Design Intern, UC Berkeley IT</p>
+        <p class="cs-meta-value">Product Design Intern</p>
       </div>
       <div>
         <p class="cs-meta-label">Timeline</p>
@@ -1126,9 +1123,9 @@
         <p class="cs-meta-label">Tools</p>
         <p class="cs-meta-value">Figma, Miro, Dovetail, Claude Code, Open Berkeley</p>
       </div>
-      <div class="cs-meta-team">
+      <div>
         <p class="cs-meta-label">Team</p>
-        <p class="cs-meta-value">Sole product design intern on the project. I owned the design end to end, working with my PM, the Berkeley IT UX team, engineering, and L&amp;S advising stakeholders.</p>
+        <p class="cs-meta-value">1 PM<br>Engineering<br>L&amp;S Advising<br>1 Designer (me!)</p>
       </div>
     </div>
 
