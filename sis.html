@@ -198,6 +198,9 @@
       max-width: 900px;
       margin-bottom: 80px;
     }
+    /* the fifth field is a sentence, not a word, so it takes its own row
+       under the four columns instead of squeezing the strip to five */
+    .cs-meta-team { grid-column: 1 / -1; max-width: 640px; }
     .cs-meta-label {
       font-family: 'Inter', system-ui, sans-serif;
       font-size: 12px; font-weight: 600;
@@ -1055,6 +1058,10 @@
         <p class="cs-meta-label">Tools</p>
         <p class="cs-meta-value">Figma, Miro, Dovetail, Claude Code, Open Berkeley</p>
       </div>
+      <div class="cs-meta-team">
+        <p class="cs-meta-label">Team</p>
+        <p class="cs-meta-value">Sole product design intern on the project. I owned the design end to end, working with my PM, the Berkeley IT UX team, engineering, and L&amp;S advising stakeholders.</p>
+      </div>
     </div>
 
     <!-- OVERVIEW -->
@@ -1063,7 +1070,6 @@
       <h2>Students had to understand how UC Berkeley&rsquo;s advising is structured before they could get help from it.</h2>
       <p>L&amp;S is Berkeley&rsquo;s largest college, and its advising site supports everything from appointments to petitions and deadlines. But students had to navigate unclear advising distinctions, hidden options, and buried eligibility requirements just to figure out where to go for help.</p>
       <p>I redesigned three high-priority advising experiences, a routing flow, and the component system behind them, grounded in 261 survey responses and usability testing with nine students. Rather than explaining Berkeley&rsquo;s advising structure more clearly, the designs reduce how much of that structure students need to understand in the first place.</p>
-      <p class="cs-credit">Collaborators: Berkeley IT UX team + L&amp;S Advising stakeholders</p>
     </section>
 
     <!-- PROJECTS -->
