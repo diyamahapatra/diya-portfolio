@@ -308,6 +308,31 @@
       margin-bottom: 0;
     }
 
+    /* ── THREE-UP UNDER A FIGURE ──
+       Same treatment as the research synthesis on the Flourish study.
+       Scoped as `.cs-section p.<class>`, not the bare class: `.cs-section p`
+       is (0,1,1) and would otherwise win and render both lines at 14.4px. */
+    .cs-synthesis {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 32px;
+      margin-top: 36px;
+    }
+    .cs-section p.cs-synthesis-title {
+      font-family: 'Lora', Georgia, serif;
+      font-size: 19px;
+      font-weight: 600;
+      color: #0F0F0F;
+      margin-bottom: 10px;
+      line-height: 1.3;
+    }
+    .cs-section p.cs-synthesis-desc {
+      font-size: 13px;
+      color: #5C5C5C;
+      line-height: 1.7;
+      margin-bottom: 0;
+    }
+
     /* sections */
     .cs-section {
       margin-bottom: 128px;
@@ -833,6 +858,7 @@
       .next-up-grid,
       .cs-persona-grid,
       .cs-two-col { grid-template-columns: 1fr; }
+      .cs-synthesis { grid-template-columns: 1fr; gap: 24px; }
       .finding-row { grid-template-columns: 22px 1fr; }
       .cs-overview-grid { grid-template-columns: 1fr 1fr; column-gap: 24px; }
 
@@ -891,7 +917,6 @@
         <li><a href="#research">Research</a></li>
         <li><a href="#direction">Design Direction</a></li>
         <li><a href="#system">Visual System</a></li>
-        <li><a href="#accessibility">Accessibility</a></li>
         <li><a href="#solution">The Solution</a></li>
         <li><a href="#outcome">Outcome</a></li>
         <li><a href="#reflection">Reflection</a></li>
@@ -1004,36 +1029,26 @@
       <!-- Visual System -->
       <div class="cs-section" id="system">
         <p class="cs-section-label">Visual System</p>
-        <h2>Creating a foundation for a more consistent product.</h2>
-        <p>To support the redesign, I helped build a visual system using Carbon Sustain's existing brand as a foundation. Reusable typography, color, buttons, and data patterns gave us a consistent language across the marketing site and dashboard.</p>
+        <h2>Trust needed to carry across the entire product.</h2>
+        <p>I helped turn Carbon Sustain's existing brand into a reusable visual system across the marketing site and dashboard. Consistent type, color, components, and data patterns helped the experience feel like one product rather than a collection of separate screens.</p>
 
         <div style="margin-top: 32px; overflow: visible;">
           <img src="images/carbon-design-system.png" alt="Carbon Sustain visual system — typography scale, brand and accent colors, button variants, and radius scale" style="width:100%; display:block;">
         </div>
-      </div>
 
-      <!-- Accessibility -->
-      <div class="cs-section" id="accessibility">
-        <p class="cs-section-label">Accessibility</p>
-        <h2>Designing complex data to work for more people.</h2>
-        <p>Accessibility shaped the visual system from the beginning rather than being treated as a final check. Because Carbon Sustain relies heavily on charts, metrics, and dense sustainability data, I focused on making information legible and understandable without depending on color or visual complexity alone.</p>
-
-        <div class="owned-grid">
-            <div class="owned-card">
-              <svg class="owned-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 3v18a9 9 0 0 0 0-18z" fill="currentColor" stroke="none"/></svg>
-              <h3 class="owned-title">Contrast &amp; Legibility</h3>
-              <p class="owned-body">Used accessible contrast for key text, controls, and data while maintaining Carbon Sustain's muted brand palette.</p>
-            </div>
-            <div class="owned-card">
-              <svg class="owned-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-              <h3 class="owned-title">More Than Color</h3>
-              <p class="owned-body">Paired chart colors with labels, values, and contextual cues so users could interpret emissions data without relying on color alone.</p>
-            </div>
-            <div class="owned-card">
-              <svg class="owned-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="17" y1="10" x2="3" y2="10"/><line x1="21" y1="6" x2="3" y2="6"/><line x1="21" y1="14" x2="3" y2="14"/><line x1="17" y1="18" x2="3" y2="18"/></svg>
-              <h3 class="owned-title">Hierarchy &amp; Readability</h3>
-              <p class="owned-body">Established consistent type scales, spacing, and component patterns to make dense dashboards easier to scan and reduce cognitive load.</p>
-            </div>
+        <div class="cs-synthesis">
+          <div>
+            <p class="cs-synthesis-title">Contrast &amp; legibility</p>
+            <p class="cs-synthesis-desc">Accessible contrast for key text, controls, and data.</p>
+          </div>
+          <div>
+            <p class="cs-synthesis-title">More than color</p>
+            <p class="cs-synthesis-desc">Labels and values accompany chart colors so meaning doesn't depend on color alone.</p>
+          </div>
+          <div>
+            <p class="cs-synthesis-title">Clear hierarchy</p>
+            <p class="cs-synthesis-desc">Consistent type and spacing make dense dashboards easier to scan.</p>
+          </div>
         </div>
       </div>
 
