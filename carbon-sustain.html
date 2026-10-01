@@ -278,6 +278,36 @@
       color: #3D3D3D;
     }
 
+    /* ── CLIENT PRIORITY ──
+       A single steer from the founder, set apart from the body copy with a
+       rule rather than a box so it reads as a note, not another exhibit. */
+    .client-note {
+      border-left: 2px solid var(--orange);
+      padding: 2px 0 2px 22px;
+      max-width: 560px;
+    }
+    .client-note-label {
+      font-family: 'Inter', system-ui, sans-serif;
+      font-size: 12px; font-weight: 600;
+      letter-spacing: 0.10em; text-transform: uppercase;
+      color: var(--orange);
+      margin-bottom: 10px;
+    }
+    .cs-section p.client-note-line {
+      font-family: 'Lora', Georgia, serif;
+      font-size: 21px;
+      font-weight: 400;
+      letter-spacing: -0.01em;
+      line-height: 1.35;
+      color: var(--ink, #202020);
+      margin-bottom: 10px;
+    }
+    .cs-section p.client-note-by {
+      font-size: 13px;
+      color: #8E8E8E;
+      margin-bottom: 0;
+    }
+
     /* sections */
     .cs-section {
       margin-bottom: 128px;
@@ -938,6 +968,15 @@
         </div>
       </div>
 
+      <!-- Client priority -->
+      <div class="cs-section" id="client-priority">
+        <div class="client-note">
+          <p class="client-note-label">Client Priority</p>
+          <p class="client-note-line">Trust should be the first thing users feel.</p>
+          <p class="client-note-by">Carbon Sustain founder</p>
+        </div>
+      </div>
+
       <!-- Research -->
       <div class="cs-section" id="research">
         <p class="cs-section-label">Research</p>
@@ -1033,7 +1072,7 @@
         </div>
 
         <div style="margin-top: 24px; width:100%;">
-          <img src="images/carbon-dashboard.png" alt="Before and after — original Carbon Sustain dashboard with competing visual weight versus redesigned dashboard with clear hierarchy, emissions comparison chart, and progress tracking" style="width:100%; display:block;">
+          <img src="images/carbon-dashboard.png" alt="The redesigned Carbon Sustain dashboard — total carbon impact and scope breakdown on the left, emissions comparison, CDP progress and decarbonization journey on the right" style="width:100%; display:block;">
         </div>
       </div>
 
