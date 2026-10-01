@@ -279,32 +279,41 @@
     }
 
     /* ── CLIENT PRIORITY ──
-       A single steer from the founder, set apart from the body copy with a
-       rule rather than a box so it reads as a note, not another exhibit. */
-    .client-note {
-      border-left: 2px solid var(--orange);
-      padding: 2px 0 2px 22px;
+       The quote card from the Flourish study, scaled down: it carries one
+       short line rather than two long interview quotes, so the padding and
+       type come in a step. */
+    .cs-quote-card {
+      background: linear-gradient(148deg, #EAE2D6 0%, #D4E0D8 100%);
+      border-radius: 0;
+      padding: 26px 30px 28px;
       max-width: 560px;
     }
-    .client-note-label {
+    .cs-section p.cs-quote-label {
       font-family: 'Inter', system-ui, sans-serif;
-      font-size: 12px; font-weight: 600;
+      font-size: 11px; font-weight: 600;
       letter-spacing: 0.10em; text-transform: uppercase;
-      color: var(--orange);
-      margin-bottom: 10px;
+      color: rgba(0,0,0,0.42);
+      margin-bottom: 12px;
     }
-    .cs-section p.client-note-line {
+    .cs-quote-glyph {
       font-family: 'Lora', Georgia, serif;
-      font-size: 21px;
-      font-weight: 400;
-      letter-spacing: -0.01em;
-      line-height: 1.35;
-      color: var(--ink, #202020);
-      margin-bottom: 10px;
+      font-size: 22px;
+      color: rgba(0,0,0,0.22);
+      line-height: 1;
+      margin-bottom: 8px;
     }
-    .cs-section p.client-note-by {
-      font-size: 13px;
-      color: #8E8E8E;
+    .cs-section p.cs-quote-text {
+      font-family: 'Lora', Georgia, serif;
+      font-style: italic;
+      font-size: 17px;
+      line-height: 1.5;
+      color: #1A1A1A;
+      margin: 0 0 10px;
+    }
+    .cs-section p.cs-quote-cite {
+      font-size: 12.5px;
+      color: #787878;
+      line-height: 1.5;
       margin-bottom: 0;
     }
 
@@ -995,10 +1004,11 @@
 
       <!-- Client priority -->
       <div class="cs-section" id="client-priority">
-        <div class="client-note">
-          <p class="client-note-label">Client Priority</p>
-          <p class="client-note-line">Trust should be the first thing users feel.</p>
-          <p class="client-note-by">Carbon Sustain founder</p>
+        <div class="cs-quote-card">
+          <p class="cs-quote-label">Client Priority</p>
+          <div class="cs-quote-glyph">&ldquo;</div>
+          <p class="cs-quote-text">Trust should be the first thing users feel.</p>
+          <p class="cs-quote-cite">Carbon Sustain founder</p>
         </div>
       </div>
 
@@ -1056,12 +1066,12 @@
       <div class="cs-section" id="solution">
         <p class="cs-section-label">The Solution</p>
         <h2>A clearer path from understanding your footprint to acting on it.</h2>
-        <p>I applied these principles across Carbon Sustain's core experience from first discovering the platform to calculating emissions and monitoring progress over time.</p>
+        <p>The redesign covered the full journey, from understanding Carbon Sustain&rsquo;s value to calculating emissions and tracking progress over time.</p>
 
         <div style="margin-top: 40px;">
           <p style="font-family:'Inter', sans-serif; font-weight:600; font-size:13px; letter-spacing:0.06em; text-transform:uppercase; color:var(--orange); margin-bottom:12px;">Product Discovery</p>
-          <p style="font-family:'Lora', serif; font-weight:600; font-size:22px; color:#0F0F0F; margin-bottom:12px; line-height:1.3;">Making Carbon Sustain's value clear from the first interaction.</p>
-          <p>The original landing page introduced Carbon Sustain without giving users a strong path forward. I reorganized the page around a clearer value proposition, brought the carbon calculator into the primary journey, and simplified navigation so users could quickly understand what the platform offered.</p>
+          <p style="font-family:'Lora', serif; font-weight:600; font-size:22px; color:#0F0F0F; margin-bottom:12px; line-height:1.3;">I brought the carbon calculator into the main journey.</p>
+          <p>The original landing page explained Carbon Sustain but didn&rsquo;t give visitors much to do next. I made the calculator a primary entry point, simplified the navigation, and clarified what the platform could help businesses accomplish.</p>
         </div>
 
         <div style="margin-top: 24px; width:100%;">
