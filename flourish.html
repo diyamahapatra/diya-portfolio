@@ -235,24 +235,29 @@
     .cs-overview-grid {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
-      gap: 32px;
-      padding: 12px 0 28px;
+      column-gap: 40px;
+      row-gap: 26px;
+      padding: 4px 0 8px;
       margin-bottom: 32px;
     }
+    /* No card around each field — same treatment as the Berkeley IT study:
+       a small-caps accent label over plain body copy. */
     .cs-overview-item {
-      border: 1px solid var(--border);
-      border-radius: 0;
-      padding: 16px 18px;
+      border: none;
+      padding: 0;
     }
     .cs-overview-label {
-      font-size: 11px; font-weight: 400;
-      letter-spacing: 0.04em;
-      color: var(--gray);
+      font-family: 'Inter', system-ui, sans-serif;
+      font-size: 12px; font-weight: 600;
+      letter-spacing: 0.10em; text-transform: uppercase;
+      color: var(--orange);
       margin-bottom: 8px;
     }
     .cs-overview-value {
-      font-size: 13px; color: var(--black);
-      line-height: 1.5; font-weight: 500;
+      font-size: 14.4px;
+      font-weight: 400;
+      line-height: 1.75;
+      color: #3D3D3D;
     }
 
     /* sections */
@@ -1305,29 +1310,8 @@
         margin-right: -20px;
         width: calc(100% + 40px);
       }
-      .cs-overview-grid {
-        grid-template-columns: 1fr 1fr;
-        column-gap: 24px;
-        row-gap: 26px;
-        padding: 4px 0 8px;
-      }
-      .cs-overview-item {
-        border: none;
-        padding: 0;
-      }
-      .cs-overview-label {
-        font-family: 'Inter', system-ui, sans-serif;
-        font-size: 12px; font-weight: 600;
-        letter-spacing: 0.10em; text-transform: uppercase;
-        color: var(--orange);
-        margin-bottom: 8px;
-      }
-      .cs-overview-value {
-        font-size: 14.4px;
-        font-weight: 400;
-        line-height: 1.75;
-        color: #3D3D3D;
-      }
+      .cs-overview-grid { grid-template-columns: 1fr 1fr; column-gap: 24px; }
+
 
       /* oversized display numerals shrink to fit a 390px screen */
       .cs-metric-num { font-size: 39.6px; }

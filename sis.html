@@ -352,6 +352,14 @@
       transition: opacity 0.6s var(--ease), transform 0.6s var(--ease);
     }
     .js-reveal .cs-section.revealed { opacity: 1; transform: none; }
+    /* Blocks already in the opening screenful skip the animation outright —
+       fading them in from 0 means the first paint shows an empty page below
+       the metadata, with nothing to suggest there is more to scroll to. */
+    .js-reveal .cs-section.revealed-at-load {
+      opacity: 1;
+      transform: none;
+      transition: none;
+    }
 
     /* the solution cards drift in from their own side of the grid, so the
        set assembles inward rather than all rising together */
@@ -1338,7 +1346,16 @@
           if (e.isIntersecting) { fired = true; e.target.classList.add('revealed'); io.unobserve(e.target); }
         });
       }, { rootMargin: '0px 0px -12% 0px', threshold: 0 });
-      for (var i = 0; i < blocks.length; i++) io.observe(blocks[i]);
+      /* Anything in the opening screenful is shown straight away. Leaving the
+         first section to animate in meant landing on a page whose content
+         stopped at the metadata, with no cue that there was more below. */
+      for (var i = 0; i < blocks.length; i++) {
+        if (blocks[i].getBoundingClientRect().top < window.innerHeight * 1.25) {
+          blocks[i].classList.add('revealed', 'revealed-at-load');
+        } else {
+          io.observe(blocks[i]);
+        }
+      }
       /* Failsafe only when the observer never fired at all. */
       window.addEventListener('load', function () {
         setTimeout(function () { if (!fired) revealAll(); }, 2500);
