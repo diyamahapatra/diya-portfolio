@@ -1284,7 +1284,6 @@
       .next-up-section { padding: 48px 20px 64px; }
 
       /* every multi-column block becomes a single stack */
-      .cs-overview-grid,
       .cs-synthesis,
       .cs-impact-grid,
       .cs-design-row,
@@ -1295,6 +1294,40 @@
       .cs-persona-grid,
       .cs-two-col { grid-template-columns: 1fr; }
       .finding-row { grid-template-columns: 22px 1fr; }
+
+      /* ── HERO + METADATA ON A PHONE ──
+         Matched to the Berkeley IT study, which reads far better at this
+         width: the hero runs edge to edge instead of sitting inside the
+         20px gutter, and the four fields become a plain two-up label/value
+         grid rather than four bordered cards stacked down the screen. */
+      .cs-hero-img {
+        margin-left: -20px;
+        margin-right: -20px;
+        width: calc(100% + 40px);
+      }
+      .cs-overview-grid {
+        grid-template-columns: 1fr 1fr;
+        column-gap: 24px;
+        row-gap: 26px;
+        padding: 4px 0 8px;
+      }
+      .cs-overview-item {
+        border: none;
+        padding: 0;
+      }
+      .cs-overview-label {
+        font-family: 'Inter', system-ui, sans-serif;
+        font-size: 12px; font-weight: 600;
+        letter-spacing: 0.10em; text-transform: uppercase;
+        color: var(--orange);
+        margin-bottom: 8px;
+      }
+      .cs-overview-value {
+        font-size: 14.4px;
+        font-weight: 400;
+        line-height: 1.75;
+        color: #3D3D3D;
+      }
 
       /* oversized display numerals shrink to fit a 390px screen */
       .cs-metric-num { font-size: 39.6px; }
