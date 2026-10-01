@@ -214,9 +214,19 @@
       margin-bottom: 16px;
       background: #F3F4F6;
     }
+    /* One ratio across the three studies. The source frames range from 1.52
+       to 2.02, which is why the metadata sat on screen on one page and below
+       the fold on another — the hero was simply taller. Cover-cropped from
+       the centre so the exhibit keeps its own composition. */
+    .cs-hero-img {
+      aspect-ratio: 1.9;
+      overflow: hidden;
+    }
     .cs-hero-img img {
       width: 100%;
-      height: auto;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
       display: block;
     }
 
