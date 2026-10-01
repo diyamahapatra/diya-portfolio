@@ -827,14 +827,6 @@
       transition: opacity 0.65s var(--ease), transform 0.65s var(--ease);
     }
     .js-reveal .cs-section.revealed { opacity: 1; transform: none; }
-    /* Blocks already in the opening screenful skip the animation outright —
-       fading them in from 0 means the first paint shows an empty page below
-       the metadata, with nothing to suggest there is more to scroll to. */
-    .js-reveal .cs-section.revealed-at-load {
-      opacity: 1;
-      transform: none;
-      transition: none;
-    }
     @media (prefers-reduced-motion: reduce) {
       .js-reveal .cs-section { opacity: 1; transform: none; transition: none; }
     }
@@ -1222,13 +1214,7 @@
           if (e.isIntersecting) { fired = true; e.target.classList.add('revealed'); io.unobserve(e.target); }
         });
       }, { rootMargin: '0px 0px -15% 0px', threshold: 0 });
-      for (var i = 0; i < sections.length; i++) {
-        if (sections[i].getBoundingClientRect().top < window.innerHeight * 1.25) {
-          sections[i].classList.add('revealed', 'revealed-at-load');
-        } else {
-          io.observe(sections[i]);
-        }
-      }
+      for (var i = 0; i < sections.length; i++) io.observe(sections[i]);
       /* Failsafe only when the observer never fired at all. An unconditional
          timer reveals every section before the visitor has scrolled, which
          silently cancels the effect it was meant to protect. */
