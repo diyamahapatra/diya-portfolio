@@ -218,15 +218,15 @@
        to 2.02, which is why the metadata sat on screen on one page and below
        the fold on another — the hero was simply taller. Cover-cropped from
        the centre so the exhibit keeps its own composition. */
+    /* This hero runs at the Figma frame's own proportions rather than the
+       1.9 crop the other studies share — cropping it cut the top of the
+       dashboard and the bottom row of button samples. */
     .cs-hero-img {
-      aspect-ratio: 1.9;
       overflow: hidden;
     }
     .cs-hero-img img {
       width: 100%;
-      height: 100%;
-      object-fit: cover;
-      object-position: center;
+      height: auto;
       display: block;
     }
 
@@ -295,13 +295,6 @@
       letter-spacing: 0.10em; text-transform: uppercase;
       color: rgba(0,0,0,0.42);
       margin-bottom: 12px;
-    }
-    .cs-quote-glyph {
-      font-family: 'Lora', Georgia, serif;
-      font-size: 22px;
-      color: rgba(0,0,0,0.22);
-      line-height: 1;
-      margin-bottom: 8px;
     }
     .cs-section p.cs-quote-text {
       font-family: 'Lora', Georgia, serif;
@@ -1007,7 +1000,6 @@
       <div class="cs-section" id="client-priority">
         <div class="cs-quote-card">
           <p class="cs-quote-label">Client Priority</p>
-          <div class="cs-quote-glyph">&ldquo;</div>
           <p class="cs-quote-text">Trust should be the first thing users feel.</p>
           <p class="cs-quote-cite">Carbon Sustain founder</p>
         </div>
@@ -1103,12 +1095,8 @@
       <!-- Outcome -->
       <div class="cs-section" id="outcome">
         <p class="cs-section-label">Outcome</p>
-        <h2>Clearer navigation. More understandable carbon data.</h2>
-
-        <div style="margin-top: 32px;">
-          <p style="font-family:'Lora', serif; font-weight:700; font-size:80px; color:var(--orange); line-height:1; margin-bottom:16px;">30%</p>
-          <p>Comprehension improved by 30% across key navigation tasks, measured through post-task comprehension questions.</p>
-        </div>
+        <h2>A clearer path from discovering Carbon Sustain to understanding your footprint.</h2>
+        <p>The final experience connected what had previously felt like separate parts of the product. Users could understand what Carbon Sustain offered, calculate their footprint through a guided flow, and interpret their emissions through a consistent dashboard and visual system.</p>
       </div>
 
       <!-- Reflection -->
