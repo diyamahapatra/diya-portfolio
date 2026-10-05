@@ -159,22 +159,21 @@
     /* ── IMAGE FIELD — one tall frame beside two stacked ── */
     .about-shots {
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      grid-template-rows: 1fr 1fr;
+      grid-template-columns: 1fr;
       gap: 12px;
       height: calc(100vh - 100px);
       min-height: 620px;
     }
-    .about-shots .frame:first-child { grid-row: 1 / span 2; }
     .frame {
       background: #F3F4F6;
-      border: 1px dashed #D8D8D8;
       display: flex; flex-direction: column;
       align-items: center; justify-content: center;
       gap: 10px;
       overflow: hidden;
     }
-    .frame img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    /* crop biased upward — centred cut the top of her head off, since the
+       frame is wider than the portrait is tall */
+    .frame img { width: 100%; height: 100%; object-fit: cover; object-position: center 22%; display: block; }
     .frame-icon {
       width: 40px; height: 40px;
       border: 1.5px solid #CFCFCF;
@@ -295,14 +294,13 @@
       }
       .about-text { padding-top: 28px; max-width: none; }
       /* the tall frame stops spanning; three equal frames stack instead */
+      /* one portrait, so it keeps its own shape rather than the 4/3 letterbox
+         the old three-photo grid used for its lead image */
       .about-shots {
-        grid-template-columns: 1fr 1fr;
-        grid-template-rows: auto;
         height: auto;
         min-height: 0;
       }
       .about-shots .frame { aspect-ratio: 3 / 4; }
-      .about-shots .frame:first-child { grid-row: auto; grid-column: 1 / -1; aspect-ratio: 4 / 3; }
       .site-footer { padding: 56px 20px 40px; margin-top: 64px; }
       img { max-width: 100%; height: auto; }
     }
@@ -330,9 +328,9 @@
 
       <p>Outside of design I&rsquo;m:</p>
       <ul class="about-list">
-        <li class="todo">Something you actually do on weekends</li>
-        <li class="todo">A second one &mdash; specific beats impressive</li>
-        <li class="todo">A third</li>
+        <li>going to concerts</li>
+        <li>solving puzzles or trivia games</li>
+        <li>trying new cafes and teas!</li>
       </ul>
 
       <p>Say hello at <a href="mailto:diyamahapatra@berkeley.edu">diyamahapatra@berkeley.edu</a> or via <a href="https://www.linkedin.com/in/diya-mahapatra/" target="_blank">LinkedIn</a>.</p>
@@ -357,24 +355,15 @@
 
       <h2 class="about-h2">Education</h2>
       <div class="cv-row">
-        <span><span class="cv-place">UC Berkeley</span> <span class="cv-role todo">/ your major</span></span>
-        <span class="cv-year todo">year</span>
+        <span><span class="cv-place">UC Berkeley</span> <span class="cv-role">/ Cognitive Science, Data Science &amp; Design</span></span>
+        <span class="cv-year">2026</span>
       </div>
     </div>
 
     <!-- ── RIGHT: the image field ── -->
     <div class="about-shots">
       <div class="frame">
-        <div class="frame-icon"></div>
-        <p class="frame-label">Portrait</p>
-      </div>
-      <div class="frame">
-        <div class="frame-icon"></div>
-        <p class="frame-label">Photo</p>
-      </div>
-      <div class="frame">
-        <div class="frame-icon"></div>
-        <p class="frame-label">Photo</p>
+        <img src="images/about-portrait.jpg" alt="Diya outside, holding a bunch of daisies">
       </div>
     </div>
 
