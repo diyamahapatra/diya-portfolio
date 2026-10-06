@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link rel="icon" href="/favicon.ico" sizes="any"/>
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png"/>
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"/>
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"/>
+
+  <meta name="description" content="Interactive prototype of the Flourish AI meal detail screen — rename a meal and change its type and time."/>
+  <link rel="canonical" href="https://www.diya-mahapatra.com/meal-prototype"/>
+  <meta name="robots" content="noindex"/>
+
+  <meta property="og:type" content="website"/>
+  <meta property="og:site_name" content="Diya Mahapatra"/>
+  <meta property="og:title" content="Flourish AI — meal edit prototype"/>
+  <meta property="og:description" content="Interactive prototype of the Flourish AI meal detail screen — rename a meal and change its type and time."/>
+  <meta property="og:url" content="https://www.diya-mahapatra.com/meal-prototype"/>
+  <meta property="og:image" content="https://www.diya-mahapatra.com/og-card.png"/>
+
+  <title>Meal Edit Prototype — Diya Mahapatra</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Gabarito:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      /* sampled straight out of the Figma export, so the live controls sit
+         invisibly on top of the rendered design */
+      --screen-bg:  #fcfcfc;
+      --chip-bg:    #e3fbf3;
+      --chip-ink:   #063c44;
+      --name-ink:   #181d27;
+      --muted-ink:  #717680;
+      --field-edge: #e9eaeb;
+      --dd-edge:    #f0f1f2;
+
+      --stage-w: 390px;
+      --stage-h: 1276px;
+    }
+
+    html, body {
+      height: 100%;
+      background: #FAF9F7;
+      font-family: 'Inter', system-ui, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      color: #0F0F0F;
+    }
+    body { display: flex; flex-direction: column; align-items: center; }
+
+    /* ── chrome around the prototype ─────────────────────────────────────── */
+    .bar {
+      width: 100%;
+      display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap;
+      padding: 18px 20px 14px;
+      border-bottom: 1px solid #E8E6E1;
+    }
+    .bar h1 { font-size: 14px; font-weight: 600; letter-spacing: -0.01em; }
+    .bar p  { font-size: 12.5px; color: #6B7280; }
+    .bar a  { font-size: 12.5px; color: #21A0A0; margin-left: auto; }
+
+    .wrap {
+      flex: 1;
+      width: 100%;
+      display: flex; justify-content: center; align-items: flex-start;
+      overflow: hidden;
+      padding: 20px 0;
+    }
+
+    /* The whole phone is one scaled box, so the artwork and every live
+       control move together and nothing drifts out of alignment. */
+    .scaler { transform-origin: top center; }
+    .stage {
+      position: relative;
+      width: var(--stage-w);
+      height: var(--stage-h);
+      background: var(--screen-bg);
+      border-radius: 14px;
+      overflow: hidden;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.10), 0 1px 3px rgba(0,0,0,0.06);
+    }
+    .stage > img.art { width: 100%; height: 100%; display: block; }
+
+    /* ── live bits sitting over the screen artwork ───────────────────────── */
+    /* Each one covers the baked-in text with the screen's own background and
+       redraws it live, using the type specs read out of the Figma file. */
+    .live { position: absolute; font-family: 'Gabarito', system-ui, sans-serif; }
+
+    .chip {
+      left: 24px; top: 253.3px; height: 24px;
+      background: var(--chip-bg);
+      color: var(--chip-ink);
+      font-size: 14px; font-weight: 500;
+      border-radius: 6px;
+      padding: 0 8px;
+      display: flex; align-items: center;
+    }
+    .mealname {
+      left: 24.5px; top: 281.3px; width: 188px; height: 24px;
+      background: var(--screen-bg);
+      color: var(--name-ink);
+      font-size: 16px; font-weight: 500;
+      display: flex; align-items: center;
+      white-space: nowrap; overflow: hidden;
+    }
+    .time {
+      left: 308px; top: 281.3px; width: 56px; height: 24px;
+      background: var(--screen-bg);
+      color: var(--muted-ink);
+      font-size: 16px; font-weight: 400;
+      display: flex; align-items: center;
+    }
+
+    /* ── tap targets ─────────────────────────────────────────────────────── */
+    .hot {
+      position: absolute;
+      background: transparent;
+      border: 0;
+      border-radius: 8px;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .hot:focus-visible { outline: 2px solid #21A0A0; outline-offset: 2px; }
+    /* generous targets — the pencil itself is only 16px */
+    .hot-pencil { left: 210px; top: 279px; width: 30px; height: 30px; }
+    .hot-chip   { left: 20px;  top: 249px; width: 52px; height: 32px; }
+
+    /* ── modals ──────────────────────────────────────────────────────────── */
+    .backdrop {
+      position: absolute; inset: 0;
+      background: rgba(0,0,0,0.5);
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.2s ease-out;
+      z-index: 10;
+    }
+    .backdrop.on { opacity: 1; pointer-events: auto; }
+
+    .modal {
+      position: absolute;
+      left: 50%; top: 50%;
+      transform: translate(-50%, -48%);
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.2s ease-out, transform 0.2s ease-out;
+      z-index: 11;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 18px 50px rgba(0,0,0,0.22);
+    }
+    .modal.on { opacity: 1; pointer-events: auto; transform: translate(-50%, -50%); }
+    .modal img.art { display: block; }
+    .m-name { width: 343px; height: 254px; }
+    .m-type { width: 370px; height: 416px; }
+    .m-name img.art { width: 343px; height: 254px; }
+    .m-type img.art { width: 370px; height: 416px; }
+
+    /* real controls layered over the rendered modal */
+    .field {
+      position: absolute;
+      font-family: 'Gabarito', system-ui, sans-serif;
+      font-size: 14px; font-weight: 400;
+      color: var(--name-ink);
+      background: #fff;
+      border: 0;
+      outline: none;
+    }
+    /* sits inside the drawn field box, clear of its border and radius */
+    .f-name { left: 30px; top: 115px; width: 283px; height: 28px; }
+    .f-name::placeholder { color: var(--muted-ink); }
+
+    /* the dropdown and time inputs cover the drawn controls completely, so
+       they carry the box themselves rather than peeking out of one */
+    .f-type, .f-time {
+      font-size: 15px;
+      color: var(--name-ink);
+      background: #fff;
+      border: 1px solid var(--dd-edge);
+      border-radius: 8px;
+      padding: 0 12px;
+      -webkit-appearance: none; appearance: none;
+    }
+    .f-type { left: 16px; top: 96px; width: 343px; height: 44px; }
+    .f-time { left: 16px; top: 184px; width: 338px; height: 60px; font-size: 18px; text-align: center; }
+    .chev {
+      position: absolute; left: 330px; top: 113px;
+      width: 10px; height: 10px; pointer-events: none;
+      border-right: 1.6px solid var(--muted-ink);
+      border-bottom: 1.6px solid var(--muted-ink);
+      transform: rotate(45deg);
+    }
+
+    .m-name .hot-save  { left: 16px; top: 179px; width: 311px; height: 44px; }
+    .m-name .hot-close { left: 299px; top: 3px;  width: 32px;  height: 32px; }
+    .m-type .hot-save  { left: 16px; top: 268px; width: 338px; height: 44px; }
+    .m-type .hot-cancel{ left: 16px; top: 328px; width: 338px; height: 44px; }
+    .m-type .hot-close { left: 299px; top: 16px; width: 32px;  height: 32px; }
+
+    .sr-only {
+      position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+      overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .backdrop, .modal { transition: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="bar">
+    <h1>Flourish AI — editing a meal</h1>
+    <p>Tap the pencil to rename it, or the meal-type chip to change type and time.</p>
+    <a href="/flourish">← Back to the case study</a>
+  </div>
+
+  <div class="wrap">
+    <div class="scaler" id="scaler">
+      <div class="stage" id="stage">
+
+        <img class="art" src="images/proto/proto-screen.png" alt="Flourish AI meal detail screen">
+
+        <div class="live chip" id="chip">Lunch</div>
+        <div class="live mealname" id="mealname">Chicken Salad with Quinoa</div>
+        <div class="live time" id="time">1:00 PM</div>
+
+        <button class="hot hot-pencil" id="openName" aria-label="Edit meal name"></button>
+        <button class="hot hot-chip"   id="openType" aria-label="Change meal type and time"></button>
+
+        <div class="backdrop" id="backdrop"></div>
+
+        <!-- rename -->
+        <div class="modal m-name" id="modalName" role="dialog" aria-modal="true" aria-label="Edit meal name">
+          <img class="art" src="images/proto/proto-name.png" alt="">
+          <label class="sr-only" for="nameInput">Meal name</label>
+          <input class="field f-name" id="nameInput" type="text" placeholder="Chicken Salad with Quinoa" autocomplete="off">
+          <button class="hot hot-save"  id="saveName"  aria-label="Save changes"></button>
+          <button class="hot hot-close" id="closeName" aria-label="Close"></button>
+        </div>
+
+        <!-- type & time -->
+        <div class="modal m-type" id="modalType" role="dialog" aria-modal="true" aria-label="Change meal type and time">
+          <img class="art" src="images/proto/proto-type.png" alt="">
+          <label class="sr-only" for="typeInput">Meal type</label>
+          <select class="field f-type" id="typeInput">
+            <option>Breakfast</option>
+            <option>Lunch</option>
+            <option>Dinner</option>
+            <option>Snack</option>
+          </select>
+          <span class="chev" aria-hidden="true"></span>
+          <label class="sr-only" for="timeInput">Time</label>
+          <input class="field f-time" id="timeInput" type="time" value="13:00">
+          <button class="hot hot-save"   id="saveType"   aria-label="Save"></button>
+          <button class="hot hot-cancel" id="cancelType" aria-label="Cancel"></button>
+          <button class="hot hot-close"  id="closeType"  aria-label="Close"></button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const $ = (id) => document.getElementById(id);
+
+    /* ── fit the phone to the window ────────────────────────────────────── */
+    const scaler = $('scaler');
+    const STAGE_W = 390, STAGE_H = 1276;
+    function fit() {
+      const wrap = document.querySelector('.wrap');
+      const pad = 40;
+      const s = Math.min((wrap.clientHeight - pad) / STAGE_H, (wrap.clientWidth - pad) / STAGE_W, 1);
+      scaler.style.transform = 'scale(' + s + ')';
+      scaler.style.height = (STAGE_H * s) + 'px';
+      scaler.style.width  = (STAGE_W * s) + 'px';
+    }
+    window.addEventListener('resize', fit);
+    fit();
+
+    /* ── state, mirrored onto the screen ────────────────────────────────── */
+    const state = { name: 'Chicken Salad with Quinoa', type: 'Lunch', time: '13:00' };
+
+    const pretty = (hhmm) => {
+      const [h, m] = hhmm.split(':').map(Number);
+      const ampm = h >= 12 ? 'PM' : 'AM';
+      const h12 = h % 12 === 0 ? 12 : h % 12;
+      return h12 + ':' + String(m).padStart(2, '0') + ' ' + ampm;
+    };
+    function render() {
+      $('mealname').textContent = state.name;
+      $('chip').textContent = state.type;
+      $('time').textContent = pretty(state.time);
+    }
+    render();
+
+    /* ── modals ─────────────────────────────────────────────────────────── */
+    const backdrop = $('backdrop');
+    let openModal = null;
+
+    function show(el) {
+      openModal = el;
+      backdrop.classList.add('on');
+      el.classList.add('on');
+      const first = el.querySelector('input, select');
+      if (first) setTimeout(() => { first.focus(); if (first.select) first.select(); }, 210);
+    }
+    function hide() {
+      if (!openModal) return;
+      openModal.classList.remove('on');
+      backdrop.classList.remove('on');
+      openModal = null;
+    }
+
+    $('openName').addEventListener('click', () => {
+      $('nameInput').value = state.name;
+      show($('modalName'));
+    });
+    $('openType').addEventListener('click', () => {
+      $('typeInput').value = state.type;
+      $('timeInput').value = state.time;
+      show($('modalType'));
+    });
+
+    $('saveName').addEventListener('click', () => {
+      const v = $('nameInput').value.trim();
+      if (v) state.name = v;
+      render();
+      hide();
+    });
+    $('saveType').addEventListener('click', () => {
+      state.type = $('typeInput').value;
+      state.time = $('timeInput').value || state.time;
+      render();
+      hide();
+    });
+
+    $('closeName').addEventListener('click', hide);
+    $('closeType').addEventListener('click', hide);
+    $('cancelType').addEventListener('click', hide);
+    backdrop.addEventListener('click', hide);
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') hide();
+      if (e.key === 'Enter' && openModal === $('modalName')) $('saveName').click();
+    });
+  </script>
+
+</body>
+</html>
