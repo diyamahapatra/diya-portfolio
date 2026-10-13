@@ -173,6 +173,15 @@
       gap: 12px;
     }
     .about-shots .frame:first-child { grid-row: 1 / span 2; aspect-ratio: 821 / 1100; }
+    /* From 1240px up the layout is at its full width and the text column has a
+       fixed height, so the image field stretches to meet it: the photo ends
+       level with the last row, trimming ~13% off its sides. Narrower, the text
+       wraps more and stretching would crop too much, so the photo keeps its
+       own proportions there. */
+    @media (min-width: 1240px) {
+      .about-shots { align-self: stretch; }
+      .about-shots .frame:first-child { aspect-ratio: auto; }
+    }
     .frame {
       position: relative;
       min-height: 0;
@@ -219,7 +228,7 @@
       position: absolute; left: 0; top: 0;
       width: 14px; height: 14px; margin: -7px 0 0 -7px;   /* collapsed: a tile centred on the pointer */
       box-sizing: border-box;
-      background: var(--black); color: #fff;
+      background: rgba(15, 15, 15, 0.62); color: #fff;   /* see-through enough to keep the image visible behind it */
       border-radius: 15px;                    /* fully round: a dot when collapsed, a pill when open */
       font-size: 13px; font-weight: 500; line-height: 1; white-space: nowrap;
       display: flex; align-items: center; justify-content: center;
