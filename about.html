@@ -83,22 +83,20 @@
       grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
       gap: 30px;
       align-items: start;
-      max-width: 2000px;
+      max-width: 1180px;                     /* a centred column, like the homepage's, keeps the photo a modest size */
       margin: 0 auto;
     }
-    /* The column's type scales with the window like the photo does (14px at
-       1440, held between 12.5 and 16px), with sizes and spacing inside it in
-       em, so text and images stay in proportion across laptop widths.
-       Experience follows straight on from the intro; any spare height is
-       left as white space below the tables. */
+    /* The layout is a fixed-width column now, so the type is fixed too: 13px
+       body, with the headings, names and years sized in em from it.
+       Experience follows straight on from the intro. */
     .about-text {
-      font-size: clamp(12.5px, 0.9722vw, 16px);
+      font-size: 13px;
       padding-top: 0; max-width: 640px;       /* the greeting starts level with the top of the images */
     }
 
     .about-greeting {
       font-family: 'Spectral', Georgia, serif;
-      font-size: clamp(20px, 1.6667vw, 27px);   /* 24px at 1440 */
+      font-size: 23px;
       font-weight: 300;
       letter-spacing: -0.4px;
       line-height: 1.2;
@@ -133,7 +131,7 @@
     /* ── EXPERIENCE / EDUCATION TABLES ── */
     .about-h2 {
       font-family: 'Spectral', Georgia, serif;
-      font-size: 1.1429em;                   /* 16px at 14px */
+      font-size: 1.1429em;                   /* ~15px at 13px */
       font-weight: 300;
       letter-spacing: -0.4px;
       color: var(--black);
@@ -148,7 +146,7 @@
     }
     .cv-place {
       font-family: 'Spectral', Georgia, serif;
-      font-size: 1.0714em;                   /* 15px at 14px */
+      font-size: 1.0714em;                   /* ~14px at 13px */
       font-weight: 400;
       letter-spacing: -0.2px;
       color: var(--black);
@@ -156,7 +154,7 @@
     .cv-role  { color: var(--gray); }
     .cv-year  {
       color: var(--gray);
-      font-size: 0.8571em;                  /* 12px at 14px */
+      font-size: 0.8571em;                  /* ~11px at 13px */
       letter-spacing: 0.02em;
       flex-shrink: 0;
       font-variant-numeric: tabular-nums;
@@ -347,7 +345,7 @@
         gap: 32px;
         padding: 57px 20px 0;
       }
-      .about-text { padding-top: 28px; max-width: none; font-size: 15px; }
+      .about-text { padding-top: 28px; max-width: none; font-size: 14px; }
       /* the portrait goes full width at its own proportions; the other two sit side by side below */
       .about-shots { grid-template-rows: auto; }
       .about-shots .frame { aspect-ratio: 1 / 1; }
