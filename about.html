@@ -86,22 +86,15 @@
       max-width: 2000px;
       margin: 0 auto;
     }
-    /* Ending the text column level with the photo:
-       - its type scales with the window like the photo does (14px at 1440,
-         held between 12.5 and 16px), and the sizes and spacing inside it are
-         in em, so the two stay in proportion across laptop widths;
-       - it stretches to the image field's height with the CV tables at its
-         foot (.about-cv margin-top:auto), so the last row meets the bottom
-         of the photo whenever the text is the shorter of the two.
-       The image field keeps align-self:start so stretching never crops it. */
+    /* The column's type scales with the window like the photo does (14px at
+       1440, held between 12.5 and 16px), with sizes and spacing inside it in
+       em, so text and images stay in proportion across laptop widths.
+       Experience follows straight on from the intro; any spare height is
+       left as white space below the tables. */
     .about-text {
       font-size: clamp(12.5px, 0.9722vw, 16px);
       padding-top: 0; max-width: 640px;       /* the greeting starts level with the top of the images */
-      align-self: stretch;
-      display: flex; flex-direction: column;
     }
-    .about-cv { margin-top: auto; }
-    .about-shots { align-self: start; }
 
     .about-greeting {
       font-family: 'Spectral', Georgia, serif;
@@ -214,11 +207,10 @@
     }
 
     /* ── HOVER TAG ──
-       Over the photo and the loop the pointer becomes a small blank tile (the
-       one from the puzzle loop and the homepage board), which stretches into a
-       label, types its words in, then flips once like a Wordle tile and lands
-       ink-on-white reversed. The outer box follows the pointer and leans with
-       speed (JS); the face inside does the stretching and flipping (CSS). */
+       Over the photo and the loop the pointer becomes a small black dot that
+       stretches into a rounded label and types its words in. The outer box
+       follows the pointer and leans with speed (JS); the face inside does the
+       stretching (CSS). */
     .hover-tag {
       position: fixed; left: 0; top: 0; width: 0; height: 0;
       z-index: 300; pointer-events: none;
@@ -229,8 +221,8 @@
       position: absolute; left: 0; top: 0;
       width: 14px; height: 14px; margin: -7px 0 0 -7px;   /* collapsed: a tile centred on the pointer */
       box-sizing: border-box;
-      background: #fff; color: var(--black);
-      border: 1.5px solid var(--black); border-radius: 8px;
+      background: var(--black); color: #fff;
+      border-radius: 15px;                    /* fully round: a dot when collapsed, a pill when open */
       font-size: 13px; font-weight: 500; line-height: 1; white-space: nowrap;
       display: flex; align-items: center; justify-content: center;
       overflow: hidden;
@@ -238,9 +230,6 @@
                   margin .34s cubic-bezier(.34, 1.3, .64, 1);
     }
     .tag-face.open { height: 30px; margin-top: -15px; }
-    .tag-face.solved { background: var(--black); color: #fff; }
-    .tag-face.flipping { animation: tagFlip .28s var(--ease); }
-    @keyframes tagFlip { 0%, 100% { transform: scaleY(1); } 50% { transform: scaleY(0); } }
     .tag-text .ch { display: inline-block; white-space: pre; animation: tagType .22s var(--ease) both; }
     @keyframes tagType {
       from { opacity: 0; filter: blur(4px); transform: translateY(3px); }
@@ -386,7 +375,7 @@
     <div class="about-text">
       <h1 class="about-greeting">Hi there, I&rsquo;m Diya.</h1>
 
-      <p>I&rsquo;m currently designing at UC Berkeley IT, working on advising tools and design systems for 20,000+ students. I&rsquo;m an AI-native product designer working across interaction, systems, and research.</p>
+      <p>I&rsquo;m currently designing at UC Berkeley IT, working on advising tools and design systems for 20,000+ students. I&rsquo;m an AI-native product designer working across interaction, systems, and research. I love bringing visual craft and emotion into my work, so the things I design feel as good as they work.</p>
 
       <p>Outside of design I&rsquo;m:</p>
       <ul class="about-list">
@@ -397,7 +386,6 @@
 
       <p>Say hello at <a href="mailto:diyamahapatra@berkeley.edu">diyamahapatra@berkeley.edu</a> or via <a href="https://www.linkedin.com/in/diya-mahapatra/" target="_blank">LinkedIn</a>.</p>
 
-      <div class="about-cv">
       <h2 class="about-h2">Experience</h2>
       <div class="cv-row">
         <span><span class="cv-place">UC Berkeley IT</span> <span class="cv-role">/ Product Design</span></span>
@@ -420,7 +408,6 @@
       <div class="cv-row">
         <span><span class="cv-place">UC Berkeley</span> <span class="cv-role">/ Cognitive Science, Data Science &amp; Design</span></span>
         <span class="cv-year">2026</span>
-      </div>
       </div>
     </div>
 
@@ -483,7 +470,7 @@
        Mouse: the tag replaces the cursor inside the photo and loop frames and
        trails it on a short spring, leaning with horizontal speed; the rAF loop
        only runs while the tag is showing or settling. Touch: a tap shows it
-       where you tapped for a moment. Reduced motion: no typing, flip or lean. */
+       where you tapped for a moment. Reduced motion: no typing or lean. */
     (function () {
       var targets = [
         { el: document.querySelector('.about-shots .frame:first-child'), text: 'me!' },
@@ -512,14 +499,13 @@
       }
       function open(text) {
         clearTimers();
-        face.classList.remove('solved', 'flipping');
         label.textContent = '';
         measure.font = '500 13px Inter, system-ui, sans-serif';
-        w = Math.ceil(measure.measureText(text).width) + 25;   // 11px padding a side + border
+        w = Math.ceil(measure.measureText(text).width) + 26;   // 13px padding a side for the pill ends
         face.style.width = w + 'px';
         face.classList.add('open');
         side();
-        if (reduced) { label.textContent = text; face.classList.add('solved'); return; }
+        if (reduced) { label.textContent = text; return; }
         text.split('').forEach(function (ch, i) {
           later(function () {
             var c = document.createElement('span');
@@ -527,15 +513,11 @@
             label.appendChild(c);
           }, 90 + i * 24);
         });
-        later(function () {
-          face.classList.add('flipping');
-          later(function () { face.classList.add('solved'); }, 140);   // swap colours while it's edge-on
-        }, 90 + text.length * 24 + 260);
       }
       function close() {
         clearTimers();
         label.textContent = '';
-        face.classList.remove('open', 'solved', 'flipping');
+        face.classList.remove('open');
         face.style.width = ''; face.style.marginLeft = '';
         showing = false;
         tag.classList.remove('on');
