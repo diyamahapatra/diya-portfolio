@@ -83,20 +83,19 @@
       grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
       gap: 30px;
       align-items: start;
-      max-width: 1180px;                     /* a centred column, like the homepage's, keeps the photo a modest size */
+      max-width: 1240px;                     /* a centred column, like the homepage's, keeps the photo a modest size */
       margin: 0 auto;
     }
-    /* The layout is a fixed-width column now, so the type is fixed too: 13px
-       body, with the headings, names and years sized in em from it.
-       Experience follows straight on from the intro. */
+    /* The layout is a fixed-width column now, so the type is fixed too: 13.5px
+       body, with the headings, names and years sized in em from it. */
     .about-text {
-      font-size: 13px;
+      font-size: 13.5px;
       padding-top: 0; max-width: 640px;       /* the greeting starts level with the top of the images */
     }
 
     .about-greeting {
       font-family: 'Spectral', Georgia, serif;
-      font-size: 23px;
+      font-size: 23.5px;
       font-weight: 300;
       letter-spacing: -0.4px;
       line-height: 1.2;
@@ -131,12 +130,13 @@
     /* ── EXPERIENCE / EDUCATION TABLES ── */
     .about-h2 {
       font-family: 'Spectral', Georgia, serif;
-      font-size: 1.1429em;                   /* ~15px at 13px */
+      font-size: 1.1429em;                   /* ~15.5px at 13.5px */
       font-weight: 300;
       letter-spacing: -0.4px;
       color: var(--black);
       margin: 1.1em 0 0.1em;
     }
+    .about-text .about-h2:first-of-type { margin-top: 1.9em; }   /* a bit more air between the intro and Experience */
     .cv-row {
       display: flex; align-items: baseline; justify-content: space-between;
       gap: 20px;
@@ -146,7 +146,7 @@
     }
     .cv-place {
       font-family: 'Spectral', Georgia, serif;
-      font-size: 1.0714em;                   /* ~14px at 13px */
+      font-size: 1.0714em;                   /* ~14.5px at 13.5px */
       font-weight: 400;
       letter-spacing: -0.2px;
       color: var(--black);
@@ -154,7 +154,7 @@
     .cv-role  { color: var(--gray); }
     .cv-year  {
       color: var(--gray);
-      font-size: 0.8571em;                  /* ~11px at 13px */
+      font-size: 0.8571em;                  /* ~11.5px at 13.5px */
       letter-spacing: 0.02em;
       flex-shrink: 0;
       font-variant-numeric: tabular-nums;
@@ -345,7 +345,7 @@
         gap: 32px;
         padding: 57px 20px 0;
       }
-      .about-text { padding-top: 28px; max-width: none; font-size: 14px; }
+      .about-text { padding-top: 28px; max-width: none; font-size: 14.5px; }
       /* the portrait goes full width at its own proportions; the other two sit side by side below */
       .about-shots { grid-template-rows: auto; }
       .about-shots .frame { aspect-ratio: 1 / 1; }
