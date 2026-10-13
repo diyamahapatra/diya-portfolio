@@ -1499,11 +1499,13 @@
     })();
 
     /* ── HERO HOP BOARD ──
-       She follows a beat behind the pointer: hovering a tile for a moment (or
-       tapping it) sets where she wants to be, and each hop runs to completion
-       before the next starts, so a fast sweep doesn't make her jitter — she
-       just heads for wherever you settled. The rAF loop only runs mid-hop.
-       When the pointer leaves the board she wanders back home. */
+       She only goes where the pointer actually rests: a tile has to be hovered
+       for DWELL ms before she commits, and moving off it first cancels that, so
+       passing over tiles on the way somewhere else doesn't send her anywhere.
+       Each hop runs to completion; if you've moved off her next tile by the
+       time she lands, she stays put. Taps are deliberate, so they count at
+       once. The rAF loop only runs mid-hop. When the pointer leaves the board
+       she wanders back home. */
     (function () {
       var root = document.querySelector('.hero-hop');
       if (!root) return;
@@ -1512,7 +1514,8 @@
       var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
       var COLS = 5, TS = 49, GAP = 8, FEET = 15, HOME = 21;   // 21 = row 5, column 2
-      var at = HOME, want = HOME, hop = null, dwell = null, wander = null;
+      var DWELL = 350;                                        // how long the pointer must rest on a tile
+      var at = HOME, want = HOME, sure = true, hop = null, dwell = null, wander = null, hovered = -1;
 
       function spot(i) {
         return [TS / 2 + (i % COLS) * (TS + GAP), TS / 2 + Math.floor(i / COLS) * (TS + GAP) + FEET];
@@ -1530,8 +1533,9 @@
         return Math.exp(-z * w * t) * (Math.cos(wd * t) + (z * w / wd) * Math.sin(wd * t));
       }
 
-      function goTo(i) {
-        want = i;
+      /* sure: a tap or the walk home, which should happen even without a hover */
+      function goTo(i, isSure) {
+        want = i; sure = !!isSure;
         if (!hop && want !== at) jump();
       }
       function jump() {
@@ -1560,8 +1564,11 @@
           if (!hop.landed) { hop.landed = true; at = hop.to; tiles[at].classList.add('home'); }
           var u = t - 0.48;
           place(B[0], B[1], 1 - 0.14 * (u < 0.04 ? u / 0.04 : settle(u - 0.04)), 0);
-          /* chain the next hop once she's down, rather than waiting out the wobble */
-          if (t >= 0.62 && want !== at) { hop = null; jump(); return; }
+          /* chain the next hop once she's down, but only toward a tile that's still hovered */
+          if (t >= 0.62 && want !== at) {
+            if (sure || want === hovered) { hop = null; jump(); return; }
+            want = at;
+          }
           if (t >= 0.9) {
             place(B[0], B[1], 1, 0);
             hop = null; root.classList.remove('is-hopping');
@@ -1576,23 +1583,27 @@
           tile.classList.add('lit');
           clearTimeout(wander);
           if (e.pointerType !== 'mouse') return;
+          hovered = i;
           clearTimeout(dwell);
-          dwell = setTimeout(function () { goTo(i); }, 120);
+          dwell = setTimeout(function () { goTo(i); }, DWELL);
         });
-        tile.addEventListener('pointerleave', function () { tile.classList.remove('lit'); });
+        tile.addEventListener('pointerleave', function () {
+          tile.classList.remove('lit');
+          if (hovered === i) { hovered = -1; clearTimeout(dwell); }
+        });
         /* touch and pen have no hover, so a tap sends her straight there */
         tile.addEventListener('pointerdown', function (e) {
           if (e.pointerType === 'mouse') return;
           tile.classList.add('lit');
           setTimeout(function () { tile.classList.remove('lit'); }, 250);
-          goTo(i);
+          goTo(i, true);
         });
       });
       /* mouse only: a finger "leaves" the moment it lifts, which would send her straight back */
       root.addEventListener('pointerleave', function (e) {
         clearTimeout(dwell);
         if (e.pointerType !== 'mouse') return;
-        wander = setTimeout(function () { goTo(HOME); }, 700);
+        wander = setTimeout(function () { goTo(HOME, true); }, 700);
       });
     })();
 </script>
