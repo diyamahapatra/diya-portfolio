@@ -104,24 +104,25 @@
       gap: 40px;
     }
     /* ── HERO HOP BOARD ──
-       Miffy stands on a 4×4 board and hops to whichever tile you hover (or
+       Miffy stands on a 5×5 board and hops to whichever tile you hover (or
        tap). Tiles light under the pointer and fade back on their own, so
        moving across the board leaves a short trail; the tile she's standing
        on stays tinted. The hop itself is driven from JS; everything else
        here is plain CSS so an idle board costs nothing. */
     .hero-hop {
       position: relative; flex-shrink: 0;
-      width: 208px; height: 262px;           /* 4 × 46px tiles + 8px gaps, plus headroom for her ears on the top row */
+      width: 277px; height: 277px;           /* 5 × 49px tiles + 8px gaps: spans the heading's top down to its old bottom */
+      align-self: flex-start;                 /* top row lines up with "I'm Diya,"; on that row her ears just overhang the box */
       opacity: 0; transform: translateY(20px);
       transition: opacity .9s var(--ease) .8s, transform .9s var(--ease) .8s;
     }
     #portfolio.visible .hero-hop { opacity: 1; transform: translateY(0); }
     .hop-board {
-      position: absolute; left: 0; top: 54px;
-      display: grid; grid-template-columns: repeat(4, 46px); gap: 8px;
+      position: absolute; left: 0; top: 0;
+      display: grid; grid-template-columns: repeat(5, 49px); gap: 8px;
     }
     .hop-tile {
-      width: 46px; height: 46px; border-radius: 10px; box-sizing: border-box;
+      width: 49px; height: 49px; border-radius: 11px; box-sizing: border-box;
       background: #fff; border: 1.5px solid #E5E2DD; cursor: pointer;
       transition: background-color .6s var(--ease), border-color .6s var(--ease), transform .35s var(--ease);
     }
@@ -135,11 +136,11 @@
     .hop-pos {
       position: absolute; left: 0; top: 0; width: 0; height: 0; z-index: 1;
       pointer-events: none;
-      transform: translate(77px, 253px);    /* home tile (row 4, column 2) for the no-JS case */
+      transform: translate(81.5px, 267.5px);  /* home tile (row 5, column 2) for the no-JS case */
     }
     .hop-bunny {
       position: absolute; left: 0; bottom: 0;
-      height: 74px; width: auto; display: block;
+      height: 78px; width: auto; display: block;
       max-width: none;                       /* the mobile img max-width:100% would collapse her inside the zero-width anchor */
       transform: translateX(-50%);
       user-select: none; -webkit-user-drag: none;
@@ -1034,6 +1035,7 @@
       }
       .hero-separator { display: none; }
       .hero-left, .hero-right { width: 100%; }
+      .hero-hop { margin-top: 56px; }        /* room for her ears on the top row, above the stacked text */
 
       /* two-up work cards become a single column */
       .work-section { padding: 36px 20px 90px; }
@@ -1120,10 +1122,11 @@
       </div>
       <div class="hero-hop" aria-hidden="true">
         <div class="hop-board">
-          <span class="hop-tile"></span><span class="hop-tile"></span><span class="hop-tile"></span><span class="hop-tile"></span>
-          <span class="hop-tile"></span><span class="hop-tile"></span><span class="hop-tile"></span><span class="hop-tile"></span>
-          <span class="hop-tile"></span><span class="hop-tile"></span><span class="hop-tile"></span><span class="hop-tile"></span>
-          <span class="hop-tile"></span><span class="hop-tile home"></span><span class="hop-tile"></span><span class="hop-tile"></span>
+          <span class="hop-tile"></span><span class="hop-tile"></span><span class="hop-tile"></span><span class="hop-tile"></span><span class="hop-tile"></span>
+          <span class="hop-tile"></span><span class="hop-tile"></span><span class="hop-tile"></span><span class="hop-tile"></span><span class="hop-tile"></span>
+          <span class="hop-tile"></span><span class="hop-tile"></span><span class="hop-tile"></span><span class="hop-tile"></span><span class="hop-tile"></span>
+          <span class="hop-tile"></span><span class="hop-tile"></span><span class="hop-tile"></span><span class="hop-tile"></span><span class="hop-tile"></span>
+          <span class="hop-tile"></span><span class="hop-tile home"></span><span class="hop-tile"></span><span class="hop-tile"></span><span class="hop-tile"></span>
         </div>
         <div class="hop-pos"><img src="images/purpmiffy-solid.png" alt="" draggable="false" class="hop-bunny"/></div>
       </div>
@@ -1508,11 +1511,11 @@
       var pos = root.querySelector('.hop-pos');
       var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-      var TS = 46, GAP = 8, TOP = 54, FEET = 14, HOME = 13;   // 13 = row 4, column 2
+      var COLS = 5, TS = 49, GAP = 8, FEET = 15, HOME = 21;   // 21 = row 5, column 2
       var at = HOME, want = HOME, hop = null, dwell = null, wander = null;
 
       function spot(i) {
-        return [TS / 2 + (i % 4) * (TS + GAP), TOP + TS / 2 + Math.floor(i / 4) * (TS + GAP) + FEET];
+        return [TS / 2 + (i % COLS) * (TS + GAP), TS / 2 + Math.floor(i / COLS) * (TS + GAP) + FEET];
       }
       function place(x, y, sy, lean) {
         var sx = 1 + (1 - sy) * 0.9;                           // roughly keep her volume while squashing
@@ -1550,7 +1553,7 @@
         } else if (t < 0.48) {                                  // in the air: arc, stretch, lean into the jump
           var p = (t - 0.08) / 0.4, e = easeInOutCubic(p);
           place(A[0] + (B[0] - A[0]) * e,
-                A[1] + (B[1] - A[1]) * e - 120 * p * (1 - p),
+                A[1] + (B[1] - A[1]) * e - 128 * p * (1 - p),
                 1 + 0.07 * Math.sin(Math.PI * p) - 0.12 * Math.pow(1 - p, 4),
                 8 * Math.sign(B[0] - A[0]) * Math.sin(Math.PI * p));
         } else {                                                // land, squash, settle
