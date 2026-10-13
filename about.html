@@ -74,116 +74,105 @@
     .nav-links a.active { color: var(--black); font-weight: 500; }
 
     /* ── LAYOUT ──
-       Text left, images right at roughly 1:2, measured off the reference:
-       a ~633px reading column beside a ~1283px image field at a 2000px
-       window, both inset ~27px from the page edges. */
+       Three columns up top (intro, education, experience) between dashed
+       rules, then a small numbered grid for the photo and the puzzle loop.
+       The dashes reuse the 1px #D8D8D8 dashed style the old image frames had. */
     .about {
-      padding: 57px 28px 0;
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
-      gap: 30px;
-      align-items: start;
-      max-width: 2000px;
+      max-width: 1100px;
       margin: 0 auto;
+      padding: 113px 48px 0;                 /* 57px nav + 56px */
     }
-    .about-text { padding-top: 40px; max-width: 640px; }
+    .about-label {
+      font-size: 12px; font-weight: 500;
+      letter-spacing: 0.10em; text-transform: uppercase;
+      color: var(--gray);
+    }
 
-    .about-greeting {
-      font-family: 'Spectral', Georgia, serif;
-      font-size: clamp(28px, 2.9vw, 38px);
-      font-weight: 300;
-      letter-spacing: -0.4px;
-      line-height: 1.2;
-      color: var(--black);
-      margin-bottom: 20px;
+    /* ── INTRO / EDUCATION / EXPERIENCE ── */
+    .about-cols {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      border-top: 1px dashed #D8D8D8;
+      border-bottom: 1px dashed #D8D8D8;
     }
-    .about-text p {
+    .about-col { padding: 56px 28px 64px; }
+    .about-col + .about-col { border-left: 1px dashed #D8D8D8; }
+    .about-col .about-label { margin-bottom: 40px; }
+
+    .about-col p {
       font-size: 15px;
       line-height: 1.7;
       color: var(--gray);
-      margin-bottom: 18px;
     }
-    .about-text a {
+    .about-col a {
       color: var(--gray);
       text-decoration: underline;
       text-underline-offset: 2px;
       transition: color 0.18s;
     }
-    .about-text a:hover { color: var(--black); }
+    .about-col a:hover { color: var(--black); }
 
-    .about-list { list-style: none; margin: 0 0 18px; }
-    .about-list li {
-      font-size: 15px; line-height: 1.7; color: var(--gray);
-      padding-left: 18px; position: relative;
-    }
-    .about-list li::before {
-      content: '·';
-      position: absolute; left: 4px;
-      color: var(--gray);
-    }
-
-    /* ── EXPERIENCE / EDUCATION TABLES ── */
-    .about-h2 {
-      font-family: 'Spectral', Georgia, serif;
-      font-size: 23px;
-      font-weight: 300;
-      letter-spacing: -0.4px;
-      color: var(--black);
-      margin: 38px 0 6px;
-    }
-    .cv-row {
-      display: flex; align-items: baseline; justify-content: space-between;
-      gap: 20px;
-      padding: 13px 0;
-      border-bottom: 1px solid var(--border);
-      font-size: 15px;
-    }
+    .cv-entry + .cv-entry { margin-top: 22px; }
     .cv-place {
       font-family: 'Spectral', Georgia, serif;
       font-size: 17px;
       font-weight: 400;
       letter-spacing: -0.2px;
       color: var(--black);
+      line-height: 1.4;
     }
-    .cv-role  { color: var(--gray); }
-    .cv-year  {
+    .cv-detail {
+      margin-top: 4px;
+      font-size: 15px;
+      line-height: 1.5;
       color: var(--gray);
-      font-size: 14px;
-      letter-spacing: 0.02em;
-      flex-shrink: 0;
       font-variant-numeric: tabular-nums;
     }
-    /* unwritten detail, visibly marked so it can't ship by accident */
-    .todo { color: #9A9A9A; font-style: italic; }
 
-    /* ── IMAGE FIELD — one tall frame beside two stacked ── */
-    .about-shots {
+    /* ── PHOTO + LOOP ── */
+    .about-media { padding: 56px 28px 0; }
+    .about-media .about-label { margin-bottom: 40px; }
+    .media-grid {
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      grid-template-rows: 1fr 1fr;
-      gap: 12px;
-      height: calc(100vh - 100px);
-      min-height: 620px;
+      grid-template-columns: repeat(2, 340px);
+      width: max-content; margin: 0 auto;   /* the dashed lines frame the cells, not the page */
+      border-bottom: 1px dashed #D8D8D8;
     }
-    .about-shots .frame:first-child { grid-row: 1 / span 2; }
-    .frame {
-      background: #F3F4F6;
-      border: 1px dashed #D8D8D8;
+    .media-cell {
+      position: relative;
+      height: 380px;
       display: flex; flex-direction: column;
       align-items: center; justify-content: center;
-      gap: 10px;
-      overflow: hidden;
+      gap: 26px;
     }
-    .frame img { width: 100%; height: 100%; object-fit: cover; object-position: center 18%; display: block; }
-    .frame-icon {
-      width: 40px; height: 40px;
-      border: 1.5px solid #CFCFCF;
-      border-radius: 2px;
-    }
-    .frame-label {
-      font-size: 12px; font-weight: 600;
-      letter-spacing: 0.10em; text-transform: uppercase;
+    .media-cell + .media-cell { border-left: 1px dashed #D8D8D8; }
+    .media-num {
+      position: absolute; top: 14px; left: 16px;
+      font-size: 10px; letter-spacing: 0.06em;
       color: #A8A8A8;
+      font-variant-numeric: tabular-nums;
+    }
+    .media-caption { font-size: 13px; color: var(--gray); }
+
+    /* the portrait as a polaroid, set down slightly crooked */
+    .polaroid {
+      background: #fff;
+      padding: 9px 9px 30px;
+      transform: rotate(-3deg);
+      box-shadow: 0 1px 2px rgba(15,15,15,0.06), 0 10px 26px rgba(15,15,15,0.08);
+    }
+    .polaroid img {
+      display: block;
+      width: 168px; height: 224px;
+      object-fit: cover; object-position: center 18%;
+    }
+    /* near-square, like the hop tiles and work cards */
+    .media-loop {
+      display: block;
+      width: 272px; height: 272px;          /* same height as the polaroid beside it */
+      border-radius: 4px;
+      border: 1px solid var(--border);
+      background: #FAF9F7;
     }
 
     /* ── FOOTER ── */
@@ -288,21 +277,17 @@
       .nav-links { gap: 18px; }
       .nav-links a { font-size: 13px; }
 
-      .about {
-        grid-template-columns: 1fr;
-        gap: 32px;
-        padding: 57px 20px 0;
-      }
-      .about-text { padding-top: 28px; max-width: none; }
-      /* the tall frame stops spanning; three equal frames stack instead */
-      .about-shots {
-        grid-template-columns: 1fr 1fr;
-        grid-template-rows: auto;
-        height: auto;
-        min-height: 0;
-      }
-      .about-shots .frame { aspect-ratio: 3 / 4; }
-      .about-shots .frame:first-child { grid-row: auto; grid-column: 1 / -1; aspect-ratio: 4 / 3; }
+      .about { padding: 89px 20px 0; }
+      /* the three columns stack; the dashed dividers turn horizontal */
+      .about-cols { grid-template-columns: 1fr; }
+      .about-col { padding: 36px 4px 40px; }
+      .about-col + .about-col { border-left: 0; border-top: 1px dashed #D8D8D8; }
+      .about-col .about-label { margin-bottom: 24px; }
+      .about-media { padding: 36px 4px 0; }
+      .about-media .about-label { margin-bottom: 24px; }
+      .media-grid { grid-template-columns: 1fr; width: auto; }
+      .media-cell { height: 340px; }
+      .media-cell + .media-cell { border-left: 0; border-top: 1px dashed #D8D8D8; }
       .site-footer { padding: 56px 20px 40px; margin-top: 64px; }
       img { max-width: 100%; height: auto; }
     }
@@ -321,62 +306,60 @@
   </nav>
 
   <main class="about">
+    <h1 class="sr-only">About Diya Mahapatra</h1>
 
-    <!-- ── LEFT: the written half ── -->
-    <div class="about-text">
-      <h1 class="about-greeting">Hi there, I&rsquo;m Diya.</h1>
-
-      <p>I&rsquo;m currently designing at UC Berkeley IT, working on advising tools and design systems for 20,000+ students. I&rsquo;m an AI-native product designer working across interaction, systems, and research.</p>
-
-      <p>Outside of design I&rsquo;m:</p>
-      <ul class="about-list">
-        <li>going to concerts</li>
-        <li>solving puzzles or trivia games</li>
-        <li>trying new cafes and teas!</li>
-      </ul>
-
-      <p>Say hello at <a href="mailto:diyamahapatra@berkeley.edu">diyamahapatra@berkeley.edu</a> or via <a href="https://www.linkedin.com/in/diya-mahapatra/" target="_blank">LinkedIn</a>.</p>
-
-      <h2 class="about-h2">Experience</h2>
-      <div class="cv-row">
-        <span><span class="cv-place">UC Berkeley IT</span> <span class="cv-role">/ Product Design</span></span>
-        <span class="cv-year">2026</span>
-      </div>
-      <div class="cv-row">
-        <span><span class="cv-place">Flourish AI</span> <span class="cv-role">/ Product Design</span></span>
-        <span class="cv-year">2025</span>
-      </div>
-      <div class="cv-row">
-        <span><span class="cv-place">Amazon Music</span> <span class="cv-role">/ Product Design</span></span>
-        <span class="cv-year">2025</span>
-      </div>
-      <div class="cv-row">
-        <span><span class="cv-place">Carbon Sustain</span> <span class="cv-role">/ Product Design</span></span>
-        <span class="cv-year">2024</span>
+    <section class="about-cols">
+      <div class="about-col">
+        <h2 class="about-label">Self introduction</h2>
+        <p>I&rsquo;m Diya, an AI-native product designer working across interaction, systems, and research. I&rsquo;m currently designing at UC Berkeley IT, working on advising tools and design systems for 20,000+ students. Outside of design I&rsquo;m going to concerts, solving puzzles or trivia games, and trying new cafes and teas! Say hello at <a href="mailto:diyamahapatra@berkeley.edu">diyamahapatra@berkeley.edu</a> or via <a href="https://www.linkedin.com/in/diya-mahapatra/" target="_blank">LinkedIn</a>.</p>
       </div>
 
-      <h2 class="about-h2">Education</h2>
-      <div class="cv-row">
-        <span><span class="cv-place">UC Berkeley</span> <span class="cv-role">/ Cognitive Science, Data Science &amp; Design</span></span>
-        <span class="cv-year">2026</span>
+      <div class="about-col">
+        <h2 class="about-label">Education</h2>
+        <div class="cv-entry">
+          <p class="cv-place">UC Berkeley</p>
+          <p class="cv-detail">Cognitive Science, Data Science &amp; Design &middot; 2026</p>
+        </div>
       </div>
-    </div>
 
-    <!-- ── RIGHT: the image field ── -->
-    <div class="about-shots">
-      <div class="frame">
-        <img src="images/about-portrait.jpg" alt="Diya outside, holding a bunch of daisies">
+      <div class="about-col">
+        <h2 class="about-label">Experience</h2>
+        <div class="cv-entry">
+          <p class="cv-place">UC Berkeley IT</p>
+          <p class="cv-detail">2026 &middot; Product Design</p>
+        </div>
+        <div class="cv-entry">
+          <p class="cv-place">Flourish AI</p>
+          <p class="cv-detail">2025 &middot; Product Design</p>
+        </div>
+        <div class="cv-entry">
+          <p class="cv-place">Amazon Music</p>
+          <p class="cv-detail">2025 &middot; Product Design</p>
+        </div>
+        <div class="cv-entry">
+          <p class="cv-place">Carbon Sustain</p>
+          <p class="cv-detail">2024 &middot; Product Design</p>
+        </div>
       </div>
-      <div class="frame">
-        <div class="frame-icon"></div>
-        <p class="frame-label">Photo</p>
-      </div>
-      <div class="frame">
-        <div class="frame-icon"></div>
-        <p class="frame-label">Photo</p>
-      </div>
-    </div>
+    </section>
 
+    <section class="about-media">
+      <h2 class="about-label">A photo, and a loop I made</h2>
+      <div class="media-grid">
+        <figure class="media-cell">
+          <span class="media-num">01</span>
+          <div class="polaroid"><img src="images/about-portrait.jpg" alt="Diya outside, holding a bunch of daisies"></div>
+          <figcaption class="media-caption">me</figcaption>
+        </figure>
+        <figure class="media-cell">
+          <span class="media-num">02</span>
+          <video class="media-loop" src="videos/puzzle-loop.mp4" poster="images/puzzle-loop-poster.jpg"
+                 autoplay muted loop playsinline preload="metadata"
+                 aria-label="A single tile morphing through Wordle, a mini crossword, sudoku, Connections and a jigsaw"></video>
+          <figcaption class="media-caption">puzzle loop</figcaption>
+        </figure>
+      </div>
+    </section>
   </main>
 
   <footer class="site-footer">
@@ -406,6 +389,15 @@
   </footer>
 
   <script>
+
+    /* ── PUZZLE LOOP ──
+       Autoplays muted like a GIF; with reduced motion it stays on its poster. */
+    (function () {
+      var v = document.querySelector('.media-loop');
+      if (!v || !window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      v.removeAttribute('autoplay');
+      v.pause();
+    })();
 
     /* ── FOOTER WORD CYCLER ── */
     (function() {
