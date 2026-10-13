@@ -86,22 +86,37 @@
       max-width: 2000px;
       margin: 0 auto;
     }
-    .about-text { padding-top: 40px; max-width: 640px; }
+    /* Ending the text column level with the photo:
+       - its type scales with the window like the photo does (14px at 1440,
+         held between 12.5 and 16px), and the sizes and spacing inside it are
+         in em, so the two stay in proportion across laptop widths;
+       - it stretches to the image field's height with the CV tables at its
+         foot (.about-cv margin-top:auto), so the last row meets the bottom
+         of the photo whenever the text is the shorter of the two.
+       The image field keeps align-self:start so stretching never crops it. */
+    .about-text {
+      font-size: clamp(12.5px, 0.9722vw, 16px);
+      padding-top: 1.7143em; max-width: 640px;   /* 24px at 14px */
+      align-self: stretch;
+      display: flex; flex-direction: column;
+    }
+    .about-cv { margin-top: auto; }
+    .about-shots { align-self: start; }
 
     .about-greeting {
       font-family: 'Spectral', Georgia, serif;
-      font-size: clamp(28px, 2.9vw, 38px);
+      font-size: clamp(26px, 2.4vw, 34px);
       font-weight: 300;
       letter-spacing: -0.4px;
       line-height: 1.2;
       color: var(--black);
-      margin-bottom: 20px;
+      margin-bottom: 14px;
     }
     .about-text p {
-      font-size: 15px;
-      line-height: 1.7;
+      font-size: 1em;
+      line-height: 1.55;
       color: var(--gray);
-      margin-bottom: 18px;
+      margin-bottom: 0.7143em;
     }
     .about-text a {
       color: var(--gray);
@@ -111,9 +126,9 @@
     }
     .about-text a:hover { color: var(--black); }
 
-    .about-list { list-style: none; margin: 0 0 18px; }
+    .about-list { list-style: none; margin: 0 0 0.7143em; }
     .about-list li {
-      font-size: 15px; line-height: 1.7; color: var(--gray);
+      font-size: 1em; line-height: 1.55; color: var(--gray);
       padding-left: 18px; position: relative;
     }
     .about-list li::before {
@@ -125,22 +140,22 @@
     /* ── EXPERIENCE / EDUCATION TABLES ── */
     .about-h2 {
       font-family: 'Spectral', Georgia, serif;
-      font-size: 23px;
+      font-size: 1.4286em;                   /* 20px at 14px */
       font-weight: 300;
       letter-spacing: -0.4px;
       color: var(--black);
-      margin: 38px 0 6px;
+      margin: 1.1em 0 0.1em;
     }
     .cv-row {
       display: flex; align-items: baseline; justify-content: space-between;
       gap: 20px;
-      padding: 13px 0;
+      padding: 0.5em 0;
       border-bottom: 1px solid var(--border);
-      font-size: 15px;
+      font-size: 1em;
     }
     .cv-place {
       font-family: 'Spectral', Georgia, serif;
-      font-size: 17px;
+      font-size: 1.1429em;                   /* 16px at 14px */
       font-weight: 400;
       letter-spacing: -0.2px;
       color: var(--black);
@@ -148,7 +163,7 @@
     .cv-role  { color: var(--gray); }
     .cv-year  {
       color: var(--gray);
-      font-size: 14px;
+      font-size: 1em;
       letter-spacing: 0.02em;
       flex-shrink: 0;
       font-variant-numeric: tabular-nums;
@@ -198,13 +213,51 @@
       color: #A8A8A8;
     }
 
+    /* ── HOVER TAG ──
+       Over the photo and the loop the pointer becomes a small blank tile (the
+       one from the puzzle loop and the homepage board), which stretches into a
+       label, types its words in, then flips once like a Wordle tile and lands
+       ink-on-white reversed. The outer box follows the pointer and leans with
+       speed (JS); the face inside does the stretching and flipping (CSS). */
+    .hover-tag {
+      position: fixed; left: 0; top: 0; width: 0; height: 0;
+      z-index: 300; pointer-events: none;
+      opacity: 0; transition: opacity .15s;
+    }
+    .hover-tag.on { opacity: 1; }
+    .tag-face {
+      position: absolute; left: 0; top: 0;
+      width: 14px; height: 14px; margin: -7px 0 0 -7px;   /* collapsed: a tile centred on the pointer */
+      box-sizing: border-box;
+      background: #fff; color: var(--black);
+      border: 1.5px solid var(--black); border-radius: 3px;
+      font-size: 13px; font-weight: 500; line-height: 1; white-space: nowrap;
+      display: flex; align-items: center; justify-content: center;
+      overflow: hidden;
+      transition: width .34s cubic-bezier(.34, 1.3, .64, 1), height .34s cubic-bezier(.34, 1.3, .64, 1),
+                  margin .34s cubic-bezier(.34, 1.3, .64, 1);
+    }
+    .tag-face.open { height: 30px; margin-top: -15px; }
+    .tag-face.solved { background: var(--black); color: #fff; }
+    .tag-face.flipping { animation: tagFlip .28s var(--ease); }
+    @keyframes tagFlip { 0%, 100% { transform: scaleY(1); } 50% { transform: scaleY(0); } }
+    .tag-text .ch { display: inline-block; white-space: pre; animation: tagType .22s var(--ease) both; }
+    @keyframes tagType {
+      from { opacity: 0; filter: blur(4px); transform: translateY(3px); }
+      to   { opacity: 1; filter: none; transform: none; }
+    }
+    .has-tag { cursor: none; }
+    @media (prefers-reduced-motion: reduce) {
+      .tag-face { transition: none; }
+    }
+
     /* ── FOOTER ── */
     .site-footer {
       --footer-accent: #8B5CF6;
       background: #FAF9F7;
       border-top: 1px solid var(--border);
       padding: 80px 96px 56px;
-      margin-top: 96px;
+      margin-top: 48px;
     }
 
     /* ── FOOTER SCRATCH-OFF ──
@@ -305,12 +358,12 @@
         gap: 32px;
         padding: 57px 20px 0;
       }
-      .about-text { padding-top: 28px; max-width: none; }
+      .about-text { padding-top: 28px; max-width: none; font-size: 15px; }
       /* the portrait goes full width at its own proportions; the other two sit side by side below */
       .about-shots { grid-template-rows: auto; }
       .about-shots .frame { aspect-ratio: 1 / 1; }
       .about-shots .frame:first-child { grid-row: auto; grid-column: 1 / -1; aspect-ratio: 821 / 1100; }
-      .site-footer { padding: 56px 20px 40px; margin-top: 64px; }
+      .site-footer { padding: 56px 20px 40px; margin-top: 40px; }
       img { max-width: 100%; height: auto; }
     }
   </style>
@@ -344,6 +397,7 @@
 
       <p>Say hello at <a href="mailto:diyamahapatra@berkeley.edu">diyamahapatra@berkeley.edu</a> or via <a href="https://www.linkedin.com/in/diya-mahapatra/" target="_blank">LinkedIn</a>.</p>
 
+      <div class="about-cv">
       <h2 class="about-h2">Experience</h2>
       <div class="cv-row">
         <span><span class="cv-place">UC Berkeley IT</span> <span class="cv-role">/ Product Design</span></span>
@@ -366,6 +420,7 @@
       <div class="cv-row">
         <span><span class="cv-place">UC Berkeley</span> <span class="cv-role">/ Cognitive Science, Data Science &amp; Design</span></span>
         <span class="cv-year">2026</span>
+      </div>
       </div>
     </div>
 
@@ -422,6 +477,107 @@
       if (!v || !window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
       v.removeAttribute('autoplay');
       v.pause();
+    })();
+
+    /* ── HOVER TAG ──
+       Mouse: the tag replaces the cursor inside the photo and loop frames and
+       trails it on a short spring, leaning with horizontal speed; the rAF loop
+       only runs while the tag is showing or settling. Touch: a tap shows it
+       where you tapped for a moment. Reduced motion: no typing, flip or lean. */
+    (function () {
+      var targets = [
+        { el: document.querySelector('.about-shots .frame:first-child'), text: 'me!' },
+        { el: document.querySelector('.frame-loop'), text: 'i love solving logic puzzles' }
+      ].filter(function (t) { return t.el; });
+      if (!targets.length) return;
+      var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      var tag = document.createElement('div');
+      tag.className = 'hover-tag';
+      tag.setAttribute('aria-hidden', 'true');
+      tag.innerHTML = '<div class="tag-face"><span class="tag-text"></span></div>';
+      document.body.appendChild(tag);
+      var face = tag.firstChild, label = face.firstChild;
+      var measure = document.createElement('canvas').getContext('2d');
+
+      var x = 0, y = 0, tx = 0, ty = 0, lean = 0, w = 14, showing = false, raf = null, timers = [], hideTimer = null;
+
+      function later(fn, ms) { timers.push(setTimeout(fn, ms)); }
+      function clearTimers() { timers.forEach(clearTimeout); timers = []; }
+
+      /* keep the label on screen: it grows rightward from the pointer, or leftward near the edge */
+      function side() {
+        if (!face.classList.contains('open')) return;
+        face.style.marginLeft = (x + w > window.innerWidth - 12 ? -(w - 7) : -7) + 'px';
+      }
+      function open(text) {
+        clearTimers();
+        face.classList.remove('solved', 'flipping');
+        label.textContent = '';
+        measure.font = '500 13px Inter, system-ui, sans-serif';
+        w = Math.ceil(measure.measureText(text).width) + 25;   // 11px padding a side + border
+        face.style.width = w + 'px';
+        face.classList.add('open');
+        side();
+        if (reduced) { label.textContent = text; face.classList.add('solved'); return; }
+        text.split('').forEach(function (ch, i) {
+          later(function () {
+            var c = document.createElement('span');
+            c.className = 'ch'; c.textContent = ch;
+            label.appendChild(c);
+          }, 90 + i * 24);
+        });
+        later(function () {
+          face.classList.add('flipping');
+          later(function () { face.classList.add('solved'); }, 140);   // swap colours while it's edge-on
+        }, 90 + text.length * 24 + 260);
+      }
+      function close() {
+        clearTimers();
+        label.textContent = '';
+        face.classList.remove('open', 'solved', 'flipping');
+        face.style.width = ''; face.style.marginLeft = '';
+        showing = false;
+        tag.classList.remove('on');
+      }
+
+      function frame() {
+        var k = reduced ? 1 : 0.3, dx = tx - x;
+        x += dx * k; y += (ty - y) * k;
+        lean += ((reduced ? 0 : Math.max(-6, Math.min(6, dx * 0.15))) - lean) * 0.2;
+        tag.style.transform = 'translate(' + x + 'px,' + y + 'px) rotate(' + lean + 'deg)';
+        side();
+        if (showing || Math.abs(dx) > 0.2 || Math.abs(lean) > 0.05) raf = requestAnimationFrame(frame);
+        else raf = null;
+      }
+      function show(e, text) {
+        tx = e.clientX; ty = e.clientY;
+        if (!showing) { x = tx; y = ty; lean = 0; }   // appear under the pointer, not trailing in from the last spot
+        showing = true;
+        tag.classList.add('on');
+        open(text);
+        if (!raf) raf = requestAnimationFrame(frame);
+      }
+
+      targets.forEach(function (t) {
+        t.el.classList.add('has-tag');
+        t.el.addEventListener('pointerenter', function (e) {
+          if (e.pointerType === 'mouse') { clearTimeout(hideTimer); show(e, t.text); }
+        });
+        t.el.addEventListener('pointermove', function (e) {
+          if (e.pointerType === 'mouse') { tx = e.clientX; ty = e.clientY; }
+        });
+        t.el.addEventListener('pointerleave', function (e) {
+          if (e.pointerType === 'mouse') close();
+        });
+        /* no hover on touch: a tap shows the tag where you tapped, briefly */
+        t.el.addEventListener('pointerdown', function (e) {
+          if (e.pointerType === 'mouse') return;
+          clearTimeout(hideTimer);
+          show(e, t.text);
+          hideTimer = setTimeout(close, 1800);
+        });
+      });
     })();
 
     /* ── FOOTER WORD CYCLER ── */
