@@ -204,7 +204,7 @@
     }
 
     /* ── HOVER TAG ──
-       Over the photo and the loop the pointer becomes a small black dot that
+       Over the photos and the loop the pointer becomes a small black dot that
        stretches into a rounded label and types its words in. The outer box
        follows the pointer and leans with speed (JS); the face inside does the
        stretching (CSS). */
@@ -470,7 +470,8 @@
     (function () {
       var targets = [
         { el: document.querySelector('.about-shots .frame:first-child'), text: 'me!' },
-        { el: document.querySelector('.frame-loop'), text: 'i love solving logic puzzles' }
+        { el: document.querySelector('.frame-loop'), text: 'i love solving logic puzzles' },
+        { el: document.querySelector('.about-shots .frame:last-child'), text: 'trying new cafes' }
       ].filter(function (t) { return t.el; });
       if (!targets.length) return;
       var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
