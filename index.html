@@ -103,21 +103,56 @@
       text-align: left;
       gap: 40px;
     }
-    .hero-miffy {
-      flex-shrink: 0;
-      height: clamp(130px, 15vw, 200px);
-      width: auto;
-      display: block;
-      align-self: center;
-      margin-bottom: 0;
+    /* ── HERO HOP BOARD ──
+       Miffy stands on a 4×4 board and hops to whichever tile you hover (or
+       tap). Tiles light under the pointer and fade back on their own, so
+       moving across the board leaves a short trail; the tile she's standing
+       on stays tinted. The hop itself is driven from JS; everything else
+       here is plain CSS so an idle board costs nothing. */
+    .hero-hop {
+      position: relative; flex-shrink: 0;
+      width: 208px; height: 262px;           /* 4 × 46px tiles + 8px gaps, plus headroom for her ears on the top row */
       opacity: 0; transform: translateY(20px);
       transition: opacity .9s var(--ease) .8s, transform .9s var(--ease) .8s;
-      animation: miffyFloat 4s ease-in-out infinite;
     }
-    #portfolio.visible .hero-miffy { opacity: 1; transform: translateY(0); }
-    @keyframes miffyFloat {
-      0%,100% { transform: translateY(0); }
-      50%      { transform: translateY(-10px); }
+    #portfolio.visible .hero-hop { opacity: 1; transform: translateY(0); }
+    .hop-board {
+      position: absolute; left: 0; top: 54px;
+      display: grid; grid-template-columns: repeat(4, 46px); gap: 8px;
+    }
+    .hop-tile {
+      width: 46px; height: 46px; border-radius: 10px; box-sizing: border-box;
+      background: #fff; border: 1.5px solid #E5E2DD; cursor: pointer;
+      transition: background-color .6s var(--ease), border-color .6s var(--ease), transform .35s var(--ease);
+    }
+    /* lighting up is quick; the .6s above is the fade back out — that's the trail */
+    .hop-tile.lit {
+      background: #EDE9FE; border-color: #C4B5FD; transform: scale(1.04);
+      transition: background-color .08s, border-color .08s, transform .12s var(--ease);
+    }
+    .hop-tile.home { background: #EDE9FE; border-color: #C4B5FD; }
+    /* zero-size anchor at her feet: JS moves, leans and squashes it around that point */
+    .hop-pos {
+      position: absolute; left: 0; top: 0; width: 0; height: 0; z-index: 1;
+      pointer-events: none;
+      transform: translate(77px, 253px);    /* home tile (row 4, column 2) for the no-JS case */
+    }
+    .hop-bunny {
+      position: absolute; left: 0; bottom: 0;
+      height: 74px; width: auto; display: block;
+      max-width: none;                       /* the mobile img max-width:100% would collapse her inside the zero-width anchor */
+      transform: translateX(-50%);
+      user-select: none; -webkit-user-drag: none;
+      animation: hopBob 2s ease-in-out infinite;
+    }
+    .hero-hop.is-hopping .hop-bunny { animation: none; }
+    @keyframes hopBob {
+      0%,100% { transform: translateX(-50%) translateY(0); }
+      50%      { transform: translateX(-50%) translateY(-3px); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .hop-bunny { animation: none; }
+      .hop-tile, .hop-tile.lit { transform: none; }
     }
     .hero-left {
       display: flex; flex-direction: column;
@@ -1083,7 +1118,15 @@
         </h1>
         <p class="hero-sub-line">Currently designing at UC Berkeley IT, working on advising tools and design systems for 20,000+ students</p>
       </div>
-      <img src="images/purpmiffy.png" alt="Miffy" draggable="false" class="hero-miffy"/>
+      <div class="hero-hop" aria-hidden="true">
+        <div class="hop-board">
+          <span class="hop-tile"></span><span class="hop-tile"></span><span class="hop-tile"></span><span class="hop-tile"></span>
+          <span class="hop-tile"></span><span class="hop-tile"></span><span class="hop-tile"></span><span class="hop-tile"></span>
+          <span class="hop-tile"></span><span class="hop-tile"></span><span class="hop-tile"></span><span class="hop-tile"></span>
+          <span class="hop-tile"></span><span class="hop-tile home"></span><span class="hop-tile"></span><span class="hop-tile"></span>
+        </div>
+        <div class="hop-pos"><img src="images/purpmiffy-solid.png" alt="" draggable="false" class="hop-bunny"/></div>
+      </div>
     </section>
 
     <!-- ── WORK ── -->
@@ -1449,6 +1492,104 @@
         if (!target) return;
         e.preventDefault();
         glideTo(target, hash);
+      });
+    })();
+
+    /* ── HERO HOP BOARD ──
+       She follows a beat behind the pointer: hovering a tile for a moment (or
+       tapping it) sets where she wants to be, and each hop runs to completion
+       before the next starts, so a fast sweep doesn't make her jitter — she
+       just heads for wherever you settled. The rAF loop only runs mid-hop.
+       When the pointer leaves the board she wanders back home. */
+    (function () {
+      var root = document.querySelector('.hero-hop');
+      if (!root) return;
+      var tiles = Array.prototype.slice.call(root.querySelectorAll('.hop-tile'));
+      var pos = root.querySelector('.hop-pos');
+      var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      var TS = 46, GAP = 8, TOP = 54, FEET = 14, HOME = 13;   // 13 = row 4, column 2
+      var at = HOME, want = HOME, hop = null, dwell = null, wander = null;
+
+      function spot(i) {
+        return [TS / 2 + (i % 4) * (TS + GAP), TOP + TS / 2 + Math.floor(i / 4) * (TS + GAP) + FEET];
+      }
+      function place(x, y, sy, lean) {
+        var sx = 1 + (1 - sy) * 0.9;                           // roughly keep her volume while squashing
+        pos.style.transform = 'translate(' + x + 'px,' + y + 'px) rotate(' + lean + 'deg) scale(' + sx + ',' + sy + ')';
+      }
+      function easeInOutCubic(p) {
+        return p < 0.5 ? 4 * p * p * p : 1 - Math.pow(-2 * p + 2, 3) / 2;
+      }
+      /* damped spring, for the wobble after landing */
+      function settle(t) {
+        var z = 0.5, w = 26, wd = w * Math.sqrt(1 - z * z);
+        return Math.exp(-z * w * t) * (Math.cos(wd * t) + (z * w / wd) * Math.sin(wd * t));
+      }
+
+      function goTo(i) {
+        want = i;
+        if (!hop && want !== at) jump();
+      }
+      function jump() {
+        var from = at, to = want;
+        tiles[from].classList.remove('home');
+        if (reduced) {                                          // no arc, no squash: she's just there
+          at = to; tiles[at].classList.add('home');
+          var s = spot(at); place(s[0], s[1], 1, 0);
+          return;
+        }
+        hop = { from: from, to: to, t0: performance.now(), landed: false };
+        root.classList.add('is-hopping');
+        requestAnimationFrame(frame);
+      }
+      function frame(now) {
+        var t = (now - hop.t0) / 1000, A = spot(hop.from), B = spot(hop.to);
+        if (t < 0.08) {                                         // crouch
+          place(A[0], A[1], 1 - 0.12 * Math.sin((t / 0.08) * Math.PI / 2), 0);
+        } else if (t < 0.48) {                                  // in the air: arc, stretch, lean into the jump
+          var p = (t - 0.08) / 0.4, e = easeInOutCubic(p);
+          place(A[0] + (B[0] - A[0]) * e,
+                A[1] + (B[1] - A[1]) * e - 120 * p * (1 - p),
+                1 + 0.07 * Math.sin(Math.PI * p) - 0.12 * Math.pow(1 - p, 4),
+                8 * Math.sign(B[0] - A[0]) * Math.sin(Math.PI * p));
+        } else {                                                // land, squash, settle
+          if (!hop.landed) { hop.landed = true; at = hop.to; tiles[at].classList.add('home'); }
+          var u = t - 0.48;
+          place(B[0], B[1], 1 - 0.14 * (u < 0.04 ? u / 0.04 : settle(u - 0.04)), 0);
+          /* chain the next hop once she's down, rather than waiting out the wobble */
+          if (t >= 0.62 && want !== at) { hop = null; jump(); return; }
+          if (t >= 0.9) {
+            place(B[0], B[1], 1, 0);
+            hop = null; root.classList.remove('is-hopping');
+            return;
+          }
+        }
+        requestAnimationFrame(frame);
+      }
+
+      tiles.forEach(function (tile, i) {
+        tile.addEventListener('pointerenter', function (e) {
+          tile.classList.add('lit');
+          clearTimeout(wander);
+          if (e.pointerType !== 'mouse') return;
+          clearTimeout(dwell);
+          dwell = setTimeout(function () { goTo(i); }, 120);
+        });
+        tile.addEventListener('pointerleave', function () { tile.classList.remove('lit'); });
+        /* touch and pen have no hover, so a tap sends her straight there */
+        tile.addEventListener('pointerdown', function (e) {
+          if (e.pointerType === 'mouse') return;
+          tile.classList.add('lit');
+          setTimeout(function () { tile.classList.remove('lit'); }, 250);
+          goTo(i);
+        });
+      });
+      /* mouse only: a finger "leaves" the moment it lifts, which would send her straight back */
+      root.addEventListener('pointerleave', function (e) {
+        clearTimeout(dwell);
+        if (e.pointerType !== 'mouse') return;
+        wander = setTimeout(function () { goTo(HOME); }, 700);
       });
     })();
 </script>
