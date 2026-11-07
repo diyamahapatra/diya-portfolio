@@ -134,6 +134,7 @@
     .img-item-gradient  { left: 310px;  top: 890px;  width: 300px; transform: rotate(2deg); }
     .img-item-resonance { left: 890px;  top: 930px;  width: 260px; transform: rotate(3deg); }
     .img-item-foundtype { left: 1430px; top: 870px;  width: 240px; transform: rotate(4deg); }
+    .img-item-moonlight { left: 1860px; top: 560px;  width: 280px; transform: rotate(-3deg); }
 
     .img-item-draw:hover      { transform: rotate(-2deg) scale(1.04); }
     .img-item-diya:hover      { transform: rotate(3deg)  scale(1.04); }
@@ -141,6 +142,7 @@
     .img-item-article:hover   { transform: rotate(-3deg) scale(1.04); }
     .img-item-resonance:hover { transform: rotate(-4deg) scale(1.04); }
     .img-item-foundtype:hover { transform: rotate(-2deg) scale(1.04); }
+    .img-item-moonlight:hover { transform: rotate(2deg)  scale(1.04); }
 
     /* while panning, suppress hover transitions so nothing fights the drag */
     .is-panning .img-item { transition: none; }
@@ -151,10 +153,17 @@
     .is-panning .img-item-article:hover   { transform: rotate(-2deg); }
     .is-panning .img-item-resonance:hover { transform: rotate(3deg); }
     .is-panning .img-item-foundtype:hover { transform: rotate(4deg); }
+    .is-panning .img-item-moonlight:hover { transform: rotate(-3deg); }
 
     .img-item img {
       display: block; width: 100%;
       -webkit-user-drag: none; user-select: none;
+    }
+    .img-item video {
+      display: block; width: 100%; aspect-ratio: 1 / 1;
+      background: #fdfcfc;
+      border: 1px solid #E8E5E0;
+      pointer-events: none;           /* drags pass straight through to the canvas */
     }
 
     .img-label {
@@ -297,6 +306,12 @@
           <span class="img-desc">Experimental letterforms</span>
         </div>
 
+        <div class="img-item img-item-moonlight">
+          <video src="videos/moonlight.mp4" poster="images/moonlight-poster.jpg" muted loop playsinline preload="metadata" aria-label="A film countdown that becomes a star rating and the Moonlight poster"></video>
+          <span class="img-label">Motion Design</span>
+          <span class="img-desc">Film countdown into a movie poster</span>
+        </div>
+
        </div>
       </div>
     </div>
@@ -396,8 +411,23 @@
        offset — otherwise the first piece starts tucked under the nav and the
        pinned heading. Only applied once, so a resize never yanks you back. */
     let placed = false;
+    /* Every copy of the canvas carries its own video, so only the ones in
+       view play — the rest sit paused on their poster. */
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const videoIO = 'IntersectionObserver' in window && !reduceMotion
+      ? new IntersectionObserver(entries => entries.forEach(en => {
+          if (en.isIntersecting) en.target.play().catch(() => {});
+          else en.target.pause();
+        }), { threshold: 0.25 })
+      : null;
+    function watchVideos() {
+      if (!videoIO) return;
+      videoIO.disconnect();
+      plane.querySelectorAll('video').forEach(v => videoIO.observe(v));
+    }
+
     function layout() {
-      measure(); buildTiles();
+      measure(); buildTiles(); watchVideos();
       if (!placed) { x = tx = 130; y = ty = 250; placed = true; }
       render();
     }
