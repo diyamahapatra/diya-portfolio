@@ -139,11 +139,9 @@
     /* ── HERO — bleeds from the rail to the right edge of the window ── */
     .cs-hero {
       margin-top: 0;
-      max-width: none;
-      /* sized like emmiwu.com/openai: ~58% of the window, never smaller than before */
-      width: min(calc(100% - 329px), max(840px, 57.65%));
-      margin-left: max(305px, 21.18%);
-      margin-right: 0;
+      max-width: 840px;
+      margin-left: max(325px, calc((100% - 840px) / 2 + var(--nudge)));
+      margin-right: 20px;
       /* same 1.9 as the hero on the other three studies */
       aspect-ratio: 1.9;
       background: #F3F4F6;
@@ -171,11 +169,9 @@
          right to sit optically centred. The max() floor keeps it clear of
          the dotted rule when the window is too narrow to both centre and
          clear. */
-      max-width: none;
-      /* sized like emmiwu.com/openai: ~58% of the window, never smaller than before */
-      width: min(calc(100% - 329px), max(840px, 57.65%));
-      margin-left: max(305px, 21.18%);
-      margin-right: 0;
+      max-width: 840px;
+      margin-left: max(325px, calc((100% - 840px) / 2 + var(--nudge)));
+      margin-right: 20px;
       padding: 16px 0 120px;
     }
 
@@ -189,13 +185,11 @@
       letter-spacing: -0.02em;
       line-height: 1.15;
       color: var(--ink);
-      max-width: none;
+      max-width: 840px;
       /* 57px of fixed nav plus the 48px the other studies leave below it */
       margin-top: 105px;
-      /* sized like emmiwu.com/openai: ~58% of the window, never smaller than before */
-      width: min(calc(100% - 329px), max(840px, 57.65%));
-      margin-left: max(305px, 21.18%);
-      margin-right: 0;
+      margin-left: max(325px, calc((100% - 840px) / 2 + var(--nudge)));
+      margin-right: 20px;
       margin-bottom: 28px;
       scroll-margin-top: 90px;
     }
@@ -871,11 +865,9 @@
     /* same geometry as .cs-content, so the cards line up under the copy */
     .next-up-label,
     .next-up-grid {
-      max-width: none;
-      /* sized like emmiwu.com/openai: ~58% of the window, never smaller than before */
-      width: min(calc(100% - 329px), max(840px, 57.65%));
-      margin-left: max(305px, 21.18%);
-      margin-right: 0;
+      max-width: 840px;
+      margin-left: max(325px, calc((100% - 840px) / 2 + var(--nudge)));
+      margin-right: 20px;
     }
 
     .next-up-label {
@@ -1120,7 +1112,6 @@
       .nav-links a { font-size: 13px; }
       .site-footer { padding: 36px 16px 24px; }
       .footer-bottom { flex-direction: column; align-items: flex-start; gap: 6px; }
-      .cs-content, .cs-body, .cs-hero, .cs-title, .next-up-label, .next-up-grid { width: auto; }
     }
 
     /* contents rail: same width as the landing page sidebar, text on the same 28px edge */
