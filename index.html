@@ -28,47 +28,30 @@
   <title>Diya Mahapatra — AI Product Designer</title>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300&family=Instrument+Serif:ital@0;1&family=Sorts+Mill+Goudy:ital@0;1&family=Lora:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Sorts+Mill+Goudy&family=Lora:wght@400;500&display=swap" rel="stylesheet"/>
   <style>
+    /* Sidebar layout experiment — same tokens as index.html, smaller type. */
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-
     :root {
       --orange: #8B5CF6;
       --black:  #0F0F0F;
       --gray:   #6B7280;
       --border: #E5E7EB;
       --ease:   cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      --side:   340px;
+      --nav-h:  63px;
     }
-
-    html { scroll-behavior: smooth; }
-    @media (prefers-reduced-motion: reduce) {
-      html, #portfolio { scroll-behavior: auto; }
-    }
-
     html, body {
-      width: 100%; height: 100%;
       font-family: 'Inter', system-ui, sans-serif;
       -webkit-font-smoothing: antialiased;
+      background: #FAF9F7; color: var(--black);
     }
+    a { color: inherit; text-decoration: none; }
 
-    /* ═══════════════════════════════════════════
-       PORTFOLIO
-    ═══════════════════════════════════════════ */
-    #portfolio {
-      position: relative;
-      width: 100%; height: 100%;
-      overflow-y: auto;
-      /* the document does not scroll on this page — this element does, so
-         the smooth fallback has to live here, not on html */
-      scroll-behavior: smooth;
-      background: #FAF9F7;
-    }
-    #portfolio.visible { opacity: 1; }
-
-    /* ── NAV ── */
+    /* ── NAV — same header as the homepage ── */
     nav {
       display: flex; align-items: center; justify-content: space-between;
-      padding: 20px 56px;
+      padding: 20px 56px 20px 28px;      /* left: the bunny's edge lines up with the "I" in the sidebar intro */
       position: sticky; top: 0;
       background: rgba(250,249,247,0.92);
       backdrop-filter: blur(12px);
@@ -76,1197 +59,345 @@
       z-index: 60;
       border-bottom: 1px solid var(--border);
     }
-    .nav-logo {
-      display: flex; align-items: center; gap: 10px;
-      text-decoration: none;
-    }
-    .logo-name {
-      font-size: 15px; font-weight: 600;
-      letter-spacing: -0.03em; color: var(--black);
-    }
-    .logo-name span { color: var(--orange); }
+    .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .logo-name { font-size: 15px; font-weight: 600; letter-spacing: -0.03em; color: var(--black); }
     .nav-links { display: flex; gap: 32px; list-style: none; }
-    .nav-links a {
-      font-size: 14px; font-weight: 400;
-      color: var(--gray); text-decoration: none;
-      transition: color 0.15s;
-    }
+    .nav-links a { font-size: 14px; font-weight: 400; color: var(--gray); text-decoration: none; transition: color 0.15s; }
     .nav-links a:hover { color: var(--black); }
 
-    /* ── HERO ── */
-    .hero {
-      padding: 10vh 64px 6vh;
-      max-width: 1080px; margin: 0 auto;
-      display: flex; flex-direction: row;
-      align-items: center;
-      justify-content: space-between;
-      text-align: left;
-      gap: 40px;
-    }
-    /* ── HERO HOP BOARD ──
-       Miffy stands on a 5×5 board and hops to whichever tile you hover (or
-       tap). Tiles light under the pointer and fade back on their own, so
-       moving across the board leaves a short trail; the tile she's standing
-       on stays tinted. The hop itself is driven from JS; everything else
-       here is plain CSS so an idle board costs nothing. */
-    .hero-hop {
-      position: relative; flex-shrink: 0;
-      width: 277px; height: 277px;           /* 5 × 49px tiles + 8px gaps: spans the heading's top down to its old bottom */
-      align-self: flex-start;                 /* top row lines up with "I'm Diya,"; on that row her ears just overhang the box */
-      opacity: 0; transform: translateY(20px);
-      transition: opacity .9s var(--ease) .8s, transform .9s var(--ease) .8s;
-    }
-    #portfolio.visible .hero-hop { opacity: 1; transform: translateY(0); }
-    .hop-board {
-      position: absolute; left: 0; top: 0;
-      display: grid; grid-template-columns: repeat(5, 49px); gap: 8px;
-    }
-    .hop-tile {
-      width: 49px; height: 49px; border-radius: 4px; box-sizing: border-box;   /* near-square, like the work cards */
-      background: #fff; border: 1.5px solid #E5E2DD; cursor: pointer;
-      transition: background-color .6s var(--ease), border-color .6s var(--ease), transform .35s var(--ease);
-    }
-    /* lighting up is quick; the .6s above is the fade back out — that's the trail */
-    .hop-tile.lit {
-      background: #EDE9FE; border-color: #C4B5FD; transform: scale(1.04);
-      transition: background-color .08s, border-color .08s, transform .12s var(--ease);
-    }
-    .hop-tile.home { background: #EDE9FE; border-color: #C4B5FD; }
-    /* zero-size anchor at her feet: JS moves, leans and squashes it around that point */
-    .hop-pos {
-      position: absolute; left: 0; top: 0; width: 0; height: 0; z-index: 1;
-      pointer-events: none;
-      transform: translate(81.5px, 267.5px);  /* home tile (row 5, column 2) for the no-JS case */
-    }
-    .hop-bunny {
-      position: absolute; left: 0; bottom: 0;
-      height: 78px; width: auto; display: block;
-      max-width: none;                       /* the mobile img max-width:100% would collapse her inside the zero-width anchor */
-      transform: translateX(-50%);
-      user-select: none; -webkit-user-drag: none;
-      animation: hopBob 2s ease-in-out infinite;
-    }
-    .hero-hop.is-hopping .hop-bunny { animation: none; }
-    @keyframes hopBob {
-      0%,100% { transform: translateX(-50%) translateY(0); }
-      50%      { transform: translateX(-50%) translateY(-3px); }
-    }
-    @media (prefers-reduced-motion: reduce) {
-      .hop-bunny { animation: none; }
-      .hop-tile, .hop-tile.lit { transform: none; }
-    }
-    .hero-left {
+    /* ── SIDEBAR ── */
+    .layout { display: flex; align-items: flex-start; }
+    .side {
+      position: sticky; top: var(--nav-h); flex-shrink: 0;
+      width: var(--side); height: calc(100vh - var(--nav-h));
+      padding: 32px 28px 28px;
       display: flex; flex-direction: column;
-      align-items: flex-start;
-      width: 100%;
     }
-    .hero-separator {
-      width: 8px; height: 8px; border-radius: 50%;
-      background: var(--orange);
-      margin: 32px 0 0;
+    /* name in the serif, everything else in the sans (Season Sans if it's
+       available, Inter otherwise) */
+    .side-name { font-family: 'Lora', Georgia, serif; font-size: 21px; font-weight: 400; letter-spacing: -0.01em; line-height: 1.25; color: var(--black); margin-bottom: 14px; }
+    .side-bio { font-family: 'Season Sans', 'Inter', system-ui, sans-serif; font-size: 14px; line-height: 1.55; color: var(--black); max-width: 280px; margin-top: 12px; }
+    .side-name + .side-bio { margin-top: 0; }
+    /* the bunny moved here from the header; nudged so her edge lines up with the D */
+    .side-bunny-btn {
+      position: relative; display: block; width: 44px; height: 44px;
+      margin: 0 0 14px -3px; padding: 0; border: 0; background: none; cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .side-bunny-btn:focus-visible { outline: 2px solid var(--orange); outline-offset: 4px; border-radius: 8px; }
+    .side-bunny { display: block; width: 100%; height: 100%; object-fit: contain; transform-origin: 50% 100%; user-select: none; -webkit-user-drag: none; pointer-events: none; }
+    /* click: she crouches, hops, and lands with a little squash */
+    .side-bunny.hop { animation: bunnyHop 0.62s cubic-bezier(.3, .7, .4, 1); }
+    @keyframes bunnyHop {
+      0%   { transform: translateY(0) scale(1, 1); }
+      14%  { transform: translateY(0) scale(1.12, 0.86); }
+      45%  { transform: translateY(-20px) scale(0.94, 1.08) rotate(-6deg); }
+      72%  { transform: translateY(0) scale(1.1, 0.9); }
+      86%  { transform: translateY(-3px) scale(0.98, 1.02); }
+      100% { transform: translateY(0) scale(1, 1); }
+    }
+    /* little hearts that float up from her */
+    .bunny-heart {
+      position: absolute; left: 50%; top: 20%; pointer-events: none;
+      font-size: 12px; line-height: 1; color: var(--orange);
+      animation: heartUp 0.95s ease-out forwards;
+    }
+    @keyframes heartUp {
+      0%   { transform: translate(-50%, 0) scale(0.4); opacity: 0; }
+      20%  { opacity: 1; }
+      100% { transform: translate(calc(-50% + var(--dx)), -34px) scale(1); opacity: 0; }
     }
-
-    /* ── HERO RIGHT — shooting star ── */
-    .hero-right {
-      flex-shrink: 0;
-      padding-top: 14vh;
-      opacity: 0; transform: translateY(16px);
-      transition: opacity .8s var(--ease) .6s, transform .8s var(--ease) .6s;
-    }
-    #portfolio.visible .hero-right { opacity: 1; transform: translateY(0); }
-    .hero-star-svg { display: block; }
-
-    /* ── STATUS CHIP ── */
-    .hero-sub-line {
-      font-size: 16px; color: var(--gray);
-      margin-top: 20px; line-height: 1.6;
-      opacity: 0; transform: translateY(8px);
-      transition: opacity .75s var(--ease) 1.1s, transform .75s var(--ease) 1.1s;
-    }
-    #portfolio.visible .hero-sub-line { opacity: 1; transform: translateY(0); }
-
-    .work-section-title {
-      font-size: 13px; font-weight: 600;
-      letter-spacing: 0.10em; text-transform: uppercase;
-      color: var(--gray); margin-bottom: 40px;
-    }
-    .work-section-title em {
-      font-style: italic;
-      font-family: 'Instrument Serif', serif;
-      font-weight: 400; font-size: 17px;
-      letter-spacing: 0;
-      text-transform: none;
-      color: var(--black);
-    }
-
-    .status-chip {
-      display: inline-flex; align-items: center; gap: 10px;
-      align-self: flex-start;
-      margin-top: 32px;
-      padding: 9px 18px 9px 13px;
-      border: 1px solid var(--border);
-      border-radius: 100px;
-      font-size: 15px; color: var(--gray);
-      opacity: 0; transform: translateY(8px);
-      transition: opacity .7s var(--ease) .55s, transform .7s var(--ease) .55s;
-    }
-    #portfolio.visible .status-chip { opacity: 1; transform: translateY(0); }
-    .status-dot {
-      width: 9px; height: 9px; border-radius: 50%;
-      background: var(--orange); flex-shrink: 0;
-      animation: dotPulse 2.8s ease-in-out infinite;
-    }
-    @keyframes dotPulse {
-      0%, 100% { opacity: 1; transform: scale(1); }
-      50%       { opacity: 0.4; transform: scale(0.75); }
-    }
-    .hero-heading {
-      font-size: clamp(30px, 3.6vw, 46px);
-      line-height: 1.18; letter-spacing: -0.02em;
-      font-weight: 500; margin-bottom: 0;
-      display: flex; flex-direction: column; gap: 0;
-    }
-    .h-line { display: block; opacity: 0; }
-
-    /* line 1 — fade only, no movement */
-    .h-line-1 {
-      font-family: 'Lora', serif;
-      transform: none;
-      transition: opacity 1s var(--ease) .1s;
-    }
-    /* line 2 — slides up */
-    .h-line-2 {
-      font-family: 'Inter', sans-serif;
-      color: var(--orange); font-style: normal;
-      transform: translateY(28px);
-      transition: opacity .95s var(--ease) .55s, transform .95s var(--ease) .55s;
-    }
-    /* line 3 — slides up, last */
-    .h-line-3 {
-      font-family: 'Lora', serif;
-      transform: translateY(28px);
-      transition: opacity .95s var(--ease) .95s, transform .95s var(--ease) .95s;
-    }
-
-    .hero-sub {
-      font-size: 17px; color: var(--gray);
-      line-height: 1.7; max-width: 520px; margin-bottom: 40px;
-      opacity: 0; transform: translateY(10px);
-      transition: opacity .75s var(--ease) .22s, transform .75s var(--ease) .22s;
-    }
-    .credentials {
-      display: flex; flex-direction: column; gap: 10px;
-      opacity: 0; transform: translateY(8px);
-      transition: opacity .7s var(--ease) .32s, transform .7s var(--ease) .32s;
-    }
-    .credential {
-      display: flex; align-items: center; gap: 10px;
-      font-size: 15px; color: var(--gray);
-    }
-    .credential .dot {
-      width: 6px; height: 6px; border-radius: 50%;
-      background: var(--orange); flex-shrink: 0;
-    }
-    .credential a {
-      color: inherit; text-decoration: none;
-      border-bottom: 1px solid var(--border);
-      transition: color 0.15s, border-color 0.15s;
-    }
-    .credential a:hover { color: var(--orange); border-color: var(--orange); }
-
-    .hero-scroll-hint {
-      display: flex; align-items: center; gap: 10px;
-      margin-top: 56px; color: var(--gray);
-      font-size: 12px; font-weight: 500;
-      letter-spacing: 0.08em; text-transform: uppercase;
-      cursor: pointer;
-      opacity: 0; transform: translateY(8px);
-      transition: opacity .7s var(--ease) .44s, transform .7s var(--ease) .44s;
-    }
-    .hint-line { width: 32px; height: 1px; background: var(--gray); opacity: .5; }
-    .hint-arrow { animation: hintBounce 1.5s ease-in-out infinite; display: inline-block; }
-    @keyframes hintBounce { 0%,100%{transform:translateY(0)} 50%{transform:translateY(5px)} }
-
-    /* stagger all hero children in once .visible is added */
-    #portfolio.visible .hero-sub,
-    #portfolio.visible .credentials,
-    #portfolio.visible .hero-scroll-hint {
-      opacity: 1;
-      transform: translateY(0);
-    }
-    #portfolio.visible .h-line {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    /* ── WORK SECTION ── */
-    .work-section {
-      padding: 48px 56px 140px;
-      border-top: 1px solid var(--border);
-      /* the nav is sticky and 63px tall, so an unadjusted anchor jump would
-         park this section's top edge underneath it */
-      scroll-margin-top: 72px;
-    }
-
-    .work-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      column-gap: 20px;
-      row-gap: 72px;
-    }
-
-    /* the hand only where a click does something — the unfinished card is a
-       plain <div>, so it keeps the default arrow */
-    a.work-card {
-      cursor: pointer;
-      display: block;
-      text-decoration: none;
-      color: inherit;
-    }
-
-    .work-thumb {
-      width: 100%;
-      aspect-ratio: 16 / 11;
-      border-radius: 0;
-      overflow: hidden;
-      margin-bottom: 22px;
-      position: relative;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    /* Two lines only — a plain bold name over one grey line of description. */
-    /* Company and year only — grey, small, wide-tracked caps. The role and
-       the em dashes are what made the old version long-winded. */
-    .work-label {
-      font-size: 11px;
-      font-weight: 500;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      color: var(--gray);
-      margin-bottom: 9px;
-    }
-
-    /* Lora, matching .next-up-title on the case study pages — the landing
-       cards were the only titles still set in sans. A touch larger than those
-       since these are the primary cards. */
-    .work-title {
-      font-family: 'Lora', Georgia, serif;
-      font-size: 20px;
-      font-weight: 500; letter-spacing: -0.01em;
-      color: var(--black); line-height: 1.35;
-      margin-bottom: 4px;
-    }
-
-    .work-desc {
-      font-size: 15px; color: var(--gray);
-      line-height: 1.55; max-width: 560px;
-    }
-
-    /* ── placeholder thumbnail backgrounds — pastel palette ── */
-
-    /* ── THUMB 1 — warm ivory/sage gradient (matches Research quote card) ── */
-    .thumb-1 {
-      background: linear-gradient(135deg, #BCD8D8 0%, #C0C8E8 52%, #EDE0D4 100%);
-      position: relative;
-      overflow: hidden;
-    }
-    .thumb-1-mesh {
-      display: none;
-    }
-    .t1b { position: absolute; border-radius: 50%; will-change: transform; }
-    .t1b-1 { width: 70%; height: 70%; background: #F5EDE6; top: -10%; left: -10%; animation: t1m1 3.5s ease-in-out infinite alternate; }
-    .t1b-2 { width: 60%; height: 60%; background: #DDD0EE; top: 0%; right: -15%; animation: t1m2 4.5s ease-in-out infinite alternate; }
-    .t1b-3 { width: 65%; height: 65%; background: #C8C0E8; bottom: -15%; left: 15%; animation: t1m3 4.0s ease-in-out infinite alternate; }
-    .t1b-4 { width: 55%; height: 55%; background: #FAF4F0; top: 20%; left: 25%; animation: t1m4 5.0s ease-in-out infinite alternate; }
-    @keyframes t1m1 { to { transform: translate(18%, 20%); } }
-    @keyframes t1m2 { to { transform: translate(-20%, 16%); } }
-    @keyframes t1m3 { to { transform: translate(16%, -18%); } }
-    @keyframes t1m4 { to { transform: translate(-14%, -12%); } }
-
-    /* ── FLOURISH AI CARD — nav pill + single card pop-up ── */
-    .f1-scene {
-      position: absolute; inset: 0; z-index: 2;
-      display: flex; align-items: center;
-      padding: 6% 5% 6% 5%;
-      gap: 14px;
-    }
-
-    /* Left nav pill */
-    .f1-nav {
-      display: flex; align-items: center; gap: 10px;
-      flex-shrink: 0;
-      opacity: 0; transform: translateY(10px);
-      transition: opacity 0.6s ease 0.3s, transform 0.6s ease 0.3s;
-    }
-    .thumb-1.in-view .f1-nav { opacity: 1; transform: translateY(0); }
-
-    .f1-pill {
-      background: rgba(255,255,255,0.38);
-      backdrop-filter: blur(18px) saturate(180%);
-      -webkit-backdrop-filter: blur(18px) saturate(180%);
-      border: 1px solid rgba(255,255,255,0.72);
-      box-shadow: 0 4px 18px rgba(160,120,130,0.10),
-                  inset 0 1.5px 0 rgba(255,255,255,0.88),
-                  inset 0 -1px 0 rgba(255,255,255,0.28);
-      border-radius: 100px;
-      padding: 6px;
-      display: flex; flex-direction: column; align-items: center;
-      gap: 0;
-      position: relative; overflow: hidden;
-    }
-    .f1-pill::before {
-      content: '';
-      position: absolute; top: 0; left: 0; right: 0; height: 50%;
-      background: linear-gradient(180deg, rgba(255,255,255,0.13) 0%, transparent 100%);
-      border-radius: inherit; pointer-events: none; z-index: 0;
-    }
-    .f1-nd {
-      width: 30px; height: 30px; border-radius: 50%;
-      background: rgba(255,255,255,0.55);
-      border: 1px solid rgba(255,255,255,0.62);
-      box-shadow: inset 0 1px 0 rgba(255,255,255,0.72);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 8px; font-weight: 700; letter-spacing: 0.02em;
-      color: rgba(0,0,0,0.70);
-      flex-shrink: 0; position: relative; z-index: 1;
-    }
-    .f1-sep { width: 1px; height: 11px; background: rgba(160,120,140,0.22); position: relative; z-index: 1; }
-
-    .f1-labels {
-      display: flex; flex-direction: column; gap: 0;
-    }
-    .f1-lbl {
-      height: 30px;
-      display: flex; align-items: center;
-      font-size: 8.5px; font-weight: 600;
-      letter-spacing: 0.13em; text-transform: uppercase;
-      color: rgba(0,0,0,0.62);
-      position: relative; z-index: 1;
-    }
-    /* gap between labels mirrors sep height */
-    .f1-lbl + .f1-lbl { margin-top: 11px; }
-
-    /* Cards display area */
-    .f1-cards-area {
-      flex: 1; position: relative;
-      height: 100%; overflow: hidden;
-      display: flex; align-items: center; justify-content: center;
-    }
-    .f1-crd {
-      position: absolute;
-      width: 68%; border-radius: 24px;
-      opacity: 0; transform: translateY(100%);
-      will-change: transform, opacity;
-      box-shadow: 0 8px 32px rgba(100,70,90,0.20), 0 2px 10px rgba(100,70,90,0.10);
-      background: rgba(255,255,255,0.18);
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
-      padding: 14px;
-      overflow: hidden;
-    }
-    .f1-crd img {
-      display: block; width: 100%; height: auto;
-      border-radius: 14px;
-    }
-    /* Both keep the Symptom card's glass treatment from .f1-crd above; they
-       only sit smaller in the frame. Width drives it — height follows each
-       image's own ratio, and land1 is portrait, so 68% would overrun. */
-    .f1-crd-1 { width: 56%; }
-    /* land1 is a light bit of UI — a short form — so it carries less and
-       doesn't need the same presence as the meal card. */
-    .f1-crd-3 { width: 44%; }
-
-    .f1-crd-2 {
-      width: auto;
-      height: 91%;
-      background: rgba(255,255,255,0.22);
-      backdrop-filter: blur(10px) saturate(160%);
-      -webkit-backdrop-filter: blur(10px) saturate(160%);
-      box-shadow: 0 8px 32px rgba(100,70,90,0.20), 0 2px 10px rgba(100,70,90,0.10);
-      padding: 13px;
-      border-radius: 28px;
-      display: flex;
-      overflow: visible;
-      position: relative;
-    }
-    .f1-crd-2::before {
-      content: '';
-      position: absolute; top: 0; left: 0; right: 0; height: 50%;
-      background: linear-gradient(180deg, rgba(255,255,255,0.10) 0%, transparent 100%);
-      border-radius: inherit; pointer-events: none;
-    }
-    .f1-crd-2 img {
-      height: 100%;
-      width: auto;
-      display: block;
-      border-radius: 0;
-    }
-
-    /* ── THUMB-1 LIQUID GLASS LAYERS ── */
-    /* Sweep shimmer overlay — sits between mesh and scene */
-    .t1-sweep {
-      position: absolute; inset: 0; z-index: 1; pointer-events: none;
-      background: linear-gradient(110deg, transparent 30%, rgba(255,255,255,0.07) 50%, transparent 70%);
-      animation: t1Sweep 4.8s ease-in-out infinite;
-    }
-    @keyframes t1Sweep { 0%,100% { transform: translateX(-130%); } 50% { transform: translateX(130%); } }
-
-    /* 10.5s cycle — one card visible at a time, pops up from bottom */
-    .thumb-1.in-view .f1-crd-1 { animation: crdPop1 10.5s var(--ease) 0.4s infinite; }
-    @keyframes crdPop1 {
-      0%         { opacity:0; transform:translateY(100%); }
-      7%         { opacity:1; transform:translateY(0); }
-      27%        { opacity:1; transform:translateY(0); }
-      33%        { opacity:0; transform:translateY(-12%); }
-      33.1%,100% { opacity:0; transform:translateY(100%); }
-    }
-    .thumb-1.in-view .f1-crd-2 { animation: crdPop2 10.5s var(--ease) 0.4s infinite; }
-    @keyframes crdPop2 {
-      0%,33%     { opacity:0; transform:translateY(100%); }
-      40%        { opacity:1; transform:translateY(0); }
-      60%        { opacity:1; transform:translateY(0); }
-      66%        { opacity:0; transform:translateY(-12%); }
-      66.1%,100% { opacity:0; transform:translateY(100%); }
-    }
-    .thumb-1.in-view .f1-crd-3 { animation: crdPop3 10.5s var(--ease) 0.4s infinite; }
-    @keyframes crdPop3 {
-      0%,66%  { opacity:0; transform:translateY(100%); }
-      73%     { opacity:1; transform:translateY(0); }
-      93%     { opacity:1; transform:translateY(0); }
-      99%     { opacity:0; transform:translateY(-12%); }
-      100%    { opacity:0; transform:translateY(100%); }
-    }
-
-    /* Nav dot highlights — synced to card cycle */
-    .thumb-1.in-view .f1-nd-1 { animation: nd1 10.5s var(--ease) 0.4s infinite; }
-    .thumb-1.in-view .f1-nd-2 { animation: nd2 10.5s var(--ease) 0.4s infinite; }
-    .thumb-1.in-view .f1-nd-3 { animation: nd3 10.5s var(--ease) 0.4s infinite; }
-    @keyframes nd1 {
-      0%,33%     { background:#fff; color:rgba(0,0,0,0.92); }
-      33.1%,100% { background:rgba(255,255,255,0.50); color:rgba(0,0,0,0.70); }
-    }
-    @keyframes nd2 {
-      0%,33%     { background:rgba(255,255,255,0.50); color:rgba(0,0,0,0.70); }
-      33.1%,66%  { background:#fff; color:rgba(0,0,0,0.92); }
-      66.1%,100% { background:rgba(255,255,255,0.50); color:rgba(0,0,0,0.70); }
-    }
-    @keyframes nd3 {
-      0%,66%     { background:rgba(255,255,255,0.50); color:rgba(0,0,0,0.70); }
-      66.1%,100% { background:#fff; color:rgba(0,0,0,0.92); }
-    }
-
-    /* Label highlights — synced */
-    .thumb-1.in-view .f1-lbl-1 { animation: lb1 10.5s var(--ease) 0.4s infinite; }
-    .thumb-1.in-view .f1-lbl-2 { animation: lb2 10.5s var(--ease) 0.4s infinite; }
-    .thumb-1.in-view .f1-lbl-3 { animation: lb3 10.5s var(--ease) 0.4s infinite; }
-    @keyframes lb1 {
-      0%,33%     { color:rgba(0,0,0,0.92); }
-      33.1%,100% { color:rgba(0,0,0,0.62); }
-    }
-    @keyframes lb2 {
-      0%,33%     { color:rgba(0,0,0,0.62); }
-      33.1%,66%  { color:rgba(0,0,0,0.92); }
-      66.1%,100% { color:rgba(0,0,0,0.62); }
-    }
-    @keyframes lb3 {
-      0%,66%     { color:rgba(0,0,0,0.62); }
-      66.1%,100% { color:rgba(0,0,0,0.92); }
-    }
-
-    /* Solid, not a mesh: the old pale-blue/cream blobs were the same family
-       as Flourish's, so the two cards read alike. This green is sampled from
-       the dashboard's own buttons and charts. */
-    /* Solid, in the blue/violet family of the personal brand rather than the
-       project's own green — the cards should read as one portfolio. */
-    .thumb-2 {
-      background: #A6CFD5;
-      /* Green mesh, not the old pale-blue/cream one that clashed with
-         Flourish. Layered radials rather than blob divs, so it's static and
-         costs no DOM. Greens sampled from the dashboard itself. */
-      position: relative;
-      overflow: hidden;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    /* top-left: soft aqua */
-    /* top-right: periwinkle */
-    /* bottom-left: warm cream (large, dominant) */
-    /* bottom-right: cream-blush */
-    /* center: warm cream drift */
-
-    /* carbonproper is drawn at the card's own 16/11, so it fills edge to edge
-       — no inset, no side gaps, nothing cropped. */
-    /* Sits low and runs off the bottom edge, so the dashboard reads as tucked
-       into the card rather than floating inside it. Centred horizontally so
-       the side margins are even. */
-    .thumb-2-img-wrap {
-      position: absolute; inset: 0; z-index: 3;
-      display: flex; align-items: flex-start; justify-content: center;
-      padding: 24% 0 0;
-    }
-    .t2-frame-enter { width: 86%; flex-shrink: 0; }
-    .thumb-2-img-wrap img {
-      display: block; width: 100%; height: auto;
-    }
-
-    /* ── THUMB-2 LIQUID GLASS ── */
-
-    /* Bare image on a soft shadow — no white border, fill or pad ring. */
-    .t2-glass-frame {
-      width: 100%;
-      height: auto;
-      /* bottom corners fall outside the card, so only the top pair round */
-      border-radius: 10px 10px 0 0;
-      overflow: hidden;
-      position: relative;
-    }
-    .t2-glass-frame img {
-      display: block;
-      width: 100%; height: auto;
-      border-radius: inherit;
-      position: relative;
-    }
-
-    /* ── THUMB-2 ENTRANCE + FLOAT ── */
-    .t2-frame-enter {
-      opacity: 0;
-      transition: opacity 0.85s var(--ease) 0.25s;
-    }
-    .thumb-2.in-view .t2-frame-enter { opacity: 1; }
-
-    .thumb-3 {
-      background: #D2D2FF;
-      overflow: hidden;
-      position: relative;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    /* ── LIQUID GLASS CARD ── */
-    .thumb-lg {
-      background: #FCE8D0;
-      position: relative; overflow: hidden;
-      display: flex; align-items: center; justify-content: center;
-    }
-    .lg-bg { position: absolute; inset: -25%; z-index: 0; }
-    .lg-blob { position: absolute; border-radius: 50%; will-change: transform; }
-    .lg-blob-1 { width: 62%; height: 62%; background: #F1C3B3; top: -8%;  left: -8%;  filter: blur(40px); animation: lgb1 3.5s ease-in-out infinite alternate; }
-    .lg-blob-2 { width: 55%; height: 55%; background: #BFD9D0; top: 5%;   right: -12%; filter: blur(36px); animation: lgb2 4s   ease-in-out infinite alternate; }
-    .lg-blob-3 { width: 80%; height: 80%; background: #FCE8D0; bottom: -10%; left: 0%;  filter: blur(44px); animation: lgb3 3.2s ease-in-out infinite alternate; }
-    .lg-blob-4 { width: 48%; height: 48%; background: #FEDCAF; top: 35%;  left: 30%;  filter: blur(34px); animation: lgb4 4.5s ease-in-out infinite alternate; }
-    @keyframes lgb1 { to { transform: translate(24%, 20%) scale(1.22); } }
-    @keyframes lgb2 { to { transform: translate(-22%, 24%) scale(0.85); } }
-    @keyframes lgb3 { to { transform: translate(20%, -22%) scale(1.18); } }
-    @keyframes lgb4 { to { transform: translate(-18%, 16%) scale(1.15); } }
-
-    .lg-scene {
-      position: relative; z-index: 1;
-      width: 78%; display: flex; flex-direction: column;
-      align-items: center; gap: 7px;
-    }
-
-    /* shared glass base */
-    .lg-glass {
-      background: rgba(255,255,255,0.38);
-      backdrop-filter: blur(20px) saturate(160%);
-      -webkit-backdrop-filter: blur(20px) saturate(160%);
-      border: 1px solid rgba(255,255,255,0.75);
-      box-shadow: 0 6px 24px rgba(180,140,110,0.14),
-                  inset 0 1.5px 0 rgba(255,255,255,0.9),
-                  inset 0 -1px 0 rgba(255,255,255,0.3);
-      position: relative; overflow: hidden;
-    }
-    /* top-edge sheen */
-    .lg-glass::before {
-      content: '';
-      position: absolute; top: 0; left: 0; right: 0; height: 50%;
-      background: linear-gradient(180deg, rgba(255,255,255,0.10) 0%, transparent 100%);
-      border-radius: inherit; pointer-events: none;
-    }
-
-    /* sweep shimmer */
-    .lg-sweep {
-      position: absolute; inset: 0; z-index: 5; pointer-events: none;
-      background: linear-gradient(110deg, transparent 30%, rgba(255,255,255,0.14) 50%, transparent 70%);
-      animation: lgSweep 3.8s ease-in-out infinite;
-    }
-    @keyframes lgSweep { 0%,100% { transform: translateX(-120%); } 50% { transform: translateX(120%); } }
-
-    /* main card */
-    .lg-main-card {
-      width: 100%; border-radius: 22px; padding: 14px 14px 12px;
-      animation: lgFloat 5s ease-in-out infinite;
-    }
-    @keyframes lgFloat { 0%,100% { transform: translateY(0);   } 50% { transform: translateY(-5px); } }
-
-    .lg-logo-row {
-      display: flex; align-items: center; gap: 8px; margin-bottom: 10px;
-    }
-    .lg-apple-icon {
-      width: 26px; height: 26px; border-radius: 8px;
-      background: rgba(255,255,255,0.15);
-      border: 1px solid rgba(255,255,255,0.25);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 14px; color: rgba(255,255,255,0.9);
-      animation: lgIconGlow 2.5s ease-in-out infinite;
-    }
-    @keyframes lgIconGlow {
-      0%,100% { box-shadow: 0 0 0 0 rgba(255,255,255,0); }
-      50%      { box-shadow: 0 0 12px 3px rgba(200,180,255,0.4); }
-    }
-    .lg-title-stack { display: flex; flex-direction: column; gap: 4px; }
-    .lg-tl { height: 5px; border-radius: 3px; background: rgba(80,60,70,0.35); }
-    .lg-tl.sm { background: rgba(80,60,70,0.2); }
-
-    .lg-divider { width: 100%; height: 1px; background: rgba(150,120,130,0.15); margin: 9px 0; }
-
-    .lg-inner-row { display: flex; gap: 5px; }
-    .lg-inner-card {
-      flex: 1; border-radius: 12px; padding: 7px 8px;
-      background: rgba(255,255,255,0.45);
-      border: 1px solid rgba(255,255,255,0.7);
-      display: flex; flex-direction: column; gap: 4px;
-    }
-    .lg-dot { width: 14px; height: 14px; border-radius: 50%; background: rgba(180,140,150,0.3); }
-    .lg-iline { height: 4px; border-radius: 2px; background: rgba(120,100,110,0.18); }
-
-    /* pills row */
-    .lg-pill-row { display: flex; gap: 6px; width: 100%; }
-    .lg-pill {
-      border-radius: 100px; padding: 5px 11px;
-      font-size: 8.5px; font-weight: 600; letter-spacing: 0.07em;
-      color: rgba(80,65,75,0.75); white-space: nowrap;
-    }
-    .lg-pill-1 { animation: lgPf1 3.8s ease-in-out infinite alternate; }
-    .lg-pill-2 { animation: lgPf2 4.4s ease-in-out infinite alternate; }
-    .lg-pill-3 { animation: lgPf3 3.2s ease-in-out infinite alternate; align-self: flex-end; margin-left: auto; }
-    @keyframes lgPf1 { from { transform: translateY(0);  } to { transform: translateY(-4px); } }
-    @keyframes lgPf2 { from { transform: translateY(-3px); } to { transform: translateY(3px);  } }
-    @keyframes lgPf3 { from { transform: translateY(0);  } to { transform: translateY(-5px); } }
-
-    /* ── THUMB BIT — solid Berkeley blue, wordmark only ── */
-    .thumb-bit {
-      background: #003262;        /* Berkeley Blue */
-      position: relative; overflow: hidden;
-      display: flex; align-items: center; justify-content: center;
-    }
-    .bit-wordmark {
-      /* Sorts Mill Goudy revives Goudy's Californian — the face UC Berkeley's
-         own Berkeley Oldstyle was cut from — so it reads as the university's
-         type without standing in for the licensed wordmark itself. */
-      font-family: 'Sorts Mill Goudy', Georgia, serif;
-      font-size: clamp(30px, 4.2vw, 54px);
-      font-weight: 400;
-      letter-spacing: 0.005em;
-      line-height: 1;
-      color: #fff;
-      text-align: center;
-      padding: 0 24px;
-    }
-
-    /* ── CARD 3 — AMAZON MUSIC IMAGES ── */
-
-    .t3-imgs {
-      position: absolute; inset: 0; z-index: 3;
-      display: flex; align-items: center; justify-content: center;
-      gap: 14px; padding: 0 16px;
-    }
-    /* Bare screens — no white outline, fill or top-edge sheen. */
-    .t3-img-back, .t3-img-front {
-      flex-shrink: 0; opacity: 0;
-      border-radius: 30px; overflow: hidden;
-      position: relative;
-    }
-    .t3-img-back  { width: 34%; }
-    .t3-img-front { width: 34%; }
-    .t3-imgs img  { display: block; width: 100%; }
-
-    /* One-shot entrance, then static — nothing loops on the card. */
-    .t3-img-back  { transform: translateY(calc(-28% - 60px)); }
-    .t3-img-front { transform: translateY(calc(28% + 60px)); }
-    .t3-img-back, .t3-img-front {
-      filter: drop-shadow(0 10px 20px rgba(100,148,172,0.18));
-      transition: opacity 0.85s var(--ease), transform 0.85s var(--ease);
-    }
-    .thumb-3.in-view .t3-img-back  { opacity: 1; transform: translateY(-28%); transition-delay: 0.20s; }
-    .thumb-3.in-view .t3-img-front { opacity: 1; transform: translateY(28%);  transition-delay: 0.45s; }
     @media (prefers-reduced-motion: reduce) {
-      .t3-img-back, .t3-img-front { transition: none; }
-      .t3-img-back  { transform: translateY(-28%); opacity: 1; }
-      .t3-img-front { transform: translateY(28%);  opacity: 1; }
+      .side-bunny.hop { animation: none; }
     }
+    .side-bio a { text-decoration: underline; text-underline-offset: 3px; text-decoration-thickness: 1px; }
+    .side-bio a:hover { color: var(--gray); }
+    .side-bio:first-child { margin-top: 0; }
+    .side-meta { font-size: 14px; line-height: 1.5; color: var(--gray); margin-top: 12px; max-width: 280px; }
 
-    .thumb-4 {
-      background: #c2d9cc;
-      overflow: hidden;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      position: relative;
+    /* ── WORK GRID ── */
+    .main { flex: 1; min-width: 0; padding: 32px 32px 64px 0; }
+    .grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 40px 14px; }
+    /* card hover — the homepage fade: the hovered card dims, nothing moves */
+    .tile { display: block; transition: opacity 0.22s var(--ease); }
+    .tile:hover { opacity: 0.75; }
+    .thumb {
+      position: relative; overflow: hidden;
+      aspect-ratio: 16 / 11; background: #F0EFED;
     }
-    .thumb-4-mesh {
-      position: absolute; inset: -20%;
-      filter: blur(42px) saturate(0.85);
-      z-index: 0;
-    }
-    .thumb-4 video { position: relative; z-index: 1; }
-    .t4b {
-      position: absolute; border-radius: 50%;
-      will-change: transform;
-    }
-    .t4b-1 {
-      width: 65%; height: 65%; background: #8ec9a8;
-      top: -5%; left: -5%;
-      animation: t4m1 3.5s ease-in-out infinite alternate;
-    }
-    .t4b-2 {
-      width: 55%; height: 55%; background: #7ec4bc;
-      top: 10%; right: -10%;
-      animation: t4m2 4s ease-in-out infinite alternate;
-    }
-    .t4b-3 {
-      width: 60%; height: 60%; background: #c4dba4;
-      bottom: -10%; left: 15%;
-      animation: t4m3 3s ease-in-out infinite alternate;
-    }
-    .t4b-4 {
-      width: 45%; height: 45%; background: #a8d4bc;
-      top: 35%; left: 30%;
-      animation: t4m4 4.5s ease-in-out infinite alternate;
-    }
-    @keyframes t4m1 { to { transform: translate(18%, 22%); } }
-    @keyframes t4m2 { to { transform: translate(-22%, 18%); } }
-    @keyframes t4m3 { to { transform: translate(16%, -20%); } }
-    @keyframes t4m4 { to { transform: translate(-14%, -16%); } }
-    .thumb-4 video {
-      width: 80%;
-      height: auto;
-      display: block;
-      border-radius: 10px;
-    }
-    .thumb-4-phone {
-      width: 68px; height: 128px;
-      border: 2px solid rgba(255,255,255,0.9);
-      border-radius: 14px;
-      background: rgba(255,255,255,0.3);
-      position: relative;
-    }
-    .thumb-4-phone::before {
-      content: '';
-      position: absolute; top: 10px; left: 50%; transform: translateX(-50%);
-      width: 22px; height: 4px;
-      background: rgba(255,255,255,0.8); border-radius: 2px;
-    }
+    .thumb > img.cover { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.7s var(--ease); }
+    /* text under each card — same as the homepage cards, a size down */
+    .work-label { margin-top: 16px; margin-bottom: 7px; font-size: 10.5px; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; color: var(--gray); }
+    .work-title { font-family: 'Lora', Georgia, serif; font-size: 18px; font-weight: 500; letter-spacing: -0.01em; line-height: 1.35; margin-bottom: 4px; color: var(--black); }
+    .work-desc { font-size: 14px; color: var(--gray); line-height: 1.55; max-width: 520px; }
 
-    /* ── THUMB SP — Student Pulse ── */
-    .thumb-sp {
-      overflow: hidden;
-      position: relative;
-      background: url('images/gradient2.png') center / cover;
-    }
-    .sp-screen {
-      position: absolute;
-      border-radius: 14px;
-      box-shadow: 0 10px 36px rgba(0,0,0,0.18);
-      display: block;
-    }
-    /* This Week — top left */
-    .sp-screen-week {
-      width: 36%;
-      top: 5%;
-      left: 4%;
-    }
-    /* Survey — bottom left, stacked under This Week, bleeds off bottom */
-    .sp-screen-survey {
-      width: 36%;
-      top: 42%;
-      left: 4%;
-    }
-    /* Notification — right side, bleeds off right edge */
-    .sp-screen-notif {
-      width: 22%;
-      top: 4%;
-      left: 68%;
-    }
+    /* per-project art, reusing the homepage covers */
+    .t-bit { background: #003262; display: flex; align-items: center; justify-content: center; }
+    .t-bit p { font-family: 'Sorts Mill Goudy', Georgia, serif; font-size: clamp(26px, 3.2vw, 44px); color: #fff; }
 
-    /* ── FOOTER ── */
+    .t-ab .ab-sym  { position: absolute; left: 34.40%; top: 10.23%; width: 7.72%;  display: block; }
+    .t-ab .ab-word { position: absolute; left: 44.70%; top: 12.71%; width: 17.51%; display: block; }
+
+    .t-am { background: #D2D2FF; display: flex; align-items: center; justify-content: center; gap: 14px; }
+    .t-am .ph { width: 30%; border-radius: 26px; overflow: hidden; filter: drop-shadow(0 10px 20px rgba(100,148,172,0.18)); }
+    .t-am .ph img { display: block; width: 100%; }
+    .t-am .ph-back  { transform: translateY(-28%); }
+    .t-am .ph-front { transform: translateY(28%); }
+
+    .t-cs { background: #A6CFD5; }
+    .t-cs .frame { position: absolute; left: 7%; top: 22%; width: 86%; border-radius: 10px 10px 0 0; overflow: hidden; }
+    .t-cs .frame img { display: block; width: 100%; }
+
+
+    /* ── FOOTER — the homepage footer, scaled down ── */
     .site-footer {
-      /* Pinned, not themed: the footer reads the same on every page, so the
-         accent stays purple even where --orange is the case study's colour. */
       --footer-accent: #8B5CF6;
+      position: relative; overflow: hidden;
       background: #FAF9F7;
       border-top: 1px solid var(--border);
-      padding: 80px 96px 56px;
+      padding: 44px 96px 28px;
     }
-
-    /* ── FOOTER SCRATCH-OFF ──
-       Three stacked layers: the colour sits underneath, a white canvas covers
-       it, and the real footer content rides on top. Moving the pointer erases
-       into the canvas, so you wipe the colour into view. The canvas never
-       takes pointer events, so links stay clickable and touch still scrolls.
-       Kept identical on every page — this footer is shared furniture. */
-    .site-footer { position: relative; overflow: hidden; }
-    .footer-inner {
-      max-width: 1000px;
-      margin: 0 auto;
-    }
-    .footer-inner { position: relative; z-index: 2; }
+    .footer-inner { position: relative; z-index: 2; max-width: 1000px; margin: 0 auto; }
     .footer-reveal {
-      position: absolute; inset: 0; z-index: 0;
-      pointer-events: none;
-      /* violet only, and deliberately pale: the footer text sits over this and
-         has to stay readable even when the whole thing is wiped clear */
+      position: absolute; inset: 0; z-index: 0; pointer-events: none;
       background:
         radial-gradient(70% 90% at 12% 18%, #C4B5FD 0%, rgba(196,181,253,0) 64%),
         radial-gradient(65% 85% at 88% 12%, #DDD6FE 0%, rgba(221,214,254,0) 60%),
         radial-gradient(85% 95% at 62% 105%, #A78BFA 0%, rgba(167,139,250,0) 64%),
         linear-gradient(125deg, #F5F3FF 0%, #EDE9FE 100%);
     }
-    .footer-veil {
-      position: absolute; inset: 0; z-index: 1;
-      pointer-events: none;
-      display: block;
-    }
-    @media (prefers-reduced-motion: reduce) {
-      .footer-reveal, .footer-veil { display: none; }
-    }
-
+    .footer-veil { position: absolute; inset: 0; z-index: 1; pointer-events: none; display: block; }
     .footer-heading {
       font-family: 'Lora', serif;
-      font-size: clamp(28px, 3.2vw, 44px);
-      font-weight: 500;
-      letter-spacing: -0.02em;
-      line-height: 1.08;
-      color: var(--black);
-      margin-bottom: 34px;
+      font-size: clamp(22px, 2.2vw, 30px); font-weight: 500;
+      letter-spacing: -0.02em; line-height: 1.1;
+      margin-bottom: 20px;
     }
-    /* Reachable by assistive tech, invisible on screen. Used to give the
-       footer heading a stable accessible name while the typewriter runs. */
-    .sr-only {
-      position: absolute;
-      width: 1px; height: 1px;
-      padding: 0; margin: -1px;
-      overflow: hidden;
-      clip-path: inset(50%);
-      white-space: nowrap;
-      border: 0;
-    }
-    .footer-word {
-      color: var(--footer-accent);
-      font-family: 'Inter', sans-serif;
-    }
-    .footer-caret {
-      display: inline-block;
-      color: var(--footer-accent);
-      font-weight: 300;
-      animation: caretBlink 0.8s step-end infinite;
-      margin-left: 1px;
-    }
+    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; border: 0; }
+    .footer-word { color: var(--footer-accent); font-family: 'Inter', sans-serif; }
+    .footer-caret { display: inline-block; color: var(--footer-accent); font-weight: 300; animation: caretBlink 0.8s step-end infinite; margin-left: 1px; }
     @keyframes caretBlink { 0%,100% { opacity: 1; } 50% { opacity: 0; } }
+    .footer-main { display: flex; align-items: flex-start; justify-content: space-between; gap: 40px; margin-bottom: 32px; }
+    .footer-left { display: flex; flex-direction: column; }
+    .footer-links { display: flex; flex-direction: column; gap: 4px; }
+    .footer-link { font-size: 13px; color: var(--gray); transition: color 0.18s; }
+    .footer-link:hover { color: var(--black); }
+    .footer-nav { display: flex; flex-direction: column; align-items: flex-end; gap: 6px; padding-top: 6px; }
+    .footer-nav-link { font-size: 12px; color: var(--gray); transition: color 0.18s; }
+    .footer-nav-link:hover { color: var(--black); }
+    .footer-bottom { display: flex; align-items: center; justify-content: space-between; border-top: 1px solid var(--border); padding-top: 16px; }
+    .footer-copy { font-size: 11px; color: var(--gray); }
     @media (prefers-reduced-motion: reduce) {
+      .footer-reveal, .footer-veil { display: none; }
       .footer-caret { animation: none; }
     }
-    .footer-main {
-      display: flex;
-      align-items: flex-start;
-      justify-content: space-between;
-      gap: 40px;
-      margin-bottom: 56px;
+
+
+    /* "under construction" note for cards whose case study isn't live yet */
+    .soon-toast {
+      position: fixed; left: 50%; bottom: 32px; z-index: 100;
+      transform: translate(-50%, 12px); opacity: 0; pointer-events: none;
+      padding: 12px 18px; border-radius: 999px;
+      background: var(--black); color: #fff;
+      font-size: 14px; line-height: 1.3; white-space: nowrap;
+      box-shadow: 0 10px 30px rgba(15, 15, 15, 0.18);
+      transition: opacity 0.25s var(--ease), transform 0.35s var(--ease);
     }
-    .footer-left {
-      display: flex;
-      flex-direction: column;
-    }
-    .footer-links {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-    }
-    .footer-link {
-      font-size: 14px;
-      font-weight: 400;
-      color: var(--gray);
-      text-decoration: none;
-      transition: color 0.18s;
-    }
-    .footer-link:hover { color: var(--black); }
-    .footer-nav {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-end;
-      gap: 8px;
-      padding-top: 8px;
-    }
-    .footer-nav-link {
-      font-size: 13px;
-      font-weight: 400;
-      color: var(--gray);
-      text-decoration: none;
-      transition: color 0.18s;
-    }
-    .footer-nav-link:hover { color: var(--black); }
-    .footer-bottom {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      border-top: 1px solid var(--border);
-      padding-top: 24px;
-    }
-    .footer-copy {
-      font-size: 12px;
-      color: var(--gray);
-    }
-  
-    /* ── MOBILE ──────────────────────────────────────────────
-       Scoped entirely to narrow viewports; desktop is untouched. */
-    @media (max-width: 820px) {
-      nav { padding: 0 18px; }
+    .soon-toast.show { opacity: 1; transform: translate(-50%, 0); }
+    @media (max-width: 480px) { .soon-toast { white-space: normal; width: calc(100% - 32px); text-align: center; border-radius: 16px; } }
+    /* ── MOBILE: sidebar becomes a header ── */
+    @media (max-width: 900px) {
+      nav { padding: 18px 18px 18px 16px; }
       .nav-links { gap: 18px; }
       .nav-links a { font-size: 13px; }
-
-      .hero {
-        flex-direction: column;
-        align-items: flex-start;
-        padding: 88px 20px 48px;
-        gap: 20px;
-      }
-      .hero-separator { display: none; }
-      .hero-left, .hero-right { width: 100%; }
-      .hero-hop { margin-top: 56px; }        /* room for her ears on the top row, above the stacked text */
-
-      /* two-up work cards become a single column */
-      .work-section { padding: 36px 20px 90px; }
-      .work-grid {
-        grid-template-columns: 1fr;
-        column-gap: 0;
-        row-gap: 52px;
-      }
-
-      .site-footer { padding: 56px 20px 40px; }
-
-      img, video { max-width: 100%; height: auto; }
+      .layout { display: block; }
+      .side { position: static; width: auto; height: auto; padding: 24px 16px 8px; }
+      .main { padding: 16px 16px 48px; }
+      .grid { grid-template-columns: 1fr; gap: 32px; }
+      .site-footer { padding: 36px 16px 24px; }
+      .footer-bottom { flex-direction: column; align-items: flex-start; gap: 6px; }
     }
-
-    /* ── WORK CARD REVEAL ──
-       Same .js-reveal gate as the case studies: no class, nothing hidden. */
-    .js-reveal .work-card {
-      opacity: 0;
-      transform: translateY(18px);
-      transition: opacity 0.5s var(--ease), transform 0.5s var(--ease);
-    }
-    .js-reveal .work-card.revealed { opacity: 1; transform: none; }
     @media (prefers-reduced-motion: reduce) {
-      .js-reveal .work-card { opacity: 1; transform: none; transition: none; }
+      .thumb > img.cover { transition: none; }
     }
-
-    /* ── CARD HOVER ──
-       The hovered card stays put and fades; its neighbours are left alone. No
-       scale, no blur — the haze is just opacity over a light page.
-       Every card fades, the unfinished one included — it still reads as a
-       response to the pointer.
-       Both selectors are needed to clear the reveal rule's opacity:1 —
-       .js-reveal .work-card.revealed is (0,3,0) and would otherwise win.
-       No reduced-motion override: nothing moves, and a slow opacity fade is
-       not the kind of motion that setting guards against, so those visitors
-       keep the affordance too. */
-    .work-card {
-      transition: opacity 0.35s var(--ease);
-    }
-    /* Same (0,2,0) as the reveal rule above, but later in the sheet, so it
-       wins: the hover reads snappier while the transform keeps the reveal's
-       own timing. */
-    .js-reveal .work-card {
-      transition: opacity 0.22s var(--ease), transform 0.5s var(--ease);
-    }
-    .work-card:hover,
-    .js-reveal .work-card.revealed:hover {
-      opacity: 0.75;
-    }
-</style>
-  <script>
-    (function () {
-      var ok = 'IntersectionObserver' in window &&
-               !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-      if (ok) document.documentElement.classList.add('js-reveal');
-    })();
-  </script>
+  </style>
+  <link rel="stylesheet" href="flourish-card/flourish-card.css"/>
+  <link rel="stylesheet" href="airbnb-card/airbnb-case-card.css"/>
 </head>
 <body>
 
-  <!-- ═══ PORTFOLIO ═══ -->
-  <div id="portfolio" class="visible">
+  <nav>
+    <a href="/" class="nav-logo">
+      <span class="logo-name">diya</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="#" class="active">Work</a></li>
+      <li><a href="/about">About</a></li>
+      <li><a href="/sandlot">Sandbox</a></li>
+      <li><a href="Diya-Mahapatra-Product-Designer-Resume.pdf" target="_blank">Resume</a></li>
+    </ul>
+  </nav>
 
-    <nav>
-      <a href="/" class="nav-logo">
-        <img src="images/purpmiffy.png" alt="miffy" style="width:22px;height:22px;object-fit:contain;display:block;">
-        <span class="logo-name">diya</span>
+  <div class="layout">
+  <aside class="side">
+    <button class="side-bunny-btn" type="button" aria-label="Say hi to Miffy"><img class="side-bunny" src="images/purpmiffy.png" alt="" draggable="false"/></button>
+    <h1 class="side-name">Diya Mahapatra</h1>
+    <p class="side-bio">Product designer interested in thoughtful interactions, research, and bringing ideas to life through design, code, and AI.</p>
+    <p class="side-bio">Currently designing at UC Berkeley IT.</p>
+    <p class="side-bio">A little more <a href="/about">about</a> me beyond design.</p>
+  </aside>
+
+  <main class="main">
+    <div class="grid">
+
+      <a class="tile" href="/sis">
+        <div class="thumb t-bit"><p>Berkeley IT</p>
+        </div>
+        <p class="work-label">Berkeley IT - 2026</p>
+        <h3 class="work-title">Making Student Advising Easier to Navigate</h3>
+        <p class="work-desc">Redesigning systems for 20,000+ students through AI-assisted research, interaction design, and agentic prototyping.</p>
       </a>
-      <ul class="nav-links">
-        <li><a href="#projects" class="active">Work</a></li>
-        <li><a href="/about">About</a></li>
-        <li><a href="/sandlot">Sandbox</a></li>
-        <li><a href="Diya-Mahapatra-Product-Designer-Resume.pdf" target="_blank">Resume</a></li>
-      </ul>
-    </nav>
 
-    <section class="hero">
-      <div class="hero-left">
-        <h1 class="hero-heading">
-          <span class="h-line h-line-1">I'm Diya,</span>
-          <span class="h-line h-line-2">an AI-native product designer</span>
-          <span class="h-line h-line-3">working across interaction,<br>systems &amp; research.</span>
-        </h1>
-        <p class="hero-sub-line">Currently designing at UC Berkeley IT, working on advising tools and design systems for 20,000+ students</p>
-      </div>
-      <div class="hero-hop" aria-hidden="true">
-        <div class="hop-board">
-          <span class="hop-tile"></span><span class="hop-tile"></span><span class="hop-tile"></span><span class="hop-tile"></span><span class="hop-tile"></span>
-          <span class="hop-tile"></span><span class="hop-tile"></span><span class="hop-tile"></span><span class="hop-tile"></span><span class="hop-tile"></span>
-          <span class="hop-tile"></span><span class="hop-tile"></span><span class="hop-tile"></span><span class="hop-tile"></span><span class="hop-tile"></span>
-          <span class="hop-tile"></span><span class="hop-tile"></span><span class="hop-tile"></span><span class="hop-tile"></span><span class="hop-tile"></span>
-          <span class="hop-tile"></span><span class="hop-tile home"></span><span class="hop-tile"></span><span class="hop-tile"></span><span class="hop-tile"></span>
+      <a class="tile" href="/flourish">
+        <div class="thumb fl-card"><img class="fl-bg" src="images/flourish-cover/bg.jpg" alt="" draggable="false"/>
+          <div class="fl-layer fl-phone"><img src="images/flourish-cover/phone.webp" alt="Flourish AI meal detail screen" draggable="false"/></div>
+          <div class="fl-layer fl-macro"><img src="images/flourish-cover/macro.webp" alt="" draggable="false"/></div>
+          <div class="fl-layer fl-edit"><img src="images/flourish-cover/edit.webp" alt="" draggable="false"/></div>
         </div>
-        <div class="hop-pos"><img src="images/purpmiffy-solid.png" alt="" draggable="false" class="hop-bunny"/></div>
-      </div>
-    </section>
+        <p class="work-label">Flourish AI - 2025</p>
+        <h3 class="work-title">Making AI Health Insights Easier to Understand and Trust</h3>
+        <p class="work-desc">Redesigned the core meal experience for an AI gut-health startup and shipped and featured in the product&rsquo;s App Store preview.</p>
+      </a>
 
-    <!-- ── WORK ── -->
-    <section class="work-section" id="projects">
-      <p class="work-section-title">Selected <em>Work</em></p>
-      <div class="work-grid">
-
-        <!-- Card 1 -->
-        <!-- Card 1 — SIS Platform -->
-        <a class="work-card work-card-link" href="/sis">
-          <div class="work-thumb thumb-bit">
-            <p class="bit-wordmark">Berkeley IT</p>
-          </div>
-          <p class="work-label">Berkeley IT - 2026</p>
-          <h3 class="work-title">Making Student Advising Easier to Navigate</h3>
-          <p class="work-desc">Redesigning systems for 20,000+ students through AI-assisted research, interaction design, and agentic prototyping.</p>
-        </a>
-
-        <!-- Card 2 — Flourish AI -->
-        <a class="work-card work-card-link" href="/flourish">
-          <div class="work-thumb thumb-1">
-            <div class="thumb-1-mesh">
-              <div class="t1b t1b-1"></div>
-              <div class="t1b t1b-2"></div>
-              <div class="t1b t1b-3"></div>
-              <div class="t1b t1b-4"></div>
+      <a class="tile" href="/airbnb" data-soon="This case study is under construction. Check back soon!">
+        <div class="cs-card" role="img" aria-label="Airbnb checkout redesign case study">
+            <div class="cs-title" aria-hidden="true">
+              <div class="cs-line cs-line-1">Po<span class="cs-i">ı<span class="cs-dot"></span></span>nt of</div>
+              <div class="cs-line cs-line-2">No Return</div>
             </div>
-            <div class="t1-sweep"></div>
-            <div class="f1-scene">
-
-              <!-- Nav pill -->
-              <div class="f1-nav">
-                <div class="f1-pill">
-                  <div class="f1-nd f1-nd-1">01</div>
-                  <div class="f1-sep"></div>
-                  <div class="f1-nd f1-nd-2">02</div>
-                  <div class="f1-sep"></div>
-                  <div class="f1-nd f1-nd-3">03</div>
-                </div>
-                <div class="f1-labels">
-                  <span class="f1-lbl f1-lbl-1">Meal</span>
-                  <span class="f1-lbl f1-lbl-2">Macro</span>
-                  <span class="f1-lbl f1-lbl-3">Trend</span>
-                </div>
+      
+            <div class="cs-icon" aria-hidden="true"><img src="images/airbnb-card/airbnb-symbol.svg" alt=""></div>
+      
+            <div class="cs-drop" aria-hidden="true">
+              <div class="cs-phone">
+                <img src="images/airbnb-card/screen-confirm.webp" alt="">
+                <img class="cs-screen-done" src="images/airbnb-card/screen-done.webp" alt="">
               </div>
-
-              <!-- One card visible at a time, pops up from bottom -->
-              <div class="f1-cards-area">
-                <div class="f1-crd f1-crd-1"><img src="images/land.png" draggable="false" alt=""/></div>
-                <div class="f1-crd f1-crd-2"><img src="images/landfinal.png" draggable="false" alt=""/></div>
-                <div class="f1-crd f1-crd-3"><img src="images/land1.png" draggable="false" alt=""/></div>
+      
+              <div class="cs-float cs-policy">
+                <div class="cs-policy-head"><img src="images/airbnb-card/airbnb-symbol.svg" alt="">If your plans change</div>
+                <div class="cs-row">I get sick or injured<span class="cs-tag cs-tag-yes">Covered with insurance</span></div>
+                <div class="cs-row">Bad weather disrupts my trip<span class="cs-tag cs-tag-yes">Covered with insurance</span></div>
+                <div class="cs-row">I change my mind<span class="cs-tag cs-tag-no">No refund</span></div>
               </div>
-
-            </div>
-          </div>
-          <p class="work-label">Flourish AI - 2025</p>
-          <h3 class="work-title">Making AI Health Insights Easier to Understand and Trust</h3>
-          <p class="work-desc">Redesigned the core meal experience for an AI gut-health startup and shipped and featured in the product&rsquo;s App Store preview.</p>
-        </a>
-
-        <!-- Card 3 — Carbon Sustain -->
-        <a class="work-card work-card-link" href="/carbon-sustain">
-          <div class="work-thumb thumb-2">
-            <div class="thumb-2-img-wrap">
-              <div class="t2-frame-enter">
-                <div class="t2-glass-frame">
-                  <img src="images/carbs.png" alt="Carbon Sustain" draggable="false"/>
+      
+              <div class="cs-float cs-notif">
+                <div class="cs-notif-icon"><img src="images/airbnb-card/airbnb-symbol.svg" alt=""></div>
+                <div class="cs-notif-text">
+                  <div class="cs-notif-top">Reservation confirmed<span>now</span></div>
+                  <div class="cs-notif-body">Villa Maya · Jan 18–25, 2026</div>
                 </div>
               </div>
             </div>
+      
+            <span class="cs-arrow" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none"><path d="M7 17 17 7M9 7h8v8" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </span>
           </div>
-          <p class="work-label">Carbon Sustain - 2024</p>
-          <h3 class="work-title">Making Carbon Data Actionable</h3>
-          <p class="work-desc">Redesigned key workflows across a B2B sustainability platform, making complex emissions data easier to understand and act on.</p>
-        </a>
+        <p class="work-label">Airbnb Concept - 2026</p>
+        <h3 class="work-title">Making the Point of No Return Clearer</h3>
+        <p class="work-desc">Redesigned the final steps of Airbnb&rsquo;s booking flow so guests know their total, their refund terms, and what happens next before they tap Pay.</p>
+      </a>
 
-        <!-- Card 4 -->
-        <a class="work-card work-card-link" href="/amazon-music">
-          <div class="work-thumb thumb-3">
-            <div class="t3-imgs">
-              <div class="t3-img-back"><img src="images/fry1.png" draggable="false" alt="Amazon Music"/></div>
-              <div class="t3-img-front"><img src="images/fry.png"  draggable="false" alt="Amazon Music"/></div>
-            </div>
-
-          </div>
-          <p class="work-label">Amazon Music - 2025</p>
-          <h3 class="work-title">Consumer & Artist Collaboration</h3>
-          <p class="work-desc">Top 10 finalist in an Amazon Music-sponsored designathon, exploring social discovery and interaction around live music.</p>
-        </a>
-
-      </div>
-    </section>
-
-    <!-- ── FOOTER ── -->
-    <footer class="site-footer">
-      <div class="footer-reveal" aria-hidden="true"></div>
-      <canvas class="footer-veil" aria-hidden="true"></canvas>
-      <div class="footer-inner">
-        <div class="footer-main">
-          <div class="footer-left">
-            <h2 class="footer-heading">Let's build something<br><span class="footer-word" id="footer-word" aria-hidden="true">together</span><span class="footer-caret" aria-hidden="true">|</span><span class="sr-only"> together</span></h2>
-            <div class="footer-links">
-              <a class="footer-link" href="mailto:diyamahapatra@berkeley.edu">email</a>
-              <a class="footer-link" href="https://www.linkedin.com/in/diya-mahapatra/" target="_blank">linkedIn</a>
-              <a class="footer-link" href="Diya-Mahapatra-Product-Designer-Resume.pdf" target="_blank">resume</a>
-            </div>
-          </div>
-          <div class="footer-nav">
-            <a class="footer-nav-link" href="#projects">Work</a>
-            <a class="footer-nav-link" href="/sandlot">Sandbox</a>
-            <a class="footer-nav-link" href="Diya-Mahapatra-Product-Designer-Resume.pdf" target="_blank">Resume</a>
-          </div>
+      <a class="tile" href="/amazon-music">
+        <div class="thumb t-am">
+          <div class="ph ph-back"><img src="images/fry1.png" alt="" draggable="false"/></div>
+          <div class="ph ph-front"><img src="images/fry.png" alt="Amazon Music" draggable="false"/></div>
         </div>
-        <div class="footer-bottom">
-          <p class="footer-copy">© 2026 Diya Mahapatra</p>
-          <p class="footer-copy">made with thai iced tea 🧋 · designed on Figma, coded with Claude Code</p>
-        </div>
-      </div>
-    </footer>
+        <p class="work-label">Amazon Music - 2025</p>
+        <h3 class="work-title">Consumer & Artist Collaboration</h3>
+        <p class="work-desc">Top 10 finalist in an Amazon Music-sponsored designathon, exploring social discovery and interaction around live music.</p>
+      </a>
 
+      <a class="tile" href="/carbon-sustain">
+        <div class="thumb t-cs">
+          <div class="frame"><img src="images/carbs.png" alt="Carbon Sustain dashboard" draggable="false"/></div>
+        </div>
+        <p class="work-label">Carbon Sustain - 2024</p>
+        <h3 class="work-title">Making Carbon Data Actionable</h3>
+        <p class="work-desc">Redesigned key workflows across a B2B sustainability platform, making complex emissions data easier to understand and act on.</p>
+      </a>
+
+    </div>
+  </main>
   </div>
+
+  <footer class="site-footer">
+    <div class="footer-reveal" aria-hidden="true"></div>
+    <canvas class="footer-veil" aria-hidden="true"></canvas>
+    <div class="footer-inner">
+      <div class="footer-main">
+        <div class="footer-left">
+          <h2 class="footer-heading">Let's build something<br><span class="footer-word" id="footer-word" aria-hidden="true">together</span><span class="footer-caret" aria-hidden="true">|</span><span class="sr-only"> together</span></h2>
+          <div class="footer-links">
+            <a class="footer-link" href="mailto:diyamahapatra@berkeley.edu">email</a>
+            <a class="footer-link" href="https://www.linkedin.com/in/diya-mahapatra/" target="_blank">linkedIn</a>
+            <a class="footer-link" href="Diya-Mahapatra-Product-Designer-Resume.pdf" target="_blank">resume</a>
+          </div>
+        </div>
+        <div class="footer-nav">
+          <a class="footer-nav-link" href="#">Work</a>
+          <a class="footer-nav-link" href="/sandlot">Sandbox</a>
+          <a class="footer-nav-link" href="Diya-Mahapatra-Product-Designer-Resume.pdf" target="_blank">Resume</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p class="footer-copy">© 2026 Diya Mahapatra</p>
+        <p class="footer-copy">made with thai iced tea 🧋 · designed on Figma, coded with Claude Code</p>
+      </div>
+    </div>
+  </footer>
 
   <script>
 
-    /* ── PORTFOLIO WORD TYPEWRITER ── */
-
-    /* ── WORK CARDS in-view ── */
-    const inViewIO = new IntersectionObserver(entries => {
-      entries.forEach(e => {
-        if (e.isIntersecting) { e.target.classList.add('in-view'); inViewIO.unobserve(e.target); }
+    /* Cards with data-soon don't navigate yet; they show a short note instead. */
+    (function () {
+      var toast = document.createElement('div');
+      toast.className = 'soon-toast'; toast.setAttribute('role', 'status'); toast.setAttribute('aria-live', 'polite');
+      document.body.appendChild(toast);
+      var hide = null;
+      document.querySelectorAll('a[data-soon]').forEach(function (a) {
+        a.addEventListener('click', function (e) {
+          e.preventDefault();
+          toast.textContent = a.getAttribute('data-soon');
+          toast.classList.add('show');
+          clearTimeout(hide);
+          hide = setTimeout(function () { toast.classList.remove('show'); }, 2600);
+        });
       });
-    }, { threshold: 0.2 });
-    ['.thumb-1', '.thumb-2', '.thumb-3', '.thumb-lg'].forEach(sel => {
-      const el = document.querySelector(sel);
-      if (el) inViewIO.observe(el);
-    });
+    })();
+
+    /* Miffy in the sidebar: click (or tap) and she hops, sending up a few hearts. */
+    (function () {
+      var btn = document.querySelector('.side-bunny-btn');
+      if (!btn) return;
+      var img = btn.querySelector('.side-bunny');
+      var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      btn.addEventListener('click', function () {
+        if (!reduced) {
+          img.classList.remove('hop'); void img.offsetWidth; img.classList.add('hop');
+        }
+        [-14, 0, 14].forEach(function (dx, i) {
+          setTimeout(function () {
+            var h = document.createElement('span');
+            h.className = 'bunny-heart'; h.textContent = '\u2665';
+            h.style.setProperty('--dx', (dx + (Math.random() * 8 - 4)) + 'px');
+            btn.appendChild(h);
+            setTimeout(function () { h.remove(); }, 1000);
+          }, 120 + i * 90);
+        });
+      });
+    })();
 
     /* ── FOOTER WORD CYCLER ── */
     (function() {
@@ -1305,37 +436,6 @@
       setTimeout(() => { deleting = true; tick(); }, PAUSE_AFTER);
     })();
   
-    /* ── WORK CARD REVEAL, staggered ── */
-    (function () {
-      var cards = document.querySelectorAll('.work-card');
-      function revealAll() {
-        for (var i = 0; i < cards.length; i++) cards[i].classList.add('revealed');
-      }
-      if (!document.documentElement.classList.contains('js-reveal')) { revealAll(); return; }
-      var fired = false;
-      var io = new IntersectionObserver(function (entries) {
-        entries.forEach(function (e) {
-          if (!e.isIntersecting) return;
-          fired = true;
-          /* stagger by column so a row arrives as a wave, not all at once */
-          var idx = [].indexOf.call(cards, e.target);
-          var card = e.target;
-          card.style.transitionDelay = (idx % 2) * 90 + 'ms';
-          card.classList.add('revealed');
-          /* The stagger belongs to the entrance only. Left in place it is an
-             inline style, so it outranks the stylesheet and would delay the
-             hover fade by up to 90ms afterwards — which reads as lag on the
-             one cue telling people the card is clickable. */
-          setTimeout(function () { card.style.transitionDelay = ''; }, 800);
-          io.unobserve(card);
-        });
-      }, { rootMargin: '0px 0px -12% 0px', threshold: 0 });
-      for (var i = 0; i < cards.length; i++) io.observe(cards[i]);
-      window.addEventListener('load', function () {
-        setTimeout(function () { if (!fired) revealAll(); }, 2500);
-      });
-    })();
-
     /* ── FOOTER SCRATCH-OFF ──
        Erases into a white canvas as the pointer moves, then heals back so the
        next visitor gets a clean slate. The rAF loop only runs while there is
@@ -1428,185 +528,8 @@
       else window.addEventListener('resize', resize);
     })();
 
-    /* ── EASED IN-PAGE SCROLL ──
-       CSS scroll-behavior:smooth has a fixed, short duration you cannot tune,
-       which is what made the jump to Selected Work feel abrupt. This drives the
-       scroll itself so it can be longer and properly eased. The CSS value stays
-       as the no-JS fallback, but has to be switched off while this runs or the
-       browser would try to smooth each frame of our own animation. */
-    (function () {
-      var reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
-
-      function easeInOutCubic(t) {
-        return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
-      }
-
-      /* This page scrolls an inner element (#portfolio), not the document, so
-         window.scrollTo would silently do nothing. Find whatever actually
-         scrolls above the target and drive that. */
-      function scrollerFor(el) {
-        var n = el.parentElement;
-        while (n && n !== document.body && n !== document.documentElement) {
-          var oy = getComputedStyle(n).overflowY;
-          if ((oy === 'auto' || oy === 'scroll') && n.scrollHeight > n.clientHeight) return n;
-          n = n.parentElement;
-        }
-        return document.scrollingElement || document.documentElement;
-      }
-
-      function glideTo(target, hash) {
-        var offset = parseFloat(getComputedStyle(target).scrollMarginTop) || 0;
-        var box = scrollerFor(target);
-        var isDoc = (box === document.scrollingElement || box === document.documentElement);
-
-        var startY = isDoc ? (window.pageYOffset || box.scrollTop) : box.scrollTop;
-        var boxTop = isDoc ? 0 : box.getBoundingClientRect().top;
-        var endY = target.getBoundingClientRect().top - boxTop + startY - offset;
-        endY = Math.max(0, Math.min(endY, box.scrollHeight - box.clientHeight));
-        var dist = endY - startY;
-        if (Math.abs(dist) < 2) return;
-
-        /* longer trips take longer, within reason */
-        var dur = Math.min(1200, Math.max(650, Math.abs(dist) * 0.95));
-        var prev = box.style.scrollBehavior;
-        box.style.scrollBehavior = 'auto';
-        var t0 = null;
-
-        function step(now) {
-          if (t0 === null) t0 = now;
-          var p = Math.min((now - t0) / dur, 1);
-          var y = startY + dist * easeInOutCubic(p);
-          if (isDoc) window.scrollTo(0, y); else box.scrollTop = y;
-          if (p < 1) { requestAnimationFrame(step); return; }
-          box.style.scrollBehavior = prev;
-          /* keep the URL shareable without triggering a second jump */
-          if (hash) history.replaceState(null, '', hash);
-        }
-        requestAnimationFrame(step);
-      }
-
-      document.addEventListener('click', function (e) {
-        if (reduced.matches) return;
-        if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
-        var a = e.target.closest && e.target.closest('a[href^="#"]');
-        if (!a) return;
-        var hash = a.getAttribute('href');
-        if (!hash || hash === '#') return;
-        var target = document.getElementById(hash.slice(1));
-        if (!target) return;
-        e.preventDefault();
-        glideTo(target, hash);
-      });
-    })();
-
-    /* ── HERO HOP BOARD ──
-       She only goes where the pointer actually rests: a tile has to be hovered
-       for DWELL ms before she commits, and moving off it first cancels that, so
-       passing over tiles on the way somewhere else doesn't send her anywhere.
-       Each hop runs to completion; if you've moved off her next tile by the
-       time she lands, she stays put. Taps are deliberate, so they count at
-       once. The rAF loop only runs mid-hop. When the pointer leaves the board
-       she wanders back home. */
-    (function () {
-      var root = document.querySelector('.hero-hop');
-      if (!root) return;
-      var tiles = Array.prototype.slice.call(root.querySelectorAll('.hop-tile'));
-      var pos = root.querySelector('.hop-pos');
-      var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-      var COLS = 5, TS = 49, GAP = 8, FEET = 15, HOME = 21;   // 21 = row 5, column 2
-      var DWELL = 350;                                        // how long the pointer must rest on a tile
-      var at = HOME, want = HOME, sure = true, hop = null, dwell = null, wander = null, hovered = -1;
-
-      function spot(i) {
-        return [TS / 2 + (i % COLS) * (TS + GAP), TS / 2 + Math.floor(i / COLS) * (TS + GAP) + FEET];
-      }
-      function place(x, y, sy, lean) {
-        var sx = 1 + (1 - sy) * 0.9;                           // roughly keep her volume while squashing
-        pos.style.transform = 'translate(' + x + 'px,' + y + 'px) rotate(' + lean + 'deg) scale(' + sx + ',' + sy + ')';
-      }
-      function easeInOutCubic(p) {
-        return p < 0.5 ? 4 * p * p * p : 1 - Math.pow(-2 * p + 2, 3) / 2;
-      }
-      /* damped spring, for the wobble after landing */
-      function settle(t) {
-        var z = 0.5, w = 26, wd = w * Math.sqrt(1 - z * z);
-        return Math.exp(-z * w * t) * (Math.cos(wd * t) + (z * w / wd) * Math.sin(wd * t));
-      }
-
-      /* sure: a tap or the walk home, which should happen even without a hover */
-      function goTo(i, isSure) {
-        want = i; sure = !!isSure;
-        if (!hop && want !== at) jump();
-      }
-      function jump() {
-        var from = at, to = want;
-        tiles[from].classList.remove('home');
-        if (reduced) {                                          // no arc, no squash: she's just there
-          at = to; tiles[at].classList.add('home');
-          var s = spot(at); place(s[0], s[1], 1, 0);
-          return;
-        }
-        hop = { from: from, to: to, t0: performance.now(), landed: false };
-        root.classList.add('is-hopping');
-        requestAnimationFrame(frame);
-      }
-      function frame(now) {
-        var t = (now - hop.t0) / 1000, A = spot(hop.from), B = spot(hop.to);
-        if (t < 0.08) {                                         // crouch
-          place(A[0], A[1], 1 - 0.12 * Math.sin((t / 0.08) * Math.PI / 2), 0);
-        } else if (t < 0.48) {                                  // in the air: arc, stretch, lean into the jump
-          var p = (t - 0.08) / 0.4, e = easeInOutCubic(p);
-          place(A[0] + (B[0] - A[0]) * e,
-                A[1] + (B[1] - A[1]) * e - 128 * p * (1 - p),
-                1 + 0.07 * Math.sin(Math.PI * p) - 0.12 * Math.pow(1 - p, 4),
-                8 * Math.sign(B[0] - A[0]) * Math.sin(Math.PI * p));
-        } else {                                                // land, squash, settle
-          if (!hop.landed) { hop.landed = true; at = hop.to; tiles[at].classList.add('home'); }
-          var u = t - 0.48;
-          place(B[0], B[1], 1 - 0.14 * (u < 0.04 ? u / 0.04 : settle(u - 0.04)), 0);
-          /* chain the next hop once she's down, but only toward a tile that's still hovered */
-          if (t >= 0.62 && want !== at) {
-            if (sure || want === hovered) { hop = null; jump(); return; }
-            want = at;
-          }
-          if (t >= 0.9) {
-            place(B[0], B[1], 1, 0);
-            hop = null; root.classList.remove('is-hopping');
-            return;
-          }
-        }
-        requestAnimationFrame(frame);
-      }
-
-      tiles.forEach(function (tile, i) {
-        tile.addEventListener('pointerenter', function (e) {
-          tile.classList.add('lit');
-          clearTimeout(wander);
-          if (e.pointerType !== 'mouse') return;
-          hovered = i;
-          clearTimeout(dwell);
-          dwell = setTimeout(function () { goTo(i); }, DWELL);
-        });
-        tile.addEventListener('pointerleave', function () {
-          tile.classList.remove('lit');
-          if (hovered === i) { hovered = -1; clearTimeout(dwell); }
-        });
-        /* touch and pen have no hover, so a tap sends her straight there */
-        tile.addEventListener('pointerdown', function (e) {
-          if (e.pointerType === 'mouse') return;
-          tile.classList.add('lit');
-          setTimeout(function () { tile.classList.remove('lit'); }, 250);
-          goTo(i, true);
-        });
-      });
-      /* mouse only: a finger "leaves" the moment it lifts, which would send her straight back */
-      root.addEventListener('pointerleave', function (e) {
-        clearTimeout(dwell);
-        if (e.pointerType !== 'mouse') return;
-        wander = setTimeout(function () { goTo(HOME, true); }, 700);
-      });
-    })();
-</script>
+  </script>
+  <script src="flourish-card/flourish-card.js"></script>
+  <script src="airbnb-card/airbnb-case-card.js"></script>
 </body>
 </html>
