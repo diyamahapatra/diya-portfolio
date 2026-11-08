@@ -352,14 +352,46 @@
       .site-footer { padding: 56px 20px 40px; margin-top: 40px; }
       img { max-width: 100%; height: auto; }
     }
+  
+    /* ── SHARED HEADER + FOOTER ──
+       Matches the landing page exactly, so every page wears the same chrome. */
+    nav {
+      height: 57px; padding: 0 56px 0 28px;
+      background: rgba(250,249,247,0.92);
+      backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .logo-name { font-size: 15px; font-weight: 600; letter-spacing: -0.03em; color: var(--black); }
+    .nav-links { display: flex; gap: 32px; list-style: none; }
+    .nav-links a { font-size: 14px; font-weight: 400; color: var(--gray); text-decoration: none; transition: color 0.15s; }
+    .nav-links a:hover, .nav-links a.active { color: var(--black); }
+
+    .site-footer { padding: 44px 96px 28px; }
+    .footer-heading { font-size: clamp(22px, 2.2vw, 30px); line-height: 1.1; margin-bottom: 20px; }
+    .footer-main { margin-bottom: 32px; }
+    .footer-links { gap: 4px; }
+    .footer-link { font-size: 13px; }
+    .footer-nav { gap: 6px; padding-top: 6px; }
+    .footer-nav-link { font-size: 12px; }
+    .footer-bottom { padding-top: 16px; }
+    .footer-copy { font-size: 11px; }
+
+    @media (max-width: 900px) {
+      nav { padding: 0 18px 0 16px; }
+      .nav-links { gap: 18px; }
+      .nav-links a { font-size: 13px; }
+      .site-footer { padding: 36px 16px 24px; }
+      .footer-bottom { flex-direction: column; align-items: flex-start; gap: 6px; }
+    }
   </style>
 </head>
 <body>
 
   <nav>
-    <a class="nav-logo" href="/"><img src="images/purpmiffy.png" alt="miffy" style="width:22px;height:22px;object-fit:contain;display:block;">diya</a>
+    <a class="nav-logo" href="/"><span class="logo-name">diya</span></a>
     <ul class="nav-links">
-      <li><a href="/#projects">Work</a></li>
+      <li><a href="/">Work</a></li>
       <li><a href="/about" class="active">About</a></li>
       <li><a href="/sandlot">Sandbox</a></li>
       <li><a href="Diya-Mahapatra-Product-Designer-Resume.pdf" target="_blank">Resume</a></li>
@@ -439,7 +471,7 @@
           </div>
         </div>
         <div class="footer-nav">
-          <a class="footer-nav-link" href="/#projects">Work</a>
+          <a class="footer-nav-link" href="/">Work</a>
           <a class="footer-nav-link" href="/sandlot">Sandbox</a>
           <a class="footer-nav-link" href="Diya-Mahapatra-Product-Designer-Resume.pdf" target="_blank">Resume</a>
         </div>
