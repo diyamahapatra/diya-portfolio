@@ -39,7 +39,7 @@
       --border: #E5E7EB;
       --ease:   cubic-bezier(0.25, 0.46, 0.45, 0.94);
       --rail:   340px;   /* fixed contents rail, same as the Flourish study */
-      --nudge:  50px;    /* optical offset right of true centre — see .cs-content */
+      --nudge:  25px;    /* optical offset right of true centre — see .cs-content */
     }
 
     html, body {
@@ -159,7 +159,7 @@
        rule when the window is too narrow to both centre and clear. */
     .cs-content {
       max-width: 840px;
-      margin-left: max(332px, calc((100% - 840px) / 2 + var(--nudge)));
+      margin-left: max(325px, calc((100% - 840px) / 2 + var(--nudge)));
       margin-right: 20px;
     }
 
@@ -644,7 +644,7 @@
     .next-up-label,
     .next-up-grid {
       max-width: 840px;
-      margin-left: max(332px, calc((100% - 840px) / 2 + var(--nudge)));
+      margin-left: max(325px, calc((100% - 840px) / 2 + var(--nudge)));
       margin-right: 20px;
     }
     .next-up-label {
@@ -907,6 +907,8 @@
 
     /* contents rail: same width as the landing page sidebar, text on the same 28px edge */
     .cs-sidebar { padding-left: 28px; }
+    /* its opaque box stops short of the (now further left) column; the list itself only reaches ~180px */
+    .cs-sidebar { width: 300px; }
     /* no divider between the contents and the case study */
     .cs-sidebar::after { display: none; }
     /* the wider rail would sit over the footer's left edge, so the footer rides above it */
