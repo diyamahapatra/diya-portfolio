@@ -907,6 +907,8 @@
 
     /* contents rail: same width as the landing page sidebar, text on the same 28px edge */
     .cs-sidebar { padding-left: 28px; }
+    /* no divider between the contents and the case study */
+    .cs-sidebar::after { display: none; }
     /* the wider rail would sit over the footer's left edge, so the footer rides above it */
     .site-footer { position: relative; z-index: 60; }
   </style>
