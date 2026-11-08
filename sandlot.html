@@ -8,254 +8,55 @@
   <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"/>
   <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"/>
 
-  <meta name="description" content="An infinite canvas of visual experiments, side projects and things made for fun."/>
+  <meta name="description" content="Visual experiments, side projects and things made for fun."/>
   <link rel="canonical" href="https://www.diya-mahapatra.com/sandlot"/>
 
   <meta property="og:type" content="website"/>
   <meta property="og:site_name" content="Diya Mahapatra"/>
   <meta property="og:title" content="Sandbox — Diya Mahapatra"/>
-  <meta property="og:description" content="An infinite canvas of visual experiments, side projects and things made for fun."/>
+  <meta property="og:description" content="Visual experiments, side projects and things made for fun."/>
   <meta property="og:url" content="https://www.diya-mahapatra.com/sandlot"/>
   <meta property="og:image" content="https://www.diya-mahapatra.com/og-card.png"/>
   <meta property="og:image:width" content="1200"/>
   <meta property="og:image:height" content="630"/>
-  <meta property="og:image:alt" content="Sandbox — a pannable canvas of visual work."/>
+  <meta property="og:image:alt" content="Sandbox — visual experiments and side projects."/>
 
   <meta name="twitter:card" content="summary_large_image"/>
   <meta name="twitter:title" content="Sandbox — Diya Mahapatra"/>
-  <meta name="twitter:description" content="An infinite canvas of visual experiments, side projects and things made for fun."/>
+  <meta name="twitter:description" content="Visual experiments, side projects and things made for fun."/>
   <meta name="twitter:image" content="https://www.diya-mahapatra.com/og-card.png"/>
   <title>Sandbox — Diya Mahapatra</title>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Sorts+Mill+Goudy&family=Lora:wght@400;500&display=swap" rel="stylesheet"/>
   <style>
+    /* Sidebar layout experiment — same tokens as index.html, smaller type. */
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-
     :root {
       --orange: #8B5CF6;
       --black:  #0F0F0F;
       --gray:   #6B7280;
       --border: #E5E7EB;
       --ease:   cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      --side:   340px;
+      --nav-h:  57px;
     }
-
     html, body {
-      width: 100%; height: 100%;
       font-family: 'Inter', system-ui, sans-serif;
       -webkit-font-smoothing: antialiased;
-      background: #FAF9F7;
-      color: var(--black);
-      overflow: hidden;               /* the canvas pans; the page itself never scrolls */
-      overscroll-behavior: none;
+      background: #FAF9F7; color: var(--black);
     }
+    a { color: inherit; text-decoration: none; }
 
-    /* ── NAV ── */
+    /* ── NAV — same header as the homepage ── */
     nav {
-      position: fixed; top: 0; left: 0; right: 0; z-index: 10;
       display: flex; align-items: center; justify-content: space-between;
-      padding: 0 40px; height: 57px;
-      border-bottom: 1px solid var(--border);
+      height: 57px; padding: 0 56px 0 28px;
+      position: sticky; top: 0;
       background: rgba(250,249,247,0.92);
       backdrop-filter: blur(12px);
-    }
-    .nav-logo {
-      display: flex; align-items: center; gap: 8px;
-      font-size: 15px; font-weight: 600;
-      text-decoration: none; color: var(--black);
-    }
-    .nav-links { list-style: none; display: flex; gap: 32px; }
-    .nav-links a {
-      font-size: 14px; color: var(--gray);
-      text-decoration: none;
-      transition: color 0.2s;
-    }
-    .nav-links a:hover { color: var(--black); }
-    .nav-links a.active { color: var(--black); font-weight: 500; }
-
-    /* ── VIEWPORT: the fixed window you look through ── */
-    /* The grab affordance rides the native cursor now that the purple ring is
-       gone — open hand over the canvas, closed hand while panning. */
-    body.is-panning, body.is-panning * { cursor: grabbing !important; }
-    .canvas-viewport {
-      cursor: grab;
-      position: fixed; inset: 0;
-      overflow: hidden;
-      touch-action: none;             /* we handle panning ourselves via pointer events */
-      opacity: 0;
-      animation: fadeIn 0.6s var(--ease) 0.1s forwards;
-    }
-    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-
-    /* faint grid so motion is legible even over empty space */
-    .canvas-grid {
-      position: absolute; inset: -50%;
-      background-image:
-        linear-gradient(to right,  rgba(15,15,15,0.045) 1px, transparent 1px),
-        linear-gradient(to bottom, rgba(15,15,15,0.045) 1px, transparent 1px);
-      background-size: 64px 64px;
-      pointer-events: none;
-      will-change: transform;
-    }
-
-    /* ── PLANE: holds the repeating tiles ── */
-    .canvas-plane {
-      position: absolute; top: 0; left: 0;
-      will-change: transform;
-    }
-    /* One tile = one full copy of the collection. The plane is filled with a
-       grid of these and the offset wraps, so the canvas never runs out. */
-    .tile {
-      position: absolute; top: 0; left: 0;
-      will-change: transform;
-    }
-    /* Shifted at runtime so the artwork's own bounding box starts at the tile
-       origin — without it the empty margin baked into each item's coordinates
-       would be added to the gap between every repeat. */
-    .tile-inner {
-      position: absolute; top: 0; left: 0;
-      will-change: transform;
-    }
-
-    /* ── ITEMS scattered in 2D space ── */
-    .img-item {
-      position: absolute;
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-      will-change: transform;
-      transition: transform 0.55s var(--ease);
-    }
-
-    /* x / y / rotation for each piece across the tile */
-    .img-item-draw      { left: 150px;  top: 350px;  width: 300px; transform: rotate(3deg); }
-    .img-item-diya      { left: 700px;  top: 250px;  width: 320px; transform: rotate(-5deg); }
-    .img-item-article   { left: 1290px; top: 320px;  width: 290px; transform: rotate(-2deg); }
-    .img-item-gradient  { left: 310px;  top: 890px;  width: 300px; transform: rotate(2deg); }
-    .img-item-fear      { left: 910px;  top: 910px;  width: 195px; transform: rotate(3deg); }
-    .img-item-foundtype { left: 1430px; top: 870px;  width: 240px; transform: rotate(4deg); }
-    .img-item-moonlight { left: 1860px; top: 560px;  width: 280px; transform: rotate(-3deg); }
-
-    .img-item-draw:hover      { transform: rotate(-2deg) scale(1.04); }
-    .img-item-diya:hover      { transform: rotate(3deg)  scale(1.04); }
-    .img-item-gradient:hover  { transform: rotate(-4deg) scale(1.04); }
-    .img-item-article:hover   { transform: rotate(-3deg) scale(1.04); }
-    .img-item-fear:hover      { transform: rotate(-4deg) scale(1.04); }
-    .img-item-foundtype:hover { transform: rotate(-2deg) scale(1.04); }
-    .img-item-moonlight:hover { transform: rotate(2deg)  scale(1.04); }
-
-    /* while panning, suppress hover transitions so nothing fights the drag */
-    .is-panning .img-item { transition: none; }
-    .is-panning .img-item:hover { transform: none; }
-    .is-panning .img-item-draw:hover      { transform: rotate(3deg); }
-    .is-panning .img-item-diya:hover      { transform: rotate(-5deg); }
-    .is-panning .img-item-gradient:hover  { transform: rotate(2deg); }
-    .is-panning .img-item-article:hover   { transform: rotate(-2deg); }
-    .is-panning .img-item-fear:hover      { transform: rotate(3deg); }
-    .is-panning .img-item-foundtype:hover { transform: rotate(4deg); }
-    .is-panning .img-item-moonlight:hover { transform: rotate(-3deg); }
-
-    .img-item img {
-      display: block; width: 100%;
-      -webkit-user-drag: none; user-select: none;
-    }
-    .img-item video {
-      display: block; width: 100%; aspect-ratio: 1 / 1;
-      background: #fdfcfc;
-      border: 1px solid #E8E5E0;
-      pointer-events: none;           /* drags pass straight through to the canvas */
-    }
-
-    .img-label {
-      margin-top: 11px;
-      font-size: 11px;
-      font-weight: 600;
-      color: var(--black);
-      letter-spacing: 0.01em;
-    }
-    .img-desc {
-      margin-top: 4px;
-      font-size: 11px;
-      font-weight: 400;
-      color: var(--gray);
-      max-width: 200px;
-      line-height: 1.5;
-    }
-
-    /* ── ONBOARDING CUE ──
-       A screenshot of this page looks like a normal scrolling page, so the
-       drag affordance has to be taught explicitly on arrival. */
-    .drag-hint {
-      position: fixed; left: 50%; bottom: 40px; z-index: 12;
-      display: flex; align-items: center; gap: 10px;
-      padding: 11px 20px 11px 16px;
-      border-radius: 999px;
-      background: rgba(255,255,255,0.90);
-      border: 1px solid var(--border);
-      box-shadow: 0 6px 28px rgba(15,15,15,0.10);
-      backdrop-filter: blur(14px);
-      font-size: 11.5px; font-weight: 500;
-      letter-spacing: 0.07em; text-transform: uppercase;
-      color: var(--black);
-      pointer-events: none;
-      white-space: nowrap;
-      transform: translateX(-50%);
-      opacity: 0;
-      animation: hintIn 0.7s var(--ease) 0.9s forwards;
-      transition: opacity 0.45s var(--ease), transform 0.45s var(--ease);
-    }
-    @keyframes hintIn {
-      from { opacity: 0; transform: translateX(-50%) translateY(10px); }
-      to   { opacity: 1; transform: translateX(-50%) translateY(0); }
-    }
-    /* once you've dragged, it leaves and does not come back this visit */
-    .drag-hint.hide {
-      opacity: 0 !important;
-      transform: translateX(-50%) translateY(8px) !important;
-    }
-
-    /* the little hand slides back and forth, miming the gesture */
-    .hint-hand {
-      display: block; width: 17px; height: 17px;
-      color: var(--orange);
-      animation: handSwipe 2.6s var(--ease) infinite;
-    }
-    .hint-hand svg { display: block; width: 100%; height: 100%; }
-    @keyframes handSwipe {
-      0%, 100% { transform: translateX(-4px); }
-      50%      { transform: translateX(5px); }
-    }
-    .hint-arrow {
-      color: var(--orange); font-size: 13px;
-      animation: arrowDrift 2.6s var(--ease) infinite;
-    }
-    @keyframes arrowDrift {
-      0%, 100% { transform: translate(0, 0); opacity: 0.75; }
-      50%      { transform: translate(3px, -3px); opacity: 1; }
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-      .img-item { transition: none; }
-      .hint-hand, .hint-arrow, .drag-hint { animation: none; opacity: 1; }
-    }
-  
-    /* ── MOBILE ──────────────────────────────────────────────
-       The canvas already handles touch via pointer events; this only
-       tightens the chrome. Desktop is untouched. */
-    @media (max-width: 820px) {
-      nav { padding: 0 18px; }
-      .nav-links { gap: 18px; }
-      .nav-links a { font-size: 13px; }
-      /* a finger is coarser than a cursor — give the hint room above the bar */
-      .drag-hint { bottom: 28px; font-size: 10.5px; padding: 9px 16px 9px 13px; }
-    }
-
-    /* ── SHARED HEADER + FOOTER ──
-       Matches the landing page exactly, so every page wears the same chrome. */
-    nav {
-      height: 57px; padding: 0 56px 0 28px;
-      background: rgba(250,249,247,0.92);
-      backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      z-index: 60;
       border-bottom: 1px solid var(--border);
     }
     .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
@@ -264,29 +65,188 @@
     .nav-links a { font-size: 14px; font-weight: 400; color: var(--gray); text-decoration: none; transition: color 0.15s; }
     .nav-links a:hover, .nav-links a.active { color: var(--black); }
 
-    .site-footer { padding: 44px 96px 28px; }
-    .footer-heading { font-size: clamp(22px, 2.2vw, 30px); line-height: 1.1; margin-bottom: 20px; }
-    .footer-main { margin-bottom: 32px; }
-    .footer-links { gap: 4px; }
-    .footer-link { font-size: 13px; }
-    .footer-nav { gap: 6px; padding-top: 6px; }
-    .footer-nav-link { font-size: 12px; }
-    .footer-bottom { padding-top: 16px; }
-    .footer-copy { font-size: 11px; }
+    /* ── SIDEBAR ── */
+    .layout { display: flex; align-items: flex-start; }
+    /* pinned for the whole page, footer included — the footer starts to its right */
+    .side {
+      position: fixed; top: var(--nav-h); left: 0; bottom: 0; z-index: 10;
+      width: var(--side);
+      padding: 32px 28px 28px;
+      display: flex; flex-direction: column;
+    }
+    /* name in the serif, everything else in the sans (Season Sans if it's
+       available, Inter otherwise) */
+    .side-name { font-family: 'Lora', Georgia, serif; font-size: 21px; font-weight: 400; letter-spacing: -0.01em; line-height: 1.25; color: var(--black); margin-bottom: 14px; }
+    .side-bio { font-family: 'Season Sans', 'Inter', system-ui, sans-serif; font-size: 14px; line-height: 1.55; color: var(--black); max-width: 280px; margin-top: 12px; }
+    .side-name + .side-bio { margin-top: 0; }
+    /* the bunny moved here from the header; nudged so her edge lines up with the D */
+    .side-bunny-btn {
+      position: relative; display: block; width: 44px; height: 44px;
+      margin: 0 0 14px -3px; padding: 0; border: 0; background: none; cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .side-bunny-btn:focus-visible { outline: 2px solid var(--orange); outline-offset: 4px; border-radius: 8px; }
+    .side-bunny { display: block; width: 100%; height: 100%; object-fit: contain; transform-origin: 50% 100%; user-select: none; -webkit-user-drag: none; pointer-events: none; }
+    /* click: she crouches, hops, and lands with a little squash */
+    .side-bunny.hop { animation: bunnyHop 0.62s cubic-bezier(.3, .7, .4, 1); }
+    @keyframes bunnyHop {
+      0%   { transform: translateY(0) scale(1, 1); }
+      14%  { transform: translateY(0) scale(1.12, 0.86); }
+      45%  { transform: translateY(-20px) scale(0.94, 1.08) rotate(-6deg); }
+      72%  { transform: translateY(0) scale(1.1, 0.9); }
+      86%  { transform: translateY(-3px) scale(0.98, 1.02); }
+      100% { transform: translateY(0) scale(1, 1); }
+    }
+    /* little hearts that float up from her */
+    .bunny-heart {
+      position: absolute; left: 50%; top: 20%; pointer-events: none;
+      font-size: 12px; line-height: 1; color: var(--orange);
+      animation: heartUp 0.95s ease-out forwards;
+    }
+    @keyframes heartUp {
+      0%   { transform: translate(-50%, 0) scale(0.4); opacity: 0; }
+      20%  { opacity: 1; }
+      100% { transform: translate(calc(-50% + var(--dx)), -34px) scale(1); opacity: 0; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .side-bunny.hop { animation: none; }
+    }
+    .side-bio a { text-decoration: underline; text-underline-offset: 3px; text-decoration-thickness: 1px; }
+    .side-bio a:hover { color: var(--gray); }
+    .side-bio:first-child { margin-top: 0; }
+    .side-meta { font-size: 14px; line-height: 1.5; color: var(--gray); margin-top: 12px; max-width: 280px; }
 
+    /* ── WORK GRID ── */
+    .main { flex: 1; min-width: 0; margin-left: var(--side); padding: 32px 32px 64px 0; }
+    .grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 40px 14px; }
+    /* card hover — the homepage fade: the hovered card dims, nothing moves */
+    .tile { display: block; transition: opacity 0.22s var(--ease); }
+    .tile:hover { opacity: 0.75; }
+    .thumb {
+      position: relative; overflow: hidden;
+      aspect-ratio: 16 / 11; background: #F0EFED;
+    }
+    .thumb > img.cover { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.7s var(--ease); }
+    /* text under each card — same as the homepage cards, a size down */
+    .work-label { margin-top: 16px; margin-bottom: 7px; font-size: 10.5px; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; color: var(--gray); }
+    .work-title { font-family: 'Lora', Georgia, serif; font-size: 18px; font-weight: 500; letter-spacing: -0.01em; line-height: 1.35; margin-bottom: 4px; color: var(--black); }
+    .work-desc { font-size: 14px; color: var(--gray); line-height: 1.55; max-width: 520px; }
+
+    /* per-project art, reusing the homepage covers */
+    .t-bit { background: #003262; display: flex; align-items: center; justify-content: center; }
+    .t-bit p { font-family: 'Sorts Mill Goudy', Georgia, serif; font-size: clamp(26px, 3.2vw, 44px); color: #fff; }
+
+    .t-ab .ab-sym  { position: absolute; left: 34.40%; top: 10.23%; width: 7.72%;  display: block; }
+    .t-ab .ab-word { position: absolute; left: 44.70%; top: 12.71%; width: 17.51%; display: block; }
+
+    .t-am { background: #D2D2FF; display: flex; align-items: center; justify-content: center; gap: 14px; }
+    .t-am .ph { width: 30%; border-radius: 26px; overflow: hidden; filter: drop-shadow(0 10px 20px rgba(100,148,172,0.18)); }
+    .t-am .ph img { display: block; width: 100%; }
+    .t-am .ph-back  { transform: translateY(-28%); }
+    .t-am .ph-front { transform: translateY(28%); }
+
+    .t-cs { background: #A6CFD5; }
+    .t-cs .frame { position: absolute; left: 7%; top: 22%; width: 86%; border-radius: 10px 10px 0 0; overflow: hidden; }
+    .t-cs .frame img { display: block; width: 100%; }
+
+
+    /* ── FOOTER — the homepage footer, scaled down ── */
+    .site-footer {
+      --footer-accent: #8B5CF6;
+      position: relative; overflow: hidden;
+      background: #FAF9F7;
+      border-top: 1px solid var(--border);
+      padding: 44px 32px 28px var(--side);  /* full-width line; content starts beside the sidebar, lined up with the cards */
+    }
+    .footer-inner { position: relative; z-index: 2; }
+    .footer-reveal {
+      position: absolute; inset: 0; z-index: 0; pointer-events: none;
+      background:
+        radial-gradient(70% 90% at 12% 18%, #C4B5FD 0%, rgba(196,181,253,0) 64%),
+        radial-gradient(65% 85% at 88% 12%, #DDD6FE 0%, rgba(221,214,254,0) 60%),
+        radial-gradient(85% 95% at 62% 105%, #A78BFA 0%, rgba(167,139,250,0) 64%),
+        linear-gradient(125deg, #F5F3FF 0%, #EDE9FE 100%);
+    }
+    .footer-veil { position: absolute; inset: 0; z-index: 1; pointer-events: none; display: block; }
+    .footer-heading {
+      font-family: 'Lora', serif;
+      font-size: clamp(22px, 2.2vw, 30px); font-weight: 500;
+      letter-spacing: -0.02em; line-height: 1.1;
+      margin-bottom: 20px;
+    }
+    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; border: 0; }
+    .footer-word { color: var(--footer-accent); font-family: 'Inter', sans-serif; }
+    .footer-caret { display: inline-block; color: var(--footer-accent); font-weight: 300; animation: caretBlink 0.8s step-end infinite; margin-left: 1px; }
+    @keyframes caretBlink { 0%,100% { opacity: 1; } 50% { opacity: 0; } }
+    .footer-main { display: flex; align-items: flex-start; justify-content: space-between; gap: 40px; margin-bottom: 32px; }
+    .footer-left { display: flex; flex-direction: column; }
+    .footer-links { display: flex; flex-direction: column; gap: 4px; }
+    .footer-link { font-size: 13px; color: var(--gray); transition: color 0.18s; }
+    .footer-link:hover { color: var(--black); }
+    .footer-nav { display: flex; flex-direction: column; align-items: flex-end; gap: 6px; padding-top: 6px; }
+    .footer-nav-link { font-size: 12px; color: var(--gray); transition: color 0.18s; }
+    .footer-nav-link:hover { color: var(--black); }
+    .footer-bottom { display: flex; align-items: center; justify-content: space-between; border-top: 1px solid var(--border); padding-top: 16px; }
+    .footer-copy { font-size: 11px; color: var(--gray); }
+    @media (prefers-reduced-motion: reduce) {
+      .footer-reveal, .footer-veil { display: none; }
+      .footer-caret { animation: none; }
+    }
+
+
+    /* "under construction" note for cards whose case study isn't live yet */
+    .soon-toast {
+      position: fixed; left: 50%; bottom: 32px; z-index: 100;
+      transform: translate(-50%, 12px); opacity: 0; pointer-events: none;
+      padding: 12px 18px; border-radius: 999px;
+      background: var(--black); color: #fff;
+      font-size: 14px; line-height: 1.3; white-space: nowrap;
+      box-shadow: 0 10px 30px rgba(15, 15, 15, 0.18);
+      transition: opacity 0.25s var(--ease), transform 0.35s var(--ease);
+    }
+    .soon-toast.show { opacity: 1; transform: translate(-50%, 0); }
+    @media (max-width: 480px) { .soon-toast { white-space: normal; width: calc(100% - 32px); text-align: center; border-radius: 16px; } }
+
+    /* ── SANDBOX: masonry of small experiments ── */
+    .sb-grid { columns: 3; column-gap: 12px; }
+    .sb-item { break-inside: avoid; margin: 0 0 28px; }
+    .sb-panel { position: relative; overflow: hidden; background: #F0EFED; display: flex; align-items: center; justify-content: center; }
+    .sb-panel img, .sb-panel video { display: block; max-width: 100%; height: auto; }
+    .sb-fill img, .sb-fill video { width: 100%; }
+    .sb-pad { padding: 14% 16%; }
+    .sb-pad img { width: 100%; filter: drop-shadow(0 12px 24px rgba(15,15,15,0.10)); }
+    .sb-pad-tall { padding: 12% 24%; }
+    .sb-pad-tall img { width: 100%; }
+    .sb-cap { display: flex; align-items: flex-start; gap: 8px; margin-top: 10px; font-size: 14px; line-height: 1.35; }
+    .sb-sq { width: 9px; height: 9px; flex-shrink: 0; margin-top: 5px; }
+    .sb-name { font-weight: 600; color: var(--black); white-space: nowrap; }
+    .sb-sub { color: var(--gray); }
+    @media (max-width: 1100px) { .sb-grid { columns: 2; } }
+    @media (max-width: 900px)  { .sb-grid { columns: 1; } }
+
+    /* ── MOBILE: sidebar becomes a header ── */
     @media (max-width: 900px) {
       nav { padding: 0 18px 0 16px; }
       .nav-links { gap: 18px; }
       .nav-links a { font-size: 13px; }
-      .site-footer { padding: 36px 16px 24px; }
+      .layout { display: block; }
+      .side { position: static; width: auto; height: auto; padding: 24px 16px 8px; }
+      .main { margin-left: 0; padding: 16px 16px 48px; }
+      .grid { grid-template-columns: 1fr; gap: 32px; }
+      .site-footer { margin-left: 0; padding: 36px 16px 24px; }
       .footer-bottom { flex-direction: column; align-items: flex-start; gap: 6px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .thumb > img.cover { transition: none; }
     }
   </style>
 </head>
 <body>
 
   <nav>
-    <a class="nav-logo" href="/"><span class="logo-name">diya</span></a>
+    <a href="/" class="nav-logo">
+      <span class="logo-name">diya</span>
+    </a>
     <ul class="nav-links">
       <li><a href="/">Work</a></li>
       <li><a href="/about">About</a></li>
@@ -295,289 +255,240 @@
     </ul>
   </nav>
 
-  <div class="canvas-viewport" id="viewport">
-    <div class="canvas-grid" id="grid"></div>
+  <div class="layout">
+  <aside class="side">
+    <button class="side-bunny-btn" type="button" aria-label="Say hi to Miffy"><img class="side-bunny" src="images/purpmiffy.png" alt="" draggable="false"/></button>
+    <h1 class="side-name">Diya Mahapatra</h1>
+    <p class="side-bio">Product designer interested in thoughtful interactions, research, and bringing ideas to life through design, code, and AI.</p>
+    <p class="side-bio">Currently designing at UC Berkeley IT.</p>
+    <p class="side-bio">A little more <a href="/about">about</a> me beyond design.</p>
+  </aside>
 
-    <div class="canvas-plane" id="plane">
-      <div class="tile" id="tile">
-       <div class="tile-inner" id="tileInner">
+  <main class="main">
+    <div class="sb-grid">
+      <figure class="sb-item">
+        <div class="sb-panel sb-fill"><video src="videos/moonlight.mp4" poster="images/moonlight-poster.jpg" muted loop playsinline preload="metadata" aria-label="A film countdown that becomes a star rating and the Moonlight poster"></video></div>
+        <figcaption class="sb-cap"><span class="sb-sq" style="background:#F6475F"></span><span class="sb-name">Motion Design</span><span class="sb-sub">Film countdown into a movie poster</span></figcaption>
+      </figure>
+      <figure class="sb-item">
+        <div class="sb-panel sb-pad"><img src="images/article.png" alt="Personal profile interface" draggable="false"/></div>
+        <figcaption class="sb-cap"><span class="sb-sq" style="background:#8B5CF6"></span><span class="sb-name">UI Exploration</span><span class="sb-sub">Personal profile built with Claude</span></figcaption>
+      </figure>
+      <figure class="sb-item">
+        <div class="sb-panel sb-fill"><img src="images/draw.png" alt="Digital painting of a kitchen scene" draggable="false"/></div>
+        <figcaption class="sb-cap"><span class="sb-sq" style="background:#E8A33D"></span><span class="sb-name">Digital Art</span><span class="sb-sub">Painting exploration on Procreate</span></figcaption>
+      </figure>
+      <figure class="sb-item">
+        <div class="sb-panel sb-pad-tall"><img src="images/fear-search.png" alt="Phone screen asking what are you watching, with a carousel of horror movie posters" draggable="false"/></div>
+        <figcaption class="sb-cap"><span class="sb-sq" style="background:#E5484D"></span><span class="sb-name">Mobile UI</span><span class="sb-sub">Horror movie fear profile app</span></figcaption>
+      </figure>
+      <figure class="sb-item">
+        <div class="sb-panel sb-fill"><img src="images/gradient.png" alt="Gradient study" draggable="false"/></div>
+        <figcaption class="sb-cap"><span class="sb-sq" style="background:#C2649A"></span><span class="sb-name">Visual Study</span><span class="sb-sub">Gradient exploration in Photoshop</span></figcaption>
+      </figure>
+      <figure class="sb-item">
+        <div class="sb-panel sb-pad"><img src="images/diyawidget.png" alt="Personal iOS widget concept" draggable="false"/></div>
+        <figcaption class="sb-cap"><span class="sb-sq" style="background:#5B8DEF"></span><span class="sb-name">3D / Graphic Design</span><span class="sb-sub">Personal iOS widget concept</span></figcaption>
+      </figure>
+      <figure class="sb-item">
+        <div class="sb-panel sb-fill"><img src="images/foundtype.png" alt="Experimental letterforms" draggable="false"/></div>
+        <figcaption class="sb-cap"><span class="sb-sq" style="background:#8A6A4F"></span><span class="sb-name">Typography</span><span class="sb-sub">Experimental letterforms</span></figcaption>
+      </figure>
+    </div>
+  </main>
+  </div>
 
-        <div class="img-item img-item-draw">
-          <img src="images/draw.png" alt="Digital painting of a kitchen scene" draggable="false"/>
-          <span class="img-label">Digital Art</span>
-          <span class="img-desc">Painting exploration on Procreate</span>
+  <footer class="site-footer">
+    <div class="footer-reveal" aria-hidden="true"></div>
+    <canvas class="footer-veil" aria-hidden="true"></canvas>
+    <div class="footer-inner">
+      <div class="footer-main">
+        <div class="footer-left">
+          <h2 class="footer-heading">Let's build something<br><span class="footer-word" id="footer-word" aria-hidden="true">together</span><span class="footer-caret" aria-hidden="true">|</span><span class="sr-only"> together</span></h2>
+          <div class="footer-links">
+            <a class="footer-link" href="mailto:diyamahapatra@berkeley.edu">email</a>
+            <a class="footer-link" href="https://www.linkedin.com/in/diya-mahapatra/" target="_blank">linkedIn</a>
+            <a class="footer-link" href="Diya-Mahapatra-Product-Designer-Resume.pdf" target="_blank">resume</a>
+          </div>
         </div>
-
-        <div class="img-item img-item-diya">
-          <img src="images/diyawidget.png" alt="Personal iOS widget concept" draggable="false"/>
-          <span class="img-label">3D / Graphic Design</span>
-          <span class="img-desc">Personal iOS widget concept</span>
+        <div class="footer-nav">
+          <a class="footer-nav-link" href="/">Work</a>
+          <a class="footer-nav-link" href="/sandlot">Sandbox</a>
+          <a class="footer-nav-link" href="Diya-Mahapatra-Product-Designer-Resume.pdf" target="_blank">Resume</a>
         </div>
-
-        <div class="img-item img-item-article">
-          <img src="images/article.png" alt="Personal profile interface" draggable="false"/>
-          <span class="img-label">UI Exploration</span>
-          <span class="img-desc">Personal profile built with Claude</span>
-        </div>
-
-        <div class="img-item img-item-gradient">
-          <img src="images/gradient.png" alt="Gradient study" draggable="false"/>
-          <span class="img-label">Visual Study</span>
-          <span class="img-desc">Gradient exploration in Photoshop</span>
-        </div>
-
-        <div class="img-item img-item-fear">
-          <img src="images/fear-search.png" alt="Phone screen asking what are you watching, with a carousel of horror movie posters" draggable="false"/>
-          <span class="img-label">Mobile UI</span>
-          <span class="img-desc">Horror movie fear profile app</span>
-        </div>
-
-        <div class="img-item img-item-foundtype">
-          <img src="images/foundtype.png" alt="Experimental letterforms" draggable="false"/>
-          <span class="img-label">Typography</span>
-          <span class="img-desc">Experimental letterforms</span>
-        </div>
-
-        <div class="img-item img-item-moonlight">
-          <video src="videos/moonlight.mp4" poster="images/moonlight-poster.jpg" muted loop playsinline preload="metadata" aria-label="A film countdown that becomes a star rating and the Moonlight poster"></video>
-          <span class="img-label">Motion Design</span>
-          <span class="img-desc">Film countdown into a movie poster</span>
-        </div>
-
-       </div>
+      </div>
+      <div class="footer-bottom">
+        <p class="footer-copy">© 2026 Diya Mahapatra</p>
+        <p class="footer-copy">made with thai iced tea 🧋 · designed on Figma, coded with Claude Code</p>
       </div>
     </div>
-  </div>
-
-  <div class="drag-hint" id="dragHint">
-    <span class="hint-hand" aria-hidden="true">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M9 11V6.5a1.5 1.5 0 0 1 3 0V11"/>
-        <path d="M12 11V5.5a1.5 1.5 0 0 1 3 0V11"/>
-        <path d="M15 11.5V8a1.5 1.5 0 0 1 3 0v6.5a6 6 0 0 1-6 6h-1.2a5 5 0 0 1-3.9-1.9L5 15.5a1.5 1.5 0 0 1 2.4-1.8L9 15.5V8"/>
-      </svg>
-    </span>
-    Drag to explore
-    <span class="hint-arrow" aria-hidden="true">↗</span>
-  </div>
+  </footer>
 
   <script>
 
-    /* ── infinite pannable canvas ──
-       The plane is tiled with copies of the collection and the translation is
-       wrapped by the tile size, so dragging any direction forever just brings
-       the work back around instead of hitting an edge. */
-    const viewport = document.getElementById('viewport');
-    const plane    = document.getElementById('plane');
-    const tile      = document.getElementById('tile');
-    const tileInner = document.getElementById('tileInner');
-    const grid     = document.getElementById('grid');
-    const hint     = document.getElementById('dragHint');
+    /* Sandbox videos play only while they're on screen. */
+    (function () {
+      var vids = document.querySelectorAll('.sb-panel video');
+      if (!vids.length || !('IntersectionObserver' in window)) return;
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      var io = new IntersectionObserver(function (es) {
+        es.forEach(function (e) { if (e.isIntersecting) e.target.play().catch(function () {}); else e.target.pause(); });
+      }, { threshold: 0.25 });
+      vids.forEach(function (v) { io.observe(v); });
+    })();
 
-    const GAP       = 110;    // breathing room between one copy and the next
-    const DRAG_RATE = 0.42;   // canvas travel per pixel of pointer movement
-    const EASE      = 0.075;  // how quickly the canvas catches up to your hand;
-                              // lower = heavier, more gliding, more "smooth scroll"
-    const FRICTION  = 0.94;   // how fast momentum decays
-    const MIN_V     = 0.05;   // velocity below which momentum stops
-    const HINT_KEY  = 'sandbox-drag-hint-seen';
 
-    let TILE_W = 0, TILE_H = 0;
-    /* The canvas never jumps straight to where you dragged. Input moves a
-       target, and the rendered position eases toward it every frame — that lag
-       is what gives the pan weight instead of feeling stuck to the cursor. */
-    let x = 0, y = 0;         // rendered position; render() wraps it
-    let tx = 0, ty = 0;       // target position that input actually moves
-    let vx = 0, vy = 0;
-    let dragging = false, moved = false;
-    let lastX = 0, lastY = 0, pointerId = null;
-    let raf = null, nudgeRaf = null;
-
-    /* Tile size comes from the artwork's own bounding box, so adding a piece
-       later needs no hand-tuned constants and never leaves a seam. The inner
-       layer is pulled back by the box's top-left corner, which is what keeps
-       the repeats tight instead of inheriting each item's leading margin. */
-    function measure() {
-      let minL = Infinity, minT = Infinity, maxR = -Infinity, maxB = -Infinity;
-      tileInner.querySelectorAll('.img-item').forEach(el => {
-        minL = Math.min(minL, el.offsetLeft);
-        minT = Math.min(minT, el.offsetTop);
-        maxR = Math.max(maxR, el.offsetLeft + el.offsetWidth);
-        maxB = Math.max(maxB, el.offsetTop  + el.offsetHeight);
+    /* Miffy in the sidebar: click (or tap) and she hops, sending up a few hearts. */
+    (function () {
+      var btn = document.querySelector('.side-bunny-btn');
+      if (!btn) return;
+      var img = btn.querySelector('.side-bunny');
+      var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      btn.addEventListener('click', function () {
+        if (!reduced) {
+          img.classList.remove('hop'); void img.offsetWidth; img.classList.add('hop');
+        }
+        [-14, 0, 14].forEach(function (dx, i) {
+          setTimeout(function () {
+            var h = document.createElement('span');
+            h.className = 'bunny-heart'; h.textContent = '\u2665';
+            h.style.setProperty('--dx', (dx + (Math.random() * 8 - 4)) + 'px');
+            btn.appendChild(h);
+            setTimeout(function () { h.remove(); }, 1000);
+          }, 120 + i * 90);
+        });
       });
-      tileInner.style.transform = `translate(${-minL}px, ${-minT}px)`;
-      TILE_W = (maxR - minL) + GAP;
-      TILE_H = (maxB - minT) + GAP;
-      tile.style.width  = TILE_W + 'px';
-      tile.style.height = TILE_H + 'px';
-    }
+    })();
 
-    /* Lay down enough copies to cover the window plus one tile of slack in
-       each direction — that slack is what the wrapped offset moves through. */
-    function buildTiles() {
-      plane.querySelectorAll('.tile.clone').forEach(n => n.remove());
-      const cols = Math.ceil(window.innerWidth  / TILE_W) + 1;
-      const rows = Math.ceil(window.innerHeight / TILE_H) + 1;
-      for (let i = 0; i <= cols; i++) {
-        for (let j = 0; j <= rows; j++) {
-          if (i === 0 && j === 0) continue;          // the original tile
-          const c = tile.cloneNode(true);
-          c.classList.add('clone');
-          c.removeAttribute('id');
-          c.setAttribute('aria-hidden', 'true');     // duplicates aren't read out
-          c.style.transform = `translate3d(${i * TILE_W}px, ${j * TILE_H}px, 0)`;
-          plane.appendChild(c);
+    /* ── FOOTER WORD CYCLER ── */
+    (function() {
+      const words   = ['together', 'great', 'magical', 'inspiring'];
+      const el      = document.getElementById('footer-word');
+      if (!el) return;
+      let wi = 0, charI = words[0].length, deleting = false;
+      const TYPE_SPEED   = 80;
+      const DELETE_SPEED = 45;
+      const PAUSE_AFTER  = 1800;
+      const PAUSE_BEFORE = 220;
+
+      function tick() {
+        const current = words[wi];
+        if (deleting) {
+          charI--;
+          el.textContent = current.slice(0, charI);
+          if (charI === 0) {
+            deleting = false;
+            wi = (wi + 1) % words.length;
+            setTimeout(tick, PAUSE_BEFORE);
+            return;
+          }
+          setTimeout(tick, DELETE_SPEED);
+        } else {
+          charI++;
+          el.textContent = words[wi].slice(0, charI);
+          if (charI === words[wi].length) {
+            setTimeout(() => { deleting = true; tick(); }, PAUSE_AFTER);
+            return;
+          }
+          setTimeout(tick, TYPE_SPEED);
         }
       }
-    }
+      // start after a pause on the first word
+      setTimeout(() => { deleting = true; tick(); }, PAUSE_AFTER);
+    })();
+  
+    /* ── FOOTER SCRATCH-OFF ──
+       Erases into a white canvas as the pointer moves, then heals back so the
+       next visitor gets a clean slate. The rAF loop only runs while there is
+       something to heal, so an idle footer costs nothing. */
+    (function () {
+      var footer = document.querySelector('.site-footer');
+      var canvas = footer && footer.querySelector('.footer-veil');
+      if (!canvas) return;
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
-    function render() {
-      /* wrap into [-TILE, 0) so there is always a copy covering the window */
-      const wx = ((x % TILE_W) + TILE_W) % TILE_W - TILE_W;
-      const wy = ((y % TILE_H) + TILE_H) % TILE_H - TILE_H;
-      plane.style.transform = `translate3d(${wx}px, ${wy}px, 0)`;
-      grid.style.transform  = `translate3d(${x % 64}px, ${y % 64}px, 0)`;
-    }
+      var ctx = canvas.getContext('2d');
+      var w = 0, h = 0, raf = null, idleFrames = 0, last = null;
+      var RADIUS = 52, HEAL = 0.030, IDLE_STOP = 260;
 
-    /* The artwork now sits flush against the tile origin, so open on a small
-       offset — otherwise the first piece starts tucked under the nav and the
-       pinned heading. Only applied once, so a resize never yanks you back. */
-    let placed = false;
-    /* Every copy of the canvas carries its own video, so only the ones in
-       view play — the rest sit paused on their poster. */
-    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const videoIO = 'IntersectionObserver' in window && !reduceMotion
-      ? new IntersectionObserver(entries => entries.forEach(en => {
-          if (en.isIntersecting) en.target.play().catch(() => {});
-          else en.target.pause();
-        }), { threshold: 0.25 })
-      : null;
-    function watchVideos() {
-      if (!videoIO) return;
-      videoIO.disconnect();
-      plane.querySelectorAll('video').forEach(v => videoIO.observe(v));
-    }
-
-    function layout() {
-      measure(); buildTiles(); watchVideos();
-      if (!placed) { x = tx = 130; y = ty = 250; placed = true; }
-      render();
-    }
-    layout();
-    window.addEventListener('load', layout);   // images settle the tile height
-    window.addEventListener('resize', layout);
-
-    function dismissHint() {
-      if (hint.classList.contains('hide')) return;
-      hint.classList.add('hide');
-      try { sessionStorage.setItem(HINT_KEY, '1'); } catch (e) {}
-      if (nudgeRaf) { cancelAnimationFrame(nudgeRaf); nudgeRaf = null; }
-    }
-    /* already taught this visit? then never show it again */
-    try {
-      if (sessionStorage.getItem(HINT_KEY)) {
-        hint.style.animation = 'none';
-        hint.classList.add('hide');
+      function fillVeil() {
+        ctx.save();
+        ctx.setTransform(1, 0, 0, 1, 0, 0);
+        ctx.globalCompositeOperation = 'source-over';
+        ctx.fillStyle = '#FAF9F7';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.restore();
       }
-    } catch (e) {}
 
-    /* A one-shot drift on arrival: the canvas itself eases a little to the
-       left and settles back, so the page visibly *moves* before you touch it.
-       Any real input cancels it immediately. */
-    function nudge() {
-      if (hint.classList.contains('hide')) return;
-      const AMP = 52, DUR = 1800, t0 = performance.now();
-      const startX = tx;
-      const step = now => {
-        const p = Math.min((now - t0) / DUR, 1);
-        const eased = Math.sin(p * Math.PI);               // out and back
-        tx = startX - AMP * eased;                         // drive the target,
-        startLoop();                                       // let the ease smooth it
-        if (p < 1 && !dragging) nudgeRaf = requestAnimationFrame(step);
-        else nudgeRaf = null;
-      };
-      nudgeRaf = requestAnimationFrame(step);
-    }
-    setTimeout(nudge, 1700);
-
-    /* One loop drives everything: momentum feeds the target, the rendered
-       position eases toward it, and it parks itself once both have settled. */
-    function tick() {
-      if (!dragging) {
-        vx *= FRICTION; vy *= FRICTION;
-        if (Math.abs(vx) < MIN_V) vx = 0;
-        if (Math.abs(vy) < MIN_V) vy = 0;
-        tx += vx; ty += vy;
+      function resize() {
+        var dpr = Math.min(window.devicePixelRatio || 1, 2);
+        var r = footer.getBoundingClientRect();
+        w = r.width; h = r.height;
+        if (!w || !h) return;
+        canvas.width = Math.round(w * dpr);
+        canvas.height = Math.round(h * dpr);
+        canvas.style.width = w + 'px';
+        canvas.style.height = h + 'px';
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        fillVeil();
+        last = null;
       }
-      x += (tx - x) * EASE;
-      y += (ty - y) * EASE;
-      render();
 
-      const settled = !dragging && vx === 0 && vy === 0 &&
-                      Math.abs(tx - x) < 0.1 && Math.abs(ty - y) < 0.1;
-      if (settled) { x = tx; y = ty; render(); raf = null; }
-      else raf = requestAnimationFrame(tick);
-    }
-    function startLoop() { if (!raf) raf = requestAnimationFrame(tick); }
+      function hole(x, y) {
+        var g = ctx.createRadialGradient(x, y, 0, x, y, RADIUS);
+        g.addColorStop(0, 'rgba(0,0,0,0.60)');
+        g.addColorStop(0.65, 'rgba(0,0,0,0.28)');
+        g.addColorStop(1, 'rgba(0,0,0,0)');
+        ctx.fillStyle = g;
+        ctx.beginPath();
+        ctx.arc(x, y, RADIUS, 0, Math.PI * 2);
+        ctx.fill();
+      }
 
-    viewport.addEventListener('pointerdown', e => {
-      if (e.button !== 0) return;
-      dragging = true; moved = false;
-      pointerId = e.pointerId;
-      lastX = e.clientX; lastY = e.clientY;
-      vx = vy = 0;
-      if (raf) { cancelAnimationFrame(raf); raf = null; }
-      if (nudgeRaf) { cancelAnimationFrame(nudgeRaf); nudgeRaf = null; }
-      document.body.classList.add('is-panning');
-      try { viewport.setPointerCapture(pointerId); } catch (err) {}
-    });
-
-    viewport.addEventListener('pointermove', e => {
-      if (!dragging) return;
-      const dx = (e.clientX - lastX) * DRAG_RATE, dy = (e.clientY - lastY) * DRAG_RATE;
-      if (Math.abs(dx) + Math.abs(dy) > 3) moved = true;
-      tx += dx; ty += dy;
-      vx = dx; vy = dy;
-      lastX = e.clientX; lastY = e.clientY;
-      startLoop();
-      if (moved) dismissHint();
-    });
-
-    function endDrag() {
-      if (!dragging) return;
-      dragging = false;
-      try {
-        if (pointerId !== null && viewport.hasPointerCapture(pointerId)) {
-          viewport.releasePointerCapture(pointerId);
+      function wipe(x, y) {
+        ctx.globalCompositeOperation = 'destination-out';
+        if (last) {
+          /* interpolate, or a fast flick leaves a dotted trail instead of a stroke */
+          var dx = x - last.x, dy = y - last.y;
+          var steps = Math.max(1, Math.ceil(Math.sqrt(dx * dx + dy * dy) / 14));
+          for (var i = 1; i <= steps; i++) hole(last.x + dx * i / steps, last.y + dy * i / steps);
+        } else {
+          hole(x, y);
         }
-      } catch (err) {}
-      pointerId = null;
-      document.body.classList.remove('is-panning');
-      startLoop();
-    }
-    viewport.addEventListener('pointerup', endDrag);
-    viewport.addEventListener('pointercancel', endDrag);
+        last = { x: x, y: y };
+        idleFrames = 0;
+        start();
+      }
 
-    /* trackpad / wheel also pans, in both axes */
-    viewport.addEventListener('wheel', e => {
-      e.preventDefault();
-      tx -= e.deltaX; ty -= e.deltaY;
-      vx = vy = 0;
-      startLoop();
-      dismissHint();
-    }, { passive: false });
+      function frame() {
+        ctx.globalCompositeOperation = 'source-over';
+        ctx.fillStyle = 'rgba(250,249,247,' + HEAL + ')';
+        ctx.fillRect(0, 0, w, h);
+        idleFrames++;
+        if (idleFrames > IDLE_STOP) { fillVeil(); raf = null; return; }
+        raf = requestAnimationFrame(frame);
+      }
 
-    /* arrow keys, for keyboard reachability */
-    window.addEventListener('keydown', e => {
-      const step = e.shiftKey ? 240 : 90;
-      const map = { ArrowLeft:[step,0], ArrowRight:[-step,0], ArrowUp:[0,step], ArrowDown:[0,-step] };
-      const d = map[e.key];
-      if (!d) return;
-      e.preventDefault();
-      tx += d[0]; ty += d[1];
-      startLoop();
-      dismissHint();
-    });
+      function start() { if (raf === null) raf = requestAnimationFrame(frame); }
+
+      footer.addEventListener('pointermove', function (e) {
+        var r = footer.getBoundingClientRect();
+        wipe(e.clientX - r.left, e.clientY - r.top);
+      }, { passive: true });
+
+      /* re-entering elsewhere shouldn't drag a streak across the whole footer */
+      footer.addEventListener('pointerleave', function () { last = null; });
+      footer.addEventListener('pointerdown', function (e) {
+        var r = footer.getBoundingClientRect();
+        last = null;
+        wipe(e.clientX - r.left, e.clientY - r.top);
+      }, { passive: true });
+
+      resize();
+      if ('ResizeObserver' in window) new ResizeObserver(resize).observe(footer);
+      else window.addEventListener('resize', resize);
+    })();
+
   </script>
 </body>
 </html>
