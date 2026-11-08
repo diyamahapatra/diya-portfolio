@@ -217,6 +217,11 @@
     .sb-pad img { width: 100%; filter: drop-shadow(0 12px 24px rgba(15,15,15,0.10)); }
     .sb-pad-tall { padding: 12% 24%; }
     .sb-pad-tall img { width: 100%; }
+    /* Moonlight countdown: a warm, old-film wash. The video's near-white
+       background multiplies into the gradient, so the line work stays dark
+       and the white turns sepia, with a soft vignette at the edges. */
+    .sb-film { background: radial-gradient(120% 120% at 50% 45%, #F3E7D3 0%, #E6D3B3 55%, #C9AE88 100%); }
+    .sb-film video { mix-blend-mode: multiply; }
     .sb-cap { display: flex; align-items: flex-start; gap: 8px; margin-top: 10px; font-size: 14px; line-height: 1.35; }
     .sb-name { font-weight: 600; color: var(--black); white-space: nowrap; }
     .sb-sub { color: var(--gray); }
@@ -266,7 +271,7 @@
   <main class="main">
     <div class="sb-grid">
       <figure class="sb-item">
-        <div class="sb-panel sb-fill"><video src="videos/moonlight.mp4" poster="images/moonlight-poster.jpg" muted loop playsinline preload="metadata" aria-label="A film countdown that becomes a star rating and the Moonlight poster"></video></div>
+        <div class="sb-panel sb-fill sb-film"><video src="videos/moonlight.mp4" poster="images/moonlight-poster.jpg" muted loop playsinline preload="metadata" aria-label="A film countdown that becomes a star rating and the Moonlight poster"></video></div>
         <figcaption class="sb-cap"><span class="sb-name">Motion Design</span><span class="sb-sub">Film countdown into a movie poster</span></figcaption>
       </figure>
       <figure class="sb-item">
