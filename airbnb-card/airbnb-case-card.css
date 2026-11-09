@@ -60,7 +60,7 @@
   width: var(--dot-size, 0.15em); height: var(--dot-size, 0.15em);
   margin-left: calc(var(--dot-size, 0.15em) / -2);
   border-radius: 50%;
-  background: var(--rausch);
+  background: currentColor; /* same ink as the rest of the title */
 }
 
 /* ---------- app icon ---------- */
