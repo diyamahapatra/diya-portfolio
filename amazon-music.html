@@ -1191,6 +1191,15 @@
     .cs-sidebar::after { display: none; }
     /* the wider rail would sit over the footer's left edge, so the footer rides above it */
     .site-footer { position: relative; z-index: 60; }
+    /* title sits under the hero image in a plain sans, like emmiwu.com/openai */
+    .cs-title.cs-title-under {
+      font-family: 'Inter', system-ui, sans-serif;
+      font-size: 18px; font-weight: 500;
+      letter-spacing: -0.01em; line-height: 1.3;
+      color: var(--black);
+      margin: 18px 0 0;
+    }
+    .cs-title.cs-title-under { margin-bottom: 24px; }
   </style>
   <script>
     (function () {
@@ -1234,12 +1243,12 @@
     <main class="cs-main">
     <div class="cs-content">
 
-      <h1 class="cs-title">Turning Solo Streaming Into Shared Concert Experiences</h1>
-
-      <!-- Hero image -->
+      <!-- Hero image first, title underneath (like emmiwu.com/openai) -->
       <div class="cs-hero-img">
         <img src="images/am-hero.png" alt="Amazon Music hero — concert detail, friend activity, and online concerts screens">
       </div>
+
+      <h1 class="cs-title cs-title-under">Turning Solo Streaming Into Shared Concert Experiences</h1>
 
       <!-- Intro + Jump button -->
       <div class="cs-intro-row">

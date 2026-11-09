@@ -1122,6 +1122,17 @@
     .cs-rail::after { display: none; }
     /* the wider rail would sit over the footer's left edge, so the footer rides above it */
     .site-footer { position: relative; z-index: 60; }
+    /* title sits under the hero in a plain sans, like emmiwu.com/openai;
+       the hero takes over the gap below the nav the title used to leave */
+    .cs-hero { margin-top: 105px; scroll-margin-top: 90px; }
+    .cs-title.cs-title-under {
+      font-family: 'Inter', system-ui, sans-serif;
+      font-size: 18px; font-weight: 500;
+      letter-spacing: -0.01em; line-height: 1.3;
+      color: var(--ink);
+      margin-top: 18px;
+      margin-bottom: 24px;
+    }
   </style>
   <script>
     (function () {
@@ -1153,12 +1164,12 @@
     <a class="rail-top" href="#top">Back to top</a>
   </aside>
 
-  <h1 class="cs-title" id="top">Redesigning advising around how 20,000+ students seek help</h1>
-
   <!-- ── HERO ── -->
-  <div class="cs-hero cs-hero--bit">
+  <div class="cs-hero cs-hero--bit" id="top">
     <p class="bit-wordmark">Berkeley IT</p>
   </div>
+
+  <h1 class="cs-title cs-title-under">Redesigning advising around how 20,000+ students seek help</h1>
 
   <!-- ── READING COLUMN ── -->
   <main class="cs-body">
