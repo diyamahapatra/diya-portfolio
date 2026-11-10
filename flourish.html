@@ -1631,6 +1631,21 @@
       margin-top: 0.55em; font-family: 'Inter', system-ui, sans-serif; font-weight: 400;
       font-size: clamp(13px, 5.2cqw, 15px); line-height: 1.5; letter-spacing: 0.01em; color: #44403B;
     }
+    /* Design section as a numbered grid, after emmiwu.com/openai's process grid:
+       mono number, tinted panel with just the UI, then title and description as text */
+    .dg-grid { display: grid; grid-template-columns: 1fr 1fr; column-gap: 16px; row-gap: 44px; margin-top: 36px; }
+    .dg-item { margin: 0; }
+    .dg-item.dg-wide { grid-column: 1 / -1; }
+    .dg-item .dg-num {
+      font-family: ui-monospace, 'SF Mono', Menlo, monospace; font-size: 12px; letter-spacing: 0.02em;
+      color: #6B7280; margin: 0 0 8px;
+    }
+    .dg-item img { display: block; width: 100%; height: auto; }
+    .cs-section .dg-item h3 {
+      font-family: 'Inter', system-ui, sans-serif; font-weight: 500; font-size: 16px; line-height: 1.35;
+      color: var(--black); margin: 18px 0 6px;
+    }
+    .cs-section .dg-item p:not(.dg-num) { font-size: 14px; line-height: 1.6; color: #6B6B6B; margin: 0; max-width: none; }
   </style>
   <script>
     (function () {
@@ -1826,8 +1841,25 @@
         <h2>Each opportunity became a core part of the meal experience.</h2>
         <p>None of it required adding more information. I explained the numbers already on screen, made them scannable, and took steps out of logging.</p>
 
-        <div style="margin-top: 40px;">
-          <img src="images/designs.webp" alt="Design decisions: trigger score with ingredient-level explanations, macro visualizations against daily goals, and editing a logged meal's name, type and time" style="width:100%; display:block;">
+        <div class="dg-grid">
+          <figure class="dg-item">
+            <p class="dg-num">01</p>
+            <img src="images/design-grid/design-01.webp" alt="Trigger summary card: a score of 6 with a plain-language reason, and each ingredient's macros and its own trigger rating" draggable="false"/>
+            <h3>Trigger Score</h3>
+            <p>Paired each personalized score with ingredient-level explanations and alternatives, turning an unexplained number into something users could understand and act on.</p>
+          </figure>
+          <figure class="dg-item">
+            <p class="dg-num">02</p>
+            <img src="images/design-grid/design-02.webp" alt="The meal's macro count as bars measured against daily goals: calories, fat, carbs and protein" draggable="false"/>
+            <h3>Macro Visualizations</h3>
+            <p>Visualized each meal against daily nutrition goals so users could understand its impact without calculating the numbers themselves.</p>
+          </figure>
+          <figure class="dg-item dg-wide">
+            <p class="dg-num">03</p>
+            <img src="images/design-grid/design-03.webp" alt="Editing a logged meal: the meal header, the rename dialog, and the meal type and time dialog" draggable="false"/>
+            <h3>Edit Logged Meal</h3>
+            <p>Let users correct meal details after logging, from names and times to meal type, so mistakes wouldn&rsquo;t carry into the insights generated from their data.</p>
+          </figure>
         </div>
       </div>
 
