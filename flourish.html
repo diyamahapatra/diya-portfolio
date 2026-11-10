@@ -1594,6 +1594,10 @@
     /* eyebrows (Role/Timeline/… and the section labels) in the same purple, 2px smaller */
     .cs-overview-label,
     .cs-section p.cs-section-label { color: #695CBC; font-size: 10px; }
+    /* hand-set line breaks in the three findings, only where the columns are
+       wide enough for them; narrower windows wrap on their own */
+    br.br-wide { display: none; }
+    @media (min-width: 1600px) { br.br-wide { display: inline; } }
   </style>
   <script>
     (function () {
@@ -1749,10 +1753,10 @@
         <div class="cs-synthesis">
           <div>
             <p class="cs-synthesis-title">Drowning in data</p>
-            <p class="cs-synthesis-desc">Dense nutrition breakdowns make "insights" feel like a chore, not help.</p>
+            <p class="cs-synthesis-desc">Dense nutrition breakdowns make "insights"<br class="br-wide"> feel like a chore, not help.</p>
           </div>
           <div>
-            <p class="cs-synthesis-title">Users needed insights specific to their body</p>
+            <p class="cs-synthesis-title">Personal relevance mattered</p>
             <p class="cs-synthesis-desc">Users wanted food triggers connected to their own symptoms, not generic nutrition rules.</p>
           </div>
           <div>
