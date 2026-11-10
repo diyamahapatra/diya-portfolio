@@ -1715,6 +1715,18 @@
     /* Engineering Collaboration: annotated Figma-style demo of the long meal name fix */
     .cs-eng-video-wrap { margin-top: 32px; }
     .cs-eng-video-wrap video { display: block; width: 100%; height: auto; aspect-ratio: 16 / 10; background: #F5F5F5; }
+    /* Testing & Iteration: two short stories, each a small heading, a paragraph and its image */
+    .it-story { margin-top: 40px; }
+    .it-story + .it-story { margin-top: 56px; }
+    .cs-section .it-story h3 { font-family: 'Inter', system-ui, sans-serif; font-size: 16px; font-weight: 500; letter-spacing: -0.01em; line-height: 1.3; color: var(--black); margin: 0 0 8px; }
+    .it-story img { display: block; width: 100%; margin-top: 24px; }
+    /* The Solution: the three features explained under the finished screen */
+    .sol-features { display: grid; grid-template-columns: repeat(3, 1fr); column-gap: 24px; margin-top: 32px; }
+    .cs-section .sol-features h3 { font-family: 'Inter', system-ui, sans-serif; font-size: 16px; font-weight: 500; letter-spacing: -0.01em; line-height: 1.3; color: var(--black); margin: 0 0 6px; }
+    .cs-section .sol-features p { font-size: 14px; line-height: 1.6; color: #6B6B6B; margin: 0; max-width: none; }
+    /* Edit Logged Meal clip on the same purple as the comparison images */
+    .it-video-wrap { margin-top: 16px; background: #695CBC; display: flex; justify-content: center; align-items: center; padding: 44px 0; }
+    .it-video-wrap video { display: block; height: 600px; max-height: 70vh; width: auto; clip-path: inset(0 round 7.4% / 3.42%); }
   </style>
   <script>
     (function () {
@@ -1750,9 +1762,7 @@
         <li><a href="#research">Research</a></li>
         <li><a href="#opportunity">Opportunity</a></li>
         <li><a href="#explorations">Explorations</a></li>
-        <li><a href="#strategy">Design</a></li>
         <li><a href="#iteration">Testing & Iteration</a></li>
-        <li><a href="#evolution">Design Evolution</a></li>
         <li><a href="#engineering">Engineering</a></li>
         <li><a href="#solution">The Solution</a></li>
         <li><a href="#impact">Impact</a></li>
@@ -1939,68 +1949,31 @@
         </div>
       </div>
 
-      <!-- Design -->
-      <div class="cs-section" id="strategy">
-        <p class="cs-section-label">Design</p>
-        <h2>Each opportunity became a core part of the meal experience.</h2>
-        <p>None of it required adding more information. I explained the numbers already on screen, made them scannable, and took steps out of logging.</p>
-
-        <div class="dg-grid">
-          <figure class="dg-item">
-            <img src="images/design-grid/design-01.webp" alt="Trigger summary card: a score of 6 with a plain-language reason, and each ingredient's macros and its own trigger rating" draggable="false"/>
-            <h3>Trigger Score</h3>
-            <p>Paired each personalized score with ingredient-level explanations and alternatives so users could act on it.</p>
-          </figure>
-          <figure class="dg-item">
-            <img src="images/design-grid/design-02.webp" alt="The meal's macro count as bars measured against daily goals: calories, fat, carbs and protein" draggable="false"/>
-            <h3>Macro Visualizations</h3>
-            <p>Visualized each meal against daily nutrition goals so users could understand its impact without calculating the numbers themselves.</p>
-          </figure>
-          <figure class="dg-item dg-wide">
-            <img src="images/design-grid/design-03.webp" alt="Editing a logged meal: the meal header, the rename dialog, and the meal type and time dialog" draggable="false"/>
-            <h3>Edit Logged Meal</h3>
-            <p>Let users correct meal details after logging, from names and times to meal type, so mistakes wouldn&rsquo;t carry into the insights generated from their data.</p>
-          </figure>
-        </div>
-      </div>
-
-      <!-- Testing & Iteration -->
+      <!-- Testing & Iteration (with the design evolution folded in) -->
       <div class="cs-section" id="iteration">
         <p class="cs-section-label">Testing & Iteration</p>
-        <h2>The visual cues were contradicting the data.</h2>
-        <p>With testing, I found that users interpreted the colors as judgments. 45g of carbs appeared red despite being well below the daily target, while 40g of protein appeared amber despite being close to its target. I explored single-color bars with visible targets to make comparisons clearer.</p>
-        <div style="width:100%; margin-top: 36px;">
-          <img src="images/iteration.png?v=3" alt="The same meal shown two ways: circular indicators, then horizontal bars with each macro anchored to its daily goal" style="width:100%; display:block;">
-        </div>
-      </div>
-
-      <!-- Design Evolution -->
-      <div class="cs-section" id="evolution">
-        <p class="cs-section-label">Design Evolution</p>
         <h2>From showing data to helping users understand it.</h2>
-        <div class="cs-diff">
 
-          <!-- Row 1: Macros -->
-          <div class="cs-diff-row">
-            <div style="display:flex; flex-direction:column; gap:10px;">
-              <p class="cs-diff-desc">The original card put every macro into one line, which made it hard to compare anything at a glance. I separated the macros into their own section and added daily targets so each number had some context.</p>
-            </div>
-            <div style="width: 100%;">
-              <img src="images/diff-first.png?v=2" alt="From macro text to horizontal bars" style="width:100%; display:block;">
-            </div>
+        <div class="it-story">
+          <h3>Macro visualization</h3>
+          <p>The visual cues were contradicting the data. With testing, I found that users interpreted the colors as judgments. 45g of carbs appeared red despite being well below the daily target, while 40g of protein appeared amber despite being close to its target. I explored single-color bars with visible targets to make comparisons clearer.</p>
+          <img src="images/iteration.png?v=3" alt="The same meal shown two ways: circular indicators, then horizontal bars with each macro anchored to its daily goal">
+        </div>
+
+        <div class="it-story">
+          <h3>Trigger Score</h3>
+          <p>The card had to carry the whole story without burying it. Collapsed, it leads with the score and the reason behind it, so the takeaway is immediate. Expanded, each ingredient opens into its own macros and score, so users can see exactly what pushed the number up and what to swap.</p>
+          <img src="images/diff-second.png?v=3" alt="The trigger summary card collapsed, leading with the score and its reason, and expanded, showing each ingredient's macros and score">
+        </div>
+
+        <div class="it-story">
+          <h3>Edit Logged Meal</h3>
+          <div class="it-video-wrap">
+            <video muted loop playsinline autoplay preload="metadata" aria-label="Changing a logged meal: picking Dinner as the meal type, adjusting the time, then renaming the meal">
+              <source src="videos/flourish-edit-meal.mp4" type="video/mp4">
+            </video>
           </div>
-
-          <!-- Row 2: Score -->
-          <div class="cs-diff-row">
-            <div style="display:flex; flex-direction:column; gap:10px;">
-              <p class="cs-diff-desc">The card had to carry the whole story without burying it. Collapsed, it leads with the score and the reason behind it, so the takeaway is immediate. Expanded, each ingredient opens into its own macros and score, so users can see exactly what pushed the number up and what to swap.</p>
-            </div>
-            <div style="width: 100%;">
-              <img src="images/diff-second.png?v=3" alt="From color dot to numeric score" style="width:100%; display:block;">
-            </div>
-          </div>
-
-</div>
+        </div>
       </div>
 
       <!-- Engineering Collaboration -->
@@ -2010,7 +1983,7 @@
         <p>During engineering handoff, a developer flagged that longer meal names were breaking the layout. I revisited the component in Figma, allowing names to wrap to two lines while keeping the edit icon and timestamp aligned. I documented the behavior for implementation so users could still recognize and verify their logged meals.</p>
         <div class="cs-eng-video-wrap">
           <video muted loop playsinline autoplay preload="metadata" aria-label="Annotated demo: a long meal name overflowing the header, then wrapping to two lines with the edit icon and timestamp kept aligned">
-            <source src="videos/flourish-long-name.mp4?v=2" type="video/mp4">
+            <source src="videos/flourish-long-name.mp4?v=3" type="video/mp4">
           </video>
         </div>
       </div>
@@ -2027,6 +2000,11 @@
           <div class="cs-solution-video-placeholder" id="solution-placeholder">
             <span>Demo video coming soon</span>
           </div>
+        </div>
+        <div class="sol-features">
+          <div><h3>Trigger Score</h3><p>Paired each personalized score with ingredient-level explanations and alternatives so users could act on it.</p></div>
+          <div><h3>Macro Visualizations</h3><p>Visualized each meal against daily nutrition goals so users could understand its impact without calculating the numbers themselves.</p></div>
+          <div><h3>Edit Logged Meal</h3><p>Let users correct meal details after logging, from names and times to meal type, so mistakes wouldn&rsquo;t carry into the insights generated from their data.</p></div>
         </div>
       </div>
 
