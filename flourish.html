@@ -1610,14 +1610,18 @@
       display: flex; flex-direction: column; justify-content: center; align-items: center;
       text-align: center; padding: 0 8.8%;
     }
-    .opp-card .glow {
-      position: absolute; border-radius: 50%; pointer-events: none;
-      filter: blur(calc(35 * var(--u)));
+    /* The colour now covers the whole card, so no white shows in the corners,
+       and it's a touch softer than the Figma blur: a flat tint with a slightly
+       lighter centre behind the text. */
+    .opp-card.g1 { background: radial-gradient(120% 110% at 50% 45%, #E2F2F2 0%, #D2EAEA 100%); }
+    .opp-card.g2 { background: radial-gradient(120% 110% at 50% 45%, #E0F5EB 0%, #D0EFE1 100%); }
+    .opp-card.g3 { background: radial-gradient(120% 110% at 50% 45%, #E6ECFF 0%, #D7E1FF 100%); }
+    .opp-card .glow { display: none; }
+    .opp-card.g3 .glow-b {
+      display: block; position: absolute; pointer-events: none; border-radius: 50%;
+      left: calc(257 * var(--u)); top: calc(-30 * var(--u)); width: calc(220 * var(--u)); height: calc(220 * var(--u));
+      background: rgba(139, 92, 246, 0.10); filter: blur(calc(35 * var(--u)));
     }
-    .opp-card.g1 .glow { left: calc(-74 * var(--u)); top: calc(-90 * var(--u)); width: calc(621 * var(--u)); height: calc(489 * var(--u)); background: rgba(33, 160, 160, 0.28); }
-    .opp-card.g2 .glow { left: calc(-52 * var(--u)); top: calc(-79 * var(--u)); width: calc(594 * var(--u)); height: calc(472 * var(--u)); background: rgba(18, 183, 106, 0.30); }
-    .opp-card.g3 .glow { left: calc(-40 * var(--u)); top: calc(-90 * var(--u)); width: calc(587 * var(--u)); height: calc(481 * var(--u)); background: rgba(4, 71, 255, 0.22); }
-    .opp-card.g3 .glow-b { left: calc(257 * var(--u)); top: calc(-30 * var(--u)); width: calc(220 * var(--u)); height: calc(220 * var(--u)); background: rgba(139, 92, 246, 0.10); }
     .opp-card h3, .opp-card p { position: relative; margin: 0; }
     .opp-card h3 {
       font-family: 'Inter', system-ui, sans-serif; font-weight: 500; color: #000;
@@ -1809,7 +1813,7 @@
       <!-- Explorations -->
       <div class="cs-section" id="explorations">
         <p class="cs-section-label">Explorations</p>
-        <h2>Three ways to explain the score, and what each one missed.</h2>
+        <h2>I explored different ways to explain the trigger score.</h2>
         <p>Explaining the trigger score was the opportunity I spent longest on. Each direction answered part of the problem and left another one open. What shipped put the per-ingredient scores and the reason together.</p>
         <div style="margin-top: 36px;">
           <img src="images/explorations.png" alt="Three lo-fi directions for the trigger summary card: severity labels giving each ingredient a rating, per-ingredient scores with no overall takeaway, and a meal-level score with an AI-generated reason but no per-ingredient attribution" style="width:100%; display:block;">
