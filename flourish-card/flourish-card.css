@@ -4,7 +4,8 @@
 .fl-card img { display: block; width: 100%; height: auto; user-select: none; -webkit-user-drag: none; }
 .fl-card .fl-bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
 .fl-layer { position: absolute; will-change: transform; }
-.fl-phone { left: 26.376%; top: 8.174%;  width: 47.248%; z-index: 1; }
+/* phone: 2x export placed by its own bounds (489.5,128.5 · 764 wide of 1744×1199) */
+.fl-phone { left: 28.068%; top: 10.717%; width: 43.807%; z-index: 1; }
 .fl-macro { left: 3.555%;  top: 16.097%; width: 43.578%; z-index: 2; }
 .fl-edit  { left: 57.683%; top: 65.054%; width: 35.780%; z-index: 2; }
 
