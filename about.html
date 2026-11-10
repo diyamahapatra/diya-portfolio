@@ -450,10 +450,8 @@
       <div class="frame">
         <img src="images/about-portrait.jpg" alt="Diya outside, holding a bunch of daisies">
       </div>
-      <div class="frame frame-loop">
-        <video src="videos/puzzle-loop.mp4" poster="images/puzzle-loop-poster.jpg"
-               autoplay muted loop playsinline preload="metadata"
-               aria-label="A single tile morphing through Wordle, a mini crossword, sudoku, Connections and a jigsaw"></video>
+      <div class="frame frame-bay">
+        <img src="images/about-bay.jpg" alt="The San Francisco skyline and Bay Bridge across the water on a foggy day, seen from a ferry" style="object-position: 50% 52%;">
       </div>
       <div class="frame">
         <img src="images/about-cafe.jpg" alt="Three open boxes of pastries on a marble café table">
@@ -507,7 +505,7 @@
     (function () {
       var targets = [
         { el: document.querySelector('.about-shots .frame:first-child'), text: 'me!' },
-        { el: document.querySelector('.frame-loop'), text: 'i love solving logic puzzles' },
+        { el: document.querySelector('.frame-bay'), text: 'foggy ferry rides' },
         { el: document.querySelector('.about-shots .frame:last-child'), text: 'trying new cafes' }
       ].filter(function (t) { return t.el; });
       if (!targets.length) return;
