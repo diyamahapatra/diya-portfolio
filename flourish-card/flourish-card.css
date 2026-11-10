@@ -6,8 +6,16 @@
 .fl-layer { position: absolute; will-change: transform; }
 /* phone: 2x export placed by its own bounds (489.5,128.5 · 764 wide of 1744×1199) */
 .fl-phone { left: 28.068%; top: 10.717%; width: 43.807%; z-index: 1; }
-.fl-macro { left: 3.555%;  top: 16.097%; width: 43.578%; z-index: 2; }
-.fl-edit  { left: 57.683%; top: 65.054%; width: 35.780%; z-index: 2; }
+/* the case study hero's components: Mixed Veggies card (169,323 · 493×202) and the
+   narrower meal type & time card (2x export placed by its bounds: 1006,790 · 598 wide) */
+.fl-macro { left: 9.690%; top: 26.939%; width: 28.268%; z-index: 2; }
+.fl-edit  { left: 57.683%; top: 65.889%; width: 34.289%; z-index: 2; }
+.fl-card .fl-macro img {
+  aspect-ratio: 493 / 202; object-fit: cover;
+  border-radius: 5.68% / 13.86%;
+  outline: 1px solid #E9EAEB; outline-offset: -1px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.22);
+}
 
 /* The phone is always there. On hover the two cards slide in from the sides,
    left first, then right; moving away slides them back out together.
