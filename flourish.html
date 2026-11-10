@@ -289,7 +289,7 @@
     }
     .cs-section h2 {
       font-family: 'Lora', serif;
-      font-size: clamp(18.9px, 2.1vw, 24.3px);
+      font-size: clamp(16.9px, calc(2.1vw - 2px), 22.3px);
       /* 500 rather than 600 — Lora's semibold is much heavier than Inter's
          at the same value and reads clotted at heading size */
       font-weight: 500;
@@ -1603,6 +1603,7 @@
     })();
   </script>
   <link rel="stylesheet" href="flourish-card/flourish-card.css"/>
+  <link rel="stylesheet" href="/cursor.css"/>
 </head>
 <body>
 
@@ -1705,7 +1706,7 @@
       </div>
 
       <!-- Context -->
-      <div class="cs-section" id="challenge">
+      <div class="cs-section revealed" id="challenge">
         <p class="cs-section-label">Context</p>
         <h2>Logging food was easy but understanding what it meant wasn't.</h2>
         <p>Flourish uses AI to connect what users eat with how they feel.</p>
