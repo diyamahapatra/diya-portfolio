@@ -1598,6 +1598,35 @@
        wide enough for them; narrower windows wrap on their own */
     br.br-wide { display: none; }
     @media (min-width: 1600px) { br.br-wide { display: inline; } }
+    /* Opportunity cards, from the Figma "gradient opportunity" frame (477 x 320 each):
+       white card washed with one big blurred colour ellipse (the third adds a faint
+       violet one), centred Inter Medium title over Inter body. Built live rather
+       than as images so the text stays as large and sharp as the rest of the page.
+       Glow geometry is in Figma card units: 1u = card width / 477.33. */
+    .opp-card {
+      --u: calc(100cqw / 477.33);
+      position: relative; overflow: hidden; container-type: inline-size;
+      aspect-ratio: 477.33 / 320; background: #fff;
+      display: flex; flex-direction: column; justify-content: center; align-items: center;
+      text-align: center; padding: 0 8.8%;
+    }
+    .opp-card .glow {
+      position: absolute; border-radius: 50%; pointer-events: none;
+      filter: blur(calc(35 * var(--u)));
+    }
+    .opp-card.g1 .glow { left: calc(-74 * var(--u)); top: calc(-90 * var(--u)); width: calc(621 * var(--u)); height: calc(489 * var(--u)); background: rgba(33, 160, 160, 0.28); }
+    .opp-card.g2 .glow { left: calc(-52 * var(--u)); top: calc(-79 * var(--u)); width: calc(594 * var(--u)); height: calc(472 * var(--u)); background: rgba(18, 183, 106, 0.30); }
+    .opp-card.g3 .glow { left: calc(-40 * var(--u)); top: calc(-90 * var(--u)); width: calc(587 * var(--u)); height: calc(481 * var(--u)); background: rgba(4, 71, 255, 0.22); }
+    .opp-card.g3 .glow-b { left: calc(257 * var(--u)); top: calc(-30 * var(--u)); width: calc(220 * var(--u)); height: calc(220 * var(--u)); background: rgba(139, 92, 246, 0.10); }
+    .opp-card h3, .opp-card p { position: relative; margin: 0; }
+    .opp-card h3 {
+      font-family: 'Inter', system-ui, sans-serif; font-weight: 500; color: #000;
+      font-size: clamp(17px, 7cqw, 22px); line-height: 1.2; letter-spacing: -0.01em;
+    }
+    .opp-card p {
+      margin-top: 0.55em; font-family: 'Inter', system-ui, sans-serif; font-weight: 400;
+      font-size: clamp(13px, 5.2cqw, 15px); line-height: 1.5; letter-spacing: 0.01em; color: #44403B;
+    }
   </style>
   <script>
     (function () {
@@ -1771,21 +1800,9 @@
         <p class="cs-section-label">Opportunity</p>
         <h2>Three ways to close that gap.</h2>
         <div class="opp-grid">
-            <div class="owned-card">
-              <svg class="owned-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.6-3.6"/></svg>
-              <h3 class="owned-title">Explain the trigger</h3>
-              <p class="owned-body">Don&rsquo;t just assign a score. Help users understand why a food may affect them using their own patterns and data.</p>
-            </div>
-            <div class="owned-card">
-              <svg class="owned-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 20V13"/><path d="M12 20V5"/><path d="M19 20v-9"/></svg>
-              <h3 class="owned-title">Make nutrition glanceable</h3>
-              <p class="owned-body">Turn dense nutrition data into visual summaries users can understand immediately.</p>
-            </div>
-            <div class="owned-card">
-              <svg class="owned-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20h4L19 9a2.1 2.1 0 0 0-3-3L5 17v3Z"/><path d="M14.5 6.5 17.5 9.5"/></svg>
-              <h3 class="owned-title">Reduce logging friction</h3>
-              <p class="owned-body">Reduce the effort required to log accurately through fewer taps, smarter defaults, and less mental overhead.</p>
-            </div>
+            <div class="opp-card g1"><i class="glow"></i><h3>Explain the trigger</h3><p>Help users understand why a food may affect them instead of just giving them a score.</p></div>
+            <div class="opp-card g2"><i class="glow"></i><h3>Make nutrition glanceable</h3><p>Turn dense nutrition data into something users can read quickly.</p></div>
+            <div class="opp-card g3"><i class="glow"></i><i class="glow glow-b"></i><h3>Reduce logging friction</h3><p>Let users correct meal details before bad inputs affect future insights and reduce drop-off.</p></div>
           </div>
       </div>
 
