@@ -1646,6 +1646,70 @@
       color: var(--black); margin: 18px 0 6px;
     }
     .cs-section .dg-item p:not(.dg-num) { font-size: 14px; line-height: 1.6; color: #6B6B6B; margin: 0; max-width: none; }
+    /* ── OPPORTUNITY as illustrated columns, after emmiwu.com/figma's Insights ──
+       title + line of copy, then a square panel with a colour tag and a small
+       illustration built from Flourish's own UI pieces. Panel geometry is on a
+       300-unit square: 1u = panel width / 300, so everything scales together. */
+    .opx-grid { display: grid; grid-template-columns: repeat(3, 1fr); column-gap: 16px; margin-top: 32px; }
+    .opx { margin: 0; display: flex; flex-direction: column; }
+    .cs-section .opx h3 { font-family: 'Inter', system-ui, sans-serif; font-weight: 500; font-size: 16px; line-height: 1.35; color: var(--black); margin: 18px 0 6px; }
+    .cs-section .opx > p { font-size: 14px; line-height: 1.6; color: #6B6B6B; margin: 0; max-width: none; }
+    .opx-panel {
+      --u: calc(100cqw / 300);
+      position: relative; aspect-ratio: 1; overflow: hidden; container-type: inline-size;
+      font-family: 'Gabarito', 'Inter', system-ui, sans-serif;
+    }
+    .opx-panel.p1 { background: #DCEFEF; }
+    .opx-panel.p2 { background: #DDF3E7; }
+    .opx-panel.p3 { background: #E2E7FF; }
+    .opx-tag {
+      position: absolute; left: calc(14 * var(--u)); top: calc(14 * var(--u));
+      display: inline-flex; align-items: center; gap: calc(6 * var(--u));
+      padding: calc(5 * var(--u)) calc(10 * var(--u)) calc(5 * var(--u)) calc(8 * var(--u));
+      border-radius: calc(4 * var(--u)); font-size: calc(14 * var(--u)); line-height: calc(17 * var(--u)); font-family: 'Inter', system-ui, sans-serif; font-weight: 500;
+    }
+    .opx-tag svg { width: calc(16 * var(--u)); height: calc(16 * var(--u)); }
+    .opx-tag.t1 { background: #21A0A0; color: #fff; }
+    .opx-tag.t2 { background: #12B76A; color: #fff; }
+    .opx-tag.t3 { background: #5B62E8; color: #fff; }
+    /* pieces placed on the 300-unit square */
+    .opx-panel [style*="--x"] { position: absolute; left: calc(var(--x) * var(--u)); top: calc(var(--y) * var(--u)); transform: rotate(var(--r, 0deg)); transform-origin: 0 0; white-space: nowrap; }
+    .opx-path { position: absolute; inset: 0; width: 100%; height: 100%; }
+    .chip {
+      display: inline-flex; align-items: center; gap: calc(7 * var(--u));
+      padding: calc(8 * var(--u)) calc(12 * var(--u)); border-radius: calc(10 * var(--u));
+      background: #fff; color: #181D27; font-size: calc(15 * var(--u)); font-weight: 500;
+      box-shadow: 0 calc(3 * var(--u)) calc(10 * var(--u)) rgba(6, 60, 68, 0.10);
+    }
+    .chip i { width: calc(10 * var(--u)); height: calc(10 * var(--u)); border-radius: 50%; display: block; }
+    .badge {
+      padding: calc(7 * var(--u)) calc(14 * var(--u)); border-radius: 999px; background: #FDB022; color: #181D27;
+      font-size: calc(17 * var(--u)); font-weight: 500; box-shadow: 0 calc(3 * var(--u)) calc(10 * var(--u)) rgba(6, 60, 68, 0.12);
+    }
+    .why {
+      white-space: normal !important; width: calc(132 * var(--u));
+      padding: calc(9 * var(--u)) calc(11 * var(--u)); border-radius: calc(10 * var(--u)); background: #063C44; color: #fff;
+      font-size: calc(13 * var(--u)); line-height: 1.3;
+    }
+    .steps { position: absolute; left: calc(26 * var(--u)); right: calc(22 * var(--u)); bottom: 0; height: calc(232 * var(--u)); display: flex; align-items: flex-end; gap: calc(10 * var(--u)); }
+    .step {
+      flex: 1; height: calc(var(--h) * 1%); position: relative; overflow: hidden;
+      background: #fff; border-radius: calc(12 * var(--u)) calc(12 * var(--u)) 0 0;
+      display: flex; flex-direction: column; align-items: center; padding-top: calc(10 * var(--u));
+      box-shadow: 0 calc(3 * var(--u)) calc(12 * var(--u)) rgba(6, 60, 68, 0.08);
+    }
+    .step::after { content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: calc(var(--f) * 100%); background: #12B76A; opacity: 0.9; }
+    .step b { font-size: calc(20 * var(--u)); font-weight: 600; color: #181D27; line-height: 1.1; position: relative; z-index: 1; }
+    .step span { font-size: calc(11 * var(--u)); color: #535862; position: relative; z-index: 1; }
+    .st { box-shadow: 0 calc(3 * var(--u)) calc(12 * var(--u)) rgba(30, 36, 120, 0.12); }
+    .st.meal { padding: calc(8 * var(--u)) calc(16 * var(--u)); border-radius: calc(8 * var(--u)); background: #E3FBF3; color: #063C44; font-size: calc(20 * var(--u)); font-weight: 500; }
+    .st.pencil { width: calc(54 * var(--u)); height: calc(54 * var(--u)); border-radius: 50%; background: #fff; display: grid; place-items: center; }
+    .st.pencil svg { width: calc(26 * var(--u)); height: calc(26 * var(--u)); }
+    .st.time { display: inline-flex; align-items: center; gap: calc(8 * var(--u)); padding: calc(10 * var(--u)) calc(16 * var(--u)); border-radius: calc(12 * var(--u)); background: #fff; color: #181D27; font-size: calc(20 * var(--u)); }
+    .st.time b { font-weight: 500; } .st.time em { font-style: normal; color: #717680; margin: 0 calc(-4 * var(--u)); }
+    .st.type { display: inline-flex; align-items: center; gap: calc(30 * var(--u)); padding: calc(10 * var(--u)) calc(14 * var(--u)); border-radius: calc(8 * var(--u)); background: #fff; border: 1px solid #E9EAEB; color: #181D27; font-size: calc(16 * var(--u)); }
+    .st.type svg { width: calc(12 * var(--u)); height: calc(12 * var(--u)); }
+    .st.save { padding: calc(11 * var(--u)) calc(48 * var(--u)); border-radius: 999px; background: #063C44; color: #fff; font-size: calc(17 * var(--u)); font-weight: 500; }
   </style>
   <script>
     (function () {
@@ -1655,6 +1719,7 @@
     })();
   </script>
   <link rel="stylesheet" href="flourish-card/flourish-card.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Gabarito:wght@400;500;600&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="/cursor.css"/>
 </head>
 <body>
@@ -1818,11 +1883,44 @@
       <div class="cs-section" id="opportunity">
         <p class="cs-section-label">Opportunity</p>
         <h2>Three ways to close that gap.</h2>
-        <div class="opp-grid">
-            <div class="opp-card g1"><i class="glow"></i><h3>Explain the trigger</h3><p>Help users understand why a food may affect them instead of just giving them a score.</p></div>
-            <div class="opp-card g2"><i class="glow"></i><h3>Make nutrition glanceable</h3><p>Turn dense nutrition data into something users can read quickly.</p></div>
-            <div class="opp-card g3"><i class="glow"></i><i class="glow glow-b"></i><h3>Reduce logging friction</h3><p>Let users correct meal details before bad inputs affect future insights and reduce drop-off.</p></div>
-          </div>
+        <div class="opx-grid">
+          <figure class="opx">
+            <div class="opx-panel p1" role="img" aria-label="Illustration: ingredient chips traced along a dotted path to a Score 6 badge">
+              <span class="opx-tag t1">Clarity</span>
+              <svg class="opx-path" viewBox="0 0 300 300" preserveAspectRatio="none" aria-hidden="true"><path d="M40 300 C 40 230, 110 250, 120 205 S 205 170, 215 120" fill="none" stroke="#21A0A0" stroke-width="3" stroke-dasharray="2 9" stroke-linecap="round"/></svg>
+              <span class="chip c-veg" style="--x:146;--y:176.4;--r:-6deg"><i style="background:#FDB022"></i>Mixed Veggies</span>
+              <span class="chip c-rice" style="--x:22;--y:178;--r:4deg"><i style="background:#12B76A"></i>Rice</span>
+              <span class="chip c-chk" style="--x:57;--y:263.3;--r:-3deg"><i style="background:#12B76A"></i>Grilled chicken</span>
+              <span class="badge" style="--x:176;--y:84;--r:5deg">Score 6</span>
+            </div>
+            <h3>Explain the trigger</h3>
+            <p>Help users understand why a food may affect them instead of just giving them a score.</p>
+          </figure>
+          <figure class="opx">
+            <div class="opx-panel p2" role="img" aria-label="Illustration: four macro bars rising like steps, each filled against its daily goal">
+              <span class="opx-tag t2">At a glance</span>
+              <div class="steps">
+                <div class="step" style="--h:30;--f:.18"><b>350</b><span>kcal</span></div>
+                <div class="step" style="--h:46;--f:.23"><b>15</b><span>g fat</span></div>
+                <div class="step" style="--h:62;--f:.18"><b>45</b><span>g carbs</span></div>
+                <div class="step" style="--h:80;--f:.62"><b>40</b><span>g protein</span></div>
+              </div>
+            </div>
+            <h3>Make nutrition glanceable</h3>
+            <p>Turn dense nutrition data into something users can read quickly.</p>
+          </figure>
+          <figure class="opx">
+            <div class="opx-panel p3" role="img" aria-label="Illustration: the pieces of a quick edit, a pencil, a time picker, a meal type dropdown and a save button">
+              <span class="opx-tag t3">Easy fixes</span>
+              <span class="st pencil" style="--x:232.5;--y:119;--r:8deg"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h4L19 9a2.1 2.1 0 0 0-3-3L5 17v3Z" fill="none" stroke="#063C44" stroke-width="2" stroke-linejoin="round"/></svg></span>
+              <span class="st time" style="--x:120;--y:168;--r:4deg"><b>1</b><em>:</em><b>00</b><b>PM</b></span>
+              <span class="st type" style="--x:18;--y:212;--r:3deg">Dinner <svg viewBox="0 0 12 12" aria-hidden="true"><path d="M3 4.5 6 7.5 9 4.5" fill="none" stroke="#717680" stroke-width="1.6" stroke-linecap="round"/></svg></span>
+              <span class="st save" style="--x:142;--y:236;--r:-4deg">Save</span>
+            </div>
+            <h3>Reduce logging friction</h3>
+            <p>Let users correct meal details before bad inputs affect future insights and reduce drop-off.</p>
+          </figure>
+        </div>
       </div>
 
       <!-- Explorations -->
