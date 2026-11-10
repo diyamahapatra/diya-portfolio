@@ -1712,6 +1712,9 @@
     .st.type { display: inline-flex; align-items: center; gap: calc(22 * var(--u)); padding: calc(8 * var(--u)) calc(12 * var(--u)); border-radius: calc(7 * var(--u)); background: #fff; color: #181D27; font-size: calc(13 * var(--u)); }
     .st.type svg { width: calc(10 * var(--u)); height: calc(10 * var(--u)); }
     .st.save { padding: calc(9 * var(--u)) calc(38 * var(--u)); border-radius: 999px; background: #063C44; color: #fff; font-size: calc(14 * var(--u)); font-weight: 500; }
+    /* Engineering Collaboration: annotated Figma-style demo of the long meal name fix */
+    .cs-eng-video-wrap { margin-top: 32px; }
+    .cs-eng-video-wrap video { display: block; width: 100%; height: auto; aspect-ratio: 16 / 10; background: #F5F5F5; }
   </style>
   <script>
     (function () {
@@ -1750,6 +1753,7 @@
         <li><a href="#strategy">Design</a></li>
         <li><a href="#iteration">Testing & Iteration</a></li>
         <li><a href="#evolution">Design Evolution</a></li>
+        <li><a href="#engineering">Engineering</a></li>
         <li><a href="#solution">The Solution</a></li>
         <li><a href="#impact">Impact</a></li>
         <li><a href="#reflection">Reflection</a></li>
@@ -1850,7 +1854,7 @@
       <div class="cs-section" id="research" style="width: calc(100% + 20px);">
         <p class="cs-section-label">Research</p>
         <h2>More data wasn&rsquo;t helping users make better decisions.</h2>
-        <p>Across 15 interviews, the same pattern kept coming up: users had plenty of data, but struggled to turn it into something useful.</p>
+        <p>Across 15 interviews, the same pattern kept coming up.</p>
 
         <div class="cs-quote-card">
           <div class="cs-quote-entry">
@@ -1896,7 +1900,7 @@
               <span class="badge" style="--x:176;--y:84;--r:5deg">Score 6</span>
             </div>
             <h3>Explain the trigger</h3>
-            <p>Help users understand why a food may affect them instead of just giving them a score.</p>
+            <p>Help users understand <u>why</u> a food may affect them.</p>
           </figure>
           <figure class="opx">
             <div class="opx-panel p2" role="img" aria-label="Illustration: four macro bars rising like steps, each filled against its daily goal">
@@ -1963,8 +1967,8 @@
       <!-- Testing & Iteration -->
       <div class="cs-section" id="iteration">
         <p class="cs-section-label">Testing & Iteration</p>
-        <h2>The macro visualization wasn't working.</h2>
-        <p>Users misread the circular indicators because they couldn&rsquo;t tell whether 45g of carbs was a lot and the arcs implied a scale without showing one. The color compounded it: carbs read red at 45g against a 250g target while protein read amber at 40g against 50g, so the palette implied a verdict that ran opposite to the numbers. Horizontal bars anchored each macro to its daily target, and dropping to a single fill let the target carry the judgment instead of the color.</p>
+        <h2>The visual cues were contradicting the data.</h2>
+        <p>With testing, I found that users interpreted the colors as judgments. 45g of carbs appeared red despite being well below the daily target, while 40g of protein appeared amber despite being close to its target. I explored single-color bars with visible targets to make comparisons clearer.</p>
         <div style="width:100%; margin-top: 36px;">
           <img src="images/iteration.png?v=3" alt="The same meal shown two ways: circular indicators, then horizontal bars with each macro anchored to its daily goal" style="width:100%; display:block;">
         </div>
@@ -1999,11 +2003,23 @@
 </div>
       </div>
 
+      <!-- Engineering Collaboration -->
+      <div class="cs-section" id="engineering">
+        <p class="cs-section-label">Engineering Collaboration</p>
+        <h2>Designing for the edge cases I missed.</h2>
+        <p>During engineering handoff, a developer flagged that longer meal names were breaking the layout. I revisited the component in Figma, allowing names to wrap to two lines while keeping the edit icon and timestamp aligned. I documented the behavior for implementation so users could still recognize and verify their logged meals.</p>
+        <div class="cs-eng-video-wrap">
+          <video muted loop playsinline autoplay preload="metadata" aria-label="Annotated demo: a long meal name overflowing the header, then wrapping to two lines with the edit icon and timestamp kept aligned">
+            <source src="videos/flourish-long-name.mp4?v=2" type="video/mp4">
+          </video>
+        </div>
+      </div>
+
       <!-- The Solution -->
       <div class="cs-section" id="solution">
         <p class="cs-section-label">The Solution</p>
         <h2>The meal screen became the bridge from data to action.</h2>
-        <p>The redesigned meal detail screen brings nutrition, trigger insights, and ingredient-level suggestions into one place. For launch, I worked with my product manager and engineers to simplify the tested macro visualization resulting in the daily targets coming off and the original macro colors coming back, while keeping the bar format users understood more easily. If I continued the project, I&rsquo;d test bringing the daily targets back.</p>
+        <p>The redesigned meal detail screen brought nutrition, trigger insights, and ingredient-level suggestions into one experience. For launch, I worked with my PM and engineers to simplify the macro visualization, retaining the more readable horizontal bars while removing daily targets and restoring the original macro colors.</p>
         <div class="cs-solution-video-wrap">
           <video autoplay muted loop playsinline preload="metadata" poster="images/flourish-hero/screen-poster.jpg" aria-label="Flourish AI meal detail screen: changing the meal type and time, renaming the meal, swiping the macro carousel and expanding food cards">
             <source src="videos/flourish-meal-detail.mp4" type="video/mp4">
