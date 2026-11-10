@@ -8,6 +8,7 @@
   if (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) return;
   var canHover = window.matchMedia && matchMedia('(hover: hover)').matches;
   cards.forEach(function (c) {
+    if (c.classList.contains('fl-live')) return;   // the live card runs its own intro (index.html)
     c.classList.add('fl-armed');
     if (canHover) {
       /* one intro on arrival: the cards slide in, hold, and slide back out;

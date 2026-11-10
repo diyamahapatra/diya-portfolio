@@ -221,6 +221,34 @@
     @media (prefers-reduced-motion: reduce) {
       .thumb > img.cover { transition: none; }
     }
+    /* Flourish card = the case study hero, scaled to the card: the hero gradient,
+       the screen recording playing in the Figma bezel, the two component cards
+       sliding in once on arrival, out again, then the recording loops.
+       Sizes in Figma frame units: 1u = card width / 1744. */
+    .fl-live { container-type: inline-size; --u: calc(100cqw / 1744); }
+    .fl-live .fl-stage { position: absolute; inset: 0; transform: translateY(7.5%) scale(0.85); transform-origin: 50% 50%; }
+    .fl-live .fl-phonelive {
+      left: 33.257%; top: 14.456%; width: 33.486%; height: 119.048%;
+      background: #fff; overflow: hidden;
+      border-radius: calc(48 * var(--u)) calc(48 * var(--u)) 0 0;
+      box-shadow: 0 calc(48 * var(--u)) calc(120 * var(--u)) rgba(8, 40, 42, 0.22),
+                  0 calc(4 * var(--u)) calc(12 * var(--u)) rgba(8, 40, 42, 0.08);
+    }
+    .fl-live .fl-phonelive video {
+      position: absolute; left: calc(12 * var(--u)); top: calc(12 * var(--u));
+      width: calc(560 * var(--u)); height: auto; display: block;
+      border-radius: calc(40.5 * var(--u));
+    }
+    .fl-live .fl-macro { left: 9.690%; top: 27.466%; width: 28.268%; }
+    .fl-live .fl-edit  { left: 57.683%; top: 67.177%; width: 34.289%; }
+    .fl-live .fl-macro img { box-shadow: 0 calc(4 * var(--u)) calc(4 * var(--u)) rgba(0, 0, 0, 0.25); }
+    /* like the hero: after the intro, hovering doesn't bring the cards back */
+    .fl-live.fl-armed:not(.fl-in) .fl-macro,
+    .fl-live.fl-armed:not(.fl-in):hover .fl-macro,
+    a:hover > .fl-live.fl-armed:not(.fl-in) .fl-macro { transform: translateX(-112%); opacity: 0; }
+    .fl-live.fl-armed:not(.fl-in) .fl-edit,
+    .fl-live.fl-armed:not(.fl-in):hover .fl-edit,
+    a:hover > .fl-live.fl-armed:not(.fl-in) .fl-edit { transform: translateX(112%); opacity: 0; }
   </style>
   <link rel="stylesheet" href="flourish-card/flourish-card.css?v=2"/>
   <link rel="stylesheet" href="airbnb-card/airbnb-case-card.css"/>
@@ -261,10 +289,16 @@
       </a>
 
       <a class="tile" href="/flourish">
-        <div class="thumb fl-card"><img class="fl-bg" src="images/flourish-cover/bg.jpg" alt="" draggable="false"/>
-          <div class="fl-layer fl-phone"><img src="images/flourish-cover/phone.webp" alt="Flourish AI meal detail screen" draggable="false"/></div>
-          <div class="fl-layer fl-macro"><img src="images/flourish-cover/macro.webp?v=2" alt="" draggable="false"/></div>
-          <div class="fl-layer fl-edit"><img src="images/flourish-cover/edit.webp?v=2" alt="" draggable="false"/></div>
+        <div class="thumb fl-card fl-live" id="flLive"><img class="fl-bg" src="images/flourish-hero/bg.jpg" alt="" draggable="false"/>
+          <div class="fl-stage">
+            <div class="fl-layer fl-phonelive">
+              <video muted loop playsinline preload="auto" poster="images/flourish-hero/screen-poster.jpg" aria-label="Flourish AI meal detail screen in use">
+                <source src="videos/flourish-meal-detail.mp4" type="video/mp4"/>
+              </video>
+            </div>
+            <div class="fl-layer fl-macro"><img src="images/flourish-hero/macro.webp" alt="" draggable="false"/></div>
+            <div class="fl-layer fl-edit"><img src="images/flourish-hero/edit.webp" alt="" draggable="false"/></div>
+          </div>
         </div>
         <p class="work-label">Flourish AI - 2025</p>
         <h3 class="work-title">Making AI Health Insights Easier to Understand and Trust</h3>
@@ -531,7 +565,28 @@
     })();
 
   </script>
-  <script src="flourish-card/flourish-card.js"></script>
+  <script src="flourish-card/flourish-card.js?v=2"></script>
+  <script>
+    /* Flourish card intro, same as the case study hero: the cards slide in
+       (left, then right), hold, slide out, then the recording plays and loops. */
+    (function () {
+      var card = document.getElementById('flLive');
+      var video = card && card.querySelector('video');
+      if (!card || !video) return;
+      var play = function () { var p = video.play(); if (p && p.catch) p.catch(function () {}); };
+      card.classList.add('fl-armed');
+      if (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) { play(); return; }
+      var imgs = [].slice.call(card.querySelectorAll('.fl-macro img, .fl-edit img'));
+      Promise.all(imgs.map(function (im) {
+        return im.complete ? Promise.resolve() : new Promise(function (r) { im.onload = im.onerror = r; });
+      })).then(function () {
+        setTimeout(function () {
+          card.classList.add('fl-in');
+          setTimeout(function () { card.classList.remove('fl-in'); setTimeout(play, 500); }, 2500);
+        }, 350);
+      });
+    })();
+  </script>
   <script src="airbnb-card/airbnb-case-card.js"></script>
 </body>
 </html>
