@@ -1652,7 +1652,7 @@
        300-unit square: 1u = panel width / 300, so everything scales together. */
     .opx-grid { display: grid; grid-template-columns: repeat(3, 1fr); column-gap: 16px; margin-top: 32px; }
     .opx { margin: 0; display: flex; flex-direction: column; }
-    .cs-section .opx h3 { font-family: 'Inter', system-ui, sans-serif; font-weight: 500; font-size: 16px; line-height: 1.35; color: var(--black); margin: 18px 0 6px; }
+    .cs-section .opx h3 { font-family: 'Inter', system-ui, sans-serif; font-weight: 500; font-size: 16px; line-height: 1.35; color: var(--black); margin: 26px 0 6px; }
     .cs-section .opx > p { font-size: 14px; line-height: 1.6; color: #6B6B6B; margin: 0; max-width: none; }
     .opx-panel {
       --u: calc(100cqw / 300);
@@ -1703,13 +1703,13 @@
     .step span { font-size: calc(11 * var(--u)); color: #535862; position: relative; z-index: 1; }
     .st { box-shadow: 0 calc(3 * var(--u)) calc(12 * var(--u)) rgba(30, 36, 120, 0.12); }
     .st.meal { padding: calc(8 * var(--u)) calc(16 * var(--u)); border-radius: calc(8 * var(--u)); background: #E3FBF3; color: #063C44; font-size: calc(20 * var(--u)); font-weight: 500; }
-    .st.pencil { width: calc(54 * var(--u)); height: calc(54 * var(--u)); border-radius: 50%; background: #fff; display: grid; place-items: center; }
-    .st.pencil svg { width: calc(26 * var(--u)); height: calc(26 * var(--u)); }
-    .st.time { display: inline-flex; align-items: center; gap: calc(8 * var(--u)); padding: calc(10 * var(--u)) calc(16 * var(--u)); border-radius: calc(12 * var(--u)); background: #fff; color: #181D27; font-size: calc(20 * var(--u)); }
+    .st.pencil { width: calc(44 * var(--u)); height: calc(44 * var(--u)); border-radius: 50%; background: #fff; display: grid; place-items: center; }
+    .st.pencil svg { width: calc(21 * var(--u)); height: calc(21 * var(--u)); }
+    .st.time { display: inline-flex; align-items: center; gap: calc(6 * var(--u)); padding: calc(8 * var(--u)) calc(13 * var(--u)); border-radius: calc(10 * var(--u)); background: #fff; color: #181D27; font-size: calc(16 * var(--u)); }
     .st.time b { font-weight: 500; } .st.time em { font-style: normal; color: #717680; margin: 0 calc(-4 * var(--u)); }
-    .st.type { display: inline-flex; align-items: center; gap: calc(30 * var(--u)); padding: calc(10 * var(--u)) calc(14 * var(--u)); border-radius: calc(8 * var(--u)); background: #fff; border: 1px solid #E9EAEB; color: #181D27; font-size: calc(16 * var(--u)); }
-    .st.type svg { width: calc(12 * var(--u)); height: calc(12 * var(--u)); }
-    .st.save { padding: calc(11 * var(--u)) calc(48 * var(--u)); border-radius: 999px; background: #063C44; color: #fff; font-size: calc(17 * var(--u)); font-weight: 500; }
+    .st.type { display: inline-flex; align-items: center; gap: calc(22 * var(--u)); padding: calc(8 * var(--u)) calc(12 * var(--u)); border-radius: calc(7 * var(--u)); background: #fff; color: #181D27; font-size: calc(13 * var(--u)); }
+    .st.type svg { width: calc(10 * var(--u)); height: calc(10 * var(--u)); }
+    .st.save { padding: calc(9 * var(--u)) calc(38 * var(--u)); border-radius: 999px; background: #063C44; color: #fff; font-size: calc(14 * var(--u)); font-weight: 500; }
   </style>
   <script>
     (function () {
@@ -1912,10 +1912,10 @@
           <figure class="opx">
             <div class="opx-panel p3" role="img" aria-label="Illustration: the pieces of a quick edit, a pencil, a time picker, a meal type dropdown and a save button">
               <span class="opx-tag t3">Easy fixes</span>
-              <span class="st pencil" style="--x:232.5;--y:119;--r:8deg"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h4L19 9a2.1 2.1 0 0 0-3-3L5 17v3Z" fill="none" stroke="#063C44" stroke-width="2" stroke-linejoin="round"/></svg></span>
-              <span class="st time" style="--x:120;--y:168;--r:4deg"><b>1</b><em>:</em><b>00</b><b>PM</b></span>
-              <span class="st type" style="--x:18;--y:212;--r:3deg">Dinner <svg viewBox="0 0 12 12" aria-hidden="true"><path d="M3 4.5 6 7.5 9 4.5" fill="none" stroke="#717680" stroke-width="1.6" stroke-linecap="round"/></svg></span>
-              <span class="st save" style="--x:142;--y:236;--r:-4deg">Save</span>
+              <span class="st pencil" style="--x:226;--y:126;--r:8deg"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h4L19 9a2.1 2.1 0 0 0-3-3L5 17v3Z" fill="none" stroke="#063C44" stroke-width="2" stroke-linejoin="round"/></svg></span>
+              <span class="st time" style="--x:128;--y:170;--r:4deg"><b>1</b><em>:</em><b>00</b><b>PM</b></span>
+              <span class="st type" style="--x:34;--y:212;--r:3deg">Dinner <svg viewBox="0 0 12 12" aria-hidden="true"><path d="M3 4.5 6 7.5 9 4.5" fill="none" stroke="#717680" stroke-width="1.6" stroke-linecap="round"/></svg></span>
+              <span class="st save" style="--x:146;--y:234;--r:-4deg">Save</span>
             </div>
             <h3>Reduce logging friction</h3>
             <p>Let users correct meal details before bad inputs affect future insights.</p>
