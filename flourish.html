@@ -1524,6 +1524,76 @@
     .cs-sidebar::after { display: none; }
     /* the wider rail would sit over the footer's left edge, so the footer rides above it */
     .site-footer { position: relative; z-index: 60; }
+    /* ── SIZING LIKE emmiwu.com/openai ──
+       Her page is five equal columns (24px page margin, 12px gaps): the
+       contents list sits in the first, the case study spans the next three,
+       the fifth stays empty. It scales with the window instead of capping. */
+    :root {
+      --col: calc((100vw - 96px) / 5);
+      /* her three-column span, taken in 5% so the hero sits a touch smaller */
+      --cs-w: calc((var(--col) * 3 + 24px) * 0.95);
+    }
+    .cs-content,
+    .next-up-label,
+    .next-up-grid {
+      max-width: none;
+      width: var(--cs-w);
+      /* Centred on the window it read as left-heavy next to the contents list,
+         so it centres in the space between the end of that list (its longest
+         entry ends 180px in) and the right edge: equal air on both sides. */
+      margin-left: calc((100vw + 180px - var(--cs-w)) / 2);
+      margin-right: 0;
+    }
+    .cs-sidebar { width: calc(var(--col) + 36px); }
+    /* hero starts 80px from the top of the window, as hers does */
+    .cs-main { padding-top: 23px; }
+    .cs-title.cs-title-under { margin-top: 24px; }
+    /* hero is the landing-page cover, just bigger: same layers, same 16:11 frame */
+    .cs-hero-img.cs-hero-fl { aspect-ratio: 1744 / 1176; margin-bottom: 0; }
+    /* Figma frame is now 1176 tall, so the tops are re-based on that height
+       (the phone and edit card simply run off the bottom edge) */
+    /* phone is a 2x, uncropped export now (matte pair), so it's placed by its own bounds */
+    .cs-hero-fl .fl-phone { left: 28.068%; top: 10.927%; width: 43.807%; }
+    /* the phone and both cards sit a touch smaller than the Figma frame, scaled
+       together around the centre so the composition holds; the gradient stays full */
+    /* nudged down 7.5% (88px of the 1176 frame) so the bottom edge crops the
+       phone and the meal-type card at the same point as the full-size frame */
+    /* the phone is live: the screen recording plays inside the Figma bezel
+       (584 x 1400 at 580,170; white, 48 top corners, screen inset 12).
+       Sizes are in Figma frame units: 1u = hero width / 1744. */
+    .cs-hero-fl { container-type: inline-size; --u: calc(100cqw / 1744); }
+    .cs-hero-fl .fl-phonelive {
+      left: 33.257%; top: 14.456%; width: 33.486%; height: 119.048%;
+      background: #fff; overflow: hidden;
+      border-radius: calc(48 * var(--u)) calc(48 * var(--u)) 0 0;
+      box-shadow: 0 calc(48 * var(--u)) calc(120 * var(--u)) rgba(8, 40, 42, 0.22),
+                  0 calc(4 * var(--u)) calc(12 * var(--u)) rgba(8, 40, 42, 0.08);
+    }
+    .cs-hero-fl .fl-phonelive video {
+      position: absolute; left: calc(12 * var(--u)); top: calc(12 * var(--u));
+      width: calc(560 * var(--u)); height: auto; display: block;
+      border-radius: calc(40.5 * var(--u));
+    }
+    /* the landing card brings its cards in on hover; here they only play once,
+       at the start, so hovering the hero after the intro keeps them out */
+    .cs-hero-fl.fl-armed:not(.fl-in):hover .fl-macro { transform: translateX(-112%); opacity: 0; }
+    .cs-hero-fl.fl-armed:not(.fl-in):hover .fl-edit  { transform: translateX(112%);  opacity: 0; }
+    .cs-hero-fl .fl-stage { position: absolute; inset: 0; transform: translateY(7.5%) scale(0.85); transform-origin: 50% 50%; }
+    .cs-hero-fl .fl-edit  { left: 57.683%; top: 67.177%; width: 34.289%; }
+    /* updated Figma V1+: the macro card became the Mixed Veggies card (169,323 · 493×202 of 1744×1199) */
+    .cs-hero-fl .fl-macro { left: 9.690%; top: 27.466%; width: 28.268%; }
+    /* the card is the raw screenshot, so its Figma corner, stroke and shadow are drawn here */
+    .cs-hero-fl .fl-macro img {
+      aspect-ratio: 493 / 202; object-fit: cover;
+      border-radius: 5.68% / 13.86%;
+      outline: 1px solid #E9EAEB; outline-offset: -1px;
+      box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+    }
+    /* active contents link: a deeper cut of the hero's lavender (#BDC5E4), dark enough to read at 12px */
+    .cs-sidebar-links a.active { color: #695CBC; }
+    /* eyebrows (Role/Timeline/… and the section labels) in the same purple, 2px smaller */
+    .cs-overview-label,
+    .cs-section p.cs-section-label { color: #695CBC; font-size: 10px; }
   </style>
   <script>
     (function () {
@@ -1532,6 +1602,7 @@
       if (ok) document.documentElement.classList.add('js-reveal');
     })();
   </script>
+  <link rel="stylesheet" href="flourish-card/flourish-card.css"/>
 </head>
 <body>
 
@@ -1552,7 +1623,6 @@
       <ul class="cs-sidebar-links">
         <li><a href="#overview" class="active">Overview</a></li>
         <li><a href="#challenge">Context</a></li>
-        <li><a href="#owned">What I Owned</a></li>
         <li><a href="#problem">The Problem</a></li>
         <li><a href="#research">Research</a></li>
         <li><a href="#opportunity">Opportunity</a></li>
@@ -1572,9 +1642,44 @@
     <div class="cs-content">
 
       <!-- Hero image first, title underneath (like emmiwu.com/openai) -->
-      <div class="cs-hero-img">
-        <img src="images/hero.png" alt="Flourish AI — redesigned meal detail experience">
+      <div class="cs-hero-img cs-hero-fl fl-card" id="flHero">
+        <img class="fl-bg" src="images/flourish-hero/bg.jpg" alt="" draggable="false"/>
+        <div class="fl-stage">
+        <div class="fl-layer fl-phonelive">
+          <video muted loop playsinline preload="auto" poster="images/flourish-hero/screen-poster.jpg" aria-label="Flourish AI meal detail screen: changing the meal type and time, renaming the meal, swiping the macro carousel and expanding food cards">
+            <source src="videos/flourish-meal-detail.mp4" type="video/mp4"/>
+          </video>
+        </div>
+        <div class="fl-layer fl-macro"><img src="images/flourish-hero/macro.webp" alt="" draggable="false"/></div>
+        <div class="fl-layer fl-edit"><img src="images/flourish-hero/edit.webp" alt="" draggable="false"/></div>
+        </div>
       </div>
+      <script>
+        /* Hero intro: the two component cards slide in (left, then right), hold,
+           slide back out, and then the screen recording starts and loops.
+           Uses the landing card's motion (flourish-card.css: fl-armed / fl-in). */
+        (function () {
+          var hero = document.getElementById('flHero');
+          var video = hero && hero.querySelector('video');
+          if (!hero || !video) return;
+          var play = function () { var p = video.play(); if (p && p.catch) p.catch(function () {}); };
+          hero.classList.add('fl-armed');            // cards start off to the sides
+          if (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) { play(); return; }
+          var imgs = [].slice.call(hero.querySelectorAll('.fl-macro img, .fl-edit img'));
+          var ready = imgs.map(function (im) {
+            return im.complete ? Promise.resolve() : new Promise(function (r) { im.onload = im.onerror = r; });
+          });
+          Promise.all(ready).then(function () {
+            setTimeout(function () {
+              hero.classList.add('fl-in');            // in: macro, then edit 0.3s later (~1.05s)
+              setTimeout(function () {
+                hero.classList.remove('fl-in');       // out together (0.45s)
+                setTimeout(play, 500);
+              }, 2500);
+            }, 350);
+          });
+        })();
+      </script>
 
       <h1 class="cs-title cs-title-under">Making AI Health Insights Easier to Understand and Trust</h1>
 
@@ -1608,24 +1713,6 @@
           <img src="images/context-flow.png" alt="Logged meals plus symptoms, AI identifies potential patterns, personalized trigger insights" style="width:100%; display:block;">
         </div>
         <p>But those insights are only useful if users can log meals accurately and understand why the product surfaces certain patterns. My internship focused on strengthening both sides of that loop.</p>
-      </div>
-
-      <!-- What I Owned -->
-      <div class="cs-section" id="owned">
-        <p class="cs-section-label">What I Owned</p>
-        <h2>I took the core experience from research to shipped design.</h2>
-        <div class="owned-grid">
-            <div class="owned-card">
-              <svg class="owned-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.6-3.6"/></svg>
-              <h3 class="owned-title">Research &amp; Validation</h3>
-              <p class="owned-body">Synthesized user interviews and usability tests to identify where AI-generated insights created confusion or mistrust.</p>
-            </div>
-            <div class="owned-card">
-              <svg class="owned-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 3 9 5-9 5-9-5 9-5Z"/><path d="m3 13 9 5 9-5"/></svg>
-              <h3 class="owned-title">Core Product Design</h3>
-              <p class="owned-body">Led end-to-end design of the meal detail experience, including trigger scores, macro visualization, and editing flows.</p>
-            </div>
-          </div>
       </div>
 
       <!-- The Problem -->
