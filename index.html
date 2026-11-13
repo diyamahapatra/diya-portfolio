@@ -249,6 +249,26 @@
     .fl-live.fl-armed:not(.fl-in) .fl-edit,
     .fl-live.fl-armed:not(.fl-in):hover .fl-edit,
     a:hover > .fl-live.fl-armed:not(.fl-in) .fl-edit { transform: translateX(112%); opacity: 0; }
+    /* L&S card: on hover three of the redesign's components slide in over the page —
+       the selected situation tile from the left, the Virtual Front Desk card from the right,
+       and the checked visa option from below — then slide back out when the pointer leaves. */
+    .ls-card .ls-layer { position: absolute; z-index: 2; opacity: 0; pointer-events: none;
+      transition: transform 0.55s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.3s; }
+    .ls-card .ls-layer img { display: block; width: 100%; height: auto; }
+    .ls-card .ls-tile  { left: 4.5%; top: 47%; width: 30%; transform: translateX(-125%);
+      filter: drop-shadow(0 10px 18px rgba(0, 10, 30, .35)); }
+    .ls-card .ls-vfd   { right: 4.5%; top: 11%; width: 24%; transform: translateX(125%);
+      background: #F9F9F9; padding: 2.1% 2.3% 1.8%; border: 1px solid #E5E7EB;
+      box-shadow: 0 12px 26px rgba(0, 10, 30, .35); }
+    .ls-card .ls-check { left: 31%; top: 79%; width: 25%; transform: translateY(220%);
+      filter: drop-shadow(0 10px 18px rgba(0, 10, 30, .35)); }
+    a.tile:hover .ls-card .ls-layer,
+    a.tile:focus-visible .ls-card .ls-layer { opacity: 1; transform: none; }
+    a.tile:hover .ls-card .ls-vfd, a.tile:focus-visible .ls-card .ls-vfd { transition-delay: .07s; }
+    a.tile:hover .ls-card .ls-check, a.tile:focus-visible .ls-card .ls-check { transition-delay: .14s; }
+    @media (prefers-reduced-motion: reduce) {
+      .ls-card .ls-layer { transition: opacity .2s; transform: none; }
+    }
   </style>
   <link rel="stylesheet" href="flourish-card/flourish-card.css?v=2"/>
   <link rel="stylesheet" href="airbnb-card/airbnb-case-card.css"/>
@@ -298,7 +318,10 @@
       </a>
 
       <a class="tile" href="/sis">
-        <div class="thumb t-bit"><p>Berkeley IT</p>
+        <div class="thumb ls-card"><img class="cover" src="images/ls-cover/base.webp" alt="The redesigned L&amp;S Advising Appointments &amp; Advice page in a browser window" draggable="false"/>
+          <div class="ls-layer ls-tile" aria-hidden="true"><img src="images/ls-cover/tile.png" alt="" draggable="false"/></div>
+          <div class="ls-layer ls-vfd" aria-hidden="true"><img src="images/ls-cover/vfd.png" alt="" draggable="false"/></div>
+          <div class="ls-layer ls-check" aria-hidden="true"><img src="images/ls-cover/check.png" alt="" draggable="false"/></div>
         </div>
         <p class="work-label">Berkeley IT - 2026</p>
         <h3 class="work-title">Making Student Advising Easier to Navigate</h3>

@@ -8,45 +8,38 @@
   <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"/>
   <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"/>
 
-  <meta name="description" content="Redesigning advising access at UC Berkeley IT so students don't have to understand the advising system before they can use it."/>
+  <meta name="description" content="Redesigned how 20,000+ L&amp;S students find advising, from research and a platform-constrained build to the version I&rsquo;d ship without the constraint."/>
   <link rel="canonical" href="https://www.diya-mahapatra.com/sis"/>
 
   <meta property="og:type" content="website"/>
   <meta property="og:site_name" content="Diya Mahapatra"/>
-  <meta property="og:title" content="Helping 20,000+ Berkeley Students Find the Right Advisor"/>
-  <meta property="og:description" content="Redesigning advising access at UC Berkeley IT so students don't have to understand the advising system before they can use it."/>
+  <meta property="og:title" content="Making Student Advising Easier to Navigate"/>
+  <meta property="og:description" content="Redesigned how 20,000+ L&amp;S students find advising, from research and a platform-constrained build to the version I&rsquo;d ship without the constraint."/>
   <meta property="og:url" content="https://www.diya-mahapatra.com/sis"/>
-  <meta property="og:image" content="https://www.diya-mahapatra.com/og-card.png?v=2"/>
+  <meta property="og:image" content="https://www.diya-mahapatra.com/images/sis-cs/hero.webp"/>
   <meta property="og:image:width" content="1200"/>
   <meta property="og:image:height" content="630"/>
-  <meta property="og:image:alt" content="Advising Access — a UC Berkeley IT case study."/>
+  <meta property="og:image:alt" content="The redesigned L&amp;S Advising Appointments &amp; Advice page."/>
 
   <meta name="twitter:card" content="summary_large_image"/>
-  <meta name="twitter:title" content="Helping 20,000+ Berkeley Students Find the Right Advisor"/>
-  <meta name="twitter:description" content="Redesigning advising access at UC Berkeley IT so students don't have to understand the advising system before they can use it."/>
-  <meta name="twitter:image" content="https://www.diya-mahapatra.com/og-card.png?v=2"/>
-  <title>Advising Access — Diya Mahapatra</title>
+  <meta name="twitter:title" content="Making Student Advising Easier to Navigate"/>
+  <meta name="twitter:description" content="Redesigned how 20,000+ L&amp;S students find advising, from research and a platform-constrained build to the version I&rsquo;d ship without the constraint."/>
+  <meta name="twitter:image" content="https://www.diya-mahapatra.com/images/sis-cs/hero.webp"/>
+  <title>L&amp;S Advising — Diya Mahapatra</title>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300&family=Sorts+Mill+Goudy:ital@0;1&family=Lora:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300&family=Instrument+Serif:ital@0;1&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,700&display=swap" rel="stylesheet"/>
   <style>
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
     :root {
-      --orange: #003262;   /* Berkeley Blue — solid fills, where white text sits on top */
-      --accent: #3B7EA1;   /* Founders Rock — the brighter Berkeley blue, for eyebrow labels */
-      --ink:    #202020;   /* headline near-black */
+      --orange: #21A0A0;
       --black:  #0F0F0F;
       --gray:   #6B7280;
       --border: #E5E7EB;
       --ease:   cubic-bezier(0.25, 0.46, 0.45, 0.94);
-
-      /* ── TEMPLATE GEOMETRY ──
-         Matched to the Flourish study: a fixed 220px contents rail with the
-         reading column capped at 840px and nudged right of true centre, so
-         all three case studies share one measure. */
-      --rail:   340px;   /* fixed contents rail, same as the Flourish study */
-      --nudge:  25px;    /* optical offset right of true centre — see .cs-body */
+      --rail:   340px;   /* fixed contents rail, same idea as the SIS study */
+      --nudge:  25px;    /* optical offset right of true centre — see .cs-content */
     }
 
     html, body {
@@ -56,8 +49,12 @@
       background: #FAF9F7;
       color: var(--black);
     }
-    html { scroll-behavior: smooth; }
-    .cs-section, .phase-mark { scroll-margin-top: 90px; }
+    html {
+      scroll-behavior: smooth;
+    }
+    .cs-section, #overview {
+      scroll-margin-top: 77px;
+    }
 
     /* ── NAV ── */
     nav {
@@ -75,7 +72,9 @@
       transition: transform 0.2s var(--ease);
       transform-origin: left center;
     }
-    .nav-logo:hover { transform: scale(1.06); }
+    .nav-logo:hover {
+      transform: scale(1.06);
+    }
     .nav-links { list-style: none; display: flex; gap: 32px; }
     .nav-links a {
       font-size: 14px; color: var(--gray);
@@ -84,36 +83,39 @@
     .nav-links a:hover { color: var(--black); }
     .nav-links a.active { color: var(--black); font-weight: 500; }
 
-    /* ── LEFT RAIL (contents) ──
-       Fixed in the rail, like the reference: a back link at the top, the
-       section list beneath it, and a back-to-top pinned at the bottom. */
-    .cs-rail {
+    /* ── LAYOUT ──
+       The contents rail is pinned to the far left and out of the flow, so
+       the reading column is free to centre on the window rather than on
+       whatever space the rail left behind. */
+    .cs-layout {
+      display: block;
+      padding-top: 57px;
+      min-height: 100vh;
+    }
+
+    /* ── CONTENTS RAIL ── */
+    .cs-sidebar {
       position: fixed;
       left: 0;
       top: 57px;
       bottom: 0;
       width: var(--rail);
       padding: 34px 24px 28px;
-      /* opaque on purpose: section borders below are full-bleed, and without
-         a backdrop they draw a line straight across the contents list */
-      background: #FAF9F7;
       display: flex;
       flex-direction: column;
       z-index: 50;
+      /* opaque on purpose: section borders below are full-bleed, and without
+         a backdrop they draw a line straight across the contents list */
+      background: #FAF9F7;
     }
-    /* Fixed rather than absolute so it runs the full height of the window
-       alongside the rail, instead of being boxed by the aside's padding. */
-    .cs-rail::after {
-      content: '';
-      position: fixed;
-      left: var(--rail);
-      top: 57px;
-      bottom: 0;
-      border-left: 1px dotted #D6D6D6;
-      pointer-events: none;
+    .cs-sidebar-links {
+      list-style: none;
+      display: flex; flex-direction: column; gap: 0;
+      /* 13 entries is taller than a short window — let it scroll on its own */
+      overflow-y: auto;
+      min-height: 0;
     }
-    .rail-links { list-style: none; display: flex; flex-direction: column; gap: 0; }
-    .rail-links a {
+    .cs-sidebar-links a {
       font-family: 'Inter', system-ui, sans-serif;
       font-size: 12px; font-weight: 500;
       letter-spacing: 0.10em; text-transform: uppercase;
@@ -123,10 +125,11 @@
       display: block;
       transition: color 0.18s;
     }
-    .rail-links a:hover { color: var(--ink); }
-    .rail-links a.active { color: var(--accent); }
-    .rail-top {
+    .cs-sidebar-links a:hover { color: var(--black); }
+    .cs-sidebar-links a.active { color: var(--orange); }
+    .cs-sidebar-top {
       margin-top: auto;
+      padding-top: 20px;
       font-family: 'Inter', system-ui, sans-serif;
       font-size: 12px; font-weight: 600;
       letter-spacing: 0.10em; text-transform: uppercase;
@@ -134,147 +137,166 @@
       text-decoration: none;
       transition: color 0.18s;
     }
-    .rail-top:hover { color: var(--ink); }
+    .cs-sidebar-top:hover { color: var(--black); }
+    /* Fixed rather than absolute so it runs the full height of the window
+       alongside the rail, instead of being boxed by the aside's padding. */
+    .cs-sidebar::after {
+      content: '';
+      position: fixed;
+      left: var(--rail);
+      top: 57px;
+      bottom: 0;
+      border-left: 1px dotted #D6D6D6;
+      pointer-events: none;
+    }
 
-    /* ── HERO — bleeds from the rail to the right edge of the window ── */
-    .cs-hero {
-      margin-top: 0;
+    /* ── MAIN CONTENT ── */
+    .cs-main {
+      padding: 48px 0 24px;
+    }
+    /* Geometrically the column centres on the window, but the rail sitting
+       off to the left makes that read as left-heavy — so it gets nudged right
+       to sit optically centred. The max() floor keeps it clear of the dotted
+       rule when the window is too narrow to both centre and clear. */
+    .cs-content {
       max-width: 840px;
       margin-left: max(325px, calc((100% - 840px) / 2 + var(--nudge)));
       margin-right: 20px;
-      /* same 1.9 as the hero on the other three studies */
-      aspect-ratio: 1.9;
-      background: #F3F4F6;
-      border: 1px dashed #D8D8D8;
-      display: flex; align-items: center; justify-content: center;
-      gap: 12px;
-      flex-direction: column;
-    }
-    /* element + class, so the placeholder caption isn't captured by
-       `.cs-section p`'s body-copy colour, width cap and margin */
-    p.ph-text,
-    .shot p.ph-text {
-      font-family: 'Inter', system-ui, sans-serif;
-      font-size: 12px; font-weight: 600;
-      letter-spacing: 0.10em; text-transform: uppercase;
-      color: #A8A8A8;
-      margin: 0;
-      max-width: none;
     }
 
-    /* ── READING COLUMN ── */
-    .cs-body {
-      /* Geometrically the column centres on the window, but the rail sitting
-         off to the left makes that read as left-heavy — so it gets nudged
-         right to sit optically centred. The max() floor keeps it clear of
-         the dotted rule when the window is too narrow to both centre and
-         clear. */
-      max-width: 840px;
-      margin-left: max(325px, calc((100% - 840px) / 2 + var(--nudge)));
-      margin-right: 20px;
-      padding: 16px 0 120px;
-    }
-
-    /* title + metadata */
-    /* Above the hero, the way the other case studies open. It sits outside
-       .cs-body now, so it carries the same column geometry as .cs-hero. */
+    /* title */
     .cs-title {
-      font-family: 'Lora', Georgia, serif;
+      font-family: 'Lora', serif;
       font-size: clamp(25.2px, 2.9vw, 39.6px);
       font-weight: 400;
       letter-spacing: -0.02em;
       line-height: 1.15;
-      color: var(--ink);
-      max-width: 840px;
-      /* 57px of fixed nav plus the 48px the other studies leave below it */
-      margin-top: 105px;
-      margin-left: max(325px, calc((100% - 840px) / 2 + var(--nudge)));
-      margin-right: 20px;
-      margin-bottom: 28px;
-      scroll-margin-top: 90px;
+      color: var(--black);
+      margin-bottom: 24px;
     }
-    /* Columns sized to their own content and packed to the left, rather
-       than four equal shares stretched across the full 1104px column —
-       that spread the four fields so far apart they stopped reading as
-       one block. Capped so it stays compact on a wide window. */
-    .cs-meta-grid {
-      display: grid;
-      grid-template-columns: repeat(5, minmax(0, auto));
-      justify-content: start;
-      column-gap: 40px;
-      row-gap: 18px;
-      max-width: 900px;
-      margin-bottom: 80px;
-    }
-    /* the one-line summary that opens the other three studies */
-    .cs-body p.cs-intro {
+
+    /* intro paragraph */
+    .cs-intro {
       font-size: 15.3px;
       line-height: 1.75;
       color: #3D3D3D;
-      margin-bottom: 36px;
-    }
-    .cs-meta-label {
-      font-family: 'Inter', system-ui, sans-serif;
-      font-size: 12px; font-weight: 600;
-      letter-spacing: 0.10em; text-transform: uppercase;
-      color: var(--accent);
-      margin-bottom: 8px;
-    }
-    .cs-meta-value {
-      font-size: 14px;
-      line-height: 1.5;
-      color: var(--gray);
+      margin-bottom: 0;
     }
 
-    /* ── PHASE MARKER ──
-       The big serif word that introduces a run of sections, carried over
-       from the earlier version of this page — italic this time. Sized
-       just under .cs-title so it reads as a chapter mark, not a rival
-       headline. */
-    .phase-mark {
-      font-family: 'Lora', Georgia, serif;
-      font-size: clamp(28px, 3.6vw, 40px);
-      font-weight: 400;
-      font-style: italic;
-      letter-spacing: 0;
-      text-transform: uppercase;
-      line-height: 1.1;
-      color: var(--ink);
-      /* Top margin collapses against the previous section's 72px bottom
-         margin, so this has to exceed it to actually open the gap —
-         a chapter break should read as a bigger pause than a section one. */
-      margin: 120px 0 44px;
+    /* intro row with jump button */
+    /* stacked, not split: the CTA sits under the paragraph on the same left
+       edge as everything else, instead of floating opposite it */
+    .cs-intro-row {
+      margin-bottom: 24px;
     }
-    /* nudged up on its own — this is the only marker that follows the
-       metadata block rather than a section, so it sits slightly differently */
-    #phase-overview { margin-top: 115px; }
+    /* a text link, not a pill — the pill read as SaaS marketing next to the
+       editorial type everywhere else on the page */
+    .cs-jump-btn {
+      display: inline-block;
+      margin-top: 16px;
+      font-size: 14px; font-weight: 500;
+      letter-spacing: 0.01em;
+      color: var(--orange);
+      background: none;
+      border: 0;
+      border-bottom: 1px solid currentColor;
+      border-radius: 0;
+      padding: 0 0 2px;
+      text-decoration: none;
+      transition: opacity 0.18s;
+    }
+    .cs-jump-btn:hover { opacity: 1; }
 
-    /* ── SECTIONS — label, headline, body, image ── */
-    .cs-section { margin-bottom: 128px; }
-    .cs-section:last-child { margin-bottom: 0; }
-    /* Two classes + the element, so it genuinely outranks `.cs-section p`
-       — `p.cs-label` alone only *ties* with it, and loses on source order. */
-    .cs-body p.cs-label {
-      font-family: 'Inter', system-ui, sans-serif;
-      font-size: 12px; font-weight: 600;
-      letter-spacing: 0.10em; text-transform: uppercase;
-      color: var(--accent);
-      margin-bottom: 8px;
-      max-width: none;
+    /* hero image */
+    .cs-hero-img {
+      width: 100%;
+      border-radius: 0;
+      overflow: hidden;
+      margin-bottom: 16px;
+      background: #F3F4F6;
+    }
+    /* One ratio across the three studies. The source frames range from 1.52
+       to 2.02, which is why the metadata sat on screen on one page and below
+       the fold on another — the hero was simply taller. Cover-cropped from
+       the centre so the exhibit keeps its own composition. */
+    .cs-hero-img {
+      aspect-ratio: 1.9;
+      overflow: hidden;
+    }
+    .cs-hero-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
       display: block;
     }
-    /* No width cap on either — the reference runs its headline and body
-       the full width of the reading column rather than a narrow measure. */
+    .cs-hero-placeholder {
+      display: flex; flex-direction: column; align-items: center; gap: 10px;
+    }
+    .cs-hero-placeholder-icon {
+      width: 48px; height: 48px; border-radius: 0;
+      background: var(--border);
+    }
+    .cs-hero-placeholder p {
+      font-size: 13px; color: var(--gray);
+    }
+
+    /* overview grid */
+    .cs-overview-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      column-gap: 40px;
+      row-gap: 26px;
+      padding: 4px 0 8px;
+      margin-bottom: 32px;
+    }
+    /* No card around each field — same treatment as the Berkeley IT study:
+       a small-caps accent label over plain body copy. */
+    .cs-overview-item {
+      border: none;
+      padding: 0;
+    }
+    .cs-overview-label {
+      font-family: 'Inter', system-ui, sans-serif;
+      font-size: 12px; font-weight: 600;
+      letter-spacing: 0.10em; text-transform: uppercase;
+      color: var(--orange);
+      margin-bottom: 8px;
+    }
+    .cs-overview-value {
+      font-size: 14.4px;
+      font-weight: 400;
+      line-height: 1.75;
+      color: #3D3D3D;
+    }
+
+    /* sections */
+    .cs-section {
+      margin-bottom: 128px;
+    }
+    /* Caps treatment matched to the contents rail: uppercase needs the wider
+       0.10em tracking, or the letters crowd at this size.
+       Selector is p.cs-section-label, not .cs-section-label: `.cs-section p`
+       is (0,1,1) and silently outranks a lone class, which is why the size
+       here was resolving to 14.4px instead of 13px. */
+    .cs-section p.cs-section-label {
+      font-family: 'Inter', system-ui, sans-serif;
+      font-size: 12px; font-weight: 500;
+      letter-spacing: 0.10em; text-transform: uppercase;
+      color: var(--orange);
+      margin-bottom: 12px;
+      display: block;
+    }
     .cs-section h2 {
-      font-family: 'Lora', Georgia, serif;
-      font-size: clamp(18.9px, 2.1vw, 24.3px);
+      font-family: 'Lora', serif;
+      font-size: clamp(16.9px, calc(2.1vw - 2px), 22.3px);
       /* 500 rather than 600 — Lora's semibold is much heavier than Inter's
          at the same value and reads clotted at heading size */
       font-weight: 500;
       letter-spacing: -0.01em;
+      color: var(--black);
+      margin-bottom: 16px;
       line-height: 1.25;
-      color: var(--ink);
-      margin-bottom: 18px;
     }
     .cs-section p {
       font-size: 14.4px;
@@ -283,122 +305,850 @@
       margin-bottom: 16px;
     }
     .cs-section p:last-child { margin-bottom: 0; }
-    /* unwritten copy, visibly marked so it can't ship by accident */
-    .cs-section p.todo {
-      color: #9A9A9A;
+    /* the reflection paragraph is one long unbroken block (the longest single
+       paragraph in the case study), so it gets a bit more air between lines
+       than the 1.75 baseline to stay easy to read straight through.
+       :not() excludes the "REFLECTION" eyebrow label, which is also a <p>
+       inside this section. */
+    #reflection p:not(.cs-section-label) { line-height: 2; }
+    .cs-pullquote {
+      background: #F2F2F0;
+      border-radius: 10px;
+      padding: 24px 28px;
+      margin-top: 24px !important;
+      font-family: 'Lora', serif;
       font-style: italic;
-    }
-    /* a quiet attribution line — two classes plus the element so it wins
-       against `.cs-section p`'s body colour and spacing */
-    .cs-body p.cs-credit {
-      font-size: 13px;
+      font-size: 17.1px;
       line-height: 1.6;
-      color: #8E8E8E;
-      margin-top: 22px;
-      margin-bottom: 0;
+      color: var(--black);
     }
 
-    /* ── IMPACT STATS — big accent numeral over a bolded lead-in ── */
-    .stat-row {
+    /* comp scatter */
+    .comp-scatter-wrap {
+      position: relative;
+      left: -48px;
+      width: calc(100% + 328px);
+      margin: 36px 0 0;
+    }
+    .comp-scatter {
+      background: #F0EFED;
+      border-radius: 14px;
+      height: 320px;
+      position: relative;
+      overflow: hidden;
+    }
+    .comp-item {
+      position: absolute;
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      user-select: none;
+    }
+    .comp-item img {
+      display: block;
+      border-radius: 8px;
+      object-fit: contain;
+      flex-shrink: 0;
+    }
+    .comp-item span {
+      font-family: 'Inter', sans-serif;
+      font-weight: 700;
+      color: #111;
+      white-space: nowrap;
+      letter-spacing: -0.025em;
+      line-height: 1;
+    }
+
+    /* research quotes */
+    .cs-quote-card {
+      background: linear-gradient(148deg, #EAE2D6 0%, #D4E0D8 100%);
+      border-radius: 0;
+      padding: 40px 44px;
+      margin: 28px 0 36px;
+    }
+    .cs-quote-entry + .cs-quote-entry {
+      margin-top: 32px;
+      padding-top: 32px;
+      border-top: 1px solid rgba(0,0,0,0.09);
+    }
+    .cs-quote-glyph {
+      font-family: 'Lora', serif;
+      font-size: 27px;
+      color: rgba(0,0,0,0.22);
+      line-height: 1;
+      margin-bottom: 14px;
+    }
+    .cs-quote-text {
+      font-family: 'Lora', serif;
+      font-style: italic;
+      font-size: 18px;
+      line-height: 1.55;
+      color: #1A1A1A;
+      margin: 0 0 14px;
+    }
+    .cs-quote-cite {
+      font-size: 13px;
+      color: #787878;
+      line-height: 1.5;
+    }
+    /* synthesis grid */
+    .cs-synthesis {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 48px;
-      margin-top: 44px;
+      gap: 32px;
+      margin-top: 8px;
     }
-    /* two classes + element, or `.cs-section p` wins and renders this
-       as 14px grey body copy */
-    .cs-body p.stat-num {
+    /* Scoped as `.cs-section p.<class>`, not the bare class: `.cs-section p`
+       is (0,1,1) and silently outranks a lone class, which is why the title
+       was resolving to 14.4px — the same size as its own description — and
+       the declared 36px never rendered. 36px is far too large for a 258px
+       grid column anyway, so the intent lands at 19px. */
+    .cs-section p.cs-synthesis-title {
       font-family: 'Inter', system-ui, sans-serif;
-      font-size: clamp(30px, 3.4vw, 42px);
-      font-weight: 600;
-      letter-spacing: -0.03em;
+      font-size: 16px;
+      font-weight: 500;
+      letter-spacing: -0.01em;
+      color: #0F0F0F;
+      margin-bottom: 10px;
+      line-height: 1.3;
+    }
+    .cs-section p.cs-synthesis-desc {
+      font-size: 13px;
+      color: #5C5C5C;
+      line-height: 1.7;
+    }
+
+    /* image block */
+    .cs-img-block {
+      width: 100%;
+      border-radius: 0;
+      overflow: hidden;
+      margin: 32px 0;
+      background: #F3F4F6;
+      aspect-ratio: 16/9;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .cs-img-block img { width: 100%; height: 100%; object-fit: cover; }
+    .cs-img-caption {
+      font-size: 12px; color: var(--gray);
+      margin-top: -20px; margin-bottom: 32px;
+      text-align: center;
+    }
+
+    /* ── THE SOLUTION ── */
+    .cs-solution-video-wrap {
+      width: 100%;
+      /* the hero's own gradient (same image, with its grain) behind the recording */
+      background: #BCC5E4 url("images/flourish-hero/bg.jpg") center / cover no-repeat;
+      border-radius: 0;
+      overflow: hidden;
+      margin-bottom: 8px;
+      height: 860px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .cs-solution-video-wrap video {
+      max-height: 780px;
+      max-width: 100%;
+      width: auto;
+      height: auto;
+      display: block;
+      /* the recording's own 28/390 rounded corners, clipped so its square
+         background never shows on the blue panel */
+      clip-path: inset(0 round 7.4% / 3.42%);
+    }
+    .cs-solution-video-placeholder {
+      aspect-ratio: 16/9;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .cs-solution-video-placeholder span {
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #555;
+    }
+
+    /* ── IMPACT ── */
+    .cs-impact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 48px;
+      align-items: center;
+      margin-top: 40px;
+    }
+    .cs-impact-proof img {
+      width: 100%;
+      display: block;
+      border-radius: 12px;
+    }
+    .cs-impact-metrics {
+      display: flex;
+      flex-direction: column;
+      gap: 44px;
+    }
+    .cs-metric-num {
+      display: block;
+      font-family: 'Lora', serif;
+      font-size: 59.4px;
+      font-weight: 700;
+      color: var(--black);
       line-height: 1;
-      color: var(--accent);
+      margin-bottom: 10px;
+      letter-spacing: -0.02em;
+    }
+    .cs-metric-label {
+      font-size: 13px;
+      line-height: 1.6;
+      color: var(--gray);
+      max-width: 220px;
+    }
+
+    /* ── DESIGN CARDS ── */
+    .cs-design-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
       margin-bottom: 16px;
     }
-    .cs-body p.stat-body {
-      font-size: 14px;
-      line-height: 1.75;
-      color: #3D3D3D;
-      margin: 0;
-      max-width: none;
+    .cs-design-card {
+      background: #F5F4F1;
+      border-radius: 0;
+      padding: 28px 28px 0;
+      overflow: hidden;
     }
-    .stat-body strong { color: var(--ink); }
-    .cs-body p.lim-eyebrow {
-      font-size: 13.5px;
-      font-weight: 400;
-      color: #8E8E8E;
-      margin: 0 0 8px;
-      max-width: none;
+    .cs-design-card--wide {
+      /* full width, no extra styles needed */
     }
-    .cs-body p.lim-body {
-      font-size: 13.5px;
+    .cs-design-card-text {
+      font-size: 13px;
       line-height: 1.7;
-      color: #6E6E6E;
+      color: #3A3A3A;
+      margin: 0 0 24px;
+    }
+    .cs-design-card-frame {
+      width: 100%;
+      aspect-ratio: 4/3;
+      background: #E4E2DD;
+      border-radius: 0;
+    }
+    .cs-design-card-frame--wide {
+      aspect-ratio: 16/7;
+    }
+
+    /* ── DIFF CARDS ── */
+    .cs-diff { display: flex; flex-direction: column; }
+    .cs-diff-row {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      padding: 36px 0;
+    }
+    .cs-diff-row:first-child { padding-top: 0; }
+    .cs-diff-num {
+      display: block;
+      font-size: 11px; font-weight: 600;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--orange); margin-bottom: 10px;
+    }
+    .cs-diff-title {
+      font-family: 'Lora', serif;
+      font-size: 14.4px; font-weight: 500;
+      color: var(--black); line-height: 1.35;
+      margin-bottom: 6px;
+    }
+    .cs-diff-desc {
+      font-size: 14.4px; line-height: 1.75;
+      color: #3D3D3D;
+    }
+    .cs-diff-pair {
+      display: grid;
+      grid-template-columns: 1fr 28px 1fr;
+      gap: 12px;
+      align-items: center;
+    }
+    .cs-diff-tag {
+      display: block;
+      font-size: 10.5px; font-weight: 600;
+      letter-spacing: 0.09em; text-transform: uppercase;
+      color: var(--gray); margin-bottom: 8px;
+    }
+    .cs-diff-img-wrap img {
+      width: 100%;
+      display: block;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+    }
+    .cs-diff-arrow {
+      text-align: center;
+      font-size: 14.4px;
+      color: #C4C9D2;
+      line-height: 1;
+    }
+
+    /* ── DESIGN EVOLUTION ── */
+    .cs-evolution-questions {
+      margin-top: 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+    .cs-evolution-q {
+      font-family: 'Lora', serif;
+      font-style: italic;
+      font-size: 19.8px;
+      line-height: 1.5;
+      color: var(--black);
       margin: 0;
-      max-width: 46ch;
+      padding: 18px 0;
+      border-bottom: 1px solid var(--border);
     }
-    /* Darker than the card's body copy below it — with the subheadings
-       gone, this eyebrow is the card's only title and has to carry it. */
-    .cs-body p.feature-eyebrow {
-      font-family: 'Inter', system-ui, sans-serif;
-      font-size: 12px; font-weight: 600;
-      letter-spacing: 0.10em; text-transform: uppercase;
-      color: #4F4F4F;
+    .cs-evolution-q:first-child { border-top: 1px solid var(--border); }
+
+    /* ── RESEARCH SECTION ── */
+    .research-stats {
+      display: flex;
+      align-items: flex-start;
+      gap: 40px;
+      margin: 28px 0 40px;
+      padding-bottom: 36px;
+      border-bottom: 1px solid var(--border);
+    }
+    .research-stat-num {
+      font-family: 'Lora', serif;
+      font-size: 46.8px;
+      font-weight: 400;
+      line-height: 1;
+      color: var(--black);
+      margin-bottom: 4px;
+    }
+    .research-stat-label {
+      font-size: 12px;
+      color: var(--gray);
+      letter-spacing: 0.03em;
+    }
+    .research-conditions {
+      font-size: 13px;
+      color: var(--gray);
+      line-height: 1.75;
+      padding-top: 6px;
+    }
+    .findings-list { margin-bottom: 40px; }
+    .finding-row {
+      display: grid;
+      grid-template-columns: 32px 1fr;
+      gap: 20px;
+      align-items: baseline;
+      padding: 22px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .findings-list .finding-row:first-child { border-top: 1px solid var(--border); }
+    .finding-num {
+      font-size: 11px;
+      color: var(--gray);
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      padding-top: 2px;
+    }
+    .finding-body { display: flex; flex-direction: column; gap: 4px; }
+    .finding-title {
+      font-size: 13.5px;
+      font-weight: 600;
+      color: var(--black);
+      line-height: 1.4;
+    }
+    .finding-desc {
+      font-size: 13px;
+      color: #3D3D3D;
+      line-height: 1.7;
+    }
+    .cs-quote {
+      margin: 28px 0;
+      padding-left: 18px;
+      border-left: 2px solid #C9C8C5;
+    }
+    .cs-quote blockquote {
+      font-family: 'Lora', serif;
+      font-size: 14.4px;
+      font-style: italic;
+      color: var(--black);
+      line-height: 1.7;
+      margin: 0 0 6px;
+    }
+    .cs-quote cite {
+      font-size: 12px;
+      color: var(--gray);
+      font-style: normal;
+      letter-spacing: 0.02em;
+    }
+    .synthesis-block {
+      margin: 48px 0 0;
+      padding: 52px 0;
+      text-align: center;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+    .synthesis-line {
+      font-family: 'Lora', serif;
+      font-size: clamp(17.1px, 2vw, 24.3px);
+      font-weight: 400;
+      color: var(--black);
+      line-height: 1.3;
+      margin: 0;
+    }
+    .synthesis-line.muted { color: var(--gray); font-style: italic; }
+    .synthesis-arrow {
+      display: block;
+      font-size: 16.2px;
+      color: #C9C9C9;
+      margin: 14px 0;
+      line-height: 1;
+    }
+    .synthesis-opp {
+      margin-top: 44px;
+    }
+    .synthesis-opp-label {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      color: var(--gray);
+      text-transform: uppercase;
       margin-bottom: 8px;
-      max-width: none;
+    }
+    .synthesis-opp-text {
+      font-size: 14.4px;
+      color: var(--black);
+      font-weight: 500;
     }
 
-    /* ── SCROLL REVEALS ──
-       Transform and opacity only — both composite on the GPU, so none of
-       this triggers layout while the page is scrolling. Everything is
-       gated behind .js-reveal, which the head script only sets when the
-       visitor hasn't asked for reduced motion. */
-    .js-reveal .cs-section {
-      opacity: 0;
-      transform: translateY(14px);
-      transition: opacity 0.6s var(--ease), transform 0.6s var(--ease);
-    }
-    .js-reveal .cs-section.revealed { opacity: 1; transform: none; }
-    /* Blocks already in the opening screenful skip the animation outright —
-       fading them in from 0 means the first paint shows an empty page below
-       the metadata, with nothing to suggest there is more to scroll to. */
-    .js-reveal .cs-section.revealed-at-load {
-      opacity: 1;
-      transform: none;
-      transition: none;
+    .work-thumb {
+      width: 100%;
+      aspect-ratio: 16 / 11;
+      border-radius: 0;
+      overflow: hidden;
+      margin-bottom: 22px;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
-    /* the solution cards drift in from their own side of the grid, so the
-       set assembles inward rather than all rising together */
-    .js-reveal .feature {
-      opacity: 0;
-      transform: translateX(-30px);
-      transition: opacity 0.65s var(--ease), transform 0.65s var(--ease);
+    .work-label {
+      font-size: 11px; font-weight: 600;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--gray); margin-bottom: 8px;
     }
-    .js-reveal .feature:nth-child(even) { transform: translateX(30px); }
-    .js-reveal .feature.revealed { opacity: 1; transform: none; }
-    /* a beat between the two halves of each row */
-    .js-reveal .feature:nth-child(2) { transition-delay: 0.10s; }
-    .js-reveal .feature:nth-child(3) { transition-delay: 0.05s; }
-    .js-reveal .feature:nth-child(4) { transition-delay: 0.15s; }
 
-    /* the three context screenshots step in left to right */
-    .js-reveal .shot-row .shot {
-      opacity: 0;
-      transform: translateY(20px);
-      transition: opacity 0.55s var(--ease), transform 0.55s var(--ease);
+    .work-title {
+      font-family: 'Lora', serif;
+      font-size: clamp(18px, 1.6vw, 23.4px);
+      font-weight: 500; letter-spacing: -0.01em;
+      color: var(--black); line-height: 1.2;
+      margin-bottom: 10px;
     }
-    .js-reveal .shot-row .shot.revealed { opacity: 1; transform: none; }
-    .js-reveal .shot-row .shot:nth-child(2) { transition-delay: 0.10s; }
-    .js-reveal .shot-row .shot:nth-child(3) { transition-delay: 0.20s; }
 
+    .work-desc {
+      font-size: 13px; color: var(--gray);
+      line-height: 1.65; max-width: 480px;
+    }
+
+    /* ── placeholder thumbnail backgrounds — pastel palette ── */
+
+    /* ── THUMB 1 — warm ivory/sage gradient (matches Research quote card) ── */
+    .thumb-1 {
+      background: linear-gradient(135deg, #BCD8D8 0%, #C0C8E8 52%, #EDE0D4 100%);
+      position: relative;
+      overflow: hidden;
+    }
+    .thumb-1-mesh {
+      display: none;
+    }
+    .t1b { position: absolute; border-radius: 50%; will-change: transform; }
+    .t1b-1 { width: 70%; height: 70%; background: #F5EDE6; top: -10%; left: -10%; animation: t1m1 3.5s ease-in-out infinite alternate; }
+    .t1b-2 { width: 60%; height: 60%; background: #DDD0EE; top: 0%; right: -15%; animation: t1m2 4.5s ease-in-out infinite alternate; }
+    .t1b-3 { width: 65%; height: 65%; background: #C8C0E8; bottom: -15%; left: 15%; animation: t1m3 4.0s ease-in-out infinite alternate; }
+    .t1b-4 { width: 55%; height: 55%; background: #FAF4F0; top: 20%; left: 25%; animation: t1m4 5.0s ease-in-out infinite alternate; }
+    @keyframes t1m1 { to { transform: translate(18%, 20%); } }
+    @keyframes t1m2 { to { transform: translate(-20%, 16%); } }
+    @keyframes t1m3 { to { transform: translate(16%, -18%); } }
+    @keyframes t1m4 { to { transform: translate(-14%, -12%); } }
+
+    .f1-scene {
+      position: absolute; inset: 0; z-index: 2;
+      display: flex; align-items: center;
+      padding: 6% 5% 6% 5%;
+      gap: 14px;
+    }
+
+    /* Left nav pill */
+    .f1-nav {
+      display: flex; align-items: center; gap: 10px;
+      flex-shrink: 0;
+      opacity: 0; transform: translateY(10px);
+      transition: opacity 0.6s ease 0.3s, transform 0.6s ease 0.3s;
+    }
+    .thumb-1.in-view .f1-nav { opacity: 1; transform: translateY(0); }
+
+    .f1-pill {
+      background: rgba(255,255,255,0.38);
+      backdrop-filter: blur(18px) saturate(180%);
+      -webkit-backdrop-filter: blur(18px) saturate(180%);
+      border: 1px solid rgba(255,255,255,0.72);
+      box-shadow: 0 4px 18px rgba(160,120,130,0.10),
+                  inset 0 1.5px 0 rgba(255,255,255,0.88),
+                  inset 0 -1px 0 rgba(255,255,255,0.28);
+      border-radius: 100px;
+      padding: 6px;
+      display: flex; flex-direction: column; align-items: center;
+      gap: 0;
+      position: relative; overflow: hidden;
+    }
+    .f1-pill::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0; height: 50%;
+      background: linear-gradient(180deg, rgba(255,255,255,0.13) 0%, transparent 100%);
+      border-radius: inherit; pointer-events: none; z-index: 0;
+    }
+    .f1-nd {
+      width: 30px; height: 30px; border-radius: 50%;
+      background: rgba(255,255,255,0.55);
+      border: 1px solid rgba(255,255,255,0.62);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.72);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 8px; font-weight: 700; letter-spacing: 0.02em;
+      color: rgba(0,0,0,0.70);
+      flex-shrink: 0; position: relative; z-index: 1;
+    }
+    .f1-sep { width: 1px; height: 11px; background: rgba(160,120,140,0.22); position: relative; z-index: 1; }
+
+    .f1-labels {
+      display: flex; flex-direction: column; gap: 0;
+    }
+    .f1-lbl {
+      height: 30px;
+      display: flex; align-items: center;
+      font-size: 8.5px; font-weight: 600;
+      letter-spacing: 0.13em; text-transform: uppercase;
+      color: rgba(0,0,0,0.62);
+      position: relative; z-index: 1;
+    }
+    /* gap between labels mirrors sep height */
+    .f1-lbl + .f1-lbl { margin-top: 11px; }
+
+    /* Cards display area */
+    .f1-cards-area {
+      flex: 1; position: relative;
+      height: 100%; overflow: hidden;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .f1-crd {
+      position: absolute;
+      width: 68%; border-radius: 24px;
+      opacity: 0; transform: translateY(100%);
+      will-change: transform, opacity;
+      box-shadow: 0 8px 32px rgba(100,70,90,0.20), 0 2px 10px rgba(100,70,90,0.10);
+      background: rgba(255,255,255,0.18);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      padding: 14px;
+      overflow: hidden;
+    }
+    .f1-crd img {
+      display: block; width: 100%; height: auto;
+      border-radius: 14px;
+    }
+    .f1-crd-2 {
+      width: auto;
+      height: 91%;
+      background: rgba(255,255,255,0.22);
+      backdrop-filter: blur(10px) saturate(160%);
+      -webkit-backdrop-filter: blur(10px) saturate(160%);
+      box-shadow: 0 8px 32px rgba(100,70,90,0.20), 0 2px 10px rgba(100,70,90,0.10);
+      padding: 13px;
+      border-radius: 28px;
+      display: flex;
+      overflow: visible;
+      position: relative;
+    }
+    .f1-crd-2::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0; height: 50%;
+      background: linear-gradient(180deg, rgba(255,255,255,0.10) 0%, transparent 100%);
+      border-radius: inherit; pointer-events: none;
+    }
+    .f1-crd-2 img {
+      height: 100%;
+      width: auto;
+      display: block;
+      border-radius: 0;
+    }
+
+    /* ── THUMB-1 LIQUID GLASS LAYERS ── */
+    /* Sweep shimmer overlay — sits between mesh and scene */
+    .t1-sweep {
+      position: absolute; inset: 0; z-index: 1; pointer-events: none;
+      background: linear-gradient(110deg, transparent 30%, rgba(255,255,255,0.07) 50%, transparent 70%);
+      animation: t1Sweep 4.8s ease-in-out infinite;
+    }
+    @keyframes t1Sweep { 0%,100% { transform: translateX(-130%); } 50% { transform: translateX(130%); } }
+
+    /* 10.5s cycle — one card visible at a time, pops up from bottom */
+    .thumb-1.in-view .f1-crd-1 { animation: crdPop1 10.5s var(--ease) 0.4s infinite; }
+    @keyframes crdPop1 {
+      0%         { opacity:0; transform:translateY(100%); }
+      7%         { opacity:1; transform:translateY(0); }
+      27%        { opacity:1; transform:translateY(0); }
+      33%        { opacity:0; transform:translateY(-12%); }
+      33.1%,100% { opacity:0; transform:translateY(100%); }
+    }
+    .thumb-1.in-view .f1-crd-2 { animation: crdPop2 10.5s var(--ease) 0.4s infinite; }
+    @keyframes crdPop2 {
+      0%,33%     { opacity:0; transform:translateY(100%); }
+      40%        { opacity:1; transform:translateY(0); }
+      60%        { opacity:1; transform:translateY(0); }
+      66%        { opacity:0; transform:translateY(-12%); }
+      66.1%,100% { opacity:0; transform:translateY(100%); }
+    }
+    .thumb-1.in-view .f1-crd-3 { animation: crdPop3 10.5s var(--ease) 0.4s infinite; }
+    @keyframes crdPop3 {
+      0%,66%  { opacity:0; transform:translateY(100%); }
+      73%     { opacity:1; transform:translateY(0); }
+      93%     { opacity:1; transform:translateY(0); }
+      99%     { opacity:0; transform:translateY(-12%); }
+      100%    { opacity:0; transform:translateY(100%); }
+    }
+
+    /* Nav dot highlights — synced to card cycle */
+    .thumb-1.in-view .f1-nd-1 { animation: nd1 10.5s var(--ease) 0.4s infinite; }
+    .thumb-1.in-view .f1-nd-2 { animation: nd2 10.5s var(--ease) 0.4s infinite; }
+    .thumb-1.in-view .f1-nd-3 { animation: nd3 10.5s var(--ease) 0.4s infinite; }
+    @keyframes nd1 {
+      0%,33%     { background:#fff; color:rgba(0,0,0,0.92); }
+      33.1%,100% { background:rgba(255,255,255,0.50); color:rgba(0,0,0,0.70); }
+    }
+    @keyframes nd2 {
+      0%,33%     { background:rgba(255,255,255,0.50); color:rgba(0,0,0,0.70); }
+      33.1%,66%  { background:#fff; color:rgba(0,0,0,0.92); }
+      66.1%,100% { background:rgba(255,255,255,0.50); color:rgba(0,0,0,0.70); }
+    }
+    @keyframes nd3 {
+      0%,66%     { background:rgba(255,255,255,0.50); color:rgba(0,0,0,0.70); }
+      66.1%,100% { background:#fff; color:rgba(0,0,0,0.92); }
+    }
+
+    /* Label highlights — synced */
+    .thumb-1.in-view .f1-lbl-1 { animation: lb1 10.5s var(--ease) 0.4s infinite; }
+    .thumb-1.in-view .f1-lbl-2 { animation: lb2 10.5s var(--ease) 0.4s infinite; }
+    .thumb-1.in-view .f1-lbl-3 { animation: lb3 10.5s var(--ease) 0.4s infinite; }
+    @keyframes lb1 {
+      0%,33%     { color:rgba(0,0,0,0.92); }
+      33.1%,100% { color:rgba(0,0,0,0.62); }
+    }
+    @keyframes lb2 {
+      0%,33%     { color:rgba(0,0,0,0.62); }
+      33.1%,66%  { color:rgba(0,0,0,0.92); }
+      66.1%,100% { color:rgba(0,0,0,0.62); }
+    }
+    @keyframes lb3 {
+      0%,66%     { color:rgba(0,0,0,0.62); }
+      66.1%,100% { color:rgba(0,0,0,0.92); }
+    }
+    .thumb-3 {
+      background: #D2D2FF;
+      overflow: hidden;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    /* ── LIQUID GLASS CARD ── */
+    .thumb-lg {
+      background: #FCE8D0;
+      position: relative; overflow: hidden;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .lg-bg { position: absolute; inset: -25%; z-index: 0; }
+    .lg-blob { position: absolute; border-radius: 50%; will-change: transform; }
+    .lg-blob-1 { width: 62%; height: 62%; background: #F1C3B3; top: -8%;  left: -8%;  filter: blur(40px); animation: lgb1 3.5s ease-in-out infinite alternate; }
+    .lg-blob-2 { width: 55%; height: 55%; background: #BFD9D0; top: 5%;   right: -12%; filter: blur(36px); animation: lgb2 4s   ease-in-out infinite alternate; }
+    .lg-blob-3 { width: 80%; height: 80%; background: #FCE8D0; bottom: -10%; left: 0%;  filter: blur(44px); animation: lgb3 3.2s ease-in-out infinite alternate; }
+    .lg-blob-4 { width: 48%; height: 48%; background: #FEDCAF; top: 35%;  left: 30%;  filter: blur(34px); animation: lgb4 4.5s ease-in-out infinite alternate; }
+    @keyframes lgb1 { to { transform: translate(24%, 20%) scale(1.22); } }
+    @keyframes lgb2 { to { transform: translate(-22%, 24%) scale(0.85); } }
+    @keyframes lgb3 { to { transform: translate(20%, -22%) scale(1.18); } }
+    @keyframes lgb4 { to { transform: translate(-18%, 16%) scale(1.15); } }
+
+    .lg-scene {
+      position: relative; z-index: 1;
+      width: 78%; display: flex; flex-direction: column;
+      align-items: center; gap: 7px;
+    }
+
+    /* shared glass base */
+    .lg-glass {
+      background: rgba(255,255,255,0.38);
+      backdrop-filter: blur(20px) saturate(160%);
+      -webkit-backdrop-filter: blur(20px) saturate(160%);
+      border: 1px solid rgba(255,255,255,0.75);
+      box-shadow: 0 6px 24px rgba(180,140,110,0.14),
+                  inset 0 1.5px 0 rgba(255,255,255,0.9),
+                  inset 0 -1px 0 rgba(255,255,255,0.3);
+      position: relative; overflow: hidden;
+    }
+    /* top-edge sheen */
+    .lg-glass::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0; height: 50%;
+      background: linear-gradient(180deg, rgba(255,255,255,0.10) 0%, transparent 100%);
+      border-radius: inherit; pointer-events: none;
+    }
+
+    /* sweep shimmer */
+    .lg-sweep {
+      position: absolute; inset: 0; z-index: 5; pointer-events: none;
+      background: linear-gradient(110deg, transparent 30%, rgba(255,255,255,0.14) 50%, transparent 70%);
+      animation: lgSweep 3.8s ease-in-out infinite;
+    }
+    @keyframes lgSweep { 0%,100% { transform: translateX(-120%); } 50% { transform: translateX(120%); } }
+
+    /* main card */
+    .lg-main-card {
+      width: 100%; border-radius: 22px; padding: 14px 14px 12px;
+      animation: lgFloat 5s ease-in-out infinite;
+    }
+    @keyframes lgFloat { 0%,100% { transform: translateY(0);   } 50% { transform: translateY(-5px); } }
+
+    .lg-logo-row {
+      display: flex; align-items: center; gap: 8px; margin-bottom: 10px;
+    }
+    .lg-apple-icon {
+      width: 26px; height: 26px; border-radius: 8px;
+      background: rgba(255,255,255,0.15);
+      border: 1px solid rgba(255,255,255,0.25);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px; color: rgba(255,255,255,0.9);
+      animation: lgIconGlow 2.5s ease-in-out infinite;
+    }
+    @keyframes lgIconGlow {
+      0%,100% { box-shadow: 0 0 0 0 rgba(255,255,255,0); }
+      50%      { box-shadow: 0 0 12px 3px rgba(200,180,255,0.4); }
+    }
+    .lg-title-stack { display: flex; flex-direction: column; gap: 4px; }
+    .lg-tl { height: 5px; border-radius: 3px; background: rgba(80,60,70,0.35); }
+    .lg-tl.sm { background: rgba(80,60,70,0.2); }
+
+    .lg-divider { width: 100%; height: 1px; background: rgba(150,120,130,0.15); margin: 9px 0; }
+
+    .lg-inner-row { display: flex; gap: 5px; }
+    .lg-inner-card {
+      flex: 1; border-radius: 12px; padding: 7px 8px;
+      background: rgba(255,255,255,0.45);
+      border: 1px solid rgba(255,255,255,0.7);
+      display: flex; flex-direction: column; gap: 4px;
+    }
+    .lg-dot { width: 14px; height: 14px; border-radius: 50%; background: rgba(180,140,150,0.3); }
+    .lg-iline { height: 4px; border-radius: 2px; background: rgba(120,100,110,0.18); }
+
+    /* pills row */
+    .lg-pill-row { display: flex; gap: 6px; width: 100%; }
+    .lg-pill {
+      border-radius: 100px; padding: 5px 11px;
+      font-size: 8.5px; font-weight: 600; letter-spacing: 0.07em;
+      color: rgba(80,65,75,0.75); white-space: nowrap;
+    }
+    .lg-pill-1 { animation: lgPf1 3.8s ease-in-out infinite alternate; }
+    .lg-pill-2 { animation: lgPf2 4.4s ease-in-out infinite alternate; }
+    .lg-pill-3 { animation: lgPf3 3.2s ease-in-out infinite alternate; align-self: flex-end; margin-left: auto; }
+    @keyframes lgPf1 { from { transform: translateY(0);  } to { transform: translateY(-4px); } }
+    @keyframes lgPf2 { from { transform: translateY(-3px); } to { transform: translateY(3px);  } }
+    @keyframes lgPf3 { from { transform: translateY(0);  } to { transform: translateY(-5px); } }
+
+    /* ── CARD 3 — AMAZON MUSIC IMAGES ── */
+
+    .t3-imgs {
+      position: absolute; inset: 0; z-index: 3;
+      display: flex; align-items: center; justify-content: center;
+      gap: 14px; padding: 0 16px;
+    }
+    /* Bare screens — no white outline, fill or top-edge sheen. */
+    .t3-img-back, .t3-img-front {
+      flex-shrink: 0; opacity: 0;
+      border-radius: 30px; overflow: hidden;
+      position: relative;
+    }
+    .t3-img-back  { width: 34%; }
+    .t3-img-front { width: 34%; }
+    .t3-imgs img  { display: block; width: 100%; }
+
+    /* One-shot entrance, then static — nothing loops on the card. */
+    .t3-img-back  { transform: translateY(calc(-28% - 60px)); }
+    .t3-img-front { transform: translateY(calc(28% + 60px)); }
+    .t3-img-back, .t3-img-front {
+      filter: drop-shadow(0 10px 20px rgba(100,148,172,0.18));
+      transition: opacity 0.85s var(--ease), transform 0.85s var(--ease);
+    }
+    .thumb-3.in-view .t3-img-back  { opacity: 1; transform: translateY(-28%); transition-delay: 0.20s; }
+    .thumb-3.in-view .t3-img-front { opacity: 1; transform: translateY(28%);  transition-delay: 0.45s; }
     @media (prefers-reduced-motion: reduce) {
-      .js-reveal .cs-section,
-      .js-reveal .feature,
-      .js-reveal .shot-row .shot {
-        opacity: 1; transform: none; transition: none;
-      }
+      .t3-img-back, .t3-img-front { transition: none; }
+      .t3-img-back  { transform: translateY(-28%); opacity: 1; }
+      .t3-img-front { transform: translateY(28%);  opacity: 1; }
+    }
+
+    /* ── NEXT UP ── */
+    .next-up-section {
+      background: #FAF9F7;
+      border-top: 1px solid var(--border);
+      /* no side padding — the label and grid carry the column's own margins */
+      padding: 64px 0 88px;
+    }
+    /* same geometry as .cs-content, so the cards line up under the copy */
+    .next-up-label,
+    .next-up-grid {
+      max-width: 840px;
+      margin-left: max(325px, calc((100% - 840px) / 2 + var(--nudge)));
+      margin-right: 20px;
+    }
+    .next-up-label {
+      text-align: center;
+      font-size: 12px; font-weight: 600;
+      letter-spacing: 0.16em; text-transform: uppercase;
+      color: var(--gray);
+      margin-bottom: 40px;
+    }
+    .next-up-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 32px;
+    }
+    .next-up-card {
+      display: block;
+      text-decoration: none;
+      color: inherit;
+      cursor: pointer;
+    }
+    /* No background here: this rule is (0,2,0) and would beat .thumb-2 /
+       .thumb-3, blanking each card's own colour. It used to be harmless
+       because the colour came from child blob divs painted on top. */
+    .next-up-grid .work-thumb {
+      border-radius: 0;
+      border: 1px solid var(--border);
+      margin-bottom: 18px;
+      transition: transform 0.4s var(--ease);
+    }
+    .next-up-card:hover .work-thumb {
+      transform: translateY(-3px);
+    }
+    .next-up-title {
+      font-family: 'Lora', serif;
+      font-size: 17.1px; font-weight: 500;
+      letter-spacing: -0.01em;
+      color: var(--black);
+    }
+    @media (max-width: 640px) {
+      .next-up-grid { grid-template-columns: 1fr; }
     }
 
     /* ── FOOTER ── */
@@ -438,7 +1188,10 @@
     @media (prefers-reduced-motion: reduce) {
       .footer-reveal, .footer-veil { display: none; }
     }
-    .footer-inner { max-width: 1000px; margin: 0 auto; }
+    .footer-inner {
+      max-width: 1000px;
+      margin: 0 auto;
+    }
     .footer-heading {
       font-family: 'Lora', serif;
       font-size: clamp(28px, 3.2vw, 44px);
@@ -459,7 +1212,10 @@
       white-space: nowrap;
       border: 0;
     }
-    .footer-word { color: var(--footer-accent); font-family: 'Inter', sans-serif; }
+    .footer-word {
+      color: var(--footer-accent);
+      font-family: 'Inter', sans-serif;
+    }
     .footer-caret {
       display: inline-block;
       color: var(--footer-accent);
@@ -468,450 +1224,115 @@
       margin-left: 1px;
     }
     @keyframes caretBlink { 0%,100% { opacity: 1; } 50% { opacity: 0; } }
-    @media (prefers-reduced-motion: reduce) { .footer-caret { animation: none; } }
-    .footer-main {
-      display: flex; align-items: flex-start; justify-content: space-between;
-      gap: 40px; margin-bottom: 56px;
+    @media (prefers-reduced-motion: reduce) {
+      .footer-caret { animation: none; }
     }
-    .footer-left { display: flex; flex-direction: column; }
-    .footer-links { display: flex; flex-direction: column; gap: 6px; }
+    .footer-main {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 40px;
+      margin-bottom: 56px;
+    }
+    .footer-left {
+      display: flex;
+      flex-direction: column;
+    }
+    .footer-links {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
     .footer-link {
-      font-size: 14px; font-weight: 400;
-      color: var(--gray); text-decoration: none;
+      font-size: 14px;
+      font-weight: 400;
+      color: var(--gray);
+      text-decoration: none;
       transition: color 0.18s;
     }
     .footer-link:hover { color: var(--black); }
     .footer-nav {
-      display: flex; flex-direction: column; align-items: flex-end;
-      gap: 8px; padding-top: 8px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 8px;
+      padding-top: 8px;
     }
     .footer-nav-link {
-      font-size: 13px; font-weight: 400;
-      color: var(--gray); text-decoration: none;
+      font-size: 13px;
+      font-weight: 400;
+      color: var(--gray);
+      text-decoration: none;
       transition: color 0.18s;
     }
     .footer-nav-link:hover { color: var(--black); }
     .footer-bottom {
-      display: flex; align-items: center; justify-content: space-between;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
       border-top: 1px solid var(--border);
       padding-top: 24px;
     }
-    .footer-copy { font-size: 12px; color: var(--gray); }
-
+    .footer-copy {
+      font-size: 12px;
+      color: var(--gray);
+    }
+  
     /* ── MOBILE ──────────────────────────────────────────────
-       The rail has nowhere to live on a phone, so it goes away and
-       everything collapses to the page's own 20px gutter. */
+       Scoped entirely to narrow viewports; desktop is untouched. */
+    @media (max-width: 820px) {
+      nav { padding: 0 18px; }
+      .nav-links { gap: 18px; }
+      .nav-links a { font-size: 13px; }
 
-    /* ── BERKELEY WORDMARK HERO ──
-       Replaces the dashed hero placeholder. Same treatment as the card
-       thumbnail on the landing page: Berkeley Blue ground, and Sorts Mill
-       Goudy (a revival of the Californian face Berkeley Oldstyle was cut
-       from) so it reads as the university's type without standing in for
-       the licensed wordmark. */
-    .cs-hero--bit {
-      background: var(--orange);
-      border: none;
+      /* the sticky "on this page" rail needs a gutter a phone doesn't have */
+      .cs-sidebar { display: none; }
+      .cs-layout {
+        max-width: 100%;
+        padding: 57px 20px 0;
+      }
+      .cs-content,
+      .next-up-label,
+      .next-up-grid {
+        max-width: 100%;
+        margin-left: 0;
+        margin-right: 0;
+      }
+      .next-up-section { padding: 48px 20px 64px; }
+
+      /* every multi-column block becomes a single stack */
+      .cs-synthesis,
+      .cs-impact-grid,
+      .cs-design-row,
+      .cs-diff-pair,
+      .owned-grid,
+      .opp-grid,
+      .next-up-grid,
+      .cs-persona-grid,
+      .cs-two-col { grid-template-columns: 1fr; }
+      .finding-row { grid-template-columns: 22px 1fr; }
+
+      /* ── HERO + METADATA ON A PHONE ──
+         Matched to the Berkeley IT study, which reads far better at this
+         width: the hero runs edge to edge instead of sitting inside the
+         20px gutter, and the four fields become a plain two-up label/value
+         grid rather than four bordered cards stacked down the screen. */
+      .cs-hero-img {
+        margin-left: -20px;
+        margin-right: -20px;
+        width: calc(100% + 40px);
+      }
+      .cs-overview-grid { grid-template-columns: 1fr 1fr; column-gap: 24px; }
+
+
+      /* oversized display numerals shrink to fit a 390px screen */
+      .cs-metric-num { font-size: 39.6px; }
+      .research-stat-num { font-size: 32.4px; }
+
+      img, video { max-width: 100%; height: auto; }
+
+      .site-footer { padding: 56px 20px 40px; }
     }
-    .bit-wordmark {
-      font-family: 'Sorts Mill Goudy', Georgia, serif;
-      font-size: clamp(34px, 5vw, 62px);
-      font-weight: 400;
-      letter-spacing: 0.005em;
-      line-height: 1;
-      color: #fff;
-      text-align: center;
-      padding: 0 24px;
-    }
-
-    /* ── PROJECT BLOCKS — locked visual left, copy right ── */
-    .proj {
-      display: grid;
-      grid-template-columns: 1.25fr 1fr;
-      gap: 40px;
-      align-items: center;
-      margin-top: 56px;
-    }
-    .proj:first-of-type { margin-top: 40px; }
-    .proj-copy .proj-title {
-      font-family: 'Lora', Georgia, serif;
-      font-size: 21px;
-      font-weight: 600;
-      letter-spacing: -0.01em;
-      line-height: 1.3;
-      color: var(--ink);
-      margin-bottom: 10px;
-    }
-    /* two selectors, or `.cs-section p` takes the colour and the width cap */
-    .cs-body .proj-copy p.proj-body {
-      font-size: 14px;
-      line-height: 1.7;
-      color: var(--gray);
-      max-width: none;
-      margin: 0;
-    }
-
-    /* The work ships behind a Berkeley login, so there is nothing to
-       screenshot. Rather than leave a dashed box, the panel says so. */
-    .locked {
-      position: relative;
-      aspect-ratio: 4 / 3;
-      border: 1px solid var(--border);
-      border-radius: 3px;
-      background:
-        radial-gradient(120% 90% at 50% 12%, rgba(59,126,161,0.10) 0%, rgba(59,126,161,0) 62%),
-        linear-gradient(160deg, #F4F6F9 0%, #EBEFF4 100%);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 14px;
-    }
-    /* the one surface with a mockup: the screen is blurred in Figma, so the
-       padlock moves to a corner badge rather than sitting centre-stage */
-    .locked--shot {
-      background: #F5F5F5;
-      padding: 0;
-      overflow: hidden;
-    }
-    .locked--shot img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-    }
-    .locked-badge {
-      position: absolute;
-      top: 12px; right: 12px;
-      width: 30px; height: 30px;
-      border-radius: 7px;
-      background: rgba(255,255,255,0.92);
-      border: 1px solid #DCE3EA;
-      display: flex; align-items: center; justify-content: center;
-      color: var(--accent);
-    }
-    .locked-lock {
-      width: 46px; height: 46px;
-      border-radius: 50%;
-      background: #FFFFFF;
-      border: 1px solid #DCE3EA;
-      display: flex; align-items: center; justify-content: center;
-      color: var(--accent);
-    }
-    .cs-body .locked p.locked-note {
-      font-family: 'Inter', system-ui, sans-serif;
-      font-size: 11px;
-      font-weight: 600;
-      letter-spacing: 0.10em;
-      text-transform: uppercase;
-      color: #8A97A5;
-      max-width: none;
-      margin: 0;
-      text-align: center;
-      padding: 0 20px;
-    }
-
-    /* ── CLOSING BLOCK ── */
-    .more-info {
-      margin-top: 96px;
-    }
-    .cs-body .more-info p.more-body {
-      font-size: 15px;
-      line-height: 1.75;
-      color: #3D3D3D;
-      margin-bottom: 22px;
-    }
-    .more-cta {
-      display: inline-block;
-      font-size: 14px;
-      font-weight: 500;
-      color: var(--orange);
-      text-decoration: none;
-      border-bottom: 1px solid rgba(0,50,98,0.35);
-      padding-bottom: 2px;
-      transition: border-color 0.2s var(--ease);
-    }
-    .more-cta:hover { border-bottom-color: var(--orange); }
-
-
-    /* ── NEXT UP ──
-       Lifted wholesale from the other case studies so the four pages end
-       the same way: the thumbnails are the same CSS scenes, not stills. */
-
-
-    .work-thumb {
-      width: 100%;
-      aspect-ratio: 16 / 11;
-      border-radius: 0;
-      overflow: hidden;
-      margin-bottom: 22px;
-      position: relative;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-
-    /* ── placeholder thumbnail backgrounds — pastel palette ── */
-
-    /* ── THUMB 1 — warm ivory/sage gradient (matches Research quote card) ── */
-    .thumb-1 {
-      background: linear-gradient(135deg, #BCD8D8 0%, #C0C8E8 52%, #EDE0D4 100%);
-      position: relative;
-      overflow: hidden;
-    }
-
-    .thumb-1-mesh {
-      display: none;
-    }
-
-    .t1b { position: absolute; border-radius: 50%; will-change: transform; }
-
-    .t1b-1 { width: 70%; height: 70%; background: #F5EDE6; top: -10%; left: -10%; animation: t1m1 3.5s ease-in-out infinite alternate; }
-
-    .t1b-2 { width: 60%; height: 60%; background: #DDD0EE; top: 0%; right: -15%; animation: t1m2 4.5s ease-in-out infinite alternate; }
-
-    .t1b-3 { width: 65%; height: 65%; background: #C8C0E8; bottom: -15%; left: 15%; animation: t1m3 4.0s ease-in-out infinite alternate; }
-
-    .t1b-4 { width: 55%; height: 55%; background: #FAF4F0; top: 20%; left: 25%; animation: t1m4 5.0s ease-in-out infinite alternate; }
-
-    @keyframes t1m1 { to { transform: translate(18%, 20%); } }
-
-    @keyframes t1m2 { to { transform: translate(-20%, 16%); } }
-
-    @keyframes t1m3 { to { transform: translate(16%, -18%); } }
-
-    @keyframes t1m4 { to { transform: translate(-14%, -12%); } }
-
-
-    .f1-scene {
-      position: absolute; inset: 0; z-index: 2;
-      display: flex; align-items: center;
-      padding: 6% 5% 6% 5%;
-      gap: 14px;
-    }
-
-
-    /* Left nav pill */
-    .f1-nav {
-      display: flex; align-items: center; gap: 10px;
-      flex-shrink: 0;
-      opacity: 0; transform: translateY(10px);
-      transition: opacity 0.6s ease 0.3s, transform 0.6s ease 0.3s;
-    }
-
-    .thumb-1.in-view .f1-nav { opacity: 1; transform: translateY(0); }
-
-
-    .f1-pill {
-      background: rgba(255,255,255,0.38);
-      backdrop-filter: blur(18px) saturate(180%);
-      -webkit-backdrop-filter: blur(18px) saturate(180%);
-      border: 1px solid rgba(255,255,255,0.72);
-      box-shadow: 0 4px 18px rgba(160,120,130,0.10),
-                  inset 0 1.5px 0 rgba(255,255,255,0.88),
-                  inset 0 -1px 0 rgba(255,255,255,0.28);
-      border-radius: 100px;
-      padding: 6px;
-      display: flex; flex-direction: column; align-items: center;
-      gap: 0;
-      position: relative; overflow: hidden;
-    }
-
-    .f1-pill::before {
-      content: '';
-      position: absolute; top: 0; left: 0; right: 0; height: 50%;
-      background: linear-gradient(180deg, rgba(255,255,255,0.13) 0%, transparent 100%);
-      border-radius: inherit; pointer-events: none; z-index: 0;
-    }
-
-    .f1-nd {
-      width: 30px; height: 30px; border-radius: 50%;
-      background: rgba(255,255,255,0.55);
-      border: 1px solid rgba(255,255,255,0.62);
-      box-shadow: inset 0 1px 0 rgba(255,255,255,0.72);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 8px; font-weight: 700; letter-spacing: 0.02em;
-      color: rgba(0,0,0,0.70);
-      flex-shrink: 0; position: relative; z-index: 1;
-    }
-
-    .f1-sep { width: 1px; height: 11px; background: rgba(160,120,140,0.22); position: relative; z-index: 1; }
-
-
-    .f1-labels {
-      display: flex; flex-direction: column; gap: 0;
-    }
-
-    .f1-lbl {
-      height: 30px;
-      display: flex; align-items: center;
-      font-size: 8.5px; font-weight: 600;
-      letter-spacing: 0.13em; text-transform: uppercase;
-      color: rgba(0,0,0,0.62);
-      position: relative; z-index: 1;
-    }
-
-    /* gap between labels mirrors sep height */
-    .f1-lbl + .f1-lbl { margin-top: 11px; }
-
-
-    /* Cards display area */
-    .f1-cards-area {
-      flex: 1; position: relative;
-      height: 100%; overflow: hidden;
-      display: flex; align-items: center; justify-content: center;
-    }
-
-    .f1-crd {
-      position: absolute;
-      width: 68%; border-radius: 24px;
-      opacity: 0; transform: translateY(100%);
-      will-change: transform, opacity;
-      box-shadow: 0 8px 32px rgba(100,70,90,0.20), 0 2px 10px rgba(100,70,90,0.10);
-      background: rgba(255,255,255,0.18);
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
-      padding: 14px;
-      overflow: hidden;
-    }
-
-    .f1-crd img {
-      display: block; width: 100%; height: auto;
-      border-radius: 14px;
-    }
-
-    /* Both keep the Symptom card's glass treatment from .f1-crd above; they
-       only sit smaller in the frame. Width drives it — height follows each
-       image's own ratio, and land1 is portrait, so 68% would overrun. */
-    .f1-crd-1 { width: 56%; }
-
-    /* land1 is a light bit of UI — a short form — so it carries less and
-       doesn't need the same presence as the meal card. */
-    .f1-crd-3 { width: 44%; }
-
-
-    .f1-crd-2 {
-      width: auto;
-      height: 91%;
-      background: rgba(255,255,255,0.22);
-      backdrop-filter: blur(10px) saturate(160%);
-      -webkit-backdrop-filter: blur(10px) saturate(160%);
-      box-shadow: 0 8px 32px rgba(100,70,90,0.20), 0 2px 10px rgba(100,70,90,0.10);
-      padding: 13px;
-      border-radius: 28px;
-      display: flex;
-      overflow: visible;
-      position: relative;
-    }
-
-    .f1-crd-2::before {
-      content: '';
-      position: absolute; top: 0; left: 0; right: 0; height: 50%;
-      background: linear-gradient(180deg, rgba(255,255,255,0.10) 0%, transparent 100%);
-      border-radius: inherit; pointer-events: none;
-    }
-
-    .f1-crd-2 img {
-      height: 100%;
-      width: auto;
-      display: block;
-      border-radius: 0;
-    }
-
-
-    /* ── THUMB-1 LIQUID GLASS LAYERS ── */
-    /* Sweep shimmer overlay — sits between mesh and scene */
-    .t1-sweep {
-      position: absolute; inset: 0; z-index: 1; pointer-events: none;
-      background: linear-gradient(110deg, transparent 30%, rgba(255,255,255,0.07) 50%, transparent 70%);
-      animation: t1Sweep 4.8s ease-in-out infinite;
-    }
-
-    @keyframes t1Sweep { 0%,100% { transform: translateX(-130%); } 50% { transform: translateX(130%); } }
-
-
-    /* 10.5s cycle — one card visible at a time, pops up from bottom */
-    .thumb-1.in-view .f1-crd-1 { animation: crdPop1 10.5s var(--ease) 0.4s infinite; }
-
-    .thumb-1.in-view .f1-crd-2 { animation: crdPop2 10.5s var(--ease) 0.4s infinite; }
-
-    .thumb-1.in-view .f1-crd-3 { animation: crdPop3 10.5s var(--ease) 0.4s infinite; }
-
-
-    /* Nav dot highlights — synced to card cycle */
-    .thumb-1.in-view .f1-nd-1 { animation: nd1 10.5s var(--ease) 0.4s infinite; }
-
-    .thumb-1.in-view .f1-nd-2 { animation: nd2 10.5s var(--ease) 0.4s infinite; }
-
-    .thumb-1.in-view .f1-nd-3 { animation: nd3 10.5s var(--ease) 0.4s infinite; }
-
-
-    /* Label highlights — synced */
-    .thumb-1.in-view .f1-lbl-1 { animation: lb1 10.5s var(--ease) 0.4s infinite; }
-
-    .thumb-1.in-view .f1-lbl-2 { animation: lb2 10.5s var(--ease) 0.4s infinite; }
-
-    .thumb-1.in-view .f1-lbl-3 { animation: lb3 10.5s var(--ease) 0.4s infinite; }
-
-
-    /* ── NEXT UP ── */
-    .next-up-section {
-      background: #FAF9F7;
-      border-top: 1px solid var(--border);
-      /* no side padding — the label and grid carry the column's own margins */
-      padding: 64px 0 88px;
-    }
-
-    /* same geometry as .cs-content, so the cards line up under the copy */
-    .next-up-label,
-    .next-up-grid {
-      max-width: 840px;
-      margin-left: max(325px, calc((100% - 840px) / 2 + var(--nudge)));
-      margin-right: 20px;
-    }
-
-    .next-up-label {
-      text-align: center;
-      font-size: 12px; font-weight: 600;
-      letter-spacing: 0.16em; text-transform: uppercase;
-      color: var(--gray);
-      margin-bottom: 40px;
-    }
-
-    .next-up-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 32px;
-    }
-
-    .next-up-card {
-      display: block;
-      text-decoration: none;
-      color: inherit;
-      cursor: pointer;
-    }
-
-    /* No background here: this rule is (0,2,0) and would beat .thumb-2 /
-       .thumb-3, blanking each card's own colour. It used to be harmless
-       because the colour came from child blob divs painted on top. */
-    .next-up-grid .work-thumb {
-      border-radius: 0;
-      border: 1px solid var(--border);
-      margin-bottom: 18px;
-      transition: transform 0.4s var(--ease);
-    }
-
-    .next-up-card:hover .work-thumb {
-      transform: translateY(-3px);
-    }
-
-    .next-up-title {
-      font-family: 'Lora', serif;
-      font-size: 17.1px; font-weight: 500;
-      letter-spacing: -0.01em;
-      color: var(--black);
-    }
-
 
     /* ── THUMB-2 (Carbon Sustain) — ported for the Next Up card ── */
     /* Solid, not a mesh: the old pale-blue/cream blobs were the same family
@@ -930,7 +1351,6 @@
       align-items: center;
       justify-content: center;
     }
-
     /* carbonproper is drawn at the card's own 16/11, so it fills edge to edge
        — no inset, no side gaps, nothing cropped. */
     /* Sits low and runs off the bottom edge, so the dashboard reads as tucked
@@ -941,13 +1361,10 @@
       display: flex; align-items: flex-start; justify-content: center;
       padding: 24% 0 0;
     }
-
     .t2-frame-enter { width: 86%; flex-shrink: 0; }
-
     .thumb-2-img-wrap img {
       display: block; width: 100%; height: auto;
     }
-
     .t2-glass-frame {
       width: 100%;
       height: auto;
@@ -956,132 +1373,110 @@
       overflow: hidden;
       position: relative;
     }
-
     .t2-glass-frame::before {
       content: '';
       position: absolute; top: 0; left: 0; right: 0; height: 35%;
       background: linear-gradient(180deg, rgba(255,255,255,0.08) 0%, transparent 100%);
       border-radius: inherit; pointer-events: none; z-index: 1;
     }
-
     .t2-glass-frame img {
       display: block;
       width: 100%; height: auto;
       border-radius: inherit;
       position: relative;
     }
-
     .thumb-2.in-view .t2-frame-enter { opacity: 1; }
-
     .t2-frame-enter {
       opacity: 0;
       transition: opacity 0.85s var(--ease) 0.25s;
     }
 
-
-    /* The Flourish thumb's phone cards, nav dots and labels are driven by
-       these; without them the card animations never run and the scene
-       renders as a bare gradient. */
-    @keyframes crdPop1 {
-      0%         { opacity:0; transform:translateY(100%); }
-      7%         { opacity:1; transform:translateY(0); }
-      27%        { opacity:1; transform:translateY(0); }
-      33%        { opacity:0; transform:translateY(-12%); }
-      33.1%,100% { opacity:0; transform:translateY(100%); }
+    /* ── WHAT I OWNED — card grid ── */
+    .owned-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-top: 32px;
     }
-    @keyframes crdPop2 {
-      0%,33%     { opacity:0; transform:translateY(100%); }
-      40%        { opacity:1; transform:translateY(0); }
-      60%        { opacity:1; transform:translateY(0); }
-      66%        { opacity:0; transform:translateY(-12%); }
-      66.1%,100% { opacity:0; transform:translateY(100%); }
+    /* white paper on the warm cream page — #FAFAFA was within 3 points of the
+       #faf9f7 background, so the cards had no edge. White reads as a lifted
+       surface and the warm-grey hairline gives it a definite boundary. */
+    .owned-card {
+      background: #FFFFFF;
+      border: 1px solid #E5E1D9;
+      border-radius: 0;
+      padding: 26px 28px 28px;
     }
-    @keyframes crdPop3 {
-      0%,66%  { opacity:0; transform:translateY(100%); }
-      73%     { opacity:1; transform:translateY(0); }
-      93%     { opacity:1; transform:translateY(0); }
-      99%     { opacity:0; transform:translateY(-12%); }
-      100%    { opacity:0; transform:translateY(100%); }
+    /* the third card runs the full width, mirroring the reference layout */
+    /* was there to stop an orphaned third card sitting half-width; with two
+       cards it wrongly made the second span the full row instead */
+    /* One icon treatment for both card sets: a cream chip in the top-left.
+       On a white card a white chip would disappear, so the cream sits on the
+       chip rather than behind it. */
+    .owned-icon {
+      display: block;
+      color: #0F0F0F;
+      background: #F3F1EC;
+      border-radius: 9px;
+      padding: 8px;
+      box-sizing: content-box;
+      width: 18px; height: 18px;
+      margin-bottom: 22px;
     }
-    @keyframes lb1 {
-      0%,33%     { color:rgba(0,0,0,0.92); }
-      33.1%,100% { color:rgba(0,0,0,0.62); }
+    /* Lora at 400 — the same weight and tracking as .cs-title, so the cards
+       sit in the page's existing type rather than introducing a heavier cut */
+    .owned-title {
+      font-family: 'Lora', serif;
+      font-size: 16.6px;
+      font-weight: 400;
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+      color: var(--black);
+      margin-bottom: 9px;
     }
-    @keyframes lb2 {
-      0%,33%     { color:rgba(0,0,0,0.62); }
-      33.1%,66%  { color:rgba(0,0,0,0.92); }
-      66.1%,100% { color:rgba(0,0,0,0.62); }
-    }
-    @keyframes lb3 {
-      0%,66%     { color:rgba(0,0,0,0.62); }
-      66.1%,100% { color:rgba(0,0,0,0.92); }
-    }
-    @keyframes nd1 {
-      0%,33%     { background:#fff; color:rgba(0,0,0,0.92); }
-      33.1%,100% { background:rgba(255,255,255,0.50); color:rgba(0,0,0,0.70); }
-    }
-    @keyframes nd2 {
-      0%,33%     { background:rgba(255,255,255,0.50); color:rgba(0,0,0,0.70); }
-      33.1%,66%  { background:#fff; color:rgba(0,0,0,0.92); }
-      66.1%,100% { background:rgba(255,255,255,0.50); color:rgba(0,0,0,0.70); }
-    }
-    @keyframes nd3 {
-      0%,66%     { background:rgba(255,255,255,0.50); color:rgba(0,0,0,0.70); }
-      66.1%,100% { background:#fff; color:rgba(0,0,0,0.92); }
+    .owned-card .owned-body {
+      font-size: 12px;
+      line-height: 1.6;
+      color: #6E6E6E;
+      max-width: 42ch;
     }
 
-    @media (max-width: 900px) {
-      nav { padding: 0 18px; }
-      .nav-links { gap: 18px; }
-      .nav-links a { font-size: 13px; }
-
-      .cs-rail { display: none; }
-      .cs-title {
-        max-width: none;
-        margin-left: 0;
-        margin-right: 0;
-        padding: 0 20px;
-        /* the nav is fixed and 57px tall — 40px ran the first line under it */
-        margin-top: 105px;
-      }
-      .cs-hero {
-        max-width: none;
-        margin-left: 0;
-        margin-right: 0;
-        aspect-ratio: 1.9;
-      }
-      .cs-body {
-        max-width: none;
-        margin-left: 0;
-        margin-right: 0;
-        padding: 16px 20px 80px;
-      }
-      .cs-meta-grid { grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 64px; }
-      .next-up-label,
-      .next-up-grid { max-width: 100%; margin-left: 0; margin-right: 0; }
-      .next-up-section { padding: 48px 20px 64px; }
-      .next-up-grid { grid-template-columns: 1fr; }
-      .proj { grid-template-columns: 1fr; gap: 22px; margin-top: 44px; }
-      .cs-section { margin-bottom: 72px; }
-      /* one card per row on a phone; the shot stops bleeding sideways */
-      .feature-grid { grid-template-columns: 1fr; gap: 16px; }
-      /* three across is unreadable on a phone — stack to two */
-      .shot-row { grid-template-columns: 1fr 1fr; gap: 10px; }
-      .stat-row { grid-template-columns: 1fr; gap: 32px; }
-      .lim-grid { grid-template-columns: 1fr; }
-      .shot--half { max-width: none; }
-      /* cards are full-width here, so a sideways entrance would push the
-         page 10px wider mid-animation and flash a scrollbar — rise instead */
-      .js-reveal .feature,
-      .js-reveal .feature:nth-child(even) { transform: translateY(20px); }
-      .js-reveal .feature.revealed { transform: none; }
-      .feature { padding: 30px 24px 0; }
-      .feature .shot { margin: 24px -22px 0 22px; min-height: 160px; }
-      .shot--square { max-width: 100%; }
-      .site-footer { padding: 56px 20px 40px; }
-      img, video { max-width: 100%; height: auto; }
+    /* ── OPPORTUNITY — same card treatment as What I Owned ── */
+    /* three across, as the original graphic was — the cards borrow the
+       What I Owned styling but not its full-width last child */
+    .opp-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-top: 32px;
     }
-  
+    /* Opportunity cards follow the current Figma frame: the sand #F0E9E1 fill
+       is gone, the cards are now a hairline-outlined box with an icon chip.
+       Kept as real text rather than a flattened export so it stays selectable
+       and readable to a screen reader — the frame is type, not imagery.
+       The frame draws the box on the page cream with a cool #E9EAEB stroke;
+       here it takes the same white ground and warm hairline as What I Owned
+       so the two card sets read as one system and neither dissolves into the
+       #faf9f7 page.
+       Type and padding are deliberately NOT overridden — the cards inherit
+       .owned-card / .owned-title / .owned-body wholesale so the two sets are
+       typographically identical. The chip below is the only override left. */
+
+    /* ── SCROLL REVEALS ──
+       Gated behind .js-reveal, which is only set when the browser supports
+       IntersectionObserver and the visitor hasn't asked for reduced motion.
+       Without that class nothing is hidden, so the page degrades to plain
+       static content rather than a blank column. */
+    .js-reveal .cs-section {
+      opacity: 0;
+      transform: translateY(16px);
+      transition: opacity 0.65s var(--ease), transform 0.65s var(--ease);
+    }
+    .js-reveal .cs-section.revealed { opacity: 1; transform: none; }
+    @media (prefers-reduced-motion: reduce) {
+      .js-reveal .cs-section { opacity: 1; transform: none; transition: none; }
+    }
+
     /* ── SHARED HEADER + FOOTER ──
        Matches the landing page exactly, so every page wears the same chrome. */
     nav {
@@ -1115,26 +1510,329 @@
     }
 
     /* contents rail: same width as the landing page sidebar, text on the same 28px edge */
-    .cs-rail { padding-left: 28px; }
+    .cs-sidebar { padding-left: 28px; }
     /* its opaque box stops short of the (now further left) column; the list itself only reaches ~180px */
-    .cs-rail { width: 300px; }
-    /* no divider between the contents and the case study */
-    .cs-rail::after { display: none; }
-    /* the wider rail would sit over the footer's left edge, so the footer rides above it */
-    .site-footer { position: relative; z-index: 60; }
-    /* title sits under the hero in a plain sans, like emmiwu.com/openai;
-       the hero takes over the gap below the nav the title used to leave */
-    .cs-hero { margin-top: 105px; scroll-margin-top: 90px; }
+    .cs-sidebar { width: 300px; }
+    /* title sits under the hero image in a plain sans, like emmiwu.com/openai */
     .cs-title.cs-title-under {
       font-family: 'Inter', system-ui, sans-serif;
       font-size: 18px; font-weight: 500;
       letter-spacing: -0.01em; line-height: 1.3;
-      color: var(--ink);
-      margin-top: 18px;
-      margin-bottom: 24px;
+      color: var(--black);
+      margin: 18px 0 0;
     }
-    /* with the intro gone, the details row sits the same 24px under the title as the other studies */
-    .cs-body { padding-top: 0; }
+    .cs-title.cs-title-under { margin-bottom: 24px; }
+    /* no divider between the contents and the case study */
+    .cs-sidebar::after { display: none; }
+    /* the wider rail would sit over the footer's left edge, so the footer rides above it */
+    .site-footer { position: relative; z-index: 60; }
+    /* ── SIZING LIKE emmiwu.com/openai ──
+       Her page is five equal columns (24px page margin, 12px gaps): the
+       contents list sits in the first, the case study spans the next three,
+       the fifth stays empty. It scales with the window instead of capping. */
+    :root {
+      --col: calc((100vw - 96px) / 5);
+      /* her three-column span, taken in 5% so the hero sits a touch smaller */
+      --cs-w: calc((var(--col) * 3 + 24px) * 0.95);
+    }
+    .cs-content,
+    .next-up-label,
+    .next-up-grid {
+      max-width: none;
+      width: var(--cs-w);
+      /* Centred on the window it read as left-heavy next to the contents list,
+         so it centres in the space between the end of that list (its longest
+         entry ends 180px in) and the right edge: equal air on both sides. */
+      margin-left: calc((100vw + 180px - var(--cs-w)) / 2);
+      margin-right: 0;
+    }
+    .cs-sidebar { width: calc(var(--col) + 36px); }
+    /* hero starts 80px from the top of the window, as hers does */
+    .cs-main { padding-top: 23px; }
+    .cs-title.cs-title-under { margin-top: 24px; }
+    /* hero is the landing-page cover, just bigger: same layers, same 16:11 frame */
+    .cs-hero-img.cs-hero-fl { aspect-ratio: 1744 / 1176; margin-bottom: 0; }
+    /* Figma frame is now 1176 tall, so the tops are re-based on that height
+       (the phone and edit card simply run off the bottom edge) */
+    /* phone is a 2x, uncropped export now (matte pair), so it's placed by its own bounds */
+    .cs-hero-fl .fl-phone { left: 28.068%; top: 10.927%; width: 43.807%; }
+    /* the phone and both cards sit a touch smaller than the Figma frame, scaled
+       together around the centre so the composition holds; the gradient stays full */
+    /* nudged down 7.5% (88px of the 1176 frame) so the bottom edge crops the
+       phone and the meal-type card at the same point as the full-size frame */
+    /* the phone is live: the screen recording plays inside the Figma bezel
+       (584 x 1400 at 580,170; white, 48 top corners, screen inset 12).
+       Sizes are in Figma frame units: 1u = hero width / 1744. */
+    .cs-hero-fl { container-type: inline-size; --u: calc(100cqw / 1744); }
+    .cs-hero-fl .fl-phonelive {
+      left: 33.257%; top: 14.456%; width: 33.486%; height: 119.048%;
+      background: #fff; overflow: hidden;
+      border-radius: calc(48 * var(--u)) calc(48 * var(--u)) 0 0;
+      box-shadow: 0 calc(48 * var(--u)) calc(120 * var(--u)) rgba(8, 40, 42, 0.22),
+                  0 calc(4 * var(--u)) calc(12 * var(--u)) rgba(8, 40, 42, 0.08);
+    }
+    .cs-hero-fl .fl-phonelive video {
+      position: absolute; left: calc(12 * var(--u)); top: calc(12 * var(--u));
+      width: calc(560 * var(--u)); height: auto; display: block;
+      border-radius: calc(40.5 * var(--u));
+    }
+    /* the landing card brings its cards in on hover; here they only play once,
+       at the start, so hovering the hero after the intro keeps them out */
+    .cs-hero-fl.fl-armed:not(.fl-in):hover .fl-macro { transform: translateX(-112%); opacity: 0; }
+    .cs-hero-fl.fl-armed:not(.fl-in):hover .fl-edit  { transform: translateX(112%);  opacity: 0; }
+    .cs-hero-fl .fl-stage { position: absolute; inset: 0; transform: translateY(7.5%) scale(0.85); transform-origin: 50% 50%; }
+    .cs-hero-fl .fl-edit  { left: 57.683%; top: 67.177%; width: 34.289%; }
+    /* updated Figma V1+: the macro card became the Mixed Veggies card (169,323 · 493×202 of 1744×1199) */
+    .cs-hero-fl .fl-macro { left: 9.690%; top: 27.466%; width: 28.268%; }
+    /* the card is the raw screenshot, so its Figma corner, stroke and shadow are drawn here */
+    .cs-hero-fl .fl-macro img {
+      aspect-ratio: 493 / 202; object-fit: cover;
+      border-radius: 5.68% / 13.86%;
+      outline: 1px solid #E9EAEB; outline-offset: -1px;
+      box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+    }
+    /* active contents link: a deeper cut of the hero's lavender (#BDC5E4), dark enough to read at 12px */
+    .cs-sidebar-links a.active { color: #695CBC; }
+    /* eyebrows (Role/Timeline/… and the section labels) in the same purple, 2px smaller */
+    .cs-overview-label,
+    .cs-section p.cs-section-label { color: #695CBC; font-size: 10px; }
+    /* hand-set line breaks in the three findings, only where the columns are
+       wide enough for them; narrower windows wrap on their own */
+    br.br-wide { display: none; }
+    @media (min-width: 1600px) { br.br-wide { display: inline; } }
+    /* Opportunity cards, from the Figma "gradient opportunity" frame (477 x 320 each):
+       white card washed with one big blurred colour ellipse (the third adds a faint
+       violet one), centred Inter Medium title over Inter body. Built live rather
+       than as images so the text stays as large and sharp as the rest of the page.
+       Glow geometry is in Figma card units: 1u = card width / 477.33. */
+    .opp-card {
+      --u: calc(100cqw / 477.33);
+      position: relative; overflow: hidden; container-type: inline-size;
+      aspect-ratio: 477.33 / 320; background: #fff;
+      display: flex; flex-direction: column; justify-content: center; align-items: center;
+      text-align: center; padding: 0 8.8%;
+    }
+    /* The colour now covers the whole card, so no white shows in the corners,
+       and it's a touch softer than the Figma blur: a flat tint with a slightly
+       lighter centre behind the text. */
+    .opp-card.g1 { background: radial-gradient(120% 110% at 50% 45%, #E2F2F2 0%, #D2EAEA 100%); }
+    .opp-card.g2 { background: radial-gradient(120% 110% at 50% 45%, #E0F5EB 0%, #D0EFE1 100%); }
+    .opp-card.g3 { background: radial-gradient(120% 110% at 50% 45%, #E6ECFF 0%, #D7E1FF 100%); }
+    .opp-card .glow { display: none; }
+    .opp-card.g3 .glow-b {
+      display: block; position: absolute; pointer-events: none; border-radius: 50%;
+      left: calc(257 * var(--u)); top: calc(-30 * var(--u)); width: calc(220 * var(--u)); height: calc(220 * var(--u));
+      background: rgba(139, 92, 246, 0.10); filter: blur(calc(35 * var(--u)));
+    }
+    .opp-card h3, .opp-card p { position: relative; margin: 0; }
+    .opp-card h3 {
+      font-family: 'Inter', system-ui, sans-serif; font-weight: 500; color: #000;
+      font-size: clamp(17px, 7cqw, 22px); line-height: 1.2; letter-spacing: -0.01em;
+    }
+    .opp-card p {
+      margin-top: 0.55em; font-family: 'Inter', system-ui, sans-serif; font-weight: 400;
+      font-size: clamp(13px, 5.2cqw, 15px); line-height: 1.5; letter-spacing: 0.01em; color: #44403B;
+    }
+    /* Design section as a numbered grid, after emmiwu.com/openai's process grid:
+       mono number, tinted panel with just the UI, then title and description as text */
+    .dg-grid { display: grid; grid-template-columns: 1fr 1fr; column-gap: 16px; row-gap: 44px; margin-top: 36px; }
+    .dg-item { margin: 0; }
+    .dg-item.dg-wide { grid-column: 1 / -1; }
+    .dg-item .dg-num {
+      font-family: ui-monospace, 'SF Mono', Menlo, monospace; font-size: 12px; letter-spacing: 0.02em;
+      color: #6B7280; margin: 0 0 8px;
+    }
+    .dg-item img { display: block; width: 100%; height: auto; }
+    .cs-section .dg-item h3 {
+      font-family: 'Inter', system-ui, sans-serif; font-weight: 500; font-size: 16px; line-height: 1.35;
+      color: var(--black); margin: 18px 0 6px;
+    }
+    .cs-section .dg-item p:not(.dg-num) { font-size: 14px; line-height: 1.6; color: #6B6B6B; margin: 0; max-width: none; }
+    /* ── OPPORTUNITY as illustrated columns, after emmiwu.com/figma's Insights ──
+       title + line of copy, then a square panel with a colour tag and a small
+       illustration built from Flourish's own UI pieces. Panel geometry is on a
+       300-unit square: 1u = panel width / 300, so everything scales together. */
+    .opx-grid { display: grid; grid-template-columns: repeat(3, 1fr); column-gap: 16px; margin-top: 32px; }
+    .opx { margin: 0; display: flex; flex-direction: column; }
+    .cs-section .opx h3 { font-family: 'Inter', system-ui, sans-serif; font-weight: 500; font-size: 16px; line-height: 1.3; letter-spacing: -0.01em; color: var(--black); margin: 26px 0 6px; }
+    .cs-section .opx > p { font-size: 14px; line-height: 1.6; color: #6B6B6B; margin: 0; max-width: none; }
+    .opx-panel {
+      --u: calc(100cqw / 300);
+      position: relative; aspect-ratio: 1; overflow: hidden; container-type: inline-size;
+      font-family: 'Gabarito', 'Inter', system-ui, sans-serif;
+    }
+    .opx-panel.p1 { background: #C6E4EC; }  /* hero gradient, teal corner */
+    .opx-panel.p2 { background: #CCD4F5; }  /* hero gradient, periwinkle middle */
+    .opx-panel.p3 { background: #FCE4D6; }  /* peach, warmer than the hero's corner */
+    .opx-tag {
+      position: absolute; left: calc(14 * var(--u)); top: calc(14 * var(--u));
+      display: inline-flex; align-items: center; gap: calc(6 * var(--u));
+      padding: calc(5 * var(--u)) calc(10 * var(--u)) calc(5 * var(--u)) calc(8 * var(--u));
+      border-radius: calc(4 * var(--u)); font-size: calc(14 * var(--u)); line-height: calc(17 * var(--u)); font-family: 'Inter', system-ui, sans-serif; font-weight: 500;
+    }
+    .opx-tag svg { width: calc(16 * var(--u)); height: calc(16 * var(--u)); }
+    .opx-tag.t1 { background: #21A0A0; color: #fff; }
+    .opx-tag.t2 { background: #12B76A; color: #fff; }
+    .opx-tag.t3 { background: #5B62E8; color: #fff; }
+    /* pieces placed on the 300-unit square */
+    .opx-panel [style*="--x"] { position: absolute; left: calc(var(--x) * var(--u)); top: calc(var(--y) * var(--u)); transform: rotate(var(--r, 0deg)); transform-origin: 0 0; white-space: nowrap; }
+    .opx-path { position: absolute; inset: 0; width: 100%; height: 100%; }
+    .chip {
+      display: inline-flex; align-items: center; gap: calc(7 * var(--u));
+      padding: calc(8 * var(--u)) calc(12 * var(--u)); border-radius: calc(10 * var(--u));
+      background: #fff; color: #181D27; font-size: calc(15 * var(--u)); font-weight: 500;
+      box-shadow: 0 calc(3 * var(--u)) calc(10 * var(--u)) rgba(6, 60, 68, 0.10);
+    }
+    .chip i { width: calc(10 * var(--u)); height: calc(10 * var(--u)); border-radius: 50%; display: block; }
+    .badge {
+      padding: calc(7 * var(--u)) calc(14 * var(--u)); border-radius: 999px; background: #FDB022; color: #181D27;
+      font-size: calc(17 * var(--u)); font-weight: 500; box-shadow: 0 calc(3 * var(--u)) calc(10 * var(--u)) rgba(6, 60, 68, 0.12);
+    }
+    .why {
+      white-space: normal !important; width: calc(132 * var(--u));
+      padding: calc(9 * var(--u)) calc(11 * var(--u)); border-radius: calc(10 * var(--u)); background: #063C44; color: #fff;
+      font-size: calc(13 * var(--u)); line-height: 1.3;
+    }
+    .steps { position: absolute; left: calc(26 * var(--u)); right: calc(22 * var(--u)); bottom: 0; height: calc(232 * var(--u)); display: flex; align-items: flex-end; gap: calc(10 * var(--u)); }
+    .step {
+      flex: 1; height: calc(var(--h) * 1%); position: relative; overflow: hidden;
+      background: #fff; border-radius: calc(12 * var(--u)) calc(12 * var(--u)) 0 0;
+      display: flex; flex-direction: column; align-items: center; padding-top: calc(10 * var(--u));
+      box-shadow: 0 calc(3 * var(--u)) calc(12 * var(--u)) rgba(6, 60, 68, 0.08);
+    }
+    .step::after { content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: calc(var(--f) * 100%); background: #12B76A; opacity: 0.9; }
+    .step b { font-size: calc(20 * var(--u)); font-weight: 600; color: #181D27; line-height: 1.1; position: relative; z-index: 1; }
+    .step span { font-size: calc(11 * var(--u)); color: #535862; position: relative; z-index: 1; }
+    .st { box-shadow: 0 calc(3 * var(--u)) calc(12 * var(--u)) rgba(30, 36, 120, 0.12); }
+    .st.meal { padding: calc(8 * var(--u)) calc(16 * var(--u)); border-radius: calc(8 * var(--u)); background: #E3FBF3; color: #063C44; font-size: calc(20 * var(--u)); font-weight: 500; }
+    .st.pencil { width: calc(44 * var(--u)); height: calc(44 * var(--u)); border-radius: 50%; background: #fff; display: grid; place-items: center; }
+    .st.pencil svg { width: calc(21 * var(--u)); height: calc(21 * var(--u)); }
+    .st.time { display: inline-flex; align-items: center; gap: calc(6 * var(--u)); padding: calc(8 * var(--u)) calc(13 * var(--u)); border-radius: calc(10 * var(--u)); background: #fff; color: #181D27; font-size: calc(16 * var(--u)); }
+    .st.time b { font-weight: 500; } .st.time em { font-style: normal; color: #717680; margin: 0 calc(-4 * var(--u)); }
+    .st.type { display: inline-flex; align-items: center; gap: calc(22 * var(--u)); padding: calc(8 * var(--u)) calc(12 * var(--u)); border-radius: calc(7 * var(--u)); background: #fff; color: #181D27; font-size: calc(13 * var(--u)); }
+    .st.type svg { width: calc(10 * var(--u)); height: calc(10 * var(--u)); }
+    .st.save { padding: calc(9 * var(--u)) calc(38 * var(--u)); border-radius: 999px; background: #063C44; color: #fff; font-size: calc(14 * var(--u)); font-weight: 500; }
+    /* Engineering Collaboration: annotated Figma-style demo of the long meal name fix */
+    .cs-eng-video-wrap { margin-top: 32px; }
+    .cs-eng-video-wrap video { display: block; width: 100%; height: auto; aspect-ratio: 16 / 10; background: #F5F5F5; }
+    /* Testing & Iteration: two short stories, each a small heading, a paragraph and its image */
+    .it-story { margin-top: 40px; }
+    .it-story + .it-story { margin-top: 56px; }
+    .cs-section .it-story h3 { font-family: 'Inter', system-ui, sans-serif; font-size: 16px; font-weight: 500; letter-spacing: -0.01em; line-height: 1.3; color: var(--black); margin: 0 0 8px; }
+    .it-story img { display: block; width: 100%; margin-top: 24px; }
+    /* The Solution: the three features explained under the finished screen */
+    .sol-features { display: grid; grid-template-columns: repeat(3, 1fr); column-gap: 24px; margin-top: 32px; }
+    .cs-section .sol-features h3 { font-family: 'Inter', system-ui, sans-serif; font-size: 16px; font-weight: 500; letter-spacing: -0.01em; line-height: 1.3; color: var(--black); margin: 0 0 6px; }
+    .cs-section .sol-features p { font-size: 14px; line-height: 1.6; color: #6B6B6B; margin: 0; max-width: none; }
+    /* Edit Logged Meal clip on the same purple as the comparison images */
+    .it-video-wrap { margin-top: 24px; background: #695CBC; display: flex; justify-content: center; align-items: center; padding: 44px 0; }
+    .it-video-wrap video { display: block; height: 560px; max-height: 70vh; width: auto; clip-path: inset(0 round 3.7% / 2.4%); }
+
+    /* ───────── L&S Advising case study ─────────
+       Same skeleton as Flourish; Berkeley blue takes the place of Flourish's purple. */
+    .cs-sidebar-links a.active { color: #2F6D99; }
+    .cs-overview-label,
+    .cs-section p.cs-section-label { color: #2F6D99; font-size: 10px; }
+    .cs-main { padding-top: 23px; }
+    .cs-hero-img.cs-hero-ls { aspect-ratio: 1744 / 1176; margin-bottom: 0; position: relative;
+      background: radial-gradient(120% 95% at 18% 0%, #0D4C88 0%, #003262 52%, #00264C 100%); }
+    /* the prototype recording already carries its own browser chrome; it sits where the window sits on the cover */
+    .ls-hero-win { position: absolute; left: 8.7%; top: 12.8%; width: 82.6%; aspect-ratio: 1920 / 1200;
+      border-radius: 1.2% / 1.9%; overflow: hidden; background: #fff;
+      box-shadow: 0 30px 90px rgba(0, 10, 30, .45), 0 4px 14px rgba(0, 10, 30, .18); }
+    .ls-hero-win video { display: block; width: 100%; height: 100%; object-fit: cover; }
+    .cs-title.cs-title-under { margin-top: 24px; }
+    .ls-subtitle { font-size: 15px; line-height: 1.6; color: #5C5C5C; max-width: 640px; margin: 10px 0 40px; }
+
+    /* context: three paths */
+    .ls-paths { margin-top: 32px; background: #F0EFED; padding: 32px 28px 28px; }
+    .ls-paths-start { width: max-content; margin: 0 auto; padding: 9px 16px; background: #003262; color: #fff; font-size: 13px; font-weight: 500; }
+    .ls-paths-fork { display: block; width: 66.6%; height: 32px; margin: 0 auto; overflow: visible; }
+    .ls-paths-fork path { fill: none; stroke: #9AA3AE; stroke-width: 1.5; }
+    .ls-paths-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+    .ls-path { background: #fff; padding: 16px 16px 14px; }
+    .cs-section p.ls-path-name { font-size: 14px; font-weight: 500; color: #0F0F0F; margin: 0 0 6px; line-height: 1.35; }
+    .cs-section p.ls-path-desc { font-size: 12.5px; line-height: 1.55; color: #5C5C5C; margin: 0 0 10px; }
+    .cs-section p.ls-path-how { font-size: 11.5px; color: #2F6D99; margin: 0; }
+
+    /* problem: stat row */
+    .ls-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin: 28px 0 32px; }
+    .cs-section p.ls-stat-num { font-family: 'Lora', serif; font-size: 30px; font-weight: 500; color: #003262; line-height: 1.1; margin: 0 0 6px; letter-spacing: -0.01em; }
+    .cs-section p.ls-stat-label { font-size: 13px; line-height: 1.5; color: #5C5C5C; margin: 0; }
+
+    /* problem: two single-series bar charts on one shared scale (max 125 responses) */
+    .ls-charts { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin-top: 28px; }
+    .ls-chart { margin: 0; }
+    .ls-chart-title { font-size: 14px; font-weight: 500; color: #0F0F0F; margin-bottom: 16px; }
+    .ls-chart-title span { font-weight: 400; color: #8A8F98; font-size: 12px; margin-left: 6px; }
+    .ls-bars { display: grid; gap: 10px; }
+    .ls-row { position: relative; display: grid; grid-template-columns: 44% 1fr; align-items: center; gap: 12px; outline: none; padding: 3px 0; }
+    .ls-cat { font-size: 12.5px; line-height: 1.35; color: #3D3D3D; }
+    .ls-track { display: flex; align-items: center; gap: 8px; border-left: 1px solid #C9CDD3; min-height: 22px; }
+    .ls-bar { display: block; height: 14px; width: calc(var(--v) / 125 * (100% - 34px)); background: #003262; border-radius: 0 4px 4px 0; transition: background .15s; }
+    .ls-val { font-size: 12px; color: #3D3D3D; font-variant-numeric: tabular-nums; }
+    .ls-row:hover .ls-bar, .ls-row:focus-visible .ls-bar { background: #2F6D99; }
+    .ls-row::after {
+      content: attr(data-tip); position: absolute; right: 0; bottom: calc(100% + 2px);
+      background: #0F0F0F; color: #fff; font-size: 11.5px; padding: 5px 8px; white-space: nowrap;
+      opacity: 0; pointer-events: none; transform: translateY(3px); transition: opacity .12s, transform .12s;
+    }
+    .ls-row:hover::after, .ls-row:focus-visible::after { opacity: 1; transform: none; }
+
+    /* figures and panels */
+    .ls-figure { margin: 28px 0 0; }
+    .ls-figure img { display: block; width: 100%; height: auto; }
+    .ls-figure figcaption { font-size: 12.5px; line-height: 1.5; color: #787878; margin-top: 12px; }
+    .ls-plain { background: #F0EFED; padding: 28px; }
+    .ls-figure.ls-plain figcaption { margin-top: 16px; }
+    .ls-blue { background: radial-gradient(120% 95% at 18% 0%, #0D4C88 0%, #003262 52%, #00264C 100%); padding: 44px; }
+    .ls-blue .ls-shot { border-radius: 8px; box-shadow: 0 24px 60px rgba(0, 10, 30, .40), 0 3px 10px rgba(0, 10, 30, .18); }
+    .ls-figure.ls-blue img + img { margin-top: 0; }
+
+    /* testing */
+    .ls-bigstat { display: grid; grid-template-columns: auto 1fr; align-items: center; gap: 24px; margin: 32px 0 4px; padding: 24px 0; border-top: 1px solid #E4E2DE; border-bottom: 1px solid #E4E2DE; }
+    .cs-section p.ls-bigstat-num { font-family: 'Lora', serif; font-size: 44px; font-weight: 500; color: #003262; line-height: 1; margin: 0; letter-spacing: -0.02em; white-space: nowrap; }
+    .cs-section p.ls-bigstat-text { font-size: 15px; line-height: 1.6; color: #3D3D3D; margin: 0; max-width: 480px; }
+    .cs-quote-card.ls-quotes { background: linear-gradient(148deg, #E3E9F1 0%, #EFEAE1 100%); margin-top: 28px; }
+
+    /* redesign */
+    .cs-section p.ls-concept-tag { display: inline-block; font-size: 11px; font-weight: 500; letter-spacing: .06em; text-transform: uppercase; color: #8A4B08; background: #FBEFD9; padding: 4px 9px; margin: 0 0 16px; }
+    .ls-sub { margin-top: 56px; }
+    .cs-section .ls-sub h3 { font-family: 'Inter', system-ui, sans-serif; font-size: 16px; font-weight: 500; letter-spacing: -0.01em; line-height: 1.3; color: #0F0F0F; margin: 0 0 8px; }
+    .ls-swatches { display: flex; flex-wrap: wrap; gap: 10px 22px; margin: 4px 0 0; font-size: 12.5px; color: #3D3D3D; }
+    .ls-swatches span { display: inline-flex; align-items: center; gap: 8px; }
+    .ls-swatches i { width: 14px; height: 14px; display: block; }
+    .ls-ba { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 24px; align-items: stretch; }
+    .ls-ba figure { margin: 0; display: flex; flex-direction: column; }
+    .cs-section p.ls-ba-label { font-size: 11px; font-weight: 500; letter-spacing: .08em; text-transform: uppercase; color: #8A8F98; margin: 0 0 8px; }
+    .ls-ba-frame { flex: 1; display: flex; align-items: flex-start; justify-content: center; padding: 24px; position: relative; overflow: hidden; }
+    .ls-ba-frame img { display: block; width: 100%; height: auto; }
+    .ls-vfd-after .ls-popup { position: absolute; width: 62%; right: 14px; bottom: 18px; border-radius: 10px; box-shadow: 0 18px 44px rgba(0, 10, 30, .45); }
+    .ls-phones { display: flex; justify-content: center; gap: 28px; padding: 44px 44px 0; overflow: hidden; height: 520px; }
+    .ls-phones .ls-shot { width: 240px; height: auto; border-radius: 22px 22px 0 0; align-self: flex-start; }
+
+    /* impact */
+    .ls-impact { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: 28px; }
+    .ls-impact > div { border-top: 2px solid #003262; padding-top: 14px; }
+    .cs-section p.ls-impact-num { font-family: 'Lora', serif; font-size: 26px; font-weight: 500; color: #003262; line-height: 1.15; margin: 0 0 8px; }
+    .cs-section p.ls-impact-text { font-size: 13px; line-height: 1.6; color: #5C5C5C; margin: 0; }
+    .cs-section p.ls-projected-label { font-size: 11px; font-weight: 500; letter-spacing: .08em; text-transform: uppercase; color: #8A8F98; margin: 40px 0 0; }
+    .ls-impact-projected { grid-template-columns: repeat(3, 1fr); margin-top: 14px; }
+    .ls-impact-projected > div { border-top: 2px dashed #9AA3AE; }
+    .cs-section .ls-impact-projected p.ls-impact-num { color: #5C5C5C; }
+    .ls-figure + p, .ls-figure + .cs-synthesis { margin-top: 28px; }
+    .ls-ba-frame.ls-plain { align-items: center; }
+
+    @media (max-width: 760px) {
+      .ls-paths-grid, .ls-stats, .ls-impact, .ls-impact-projected, .ls-charts, .ls-ba { grid-template-columns: 1fr; }
+      .ls-paths-fork { display: none; }
+      .ls-paths-start { margin-bottom: 12px; }
+      .ls-blue { padding: 20px; }
+      .ls-plain { padding: 16px; }
+      .ls-phones { height: 380px; gap: 14px; padding: 24px 16px 0; }
+      .ls-phones .ls-shot { width: 46%; }
+      .ls-bigstat { grid-template-columns: 1fr; gap: 10px; }
+    }
   </style>
   <script>
     (function () {
@@ -1157,164 +1855,327 @@
     </ul>
   </nav>
 
-  <!-- ── LEFT RAIL ── -->
-  <aside class="cs-rail">
-    <ul class="rail-links">
-      <li><a href="#overview" class="active">Overview</a></li>
-      <li><a href="#impact">Impact</a></li>
-      <li><a href="#more-info">More info</a></li>
-    </ul>
-    <a class="rail-top" href="#top">Back to top</a>
-  </aside>
+  <div class="cs-layout" id="top">
 
-  <!-- ── HERO ── -->
-  <div class="cs-hero cs-hero--bit" id="top">
-    <p class="bit-wordmark">Berkeley IT</p>
+    <!-- Sidebar -->
+    <aside class="cs-sidebar">
+      <ul class="cs-sidebar-links">
+        <li><a href="#overview" class="active">Overview</a></li>
+        <li><a href="#context">Context</a></li>
+        <li><a href="#problem">The Problem</a></li>
+        <li><a href="#research">Research</a></li>
+        <li><a href="#constraint">The Constraint</a></li>
+        <li><a href="#testing">Testing</a></li>
+        <li><a href="#redesign">The Redesign</a></li>
+        <li><a href="#ai">Working with AI</a></li>
+        <li><a href="#impact">Impact</a></li>
+        <li><a href="#reflection">Reflection</a></li>
+      </ul>
+      <a class="cs-sidebar-top" href="#top">Back to top</a>
+    </aside>
+
+    <!-- Main -->
+    <main class="cs-main">
+    <div class="cs-content">
+
+      <!-- Hero: the redesigned Appointments & Advice page in a browser, on Berkeley blue -->
+      <div class="cs-hero-img cs-hero-ls">
+        <div class="ls-hero-win">
+          <video autoplay muted loop playsinline preload="auto" poster="images/sis-cs/hero-video-poster.jpg" aria-label="Desktop prototype of the redesigned Appointments &amp; Advice page: picking a situation, answering the eligibility questions, then scrolling through the adviser options">
+            <source src="videos/ls-advising-prototype.mp4" type="video/mp4"/>
+          </video>
+        </div>
+      </div>
+
+      <h1 class="cs-title cs-title-under">Making Student Advising Easier to Navigate</h1>
+
+      <!-- Overview grid -->
+      <div class="cs-overview-grid" id="overview">
+        <div class="cs-overview-item">
+          <p class="cs-overview-label">Role</p>
+          <p class="cs-overview-value">UX Design Intern<br>Berkeley IT</p>
+        </div>
+        <div class="cs-overview-item">
+          <p class="cs-overview-label">Timeline</p>
+          <p class="cs-overview-value">Summer 2026</p>
+        </div>
+        <div class="cs-overview-item">
+          <p class="cs-overview-label">Team</p>
+          <p class="cs-overview-value">Berkeley IT UX Team<br>L&amp;S Advising (client)</p>
+        </div>
+        <div class="cs-overview-item">
+          <p class="cs-overview-label">Skills</p>
+          <p class="cs-overview-value">Research<br>Interaction Design<br>Prototyping</p>
+        </div>
+      </div>
+
+      <!-- 1. Context -->
+      <div class="cs-section revealed" id="context">
+        <p class="cs-section-label">Context</p>
+        <h2>Students had to understand advising before they could get it.</h2>
+        <p>The College of Letters &amp; Science is Berkeley&rsquo;s largest college, with about 20,000 undergraduates. Its advising site is where they book appointments, find forms and get quick help, but first they had to work out which kind of advising they needed.</p>
+        <p>My client was L&amp;S Advising. They knew students were struggling with the site but not which problem to solve first, so they handed me what they had, 261 unread survey responses and the site itself, and asked me to figure out where to start.</p>
+
+        <div class="ls-paths" role="img" aria-label="A student with a question has to choose between three paths: L&amp;S College Advising, Major and Minor Advising, or live advising at the Virtual Front Desk.">
+          <div class="ls-paths-start">A student with a question</div>
+          <svg class="ls-paths-fork" viewBox="0 0 300 44" preserveAspectRatio="none" aria-hidden="true">
+            <path d="M150 0 V14 Q150 22 142 22 H58 Q50 22 50 30 V44 M150 14 V44 M150 14 Q150 22 158 22 H242 Q250 22 250 30 V44" vector-effect="non-scaling-stroke"/>
+          </svg>
+          <div class="ls-paths-grid">
+            <div class="ls-path">
+              <p class="ls-path-name">L&amp;S College Advising</p>
+              <p class="ls-path-desc">College-wide rules, enrollment, academic difficulty</p>
+              <p class="ls-path-how">25-minute appointment</p>
+            </div>
+            <div class="ls-path">
+              <p class="ls-path-name">Major &amp; Minor Advising</p>
+              <p class="ls-path-desc">Requirements and planning for one department</p>
+              <p class="ls-path-how">Booked on each department&rsquo;s site</p>
+            </div>
+            <div class="ls-path">
+              <p class="ls-path-name">Live advising</p>
+              <p class="ls-path-desc">Quick questions at the Virtual Front Desk</p>
+              <p class="ls-path-how">Drop in during open hours</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2. The Problem -->
+      <div class="cs-section" id="problem">
+        <p class="cs-section-label">The Problem</p>
+        <h2>The most-visited page was also the most confusing.</h2>
+        <p>I coded the survey responses and lined them up against the site&rsquo;s analytics to see where what students said matched what they did.</p>
+
+        <div class="ls-stats">
+          <div><p class="ls-stat-num">261</p><p class="ls-stat-label">student survey responses</p></div>
+          <div><p class="ls-stat-num">101,353</p><p class="ls-stat-label">sessions in Google Analytics</p></div>
+          <div><p class="ls-stat-num">8,884</p><p class="ls-stat-label">on Appointments &amp; Advice, the most-visited page</p></div>
+        </div>
+
+        <p>Navigation showed up on both sides of the survey: it was students&rsquo; biggest frustration, and the second thing they valued most when it worked.</p>
+
+        <div class="ls-charts">
+          <figure class="ls-chart">
+            <figcaption class="ls-chart-title">Biggest frustrations <span>responses</span></figcaption>
+            <div class="ls-bars" aria-hidden="true">
+              <div class="ls-row" tabindex="0" data-tip="98 of 261 responses"><span class="ls-cat">Hard-to-navigate site</span><span class="ls-track"><span class="ls-bar" style="--v: 98"></span><span class="ls-val">98</span></span></div>
+              <div class="ls-row" tabindex="0" data-tip="79 of 261 responses"><span class="ls-cat">Outdated or hard-to-find forms</span><span class="ls-track"><span class="ls-bar" style="--v: 79"></span><span class="ls-val">79</span></span></div>
+              <div class="ls-row" tabindex="0" data-tip="61 of 261 responses"><span class="ls-cat">Trouble booking appointments</span><span class="ls-track"><span class="ls-bar" style="--v: 61"></span><span class="ls-val">61</span></span></div>
+              <div class="ls-row" tabindex="0" data-tip="50 of 261 responses"><span class="ls-cat">Information overload</span><span class="ls-track"><span class="ls-bar" style="--v: 50"></span><span class="ls-val">50</span></span></div>
+            </div>
+            <div class="sr-only"><table>
+              <caption>Biggest frustrations, number of survey responses</caption>
+              <tr><th>Difficult website navigation and organization</th><td>98</td></tr>
+              <tr><th>Outdated or hard-to-find information and forms</th><td>79</td></tr>
+              <tr><th>Difficulty scheduling advising appointments</th><td>61</td></tr>
+              <tr><th>Information overload and website clutter</th><td>50</td></tr>
+            </table></div>
+          </figure>
+          <figure class="ls-chart">
+            <figcaption class="ls-chart-title">Most helpful <span>responses</span></figcaption>
+            <div class="ls-bars" aria-hidden="true">
+              <div class="ls-row" tabindex="0" data-tip="119 of 261 responses"><span class="ls-cat">Resources and information</span><span class="ls-track"><span class="ls-bar" style="--v: 119"></span><span class="ls-val">119</span></span></div>
+              <div class="ls-row" tabindex="0" data-tip="112 of 261 responses"><span class="ls-cat">Ease of navigation</span><span class="ls-track"><span class="ls-bar" style="--v: 112"></span><span class="ls-val">112</span></span></div>
+              <div class="ls-row" tabindex="0" data-tip="66 of 261 responses"><span class="ls-cat">Visible deadlines</span><span class="ls-track"><span class="ls-bar" style="--v: 66"></span><span class="ls-val">66</span></span></div>
+              <div class="ls-row" tabindex="0" data-tip="55 of 261 responses"><span class="ls-cat">Access to advising and booking</span><span class="ls-track"><span class="ls-bar" style="--v: 55"></span><span class="ls-val">55</span></span></div>
+            </div>
+            <div class="sr-only"><table>
+              <caption>Most helpful, number of survey responses</caption>
+              <tr><th>Availability of resources and information</th><td>119</td></tr>
+              <tr><th>Ease of navigation</th><td>112</td></tr>
+              <tr><th>Visibility of important deadlines</th><td>66</td></tr>
+              <tr><th>Accessibility of advising and appointment scheduling</th><td>55</td></tr>
+            </table></div>
+          </figure>
+        </div>
+      </div>
+
+      <!-- 3. Research -->
+      <div class="cs-section" id="research">
+        <p class="cs-section-label">Research</p>
+        <h2>A heuristic review wouldn&rsquo;t have found this.</h2>
+        <p>The brief asked for a heuristic evaluation. But students weren&rsquo;t stuck on individual buttons; they were stuck getting from &ldquo;I need help&rdquo; to the right person. So I mapped the full journey through Appointments &amp; Advice, the Virtual Front Desk and Forms &amp; Petitions instead.</p>
+
+        <figure class="ls-figure ls-plain">
+          <img src="images/sis-cs/journey-flow.webp" alt="Journey map of booking advising: find the page, choose a quick question or full appointment, then choose an adviser type, with a red marker where students were unsure which adviser they needed" loading="lazy"/>
+        </figure>
+
+        <div class="cs-synthesis">
+          <div>
+            <p class="cs-synthesis-title">Choosing a path was the hardest step</p>
+            <p class="cs-synthesis-desc">Students had to tell L&amp;S, major and minor, and live advising apart before they could do anything else.</p>
+          </div>
+          <div>
+            <p class="cs-synthesis-title">The Virtual Front Desk was hard to find</p>
+            <p class="cs-synthesis-desc">Students valued it once they got there, but the guidance on when to use it came too late.</p>
+          </div>
+          <div>
+            <p class="cs-synthesis-title">The booking rules sat at the bottom</p>
+            <p class="cs-synthesis-desc">Whether athletes, visa holders or aid recipients could book at all was written as prose at the end of the page.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4. The Constraint -->
+      <div class="cs-section" id="constraint">
+        <p class="cs-section-label">The Constraint</p>
+        <h2>The best idea didn&rsquo;t fit the platform.</h2>
+        <p>I explored four concepts for Appointments &amp; Advice. Three sorted students by their situation: answer a question or two and get pointed to the right service. The fourth simply reorganized the existing content into cards and a comparison table.</p>
+
+        <figure class="ls-figure ls-plain">
+          <img src="images/sis-cs/concepts.webp" alt="Four lo-fi concepts for the Appointments &amp; Advice page, labeled A to D" loading="lazy"/>
+          <figcaption>A&ndash;C sorted students by situation. D reorganized what was already there.</figcaption>
+        </figure>
+
+        <p>In review, we found that Open Berkeley, the university&rsquo;s site builder, couldn&rsquo;t support any of the sorting concepts. The page was built with the simpler structure, and sorting moved off the page: first into a Qualtrics questionnaire, then, at L&amp;S&rsquo;s request, into Calendly, which only allowed single-choice questions and one recommendation at the end.</p>
+      </div>
+
+      <!-- 5. Testing -->
+      <div class="cs-section" id="testing">
+        <p class="cs-section-label">Testing</p>
+        <h2>Testing showed exactly where the workaround broke.</h2>
+        <p>I ran nine moderated sessions with undergraduates across class years and majors. They worked through real scenarios on the rebuilt pages and the Calendly flow, then compared each with the live site.</p>
+
+        <div class="ls-bigstat">
+          <p class="ls-bigstat-num">7 of 8</p>
+          <p class="ls-bigstat-text">participants who reached the visa redirect looked at the empty calendar first, and some thought the page was broken.</p>
+        </div>
+
+        <figure class="ls-figure ls-plain">
+          <img src="images/sis-cs/calendly-redirect.webp" alt="Calendly redirect telling visa students to check with the Berkeley International Office first, next to an empty date picker" loading="lazy"/>
+          <figcaption>The instructions sat on the left. The empty calendar on the right was what students read first.</figcaption>
+        </figure>
+
+        <div class="cs-quote-card ls-quotes">
+          <div class="cs-quote-entry">
+            <div class="cs-quote-glyph">&ldquo;</div>
+            <p class="cs-quote-text">Yeah, it&rsquo;s broken. I guess after realizing it&rsquo;s broken, I will start reading.</p>
+            <p class="cs-quote-cite">Participant</p>
+          </div>
+          <div class="cs-quote-entry">
+            <div class="cs-quote-glyph">&ldquo;</div>
+            <p class="cs-quote-text">When you reach this page, the first thing that you would notice is the calendar, not the instructions that are off to the side.</p>
+            <p class="cs-quote-cite">Participant</p>
+          </div>
+        </div>
+
+        <div class="cs-synthesis">
+          <div>
+            <p class="cs-synthesis-title">&ldquo;DSP&rdquo; meant nothing</p>
+            <p class="cs-synthesis-desc">Four participants didn&rsquo;t know the acronym, and one answered a screening question wrong because of it.</p>
+          </div>
+          <div>
+            <p class="cs-synthesis-title">The button came too late</p>
+            <p class="cs-synthesis-desc">Three said they&rsquo;d have acted before reaching the intake button at the bottom of the Virtual Front Desk page.</p>
+          </div>
+          <div>
+            <p class="cs-synthesis-title">Students missed color and icons</p>
+            <p class="cs-synthesis-desc">Five noticed the old site&rsquo;s visual cues were gone, even while preferring the new structure.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 6. The Redesign (concept) -->
+      <div class="cs-section" id="redesign">
+        <p class="cs-section-label">The Redesign</p>
+        <h2>So I designed the version I&rsquo;d ship without the platform.</h2>
+        <p class="ls-concept-tag">Concept &middot; not shipped</p>
+        <p>I took the findings into an unconstrained redesign: what the pages could be if they were free to sort students themselves.</p>
+
+        <div class="ls-sub">
+          <h3>Sorting on the page</h3>
+          <p>The questions worked; Calendly didn&rsquo;t. So sorting moved back onto the page. Students pick the tile that matches their situation, check off anything that applies, and get a next step. A visa student sees a Berkeley International Office card, with no calendar to misread.</p>
+          <figure class="ls-figure ls-blue">
+            <img class="ls-shot" src="images/sis-cs/sorting.webp" alt="Redesigned Appointments &amp; Advice: the Add, drop or change classes tile selected, eligibility checkboxes with F-1 or J-1 visa checked, and a card saying to check with the Berkeley International Office first" loading="lazy"/>
+          </figure>
+        </div>
+
+        <div class="ls-sub">
+          <h3>Color that means something</h3>
+          <p>Students missed the old site&rsquo;s color, but they read different colors as different kinds of sections. So each color got one job.</p>
+          <div class="ls-swatches">
+            <span><i style="background:#00A598"></i>Teal: get help now</span>
+            <span><i style="background:#EE1F60"></i>Rose: check with another office first</span>
+            <span><i style="background:#C4820E"></i>Gold: reference</span>
+          </div>
+          <div class="ls-ba">
+            <figure>
+              <p class="ls-ba-label">Tested build</p>
+              <div class="ls-ba-frame ls-plain"><img src="images/sis-cs/tested-aa.webp" alt="Tested Open Berkeley build of Appointments &amp; Advice with teal and gold section bands" loading="lazy"/></div>
+            </figure>
+            <figure>
+              <p class="ls-ba-label">Redesign</p>
+              <div class="ls-ba-frame ls-blue"><img class="ls-shot" src="images/sis-cs/landing-full.webp" alt="Redesigned Appointments &amp; Advice page with teal help sections, a gold adviser comparison and a rose check-first section" loading="lazy"/></div>
+            </figure>
+          </div>
+        </div>
+
+        <div class="ls-sub">
+          <h3>One Virtual Front Desk</h3>
+          <p>&ldquo;Virtual Front Desk&rdquo; and &ldquo;Virtual Express Drop-ins&rdquo; used the same form and the same Zoom link, so students were choosing between two names for one service. The redesign uses one name, puts the steps to join above the hours, and lets students click any open block on the calendar to see how to join.</p>
+          <div class="ls-ba">
+            <figure>
+              <p class="ls-ba-label">Tested build</p>
+              <div class="ls-ba-frame ls-plain"><img src="images/sis-cs/tested-vfd.webp" alt="Tested Open Berkeley build of Virtual Drop-In Advising, with the calendar above the steps to join" loading="lazy"/></div>
+            </figure>
+            <figure>
+              <p class="ls-ba-label">Redesign</p>
+              <div class="ls-ba-frame ls-blue ls-vfd-after">
+                <img class="ls-shot" src="images/sis-cs/vfd.webp" alt="Redesigned Virtual Front Desk page: the service compared with a 25-minute appointment, steps to join, then the hours" loading="lazy"/>
+                <img class="ls-popup" src="images/sis-cs/popup.png" alt="Calendar popup for an open Virtual Front Desk block, listing the three steps to join" loading="lazy"/>
+              </div>
+            </figure>
+          </div>
+        </div>
+
+        <div class="ls-sub">
+          <h3>Mobile</h3>
+          <p>On phones, situation tiles become compact rows, the two services sit in tabs, and section bands slim down so the first choice shows without scrolling.</p>
+          <figure class="ls-figure ls-blue ls-phones">
+            <img class="ls-shot" src="images/sis-cs/mobile-aa.webp" alt="Mobile Appointments &amp; Advice with situations as compact rows" loading="lazy"/>
+            <img class="ls-shot" src="images/sis-cs/mobile-vfd.webp" alt="Mobile Virtual Front Desk with tabs for the Virtual Front Desk and an appointment" loading="lazy"/>
+          </figure>
+        </div>
+      </div>
+
+      <!-- 7. Working with AI -->
+      <div class="cs-section" id="ai">
+        <p class="cs-section-label">Working with AI</p>
+        <h2>AI sped up the repetitive work, not the judgment.</h2>
+        <p>I used AskAI in Google Sheets to code the survey responses, Claude Code with the Figma API to build repetitive components and a coded prototype, and Dovetail to transcribe and tag the nine sessions. Each needed checking by hand: AskAI missed responses with more than one theme, Claude Code introduced prototype performance issues, and Dovetail sometimes misread what participants meant. I went back to the original responses and recordings to fix them.</p>
+      </div>
+
+      <!-- 8. Impact -->
+      <div class="cs-section" id="impact">
+        <p class="cs-section-label">Impact</p>
+        <h2>What shipped, and what it would change.</h2>
+        <div class="ls-impact">
+          <div><p class="ls-impact-num">Built</p><p class="ls-impact-text">The redesigned Appointments &amp; Advice and Virtual Front Desk pages, in Open Berkeley.</p></div>
+          <div><p class="ls-impact-num">8 of 9</p><p class="ls-impact-text">participants preferred the redesigned layout over the current site.</p></div>
+          <div><p class="ls-impact-num">Delivered</p><p class="ls-impact-text">Findings and recommendations to the L&amp;S Advising team.</p></div>
+        </div>
+        <p class="ls-projected-label">Projected, if the concept ships</p>
+        <div class="ls-impact ls-impact-projected">
+          <div><p class="ls-impact-num">~4 &rarr; 1</p><p class="ls-impact-text">decisions before booking, down to one choice about their situation.</p></div>
+          <div><p class="ls-impact-num">&le; 3 clicks</p><p class="ls-impact-text">from landing on the page to booking.</p></div>
+        </div>
+      </div>
+
+      <!-- 9. Reflection -->
+      <div class="cs-section" id="reflection">
+        <p class="cs-section-label">Reflection</p>
+        <h2>Learn the platform before you design for it.</h2>
+        <p>My strongest concepts assumed the page could sort students, and I only learned it couldn&rsquo;t after designing them. Next time I&rsquo;d find the platform&rsquo;s limits first, because they decide what&rsquo;s possible. I&rsquo;d also test more than one path through a flow. Everyone walked the visa route, so we learned a lot about that path and nothing about the others.</p>
+      </div>
+
+    </div>
+    </main>
   </div>
 
-  <h1 class="cs-title cs-title-under">Redesigning advising around how 20,000+ students seek help</h1>
-
-  <!-- ── READING COLUMN ── -->
-  <main class="cs-body">
-
-    <div class="cs-meta-grid">
-      <div>
-        <p class="cs-meta-label">Role</p>
-        <p class="cs-meta-value">Product Design Intern</p>
-      </div>
-      <div>
-        <p class="cs-meta-label">Timeline</p>
-        <p class="cs-meta-value">Summer 2026</p>
-      </div>
-      <div>
-        <p class="cs-meta-label">Scope</p>
-        <p class="cs-meta-value">Research, IA, interaction design, usability testing</p>
-      </div>
-      <div>
-        <p class="cs-meta-label">Tools</p>
-        <p class="cs-meta-value">Figma, Miro, Dovetail, Claude Code, Open Berkeley</p>
-      </div>
-      <div>
-        <p class="cs-meta-label">Team</p>
-        <p class="cs-meta-value">1 PM<br>1 Designer (me)<br>L&amp;S Advising Team</p>
-      </div>
-    </div>
-
-    <!-- OVERVIEW -->
-    <section class="cs-section" id="overview">
-      <p class="cs-label">Overview</p>
-      <h2>Students had to understand how UC Berkeley&rsquo;s advising is structured before they could get help from it.</h2>
-      <p>L&amp;S is UC Berkeley&rsquo;s largest college, and its advising site supports everything from appointments to petitions and deadlines. But students had to navigate unclear advising distinctions, hidden options, and buried eligibility requirements just to figure out where to go for help. I redesigned three high-priority advising experiences, a routing flow, and the component system behind them, grounded in 261 survey responses and usability testing.</p>
-
-        <div class="proj">
-          <div class="locked locked--shot">
-            <img src="images/sis-design-system.png" alt="The advising design system on a desktop display, blurred — the components are internal to UC Berkeley">
-            <span class="locked-badge" aria-hidden="true"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="10.5" width="16" height="10.5" rx="2"/><path d="M8 10.5V7a4 4 0 0 1 8 0v3.5"/></svg></span>
-          </div>
-          <div class="proj-copy">
-            <p class="proj-title">Design System</p>
-            <p class="proj-body">A 90+ component system with best-practice standards, built through AI assistant workflows, which is what made 600+ prototype interactions feasible to build and put in front of stakeholders.</p>
-          </div>
-        </div>
-        <div class="proj">
-          <div class="locked locked--shot">
-            <img src="images/sis-appointments.png" alt="The redesigned Appointments &amp; Advice page on a desktop display, blurred — the design is internal to UC Berkeley">
-            <span class="locked-badge" aria-hidden="true"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="10.5" width="16" height="10.5" rx="2"/><path d="M8 10.5V7a4 4 0 0 1 8 0v3.5"/></svg></span>
-          </div>
-          <div class="proj-copy">
-            <p class="proj-title">Appointments &amp; Advice</p>
-            <p class="proj-body">Services grouped into clear sections, with College vs. Major/Minor advising compared side by side and special cases surfaced upfront.</p>
-          </div>
-        </div>
-        <div class="proj">
-          <div class="locked locked--shot">
-            <img src="images/sis-virtual-front-desk.png" alt="The redesigned Virtual Front Desk page on a desktop display, blurred — the design is internal to UC Berkeley">
-            <span class="locked-badge" aria-hidden="true"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="10.5" width="16" height="10.5" rx="2"/><path d="M8 10.5V7a4 4 0 0 1 8 0v3.5"/></svg></span>
-          </div>
-          <div class="proj-copy">
-            <p class="proj-title">Virtual Front Desk</p>
-            <p class="proj-body">Two overlapping drop-in services consolidated into one, leaving students with a clearer choice between quick help and a scheduled appointment.</p>
-          </div>
-        </div>
-        <div class="proj">
-          <div class="locked locked--shot">
-            <img src="images/sis-routing-flow.png" alt="The end of the routing flow on a desktop display, blurred — the design is internal to UC Berkeley">
-            <span class="locked-badge" aria-hidden="true"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="10.5" width="16" height="10.5" rx="2"/><path d="M8 10.5V7a4 4 0 0 1 8 0v3.5"/></svg></span>
-          </div>
-          <div class="proj-copy">
-            <p class="proj-title">Routing Flow</p>
-            <p class="proj-body">A guided flow asks students about their situation and recommends the appropriate advising path instead of asking them to choose a service themselves.</p>
-          </div>
-        </div>
-    </section>
-
-
-    <!-- IMPACT -->
-    <section class="cs-section" id="impact">
-      <p class="cs-label">Impact</p>
-      <h2>What changed for students.</h2>
-      <div class="stat-row">
-        <div>
-          <p class="stat-num">4 &rarr; 0</p>
-          <p class="stat-body"><strong>decisions before booking.</strong> Students previously had to figure out which type of advisor they needed. The new flow asks about their situation and routes them from there.</p>
-        </div>
-        <div>
-          <p class="stat-num">2 &rarr; 1</p>
-          <p class="stat-body"><strong>drop-in services.</strong> Testing made me question why students were choosing between two services that ultimately used the same intake form and Zoom link, so I combined them.</p>
-        </div>
-        <div>
-          <p class="stat-num">1</p>
-          <p class="stat-body"><strong>issue caught in testing.</strong> 7 of 8 students thought an empty calendar screen meant the page was broken, which I was able to address before launch.</p>
-        </div>
-      </div>
-    </section>
-
-    <!-- MORE INFO -->
-    <section class="more-info" id="more-info">
-      <p class="cs-label">Want to know more?</p>
-      <p class="more-body">The designs are internal to UC Berkeley and not public, so I can&rsquo;t show the screens here. I&rsquo;m happy to walk through the research, the routing decisions, and what testing changed over a call.</p>
-      <a class="more-cta" href="mailto:diyamahapatra@berkeley.edu">diyamahapatra@berkeley.edu &rarr;</a>
-    </section>
-
-  </main>
-
   <section class="next-up-section">
-    <p class="next-up-label">Next Up&hellip;</p>
+    <p class="next-up-label">Next Up…</p>
     <div class="next-up-grid">
-
-      <a class="next-up-card" href="/flourish">
-        <div class="work-thumb thumb-1">
-          <div class="thumb-1-mesh">
-            <div class="t1b t1b-1"></div>
-            <div class="t1b t1b-2"></div>
-            <div class="t1b t1b-3"></div>
-            <div class="t1b t1b-4"></div>
-          </div>
-          <div class="t1-sweep"></div>
-          <div class="f1-scene">
-            <div class="f1-nav">
-              <div class="f1-pill">
-                <div class="f1-nd f1-nd-1">01</div>
-                <div class="f1-sep"></div>
-                <div class="f1-nd f1-nd-2">02</div>
-                <div class="f1-sep"></div>
-                <div class="f1-nd f1-nd-3">03</div>
-              </div>
-              <div class="f1-labels">
-                <span class="f1-lbl f1-lbl-1">Meal</span>
-                <span class="f1-lbl f1-lbl-2">Macro</span>
-                <span class="f1-lbl f1-lbl-3">Trend</span>
-              </div>
-            </div>
-            <div class="f1-cards-area">
-              <div class="f1-crd f1-crd-1"><img src="images/land.png" draggable="false" alt=""/></div>
-              <div class="f1-crd f1-crd-2"><img src="images/landfinal.png" draggable="false" alt=""/></div>
-              <div class="f1-crd f1-crd-3"><img src="images/land1.png" draggable="false" alt=""/></div>
-            </div>
-          </div>
-        </div>
-        <p class="next-up-title">AI Health Insights</p>
-      </a>
 
       <a class="next-up-card" href="/carbon-sustain">
           <div class="work-thumb thumb-2">
@@ -1328,6 +2189,16 @@
           </div>
           <p class="next-up-title">Making Carbon Data Actionable</p>
         </a>
+
+      <a class="next-up-card" href="/amazon-music">
+        <div class="work-thumb thumb-3">
+          <div class="t3-imgs">
+            <div class="t3-img-back"><img src="images/fry1.png" draggable="false" alt="Amazon Music"/></div>
+            <div class="t3-img-front"><img src="images/fry.png" draggable="false" alt="Amazon Music"/></div>
+          </div>
+        </div>
+        <p class="next-up-title">Consumer &amp; Artist Collaboration</p>
+      </a>
 
     </div>
   </section>
@@ -1360,69 +2231,34 @@
 
   <script>
 
-    /* ── RAIL ACTIVE STATE ON SCROLL ──
-       A section can point at a rail item other than its own id via
-       data-toc; without it, it falls back to its own id. */
-    (function () {
-      var sections = document.querySelectorAll('.cs-section');
-      var railLinks = document.querySelectorAll('.rail-links a');
-      var io = new IntersectionObserver(function (entries) {
-        entries.forEach(function (entry) {
-          if (!entry.isIntersecting) return;
-          var key = entry.target.dataset.toc || entry.target.id;
-          var active = document.querySelector('.rail-links a[href="#' + key + '"]');
-          if (active) {
-            railLinks.forEach(function (a) { a.classList.remove('active'); });
-            active.classList.add('active');
-          }
-        });
-      }, { rootMargin: '-15% 0px -70% 0px' });
-      sections.forEach(function (s) { io.observe(s); });
-    })();
-
-    /* ── NEXT UP thumbs in-view ──
-       The thumbnails are CSS scenes that start hidden and fade in when the
-       card reaches the viewport, same as on the other case studies. Without
-       this observer they sit at opacity 0 and the cards look empty. */
-    const nextUpIO = new IntersectionObserver(entries => {
-      entries.forEach(e => {
-        if (e.isIntersecting) { e.target.classList.add('in-view'); nextUpIO.unobserve(e.target); }
+    /* ── SOLUTION VIDEO: hide placeholder when video plays ── */
+    const solVideo = document.querySelector('#solution video');
+    const solPlaceholder = document.getElementById('solution-placeholder');
+    if (solVideo) {
+      solVideo.addEventListener('playing', () => {
+        if (solPlaceholder) solPlaceholder.style.display = 'none';
       });
-    }, { threshold: 0.2 });
-    document.querySelectorAll('.next-up-grid .thumb-1, .next-up-grid .thumb-2, .next-up-grid .thumb-3, .next-up-grid .thumb-lg').forEach(el => nextUpIO.observe(el));
+      // If the video src is missing, keep placeholder visible
+      solVideo.addEventListener('error', () => {
+        if (solPlaceholder) solPlaceholder.style.display = 'flex';
+      });
+    }
 
-    /* ── SCROLL REVEALS ──
-       The cards and screenshots are observed individually, not just via
-       their parent section: the grid's second row is usually still below
-       the fold when the section itself comes into view, so letting the
-       section trigger them would spend the animation off-screen. */
-    (function () {
-      var blocks = document.querySelectorAll('.cs-section, .feature, .shot-row .shot');
-      function revealAll() {
-        for (var i = 0; i < blocks.length; i++) blocks[i].classList.add('revealed');
-      }
-      if (!document.documentElement.classList.contains('js-reveal')) { revealAll(); return; }
-      var fired = false;
-      var io = new IntersectionObserver(function (entries) {
-        entries.forEach(function (e) {
-          if (e.isIntersecting) { fired = true; e.target.classList.add('revealed'); io.unobserve(e.target); }
-        });
-      }, { rootMargin: '0px 0px -12% 0px', threshold: 0 });
-      /* Anything in the opening screenful is shown straight away. Leaving the
-         first section to animate in meant landing on a page whose content
-         stopped at the metadata, with no cue that there was more below. */
-      for (var i = 0; i < blocks.length; i++) {
-        if (blocks[i].getBoundingClientRect().top < window.innerHeight * 1.25) {
-          blocks[i].classList.add('revealed', 'revealed-at-load');
-        } else {
-          io.observe(blocks[i]);
+    /* ── SIDEBAR ACTIVE STATE ON SCROLL ── */
+    const sections = document.querySelectorAll('.cs-section, #overview');
+    const sidebarLinks = document.querySelectorAll('.cs-sidebar-links a');
+
+    const io = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          sidebarLinks.forEach(a => a.classList.remove('active'));
+          const active = document.querySelector(`.cs-sidebar-links a[href="#${entry.target.id}"]`);
+          if (active) active.classList.add('active');
         }
-      }
-      /* Failsafe only when the observer never fired at all. */
-      window.addEventListener('load', function () {
-        setTimeout(function () { if (!fired) revealAll(); }, 2500);
       });
-    })();
+    }, { rootMargin: '-20% 0px -70% 0px' });
+
+    sections.forEach(s => io.observe(s));
 
     /* ── FOOTER WORD CYCLER ── */
     (function() {
@@ -1447,7 +2283,38 @@
       }
       setTimeout(() => { deleting = true; tick(); }, PAUSE_AFTER);
     })();
+
+    /* ── NEXT UP thumbs in-view ── */
+    const nextUpIO = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) { e.target.classList.add('in-view'); nextUpIO.unobserve(e.target); }
+      });
+    }, { threshold: 0.2 });
+    document.querySelectorAll('.next-up-grid .thumb-1, .next-up-grid .thumb-2, .next-up-grid .thumb-3, .next-up-grid .thumb-lg').forEach(el => nextUpIO.observe(el));
+
   
+    /* ── SCROLL REVEALS ── */
+    (function () {
+      var sections = document.querySelectorAll('.cs-section');
+      function revealAll() {
+        for (var i = 0; i < sections.length; i++) sections[i].classList.add('revealed');
+      }
+      if (!document.documentElement.classList.contains('js-reveal')) { revealAll(); return; }
+      var fired = false;
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+          if (e.isIntersecting) { fired = true; e.target.classList.add('revealed'); io.unobserve(e.target); }
+        });
+      }, { rootMargin: '0px 0px -15% 0px', threshold: 0 });
+      for (var i = 0; i < sections.length; i++) io.observe(sections[i]);
+      /* Failsafe only when the observer never fired at all. An unconditional
+         timer reveals every section before the visitor has scrolled, which
+         silently cancels the effect it was meant to protect. */
+      window.addEventListener('load', function () {
+        setTimeout(function () { if (!fired) revealAll(); }, 2500);
+      });
+    })();
+
     /* ── FOOTER SCRATCH-OFF ──
        Erases into a white canvas as the pointer moves, then heals back so the
        next visitor gets a clean slate. The rAF loop only runs while there is
@@ -1540,5 +2407,6 @@
       else window.addEventListener('resize', resize);
     })();
 </script>
+
 </body>
 </html>

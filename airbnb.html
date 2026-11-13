@@ -1,0 +1,2331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link rel="icon" href="/favicon.ico" sizes="any"/>
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png"/>
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"/>
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"/>
+
+  <meta name="description" content="A take-home design challenge: redesigning Airbnb's commitment moment so guests know exactly what they're paying, whether they can get it back, and what happens next."/>
+  <link rel="canonical" href="https://www.diya-mahapatra.com/airbnb"/>
+
+  <meta property="og:type" content="website"/>
+  <meta property="og:site_name" content="Diya Mahapatra"/>
+  <meta property="og:title" content="Making the Point of No Return Clearer"/>
+  <meta property="og:description" content="A take-home design challenge: redesigning Airbnb's commitment moment so guests know exactly what they're paying, whether they can get it back, and what happens next."/>
+  <meta property="og:url" content="https://www.diya-mahapatra.com/airbnb"/>
+  <meta property="og:image" content="https://www.diya-mahapatra.com/images/airbnb-cs/hero.webp"/>
+  <meta property="og:image:width" content="1200"/>
+  <meta property="og:image:height" content="630"/>
+  <meta property="og:image:alt" content="Redesigned Airbnb booking screens."/>
+
+  <meta name="twitter:card" content="summary_large_image"/>
+  <meta name="twitter:title" content="Making the Point of No Return Clearer"/>
+  <meta name="twitter:description" content="A take-home design challenge: redesigning Airbnb's commitment moment so guests know exactly what they're paying, whether they can get it back, and what happens next."/>
+  <meta name="twitter:image" content="https://www.diya-mahapatra.com/images/airbnb-cs/hero.webp"/>
+  <title>Airbnb — Diya Mahapatra</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300&family=Instrument+Serif:ital@0;1&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,700&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --orange: #21A0A0;
+      --black:  #0F0F0F;
+      --gray:   #6B7280;
+      --border: #E5E7EB;
+      --ease:   cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      --rail:   340px;   /* fixed contents rail, same idea as the SIS study */
+      --nudge:  25px;    /* optical offset right of true centre — see .cs-content */
+    }
+
+    html, body {
+      width: 100%;
+      font-family: 'Inter', system-ui, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      background: #FAF9F7;
+      color: var(--black);
+    }
+    html {
+      scroll-behavior: smooth;
+    }
+    .cs-section, #overview {
+      scroll-margin-top: 77px;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 40px; height: 57px;
+      border-bottom: 1px solid var(--border);
+      background: rgba(250,249,247,0.92);
+      backdrop-filter: blur(12px);
+    }
+    .nav-logo {
+      display: flex; align-items: center; gap: 8px;
+      font-size: 15px; font-weight: 600;
+      text-decoration: none; color: var(--black);
+      transition: transform 0.2s var(--ease);
+      transform-origin: left center;
+    }
+    .nav-logo:hover {
+      transform: scale(1.06);
+    }
+    .nav-links { list-style: none; display: flex; gap: 32px; }
+    .nav-links a {
+      font-size: 14px; color: var(--gray);
+      text-decoration: none; transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--black); }
+    .nav-links a.active { color: var(--black); font-weight: 500; }
+
+    /* ── LAYOUT ──
+       The contents rail is pinned to the far left and out of the flow, so
+       the reading column is free to centre on the window rather than on
+       whatever space the rail left behind. */
+    .cs-layout {
+      display: block;
+      padding-top: 57px;
+      min-height: 100vh;
+    }
+
+    /* ── CONTENTS RAIL ── */
+    .cs-sidebar {
+      position: fixed;
+      left: 0;
+      top: 57px;
+      bottom: 0;
+      width: var(--rail);
+      padding: 34px 24px 28px;
+      display: flex;
+      flex-direction: column;
+      z-index: 50;
+      /* opaque on purpose: section borders below are full-bleed, and without
+         a backdrop they draw a line straight across the contents list */
+      background: #FAF9F7;
+    }
+    .cs-sidebar-links {
+      list-style: none;
+      display: flex; flex-direction: column; gap: 0;
+      /* 13 entries is taller than a short window — let it scroll on its own */
+      overflow-y: auto;
+      min-height: 0;
+    }
+    .cs-sidebar-links a {
+      font-family: 'Inter', system-ui, sans-serif;
+      font-size: 12px; font-weight: 500;
+      letter-spacing: 0.10em; text-transform: uppercase;
+      color: #969696;
+      text-decoration: none;
+      padding: 9px 0;
+      display: block;
+      transition: color 0.18s;
+    }
+    .cs-sidebar-links a:hover { color: var(--black); }
+    .cs-sidebar-links a.active { color: var(--orange); }
+    .cs-sidebar-top {
+      margin-top: auto;
+      padding-top: 20px;
+      font-family: 'Inter', system-ui, sans-serif;
+      font-size: 12px; font-weight: 600;
+      letter-spacing: 0.10em; text-transform: uppercase;
+      color: var(--gray);
+      text-decoration: none;
+      transition: color 0.18s;
+    }
+    .cs-sidebar-top:hover { color: var(--black); }
+    /* Fixed rather than absolute so it runs the full height of the window
+       alongside the rail, instead of being boxed by the aside's padding. */
+    .cs-sidebar::after {
+      content: '';
+      position: fixed;
+      left: var(--rail);
+      top: 57px;
+      bottom: 0;
+      border-left: 1px dotted #D6D6D6;
+      pointer-events: none;
+    }
+
+    /* ── MAIN CONTENT ── */
+    .cs-main {
+      padding: 48px 0 24px;
+    }
+    /* Geometrically the column centres on the window, but the rail sitting
+       off to the left makes that read as left-heavy — so it gets nudged right
+       to sit optically centred. The max() floor keeps it clear of the dotted
+       rule when the window is too narrow to both centre and clear. */
+    .cs-content {
+      max-width: 840px;
+      margin-left: max(325px, calc((100% - 840px) / 2 + var(--nudge)));
+      margin-right: 20px;
+    }
+
+    /* title */
+    .cs-title {
+      font-family: 'Lora', serif;
+      font-size: clamp(25.2px, 2.9vw, 39.6px);
+      font-weight: 400;
+      letter-spacing: -0.02em;
+      line-height: 1.15;
+      color: var(--black);
+      margin-bottom: 24px;
+    }
+
+    /* intro paragraph */
+    .cs-intro {
+      font-size: 15.3px;
+      line-height: 1.75;
+      color: #3D3D3D;
+      margin-bottom: 0;
+    }
+
+    /* intro row with jump button */
+    /* stacked, not split: the CTA sits under the paragraph on the same left
+       edge as everything else, instead of floating opposite it */
+    .cs-intro-row {
+      margin-bottom: 24px;
+    }
+    /* a text link, not a pill — the pill read as SaaS marketing next to the
+       editorial type everywhere else on the page */
+    .cs-jump-btn {
+      display: inline-block;
+      margin-top: 16px;
+      font-size: 14px; font-weight: 500;
+      letter-spacing: 0.01em;
+      color: var(--orange);
+      background: none;
+      border: 0;
+      border-bottom: 1px solid currentColor;
+      border-radius: 0;
+      padding: 0 0 2px;
+      text-decoration: none;
+      transition: opacity 0.18s;
+    }
+    .cs-jump-btn:hover { opacity: 1; }
+
+    /* hero image */
+    .cs-hero-img {
+      width: 100%;
+      border-radius: 0;
+      overflow: hidden;
+      margin-bottom: 16px;
+      background: #F3F4F6;
+    }
+    /* One ratio across the three studies. The source frames range from 1.52
+       to 2.02, which is why the metadata sat on screen on one page and below
+       the fold on another — the hero was simply taller. Cover-cropped from
+       the centre so the exhibit keeps its own composition. */
+    .cs-hero-img {
+      aspect-ratio: 1.9;
+      overflow: hidden;
+    }
+    .cs-hero-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      display: block;
+    }
+    .cs-hero-placeholder {
+      display: flex; flex-direction: column; align-items: center; gap: 10px;
+    }
+    .cs-hero-placeholder-icon {
+      width: 48px; height: 48px; border-radius: 0;
+      background: var(--border);
+    }
+    .cs-hero-placeholder p {
+      font-size: 13px; color: var(--gray);
+    }
+
+    /* overview grid */
+    .cs-overview-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      column-gap: 40px;
+      row-gap: 26px;
+      padding: 4px 0 8px;
+      margin-bottom: 32px;
+    }
+    /* No card around each field — same treatment as the Berkeley IT study:
+       a small-caps accent label over plain body copy. */
+    .cs-overview-item {
+      border: none;
+      padding: 0;
+    }
+    .cs-overview-label {
+      font-family: 'Inter', system-ui, sans-serif;
+      font-size: 12px; font-weight: 600;
+      letter-spacing: 0.10em; text-transform: uppercase;
+      color: var(--orange);
+      margin-bottom: 8px;
+    }
+    .cs-overview-value {
+      font-size: 14.4px;
+      font-weight: 400;
+      line-height: 1.75;
+      color: #3D3D3D;
+    }
+
+    /* sections */
+    .cs-section {
+      margin-bottom: 128px;
+    }
+    /* Caps treatment matched to the contents rail: uppercase needs the wider
+       0.10em tracking, or the letters crowd at this size.
+       Selector is p.cs-section-label, not .cs-section-label: `.cs-section p`
+       is (0,1,1) and silently outranks a lone class, which is why the size
+       here was resolving to 14.4px instead of 13px. */
+    .cs-section p.cs-section-label {
+      font-family: 'Inter', system-ui, sans-serif;
+      font-size: 12px; font-weight: 500;
+      letter-spacing: 0.10em; text-transform: uppercase;
+      color: var(--orange);
+      margin-bottom: 12px;
+      display: block;
+    }
+    .cs-section h2 {
+      font-family: 'Lora', serif;
+      font-size: clamp(16.9px, calc(2.1vw - 2px), 22.3px);
+      /* 500 rather than 600 — Lora's semibold is much heavier than Inter's
+         at the same value and reads clotted at heading size */
+      font-weight: 500;
+      letter-spacing: -0.01em;
+      color: var(--black);
+      margin-bottom: 16px;
+      line-height: 1.25;
+    }
+    .cs-section p {
+      font-size: 14.4px;
+      line-height: 1.75;
+      color: #3D3D3D;
+      margin-bottom: 16px;
+    }
+    .cs-section p:last-child { margin-bottom: 0; }
+    /* the reflection paragraph is one long unbroken block (the longest single
+       paragraph in the case study), so it gets a bit more air between lines
+       than the 1.75 baseline to stay easy to read straight through.
+       :not() excludes the "REFLECTION" eyebrow label, which is also a <p>
+       inside this section. */
+    #reflection p:not(.cs-section-label) { line-height: 2; }
+    .cs-pullquote {
+      background: #F2F2F0;
+      border-radius: 10px;
+      padding: 24px 28px;
+      margin-top: 24px !important;
+      font-family: 'Lora', serif;
+      font-style: italic;
+      font-size: 17.1px;
+      line-height: 1.6;
+      color: var(--black);
+    }
+
+    /* comp scatter */
+    .comp-scatter-wrap {
+      position: relative;
+      left: -48px;
+      width: calc(100% + 328px);
+      margin: 36px 0 0;
+    }
+    .comp-scatter {
+      background: #F0EFED;
+      border-radius: 14px;
+      height: 320px;
+      position: relative;
+      overflow: hidden;
+    }
+    .comp-item {
+      position: absolute;
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      user-select: none;
+    }
+    .comp-item img {
+      display: block;
+      border-radius: 8px;
+      object-fit: contain;
+      flex-shrink: 0;
+    }
+    .comp-item span {
+      font-family: 'Inter', sans-serif;
+      font-weight: 700;
+      color: #111;
+      white-space: nowrap;
+      letter-spacing: -0.025em;
+      line-height: 1;
+    }
+
+    /* research quotes */
+    .cs-quote-card {
+      background: linear-gradient(148deg, #EAE2D6 0%, #D4E0D8 100%);
+      border-radius: 0;
+      padding: 40px 44px;
+      margin: 28px 0 36px;
+    }
+    .cs-quote-entry + .cs-quote-entry {
+      margin-top: 32px;
+      padding-top: 32px;
+      border-top: 1px solid rgba(0,0,0,0.09);
+    }
+    .cs-quote-glyph {
+      font-family: 'Lora', serif;
+      font-size: 27px;
+      color: rgba(0,0,0,0.22);
+      line-height: 1;
+      margin-bottom: 14px;
+    }
+    .cs-quote-text {
+      font-family: 'Lora', serif;
+      font-style: italic;
+      font-size: 18px;
+      line-height: 1.55;
+      color: #1A1A1A;
+      margin: 0 0 14px;
+    }
+    .cs-quote-cite {
+      font-size: 13px;
+      color: #787878;
+      line-height: 1.5;
+    }
+    /* synthesis grid */
+    .cs-synthesis {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 32px;
+      margin-top: 8px;
+    }
+    /* Scoped as `.cs-section p.<class>`, not the bare class: `.cs-section p`
+       is (0,1,1) and silently outranks a lone class, which is why the title
+       was resolving to 14.4px — the same size as its own description — and
+       the declared 36px never rendered. 36px is far too large for a 258px
+       grid column anyway, so the intent lands at 19px. */
+    .cs-section p.cs-synthesis-title {
+      font-family: 'Inter', system-ui, sans-serif;
+      font-size: 16px;
+      font-weight: 500;
+      letter-spacing: -0.01em;
+      color: #0F0F0F;
+      margin-bottom: 10px;
+      line-height: 1.3;
+    }
+    .cs-section p.cs-synthesis-desc {
+      font-size: 13px;
+      color: #5C5C5C;
+      line-height: 1.7;
+    }
+
+    /* image block */
+    .cs-img-block {
+      width: 100%;
+      border-radius: 0;
+      overflow: hidden;
+      margin: 32px 0;
+      background: #F3F4F6;
+      aspect-ratio: 16/9;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .cs-img-block img { width: 100%; height: 100%; object-fit: cover; }
+    .cs-img-caption {
+      font-size: 12px; color: var(--gray);
+      margin-top: -20px; margin-bottom: 32px;
+      text-align: center;
+    }
+
+    /* ── THE SOLUTION ── */
+    .cs-solution-video-wrap {
+      width: 100%;
+      /* the hero's own gradient (same image, with its grain) behind the recording */
+      background: #BCC5E4 url("images/flourish-hero/bg.jpg") center / cover no-repeat;
+      border-radius: 0;
+      overflow: hidden;
+      margin-bottom: 8px;
+      height: 860px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .cs-solution-video-wrap video {
+      max-height: 780px;
+      max-width: 100%;
+      width: auto;
+      height: auto;
+      display: block;
+      /* the recording's own 28/390 rounded corners, clipped so its square
+         background never shows on the blue panel */
+      clip-path: inset(0 round 7.4% / 3.42%);
+    }
+    .cs-solution-video-placeholder {
+      aspect-ratio: 16/9;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .cs-solution-video-placeholder span {
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #555;
+    }
+
+    /* ── IMPACT ── */
+    .cs-impact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 48px;
+      align-items: center;
+      margin-top: 40px;
+    }
+    .cs-impact-proof img {
+      width: 100%;
+      display: block;
+      border-radius: 12px;
+    }
+    .cs-impact-metrics {
+      display: flex;
+      flex-direction: column;
+      gap: 44px;
+    }
+    .cs-metric-num {
+      display: block;
+      font-family: 'Lora', serif;
+      font-size: 59.4px;
+      font-weight: 700;
+      color: var(--black);
+      line-height: 1;
+      margin-bottom: 10px;
+      letter-spacing: -0.02em;
+    }
+    .cs-metric-label {
+      font-size: 13px;
+      line-height: 1.6;
+      color: var(--gray);
+      max-width: 220px;
+    }
+
+    /* ── DESIGN CARDS ── */
+    .cs-design-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+    .cs-design-card {
+      background: #F5F4F1;
+      border-radius: 0;
+      padding: 28px 28px 0;
+      overflow: hidden;
+    }
+    .cs-design-card--wide {
+      /* full width, no extra styles needed */
+    }
+    .cs-design-card-text {
+      font-size: 13px;
+      line-height: 1.7;
+      color: #3A3A3A;
+      margin: 0 0 24px;
+    }
+    .cs-design-card-frame {
+      width: 100%;
+      aspect-ratio: 4/3;
+      background: #E4E2DD;
+      border-radius: 0;
+    }
+    .cs-design-card-frame--wide {
+      aspect-ratio: 16/7;
+    }
+
+    /* ── DIFF CARDS ── */
+    .cs-diff { display: flex; flex-direction: column; }
+    .cs-diff-row {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      padding: 36px 0;
+    }
+    .cs-diff-row:first-child { padding-top: 0; }
+    .cs-diff-num {
+      display: block;
+      font-size: 11px; font-weight: 600;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--orange); margin-bottom: 10px;
+    }
+    .cs-diff-title {
+      font-family: 'Lora', serif;
+      font-size: 14.4px; font-weight: 500;
+      color: var(--black); line-height: 1.35;
+      margin-bottom: 6px;
+    }
+    .cs-diff-desc {
+      font-size: 14.4px; line-height: 1.75;
+      color: #3D3D3D;
+    }
+    .cs-diff-pair {
+      display: grid;
+      grid-template-columns: 1fr 28px 1fr;
+      gap: 12px;
+      align-items: center;
+    }
+    .cs-diff-tag {
+      display: block;
+      font-size: 10.5px; font-weight: 600;
+      letter-spacing: 0.09em; text-transform: uppercase;
+      color: var(--gray); margin-bottom: 8px;
+    }
+    .cs-diff-img-wrap img {
+      width: 100%;
+      display: block;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+    }
+    .cs-diff-arrow {
+      text-align: center;
+      font-size: 14.4px;
+      color: #C4C9D2;
+      line-height: 1;
+    }
+
+    /* ── DESIGN EVOLUTION ── */
+    .cs-evolution-questions {
+      margin-top: 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+    .cs-evolution-q {
+      font-family: 'Lora', serif;
+      font-style: italic;
+      font-size: 19.8px;
+      line-height: 1.5;
+      color: var(--black);
+      margin: 0;
+      padding: 18px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .cs-evolution-q:first-child { border-top: 1px solid var(--border); }
+
+    /* ── RESEARCH SECTION ── */
+    .research-stats {
+      display: flex;
+      align-items: flex-start;
+      gap: 40px;
+      margin: 28px 0 40px;
+      padding-bottom: 36px;
+      border-bottom: 1px solid var(--border);
+    }
+    .research-stat-num {
+      font-family: 'Lora', serif;
+      font-size: 46.8px;
+      font-weight: 400;
+      line-height: 1;
+      color: var(--black);
+      margin-bottom: 4px;
+    }
+    .research-stat-label {
+      font-size: 12px;
+      color: var(--gray);
+      letter-spacing: 0.03em;
+    }
+    .research-conditions {
+      font-size: 13px;
+      color: var(--gray);
+      line-height: 1.75;
+      padding-top: 6px;
+    }
+    .findings-list { margin-bottom: 40px; }
+    .finding-row {
+      display: grid;
+      grid-template-columns: 32px 1fr;
+      gap: 20px;
+      align-items: baseline;
+      padding: 22px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .findings-list .finding-row:first-child { border-top: 1px solid var(--border); }
+    .finding-num {
+      font-size: 11px;
+      color: var(--gray);
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      padding-top: 2px;
+    }
+    .finding-body { display: flex; flex-direction: column; gap: 4px; }
+    .finding-title {
+      font-size: 13.5px;
+      font-weight: 600;
+      color: var(--black);
+      line-height: 1.4;
+    }
+    .finding-desc {
+      font-size: 13px;
+      color: #3D3D3D;
+      line-height: 1.7;
+    }
+    .cs-quote {
+      margin: 28px 0;
+      padding-left: 18px;
+      border-left: 2px solid #C9C8C5;
+    }
+    .cs-quote blockquote {
+      font-family: 'Lora', serif;
+      font-size: 14.4px;
+      font-style: italic;
+      color: var(--black);
+      line-height: 1.7;
+      margin: 0 0 6px;
+    }
+    .cs-quote cite {
+      font-size: 12px;
+      color: var(--gray);
+      font-style: normal;
+      letter-spacing: 0.02em;
+    }
+    .synthesis-block {
+      margin: 48px 0 0;
+      padding: 52px 0;
+      text-align: center;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+    .synthesis-line {
+      font-family: 'Lora', serif;
+      font-size: clamp(17.1px, 2vw, 24.3px);
+      font-weight: 400;
+      color: var(--black);
+      line-height: 1.3;
+      margin: 0;
+    }
+    .synthesis-line.muted { color: var(--gray); font-style: italic; }
+    .synthesis-arrow {
+      display: block;
+      font-size: 16.2px;
+      color: #C9C9C9;
+      margin: 14px 0;
+      line-height: 1;
+    }
+    .synthesis-opp {
+      margin-top: 44px;
+    }
+    .synthesis-opp-label {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      color: var(--gray);
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+    .synthesis-opp-text {
+      font-size: 14.4px;
+      color: var(--black);
+      font-weight: 500;
+    }
+
+    .work-thumb {
+      width: 100%;
+      aspect-ratio: 16 / 11;
+      border-radius: 0;
+      overflow: hidden;
+      margin-bottom: 22px;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .work-label {
+      font-size: 11px; font-weight: 600;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--gray); margin-bottom: 8px;
+    }
+
+    .work-title {
+      font-family: 'Lora', serif;
+      font-size: clamp(18px, 1.6vw, 23.4px);
+      font-weight: 500; letter-spacing: -0.01em;
+      color: var(--black); line-height: 1.2;
+      margin-bottom: 10px;
+    }
+
+    .work-desc {
+      font-size: 13px; color: var(--gray);
+      line-height: 1.65; max-width: 480px;
+    }
+
+    /* ── placeholder thumbnail backgrounds — pastel palette ── */
+
+    /* ── THUMB 1 — warm ivory/sage gradient (matches Research quote card) ── */
+    .thumb-1 {
+      background: linear-gradient(135deg, #BCD8D8 0%, #C0C8E8 52%, #EDE0D4 100%);
+      position: relative;
+      overflow: hidden;
+    }
+    .thumb-1-mesh {
+      display: none;
+    }
+    .t1b { position: absolute; border-radius: 50%; will-change: transform; }
+    .t1b-1 { width: 70%; height: 70%; background: #F5EDE6; top: -10%; left: -10%; animation: t1m1 3.5s ease-in-out infinite alternate; }
+    .t1b-2 { width: 60%; height: 60%; background: #DDD0EE; top: 0%; right: -15%; animation: t1m2 4.5s ease-in-out infinite alternate; }
+    .t1b-3 { width: 65%; height: 65%; background: #C8C0E8; bottom: -15%; left: 15%; animation: t1m3 4.0s ease-in-out infinite alternate; }
+    .t1b-4 { width: 55%; height: 55%; background: #FAF4F0; top: 20%; left: 25%; animation: t1m4 5.0s ease-in-out infinite alternate; }
+    @keyframes t1m1 { to { transform: translate(18%, 20%); } }
+    @keyframes t1m2 { to { transform: translate(-20%, 16%); } }
+    @keyframes t1m3 { to { transform: translate(16%, -18%); } }
+    @keyframes t1m4 { to { transform: translate(-14%, -12%); } }
+
+    .f1-scene {
+      position: absolute; inset: 0; z-index: 2;
+      display: flex; align-items: center;
+      padding: 6% 5% 6% 5%;
+      gap: 14px;
+    }
+
+    /* Left nav pill */
+    .f1-nav {
+      display: flex; align-items: center; gap: 10px;
+      flex-shrink: 0;
+      opacity: 0; transform: translateY(10px);
+      transition: opacity 0.6s ease 0.3s, transform 0.6s ease 0.3s;
+    }
+    .thumb-1.in-view .f1-nav { opacity: 1; transform: translateY(0); }
+
+    .f1-pill {
+      background: rgba(255,255,255,0.38);
+      backdrop-filter: blur(18px) saturate(180%);
+      -webkit-backdrop-filter: blur(18px) saturate(180%);
+      border: 1px solid rgba(255,255,255,0.72);
+      box-shadow: 0 4px 18px rgba(160,120,130,0.10),
+                  inset 0 1.5px 0 rgba(255,255,255,0.88),
+                  inset 0 -1px 0 rgba(255,255,255,0.28);
+      border-radius: 100px;
+      padding: 6px;
+      display: flex; flex-direction: column; align-items: center;
+      gap: 0;
+      position: relative; overflow: hidden;
+    }
+    .f1-pill::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0; height: 50%;
+      background: linear-gradient(180deg, rgba(255,255,255,0.13) 0%, transparent 100%);
+      border-radius: inherit; pointer-events: none; z-index: 0;
+    }
+    .f1-nd {
+      width: 30px; height: 30px; border-radius: 50%;
+      background: rgba(255,255,255,0.55);
+      border: 1px solid rgba(255,255,255,0.62);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.72);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 8px; font-weight: 700; letter-spacing: 0.02em;
+      color: rgba(0,0,0,0.70);
+      flex-shrink: 0; position: relative; z-index: 1;
+    }
+    .f1-sep { width: 1px; height: 11px; background: rgba(160,120,140,0.22); position: relative; z-index: 1; }
+
+    .f1-labels {
+      display: flex; flex-direction: column; gap: 0;
+    }
+    .f1-lbl {
+      height: 30px;
+      display: flex; align-items: center;
+      font-size: 8.5px; font-weight: 600;
+      letter-spacing: 0.13em; text-transform: uppercase;
+      color: rgba(0,0,0,0.62);
+      position: relative; z-index: 1;
+    }
+    /* gap between labels mirrors sep height */
+    .f1-lbl + .f1-lbl { margin-top: 11px; }
+
+    /* Cards display area */
+    .f1-cards-area {
+      flex: 1; position: relative;
+      height: 100%; overflow: hidden;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .f1-crd {
+      position: absolute;
+      width: 68%; border-radius: 24px;
+      opacity: 0; transform: translateY(100%);
+      will-change: transform, opacity;
+      box-shadow: 0 8px 32px rgba(100,70,90,0.20), 0 2px 10px rgba(100,70,90,0.10);
+      background: rgba(255,255,255,0.18);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      padding: 14px;
+      overflow: hidden;
+    }
+    .f1-crd img {
+      display: block; width: 100%; height: auto;
+      border-radius: 14px;
+    }
+    .f1-crd-2 {
+      width: auto;
+      height: 91%;
+      background: rgba(255,255,255,0.22);
+      backdrop-filter: blur(10px) saturate(160%);
+      -webkit-backdrop-filter: blur(10px) saturate(160%);
+      box-shadow: 0 8px 32px rgba(100,70,90,0.20), 0 2px 10px rgba(100,70,90,0.10);
+      padding: 13px;
+      border-radius: 28px;
+      display: flex;
+      overflow: visible;
+      position: relative;
+    }
+    .f1-crd-2::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0; height: 50%;
+      background: linear-gradient(180deg, rgba(255,255,255,0.10) 0%, transparent 100%);
+      border-radius: inherit; pointer-events: none;
+    }
+    .f1-crd-2 img {
+      height: 100%;
+      width: auto;
+      display: block;
+      border-radius: 0;
+    }
+
+    /* ── THUMB-1 LIQUID GLASS LAYERS ── */
+    /* Sweep shimmer overlay — sits between mesh and scene */
+    .t1-sweep {
+      position: absolute; inset: 0; z-index: 1; pointer-events: none;
+      background: linear-gradient(110deg, transparent 30%, rgba(255,255,255,0.07) 50%, transparent 70%);
+      animation: t1Sweep 4.8s ease-in-out infinite;
+    }
+    @keyframes t1Sweep { 0%,100% { transform: translateX(-130%); } 50% { transform: translateX(130%); } }
+
+    /* 10.5s cycle — one card visible at a time, pops up from bottom */
+    .thumb-1.in-view .f1-crd-1 { animation: crdPop1 10.5s var(--ease) 0.4s infinite; }
+    @keyframes crdPop1 {
+      0%         { opacity:0; transform:translateY(100%); }
+      7%         { opacity:1; transform:translateY(0); }
+      27%        { opacity:1; transform:translateY(0); }
+      33%        { opacity:0; transform:translateY(-12%); }
+      33.1%,100% { opacity:0; transform:translateY(100%); }
+    }
+    .thumb-1.in-view .f1-crd-2 { animation: crdPop2 10.5s var(--ease) 0.4s infinite; }
+    @keyframes crdPop2 {
+      0%,33%     { opacity:0; transform:translateY(100%); }
+      40%        { opacity:1; transform:translateY(0); }
+      60%        { opacity:1; transform:translateY(0); }
+      66%        { opacity:0; transform:translateY(-12%); }
+      66.1%,100% { opacity:0; transform:translateY(100%); }
+    }
+    .thumb-1.in-view .f1-crd-3 { animation: crdPop3 10.5s var(--ease) 0.4s infinite; }
+    @keyframes crdPop3 {
+      0%,66%  { opacity:0; transform:translateY(100%); }
+      73%     { opacity:1; transform:translateY(0); }
+      93%     { opacity:1; transform:translateY(0); }
+      99%     { opacity:0; transform:translateY(-12%); }
+      100%    { opacity:0; transform:translateY(100%); }
+    }
+
+    /* Nav dot highlights — synced to card cycle */
+    .thumb-1.in-view .f1-nd-1 { animation: nd1 10.5s var(--ease) 0.4s infinite; }
+    .thumb-1.in-view .f1-nd-2 { animation: nd2 10.5s var(--ease) 0.4s infinite; }
+    .thumb-1.in-view .f1-nd-3 { animation: nd3 10.5s var(--ease) 0.4s infinite; }
+    @keyframes nd1 {
+      0%,33%     { background:#fff; color:rgba(0,0,0,0.92); }
+      33.1%,100% { background:rgba(255,255,255,0.50); color:rgba(0,0,0,0.70); }
+    }
+    @keyframes nd2 {
+      0%,33%     { background:rgba(255,255,255,0.50); color:rgba(0,0,0,0.70); }
+      33.1%,66%  { background:#fff; color:rgba(0,0,0,0.92); }
+      66.1%,100% { background:rgba(255,255,255,0.50); color:rgba(0,0,0,0.70); }
+    }
+    @keyframes nd3 {
+      0%,66%     { background:rgba(255,255,255,0.50); color:rgba(0,0,0,0.70); }
+      66.1%,100% { background:#fff; color:rgba(0,0,0,0.92); }
+    }
+
+    /* Label highlights — synced */
+    .thumb-1.in-view .f1-lbl-1 { animation: lb1 10.5s var(--ease) 0.4s infinite; }
+    .thumb-1.in-view .f1-lbl-2 { animation: lb2 10.5s var(--ease) 0.4s infinite; }
+    .thumb-1.in-view .f1-lbl-3 { animation: lb3 10.5s var(--ease) 0.4s infinite; }
+    @keyframes lb1 {
+      0%,33%     { color:rgba(0,0,0,0.92); }
+      33.1%,100% { color:rgba(0,0,0,0.62); }
+    }
+    @keyframes lb2 {
+      0%,33%     { color:rgba(0,0,0,0.62); }
+      33.1%,66%  { color:rgba(0,0,0,0.92); }
+      66.1%,100% { color:rgba(0,0,0,0.62); }
+    }
+    @keyframes lb3 {
+      0%,66%     { color:rgba(0,0,0,0.62); }
+      66.1%,100% { color:rgba(0,0,0,0.92); }
+    }
+    .thumb-3 {
+      background: #D2D2FF;
+      overflow: hidden;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    /* ── LIQUID GLASS CARD ── */
+    .thumb-lg {
+      background: #FCE8D0;
+      position: relative; overflow: hidden;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .lg-bg { position: absolute; inset: -25%; z-index: 0; }
+    .lg-blob { position: absolute; border-radius: 50%; will-change: transform; }
+    .lg-blob-1 { width: 62%; height: 62%; background: #F1C3B3; top: -8%;  left: -8%;  filter: blur(40px); animation: lgb1 3.5s ease-in-out infinite alternate; }
+    .lg-blob-2 { width: 55%; height: 55%; background: #BFD9D0; top: 5%;   right: -12%; filter: blur(36px); animation: lgb2 4s   ease-in-out infinite alternate; }
+    .lg-blob-3 { width: 80%; height: 80%; background: #FCE8D0; bottom: -10%; left: 0%;  filter: blur(44px); animation: lgb3 3.2s ease-in-out infinite alternate; }
+    .lg-blob-4 { width: 48%; height: 48%; background: #FEDCAF; top: 35%;  left: 30%;  filter: blur(34px); animation: lgb4 4.5s ease-in-out infinite alternate; }
+    @keyframes lgb1 { to { transform: translate(24%, 20%) scale(1.22); } }
+    @keyframes lgb2 { to { transform: translate(-22%, 24%) scale(0.85); } }
+    @keyframes lgb3 { to { transform: translate(20%, -22%) scale(1.18); } }
+    @keyframes lgb4 { to { transform: translate(-18%, 16%) scale(1.15); } }
+
+    .lg-scene {
+      position: relative; z-index: 1;
+      width: 78%; display: flex; flex-direction: column;
+      align-items: center; gap: 7px;
+    }
+
+    /* shared glass base */
+    .lg-glass {
+      background: rgba(255,255,255,0.38);
+      backdrop-filter: blur(20px) saturate(160%);
+      -webkit-backdrop-filter: blur(20px) saturate(160%);
+      border: 1px solid rgba(255,255,255,0.75);
+      box-shadow: 0 6px 24px rgba(180,140,110,0.14),
+                  inset 0 1.5px 0 rgba(255,255,255,0.9),
+                  inset 0 -1px 0 rgba(255,255,255,0.3);
+      position: relative; overflow: hidden;
+    }
+    /* top-edge sheen */
+    .lg-glass::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0; height: 50%;
+      background: linear-gradient(180deg, rgba(255,255,255,0.10) 0%, transparent 100%);
+      border-radius: inherit; pointer-events: none;
+    }
+
+    /* sweep shimmer */
+    .lg-sweep {
+      position: absolute; inset: 0; z-index: 5; pointer-events: none;
+      background: linear-gradient(110deg, transparent 30%, rgba(255,255,255,0.14) 50%, transparent 70%);
+      animation: lgSweep 3.8s ease-in-out infinite;
+    }
+    @keyframes lgSweep { 0%,100% { transform: translateX(-120%); } 50% { transform: translateX(120%); } }
+
+    /* main card */
+    .lg-main-card {
+      width: 100%; border-radius: 22px; padding: 14px 14px 12px;
+      animation: lgFloat 5s ease-in-out infinite;
+    }
+    @keyframes lgFloat { 0%,100% { transform: translateY(0);   } 50% { transform: translateY(-5px); } }
+
+    .lg-logo-row {
+      display: flex; align-items: center; gap: 8px; margin-bottom: 10px;
+    }
+    .lg-apple-icon {
+      width: 26px; height: 26px; border-radius: 8px;
+      background: rgba(255,255,255,0.15);
+      border: 1px solid rgba(255,255,255,0.25);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px; color: rgba(255,255,255,0.9);
+      animation: lgIconGlow 2.5s ease-in-out infinite;
+    }
+    @keyframes lgIconGlow {
+      0%,100% { box-shadow: 0 0 0 0 rgba(255,255,255,0); }
+      50%      { box-shadow: 0 0 12px 3px rgba(200,180,255,0.4); }
+    }
+    .lg-title-stack { display: flex; flex-direction: column; gap: 4px; }
+    .lg-tl { height: 5px; border-radius: 3px; background: rgba(80,60,70,0.35); }
+    .lg-tl.sm { background: rgba(80,60,70,0.2); }
+
+    .lg-divider { width: 100%; height: 1px; background: rgba(150,120,130,0.15); margin: 9px 0; }
+
+    .lg-inner-row { display: flex; gap: 5px; }
+    .lg-inner-card {
+      flex: 1; border-radius: 12px; padding: 7px 8px;
+      background: rgba(255,255,255,0.45);
+      border: 1px solid rgba(255,255,255,0.7);
+      display: flex; flex-direction: column; gap: 4px;
+    }
+    .lg-dot { width: 14px; height: 14px; border-radius: 50%; background: rgba(180,140,150,0.3); }
+    .lg-iline { height: 4px; border-radius: 2px; background: rgba(120,100,110,0.18); }
+
+    /* pills row */
+    .lg-pill-row { display: flex; gap: 6px; width: 100%; }
+    .lg-pill {
+      border-radius: 100px; padding: 5px 11px;
+      font-size: 8.5px; font-weight: 600; letter-spacing: 0.07em;
+      color: rgba(80,65,75,0.75); white-space: nowrap;
+    }
+    .lg-pill-1 { animation: lgPf1 3.8s ease-in-out infinite alternate; }
+    .lg-pill-2 { animation: lgPf2 4.4s ease-in-out infinite alternate; }
+    .lg-pill-3 { animation: lgPf3 3.2s ease-in-out infinite alternate; align-self: flex-end; margin-left: auto; }
+    @keyframes lgPf1 { from { transform: translateY(0);  } to { transform: translateY(-4px); } }
+    @keyframes lgPf2 { from { transform: translateY(-3px); } to { transform: translateY(3px);  } }
+    @keyframes lgPf3 { from { transform: translateY(0);  } to { transform: translateY(-5px); } }
+
+    /* ── CARD 3 — AMAZON MUSIC IMAGES ── */
+
+    .t3-imgs {
+      position: absolute; inset: 0; z-index: 3;
+      display: flex; align-items: center; justify-content: center;
+      gap: 14px; padding: 0 16px;
+    }
+    /* Bare screens — no white outline, fill or top-edge sheen. */
+    .t3-img-back, .t3-img-front {
+      flex-shrink: 0; opacity: 0;
+      border-radius: 30px; overflow: hidden;
+      position: relative;
+    }
+    .t3-img-back  { width: 34%; }
+    .t3-img-front { width: 34%; }
+    .t3-imgs img  { display: block; width: 100%; }
+
+    /* One-shot entrance, then static — nothing loops on the card. */
+    .t3-img-back  { transform: translateY(calc(-28% - 60px)); }
+    .t3-img-front { transform: translateY(calc(28% + 60px)); }
+    .t3-img-back, .t3-img-front {
+      filter: drop-shadow(0 10px 20px rgba(100,148,172,0.18));
+      transition: opacity 0.85s var(--ease), transform 0.85s var(--ease);
+    }
+    .thumb-3.in-view .t3-img-back  { opacity: 1; transform: translateY(-28%); transition-delay: 0.20s; }
+    .thumb-3.in-view .t3-img-front { opacity: 1; transform: translateY(28%);  transition-delay: 0.45s; }
+    @media (prefers-reduced-motion: reduce) {
+      .t3-img-back, .t3-img-front { transition: none; }
+      .t3-img-back  { transform: translateY(-28%); opacity: 1; }
+      .t3-img-front { transform: translateY(28%);  opacity: 1; }
+    }
+
+    /* ── NEXT UP ── */
+    .next-up-section {
+      background: #FAF9F7;
+      border-top: 1px solid var(--border);
+      /* no side padding — the label and grid carry the column's own margins */
+      padding: 64px 0 88px;
+    }
+    /* same geometry as .cs-content, so the cards line up under the copy */
+    .next-up-label,
+    .next-up-grid {
+      max-width: 840px;
+      margin-left: max(325px, calc((100% - 840px) / 2 + var(--nudge)));
+      margin-right: 20px;
+    }
+    .next-up-label {
+      text-align: center;
+      font-size: 12px; font-weight: 600;
+      letter-spacing: 0.16em; text-transform: uppercase;
+      color: var(--gray);
+      margin-bottom: 40px;
+    }
+    .next-up-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 32px;
+    }
+    .next-up-card {
+      display: block;
+      text-decoration: none;
+      color: inherit;
+      cursor: pointer;
+    }
+    /* No background here: this rule is (0,2,0) and would beat .thumb-2 /
+       .thumb-3, blanking each card's own colour. It used to be harmless
+       because the colour came from child blob divs painted on top. */
+    .next-up-grid .work-thumb {
+      border-radius: 0;
+      border: 1px solid var(--border);
+      margin-bottom: 18px;
+      transition: transform 0.4s var(--ease);
+    }
+    .next-up-card:hover .work-thumb {
+      transform: translateY(-3px);
+    }
+    .next-up-title {
+      font-family: 'Lora', serif;
+      font-size: 17.1px; font-weight: 500;
+      letter-spacing: -0.01em;
+      color: var(--black);
+    }
+    @media (max-width: 640px) {
+      .next-up-grid { grid-template-columns: 1fr; }
+    }
+
+    /* ── FOOTER ── */
+    .site-footer {
+      /* Pinned, not themed: the footer reads the same on every page, so the
+         accent stays purple even where --orange is the case study's colour. */
+      --footer-accent: #8B5CF6;
+      background: #FAF9F7;
+      border-top: 1px solid var(--border);
+      padding: 80px 96px 56px;
+    }
+
+    /* ── FOOTER SCRATCH-OFF ──
+       Three stacked layers: the colour sits underneath, a white canvas covers
+       it, and the real footer content rides on top. Moving the pointer erases
+       into the canvas, so you wipe the colour into view. The canvas never
+       takes pointer events, so links stay clickable and touch still scrolls.
+       Kept identical on every page — this footer is shared furniture. */
+    .site-footer { position: relative; overflow: hidden; }
+    .footer-inner { position: relative; z-index: 2; }
+    .footer-reveal {
+      position: absolute; inset: 0; z-index: 0;
+      pointer-events: none;
+      /* violet only, and deliberately pale: the footer text sits over this and
+         has to stay readable even when the whole thing is wiped clear */
+      background:
+        radial-gradient(70% 90% at 12% 18%, #C4B5FD 0%, rgba(196,181,253,0) 64%),
+        radial-gradient(65% 85% at 88% 12%, #DDD6FE 0%, rgba(221,214,254,0) 60%),
+        radial-gradient(85% 95% at 62% 105%, #A78BFA 0%, rgba(167,139,250,0) 64%),
+        linear-gradient(125deg, #F5F3FF 0%, #EDE9FE 100%);
+    }
+    .footer-veil {
+      position: absolute; inset: 0; z-index: 1;
+      pointer-events: none;
+      display: block;
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .footer-reveal, .footer-veil { display: none; }
+    }
+    .footer-inner {
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+    .footer-heading {
+      font-family: 'Lora', serif;
+      font-size: clamp(28px, 3.2vw, 44px);
+      font-weight: 500;
+      letter-spacing: -0.02em;
+      line-height: 1.08;
+      color: var(--black);
+      margin-bottom: 34px;
+    }
+    /* Reachable by assistive tech, invisible on screen. Used to give the
+       footer heading a stable accessible name while the typewriter runs. */
+    .sr-only {
+      position: absolute;
+      width: 1px; height: 1px;
+      padding: 0; margin: -1px;
+      overflow: hidden;
+      clip-path: inset(50%);
+      white-space: nowrap;
+      border: 0;
+    }
+    .footer-word {
+      color: var(--footer-accent);
+      font-family: 'Inter', sans-serif;
+    }
+    .footer-caret {
+      display: inline-block;
+      color: var(--footer-accent);
+      font-weight: 300;
+      animation: caretBlink 0.8s step-end infinite;
+      margin-left: 1px;
+    }
+    @keyframes caretBlink { 0%,100% { opacity: 1; } 50% { opacity: 0; } }
+    @media (prefers-reduced-motion: reduce) {
+      .footer-caret { animation: none; }
+    }
+    .footer-main {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 40px;
+      margin-bottom: 56px;
+    }
+    .footer-left {
+      display: flex;
+      flex-direction: column;
+    }
+    .footer-links {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .footer-link {
+      font-size: 14px;
+      font-weight: 400;
+      color: var(--gray);
+      text-decoration: none;
+      transition: color 0.18s;
+    }
+    .footer-link:hover { color: var(--black); }
+    .footer-nav {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 8px;
+      padding-top: 8px;
+    }
+    .footer-nav-link {
+      font-size: 13px;
+      font-weight: 400;
+      color: var(--gray);
+      text-decoration: none;
+      transition: color 0.18s;
+    }
+    .footer-nav-link:hover { color: var(--black); }
+    .footer-bottom {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-top: 1px solid var(--border);
+      padding-top: 24px;
+    }
+    .footer-copy {
+      font-size: 12px;
+      color: var(--gray);
+    }
+  
+    /* ── MOBILE ──────────────────────────────────────────────
+       Scoped entirely to narrow viewports; desktop is untouched. */
+    @media (max-width: 820px) {
+      nav { padding: 0 18px; }
+      .nav-links { gap: 18px; }
+      .nav-links a { font-size: 13px; }
+
+      /* the sticky "on this page" rail needs a gutter a phone doesn't have */
+      .cs-sidebar { display: none; }
+      .cs-layout {
+        max-width: 100%;
+        padding: 57px 20px 0;
+      }
+      .cs-content,
+      .next-up-label,
+      .next-up-grid {
+        max-width: 100%;
+        margin-left: 0;
+        margin-right: 0;
+      }
+      .next-up-section { padding: 48px 20px 64px; }
+
+      /* every multi-column block becomes a single stack */
+      .cs-synthesis,
+      .cs-impact-grid,
+      .cs-design-row,
+      .cs-diff-pair,
+      .owned-grid,
+      .opp-grid,
+      .next-up-grid,
+      .cs-persona-grid,
+      .cs-two-col { grid-template-columns: 1fr; }
+      .finding-row { grid-template-columns: 22px 1fr; }
+
+      /* ── HERO + METADATA ON A PHONE ──
+         Matched to the Berkeley IT study, which reads far better at this
+         width: the hero runs edge to edge instead of sitting inside the
+         20px gutter, and the four fields become a plain two-up label/value
+         grid rather than four bordered cards stacked down the screen. */
+      .cs-hero-img {
+        margin-left: -20px;
+        margin-right: -20px;
+        width: calc(100% + 40px);
+      }
+      .cs-overview-grid { grid-template-columns: 1fr 1fr; column-gap: 24px; }
+
+
+      /* oversized display numerals shrink to fit a 390px screen */
+      .cs-metric-num { font-size: 39.6px; }
+      .research-stat-num { font-size: 32.4px; }
+
+      img, video { max-width: 100%; height: auto; }
+
+      .site-footer { padding: 56px 20px 40px; }
+    }
+
+    /* ── THUMB-2 (Carbon Sustain) — ported for the Next Up card ── */
+    /* Solid, not a mesh: the old pale-blue/cream blobs were the same family
+       as Flourish's, so the two cards read alike. This green is sampled from
+       the dashboard's own buttons and charts. */
+    /* Solid, in the blue/violet family of the personal brand rather than the
+       project's own green — the cards should read as one portfolio. */
+    .thumb-2 {
+      background: #A6CFD5;
+      /* Green mesh, not the old pale-blue/cream one that clashed with
+         Flourish. Layered radials rather than blob divs, so it's static and
+         costs no DOM. Greens sampled from the dashboard itself. */
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    /* carbonproper is drawn at the card's own 16/11, so it fills edge to edge
+       — no inset, no side gaps, nothing cropped. */
+    /* Sits low and runs off the bottom edge, so the dashboard reads as tucked
+       into the card rather than floating inside it. Centred horizontally so
+       the side margins are even. */
+    .thumb-2-img-wrap {
+      position: absolute; inset: 0; z-index: 3;
+      display: flex; align-items: flex-start; justify-content: center;
+      padding: 24% 0 0;
+    }
+    .t2-frame-enter { width: 86%; flex-shrink: 0; }
+    .thumb-2-img-wrap img {
+      display: block; width: 100%; height: auto;
+    }
+    .t2-glass-frame {
+      width: 100%;
+      height: auto;
+      /* bottom corners fall outside the card, so only the top pair round */
+      border-radius: 10px 10px 0 0;
+      overflow: hidden;
+      position: relative;
+    }
+    .t2-glass-frame::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0; height: 35%;
+      background: linear-gradient(180deg, rgba(255,255,255,0.08) 0%, transparent 100%);
+      border-radius: inherit; pointer-events: none; z-index: 1;
+    }
+    .t2-glass-frame img {
+      display: block;
+      width: 100%; height: auto;
+      border-radius: inherit;
+      position: relative;
+    }
+    .thumb-2.in-view .t2-frame-enter { opacity: 1; }
+    .t2-frame-enter {
+      opacity: 0;
+      transition: opacity 0.85s var(--ease) 0.25s;
+    }
+
+    /* ── WHAT I OWNED — card grid ── */
+    .owned-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-top: 32px;
+    }
+    /* white paper on the warm cream page — #FAFAFA was within 3 points of the
+       #faf9f7 background, so the cards had no edge. White reads as a lifted
+       surface and the warm-grey hairline gives it a definite boundary. */
+    .owned-card {
+      background: #FFFFFF;
+      border: 1px solid #E5E1D9;
+      border-radius: 0;
+      padding: 26px 28px 28px;
+    }
+    /* the third card runs the full width, mirroring the reference layout */
+    /* was there to stop an orphaned third card sitting half-width; with two
+       cards it wrongly made the second span the full row instead */
+    /* One icon treatment for both card sets: a cream chip in the top-left.
+       On a white card a white chip would disappear, so the cream sits on the
+       chip rather than behind it. */
+    .owned-icon {
+      display: block;
+      color: #0F0F0F;
+      background: #F3F1EC;
+      border-radius: 9px;
+      padding: 8px;
+      box-sizing: content-box;
+      width: 18px; height: 18px;
+      margin-bottom: 22px;
+    }
+    /* Lora at 400 — the same weight and tracking as .cs-title, so the cards
+       sit in the page's existing type rather than introducing a heavier cut */
+    .owned-title {
+      font-family: 'Lora', serif;
+      font-size: 16.6px;
+      font-weight: 400;
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+      color: var(--black);
+      margin-bottom: 9px;
+    }
+    .owned-card .owned-body {
+      font-size: 12px;
+      line-height: 1.6;
+      color: #6E6E6E;
+      max-width: 42ch;
+    }
+
+    /* ── OPPORTUNITY — same card treatment as What I Owned ── */
+    /* three across, as the original graphic was — the cards borrow the
+       What I Owned styling but not its full-width last child */
+    .opp-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-top: 32px;
+    }
+    /* Opportunity cards follow the current Figma frame: the sand #F0E9E1 fill
+       is gone, the cards are now a hairline-outlined box with an icon chip.
+       Kept as real text rather than a flattened export so it stays selectable
+       and readable to a screen reader — the frame is type, not imagery.
+       The frame draws the box on the page cream with a cool #E9EAEB stroke;
+       here it takes the same white ground and warm hairline as What I Owned
+       so the two card sets read as one system and neither dissolves into the
+       #faf9f7 page.
+       Type and padding are deliberately NOT overridden — the cards inherit
+       .owned-card / .owned-title / .owned-body wholesale so the two sets are
+       typographically identical. The chip below is the only override left. */
+
+    /* ── SCROLL REVEALS ──
+       Gated behind .js-reveal, which is only set when the browser supports
+       IntersectionObserver and the visitor hasn't asked for reduced motion.
+       Without that class nothing is hidden, so the page degrades to plain
+       static content rather than a blank column. */
+    .js-reveal .cs-section {
+      opacity: 0;
+      transform: translateY(16px);
+      transition: opacity 0.65s var(--ease), transform 0.65s var(--ease);
+    }
+    .js-reveal .cs-section.revealed { opacity: 1; transform: none; }
+    @media (prefers-reduced-motion: reduce) {
+      .js-reveal .cs-section { opacity: 1; transform: none; transition: none; }
+    }
+
+    /* ── SHARED HEADER + FOOTER ──
+       Matches the landing page exactly, so every page wears the same chrome. */
+    nav {
+      height: 57px; padding: 0 56px 0 28px;
+      background: rgba(250,249,247,0.92);
+      backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .logo-name { font-size: 15px; font-weight: 600; letter-spacing: -0.03em; color: var(--black); }
+    .nav-links { display: flex; gap: 32px; list-style: none; }
+    .nav-links a { font-size: 14px; font-weight: 400; color: var(--gray); text-decoration: none; transition: color 0.15s; }
+    .nav-links a:hover, .nav-links a.active { color: var(--black); }
+
+    .site-footer { padding: 44px 96px 28px; }
+    .footer-heading { font-size: clamp(22px, 2.2vw, 30px); line-height: 1.1; margin-bottom: 20px; }
+    .footer-main { margin-bottom: 32px; }
+    .footer-links { gap: 4px; }
+    .footer-link { font-size: 13px; }
+    .footer-nav { gap: 6px; padding-top: 6px; }
+    .footer-nav-link { font-size: 12px; }
+    .footer-bottom { padding-top: 16px; }
+    .footer-copy { font-size: 11px; }
+
+    @media (max-width: 900px) {
+      nav { padding: 0 18px 0 16px; }
+      .nav-links { gap: 18px; }
+      .nav-links a { font-size: 13px; }
+      .site-footer { padding: 36px 16px 24px; }
+      .footer-bottom { flex-direction: column; align-items: flex-start; gap: 6px; }
+    }
+
+    /* contents rail: same width as the landing page sidebar, text on the same 28px edge */
+    .cs-sidebar { padding-left: 28px; }
+    /* its opaque box stops short of the (now further left) column; the list itself only reaches ~180px */
+    .cs-sidebar { width: 300px; }
+    /* title sits under the hero image in a plain sans, like emmiwu.com/openai */
+    .cs-title.cs-title-under {
+      font-family: 'Inter', system-ui, sans-serif;
+      font-size: 18px; font-weight: 500;
+      letter-spacing: -0.01em; line-height: 1.3;
+      color: var(--black);
+      margin: 18px 0 0;
+    }
+    .cs-title.cs-title-under { margin-bottom: 24px; }
+    /* no divider between the contents and the case study */
+    .cs-sidebar::after { display: none; }
+    /* the wider rail would sit over the footer's left edge, so the footer rides above it */
+    .site-footer { position: relative; z-index: 60; }
+    /* ── SIZING LIKE emmiwu.com/openai ──
+       Her page is five equal columns (24px page margin, 12px gaps): the
+       contents list sits in the first, the case study spans the next three,
+       the fifth stays empty. It scales with the window instead of capping. */
+    :root {
+      --col: calc((100vw - 96px) / 5);
+      /* her three-column span, taken in 5% so the hero sits a touch smaller */
+      --cs-w: calc((var(--col) * 3 + 24px) * 0.95);
+    }
+    .cs-content,
+    .next-up-label,
+    .next-up-grid {
+      max-width: none;
+      width: var(--cs-w);
+      /* Centred on the window it read as left-heavy next to the contents list,
+         so it centres in the space between the end of that list (its longest
+         entry ends 180px in) and the right edge: equal air on both sides. */
+      margin-left: calc((100vw + 180px - var(--cs-w)) / 2);
+      margin-right: 0;
+    }
+    .cs-sidebar { width: calc(var(--col) + 36px); }
+    /* hero starts 80px from the top of the window, as hers does */
+    .cs-main { padding-top: 23px; }
+    .cs-title.cs-title-under { margin-top: 24px; }
+    /* hero is the landing-page cover, just bigger: same layers, same 16:11 frame */
+    .cs-hero-img.cs-hero-fl { aspect-ratio: 1744 / 1176; margin-bottom: 0; }
+    /* Figma frame is now 1176 tall, so the tops are re-based on that height
+       (the phone and edit card simply run off the bottom edge) */
+    /* phone is a 2x, uncropped export now (matte pair), so it's placed by its own bounds */
+    .cs-hero-fl .fl-phone { left: 28.068%; top: 10.927%; width: 43.807%; }
+    /* the phone and both cards sit a touch smaller than the Figma frame, scaled
+       together around the centre so the composition holds; the gradient stays full */
+    /* nudged down 7.5% (88px of the 1176 frame) so the bottom edge crops the
+       phone and the meal-type card at the same point as the full-size frame */
+    /* the phone is live: the screen recording plays inside the Figma bezel
+       (584 x 1400 at 580,170; white, 48 top corners, screen inset 12).
+       Sizes are in Figma frame units: 1u = hero width / 1744. */
+    .cs-hero-fl { container-type: inline-size; --u: calc(100cqw / 1744); }
+    .cs-hero-fl .fl-phonelive {
+      left: 33.257%; top: 14.456%; width: 33.486%; height: 119.048%;
+      background: #fff; overflow: hidden;
+      border-radius: calc(48 * var(--u)) calc(48 * var(--u)) 0 0;
+      box-shadow: 0 calc(48 * var(--u)) calc(120 * var(--u)) rgba(8, 40, 42, 0.22),
+                  0 calc(4 * var(--u)) calc(12 * var(--u)) rgba(8, 40, 42, 0.08);
+    }
+    .cs-hero-fl .fl-phonelive video {
+      position: absolute; left: calc(12 * var(--u)); top: calc(12 * var(--u));
+      width: calc(560 * var(--u)); height: auto; display: block;
+      border-radius: calc(40.5 * var(--u));
+    }
+    /* the landing card brings its cards in on hover; here they only play once,
+       at the start, so hovering the hero after the intro keeps them out */
+    .cs-hero-fl.fl-armed:not(.fl-in):hover .fl-macro { transform: translateX(-112%); opacity: 0; }
+    .cs-hero-fl.fl-armed:not(.fl-in):hover .fl-edit  { transform: translateX(112%);  opacity: 0; }
+    .cs-hero-fl .fl-stage { position: absolute; inset: 0; transform: translateY(7.5%) scale(0.85); transform-origin: 50% 50%; }
+    .cs-hero-fl .fl-edit  { left: 57.683%; top: 67.177%; width: 34.289%; }
+    /* updated Figma V1+: the macro card became the Mixed Veggies card (169,323 · 493×202 of 1744×1199) */
+    .cs-hero-fl .fl-macro { left: 9.690%; top: 27.466%; width: 28.268%; }
+    /* the card is the raw screenshot, so its Figma corner, stroke and shadow are drawn here */
+    .cs-hero-fl .fl-macro img {
+      aspect-ratio: 493 / 202; object-fit: cover;
+      border-radius: 5.68% / 13.86%;
+      outline: 1px solid #E9EAEB; outline-offset: -1px;
+      box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+    }
+    /* active contents link: a deeper cut of the hero's lavender (#BDC5E4), dark enough to read at 12px */
+    .cs-sidebar-links a.active { color: #695CBC; }
+    /* eyebrows (Role/Timeline/… and the section labels) in the same purple, 2px smaller */
+    .cs-overview-label,
+    .cs-section p.cs-section-label { color: #695CBC; font-size: 10px; }
+    /* hand-set line breaks in the three findings, only where the columns are
+       wide enough for them; narrower windows wrap on their own */
+    br.br-wide { display: none; }
+    @media (min-width: 1600px) { br.br-wide { display: inline; } }
+    /* Opportunity cards, from the Figma "gradient opportunity" frame (477 x 320 each):
+       white card washed with one big blurred colour ellipse (the third adds a faint
+       violet one), centred Inter Medium title over Inter body. Built live rather
+       than as images so the text stays as large and sharp as the rest of the page.
+       Glow geometry is in Figma card units: 1u = card width / 477.33. */
+    .opp-card {
+      --u: calc(100cqw / 477.33);
+      position: relative; overflow: hidden; container-type: inline-size;
+      aspect-ratio: 477.33 / 320; background: #fff;
+      display: flex; flex-direction: column; justify-content: center; align-items: center;
+      text-align: center; padding: 0 8.8%;
+    }
+    /* The colour now covers the whole card, so no white shows in the corners,
+       and it's a touch softer than the Figma blur: a flat tint with a slightly
+       lighter centre behind the text. */
+    .opp-card.g1 { background: radial-gradient(120% 110% at 50% 45%, #E2F2F2 0%, #D2EAEA 100%); }
+    .opp-card.g2 { background: radial-gradient(120% 110% at 50% 45%, #E0F5EB 0%, #D0EFE1 100%); }
+    .opp-card.g3 { background: radial-gradient(120% 110% at 50% 45%, #E6ECFF 0%, #D7E1FF 100%); }
+    .opp-card .glow { display: none; }
+    .opp-card.g3 .glow-b {
+      display: block; position: absolute; pointer-events: none; border-radius: 50%;
+      left: calc(257 * var(--u)); top: calc(-30 * var(--u)); width: calc(220 * var(--u)); height: calc(220 * var(--u));
+      background: rgba(139, 92, 246, 0.10); filter: blur(calc(35 * var(--u)));
+    }
+    .opp-card h3, .opp-card p { position: relative; margin: 0; }
+    .opp-card h3 {
+      font-family: 'Inter', system-ui, sans-serif; font-weight: 500; color: #000;
+      font-size: clamp(17px, 7cqw, 22px); line-height: 1.2; letter-spacing: -0.01em;
+    }
+    .opp-card p {
+      margin-top: 0.55em; font-family: 'Inter', system-ui, sans-serif; font-weight: 400;
+      font-size: clamp(13px, 5.2cqw, 15px); line-height: 1.5; letter-spacing: 0.01em; color: #44403B;
+    }
+    /* Design section as a numbered grid, after emmiwu.com/openai's process grid:
+       mono number, tinted panel with just the UI, then title and description as text */
+    .dg-grid { display: grid; grid-template-columns: 1fr 1fr; column-gap: 16px; row-gap: 44px; margin-top: 36px; }
+    .dg-item { margin: 0; }
+    .dg-item.dg-wide { grid-column: 1 / -1; }
+    .dg-item .dg-num {
+      font-family: ui-monospace, 'SF Mono', Menlo, monospace; font-size: 12px; letter-spacing: 0.02em;
+      color: #6B7280; margin: 0 0 8px;
+    }
+    .dg-item img { display: block; width: 100%; height: auto; }
+    .cs-section .dg-item h3 {
+      font-family: 'Inter', system-ui, sans-serif; font-weight: 500; font-size: 16px; line-height: 1.35;
+      color: var(--black); margin: 18px 0 6px;
+    }
+    .cs-section .dg-item p:not(.dg-num) { font-size: 14px; line-height: 1.6; color: #6B6B6B; margin: 0; max-width: none; }
+    /* ── OPPORTUNITY as illustrated columns, after emmiwu.com/figma's Insights ──
+       title + line of copy, then a square panel with a colour tag and a small
+       illustration built from Flourish's own UI pieces. Panel geometry is on a
+       300-unit square: 1u = panel width / 300, so everything scales together. */
+    .opx-grid { display: grid; grid-template-columns: repeat(3, 1fr); column-gap: 16px; margin-top: 32px; }
+    .opx { margin: 0; display: flex; flex-direction: column; }
+    .cs-section .opx h3 { font-family: 'Inter', system-ui, sans-serif; font-weight: 500; font-size: 16px; line-height: 1.3; letter-spacing: -0.01em; color: var(--black); margin: 26px 0 6px; }
+    .cs-section .opx > p { font-size: 14px; line-height: 1.6; color: #6B6B6B; margin: 0; max-width: none; }
+    .opx-panel {
+      --u: calc(100cqw / 300);
+      position: relative; aspect-ratio: 1; overflow: hidden; container-type: inline-size;
+      font-family: 'Gabarito', 'Inter', system-ui, sans-serif;
+    }
+    .opx-panel.p1 { background: #C6E4EC; }  /* hero gradient, teal corner */
+    .opx-panel.p2 { background: #CCD4F5; }  /* hero gradient, periwinkle middle */
+    .opx-panel.p3 { background: #FCE4D6; }  /* peach, warmer than the hero's corner */
+    .opx-tag {
+      position: absolute; left: calc(14 * var(--u)); top: calc(14 * var(--u));
+      display: inline-flex; align-items: center; gap: calc(6 * var(--u));
+      padding: calc(5 * var(--u)) calc(10 * var(--u)) calc(5 * var(--u)) calc(8 * var(--u));
+      border-radius: calc(4 * var(--u)); font-size: calc(14 * var(--u)); line-height: calc(17 * var(--u)); font-family: 'Inter', system-ui, sans-serif; font-weight: 500;
+    }
+    .opx-tag svg { width: calc(16 * var(--u)); height: calc(16 * var(--u)); }
+    .opx-tag.t1 { background: #21A0A0; color: #fff; }
+    .opx-tag.t2 { background: #12B76A; color: #fff; }
+    .opx-tag.t3 { background: #5B62E8; color: #fff; }
+    /* pieces placed on the 300-unit square */
+    .opx-panel [style*="--x"] { position: absolute; left: calc(var(--x) * var(--u)); top: calc(var(--y) * var(--u)); transform: rotate(var(--r, 0deg)); transform-origin: 0 0; white-space: nowrap; }
+    .opx-path { position: absolute; inset: 0; width: 100%; height: 100%; }
+    .chip {
+      display: inline-flex; align-items: center; gap: calc(7 * var(--u));
+      padding: calc(8 * var(--u)) calc(12 * var(--u)); border-radius: calc(10 * var(--u));
+      background: #fff; color: #181D27; font-size: calc(15 * var(--u)); font-weight: 500;
+      box-shadow: 0 calc(3 * var(--u)) calc(10 * var(--u)) rgba(6, 60, 68, 0.10);
+    }
+    .chip i { width: calc(10 * var(--u)); height: calc(10 * var(--u)); border-radius: 50%; display: block; }
+    .badge {
+      padding: calc(7 * var(--u)) calc(14 * var(--u)); border-radius: 999px; background: #FDB022; color: #181D27;
+      font-size: calc(17 * var(--u)); font-weight: 500; box-shadow: 0 calc(3 * var(--u)) calc(10 * var(--u)) rgba(6, 60, 68, 0.12);
+    }
+    .why {
+      white-space: normal !important; width: calc(132 * var(--u));
+      padding: calc(9 * var(--u)) calc(11 * var(--u)); border-radius: calc(10 * var(--u)); background: #063C44; color: #fff;
+      font-size: calc(13 * var(--u)); line-height: 1.3;
+    }
+    .steps { position: absolute; left: calc(26 * var(--u)); right: calc(22 * var(--u)); bottom: 0; height: calc(232 * var(--u)); display: flex; align-items: flex-end; gap: calc(10 * var(--u)); }
+    .step {
+      flex: 1; height: calc(var(--h) * 1%); position: relative; overflow: hidden;
+      background: #fff; border-radius: calc(12 * var(--u)) calc(12 * var(--u)) 0 0;
+      display: flex; flex-direction: column; align-items: center; padding-top: calc(10 * var(--u));
+      box-shadow: 0 calc(3 * var(--u)) calc(12 * var(--u)) rgba(6, 60, 68, 0.08);
+    }
+    .step::after { content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: calc(var(--f) * 100%); background: #12B76A; opacity: 0.9; }
+    .step b { font-size: calc(20 * var(--u)); font-weight: 600; color: #181D27; line-height: 1.1; position: relative; z-index: 1; }
+    .step span { font-size: calc(11 * var(--u)); color: #535862; position: relative; z-index: 1; }
+    .st { box-shadow: 0 calc(3 * var(--u)) calc(12 * var(--u)) rgba(30, 36, 120, 0.12); }
+    .st.meal { padding: calc(8 * var(--u)) calc(16 * var(--u)); border-radius: calc(8 * var(--u)); background: #E3FBF3; color: #063C44; font-size: calc(20 * var(--u)); font-weight: 500; }
+    .st.pencil { width: calc(44 * var(--u)); height: calc(44 * var(--u)); border-radius: 50%; background: #fff; display: grid; place-items: center; }
+    .st.pencil svg { width: calc(21 * var(--u)); height: calc(21 * var(--u)); }
+    .st.time { display: inline-flex; align-items: center; gap: calc(6 * var(--u)); padding: calc(8 * var(--u)) calc(13 * var(--u)); border-radius: calc(10 * var(--u)); background: #fff; color: #181D27; font-size: calc(16 * var(--u)); }
+    .st.time b { font-weight: 500; } .st.time em { font-style: normal; color: #717680; margin: 0 calc(-4 * var(--u)); }
+    .st.type { display: inline-flex; align-items: center; gap: calc(22 * var(--u)); padding: calc(8 * var(--u)) calc(12 * var(--u)); border-radius: calc(7 * var(--u)); background: #fff; color: #181D27; font-size: calc(13 * var(--u)); }
+    .st.type svg { width: calc(10 * var(--u)); height: calc(10 * var(--u)); }
+    .st.save { padding: calc(9 * var(--u)) calc(38 * var(--u)); border-radius: 999px; background: #063C44; color: #fff; font-size: calc(14 * var(--u)); font-weight: 500; }
+    /* Engineering Collaboration: annotated Figma-style demo of the long meal name fix */
+    .cs-eng-video-wrap { margin-top: 32px; }
+    .cs-eng-video-wrap video { display: block; width: 100%; height: auto; aspect-ratio: 16 / 10; background: #F5F5F5; }
+    /* Testing & Iteration: two short stories, each a small heading, a paragraph and its image */
+    .it-story { margin-top: 40px; }
+    .it-story + .it-story { margin-top: 56px; }
+    .cs-section .it-story h3 { font-family: 'Inter', system-ui, sans-serif; font-size: 16px; font-weight: 500; letter-spacing: -0.01em; line-height: 1.3; color: var(--black); margin: 0 0 8px; }
+    .it-story img { display: block; width: 100%; margin-top: 24px; }
+    /* The Solution: the three features explained under the finished screen */
+    .sol-features { display: grid; grid-template-columns: repeat(3, 1fr); column-gap: 24px; margin-top: 32px; }
+    .cs-section .sol-features h3 { font-family: 'Inter', system-ui, sans-serif; font-size: 16px; font-weight: 500; letter-spacing: -0.01em; line-height: 1.3; color: var(--black); margin: 0 0 6px; }
+    .cs-section .sol-features p { font-size: 14px; line-height: 1.6; color: #6B6B6B; margin: 0; max-width: none; }
+    /* Edit Logged Meal clip on the same purple as the comparison images */
+    .it-video-wrap { margin-top: 24px; background: #695CBC; display: flex; justify-content: center; align-items: center; padding: 44px 0; }
+    .it-video-wrap video { display: block; height: 560px; max-height: 70vh; width: auto; clip-path: inset(0 round 3.7% / 2.4%); }
+
+    /* ───────── Airbnb case study ─────────
+       Same skeleton as Flourish; a deep Airbnb pink stands in for Flourish's purple. */
+    .cs-sidebar-links a.active { color: #C8164E; }
+    .cs-overview-label,
+    .cs-section p.cs-section-label { color: #C8164E; font-size: 10px; }
+    .cs-main { padding-top: 23px; }
+    .cs-hero-img.cs-hero-bnb { aspect-ratio: 1308 / 899; margin-bottom: 0; background: #FF385C; }
+    .cs-title.cs-title-under { margin-top: 24px; }
+
+    /* audit: four stages in a row, then the counts */
+    .bnb-stages { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-top: 28px; }
+    .bnb-stages figure { margin: 0; }
+    .bnb-stages img { display: block; width: 100%; aspect-ratio: 1 / 1.03; object-fit: cover; object-position: top; }
+    .bnb-stages figcaption { font-size: 12.5px; color: #3D3D3D; margin-top: 10px; }
+    .bnb-stages figcaption b { display: inline-grid; place-items: center; width: 18px; height: 18px; margin-right: 6px; border-radius: 50%; background: #F3E3E8; color: #C8164E; font-size: 10.5px; font-weight: 600; }
+    .bnb-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: 36px; }
+    .bnb-stats > div { border-top: 2px solid #C8164E; padding-top: 14px; }
+    .cs-section p.bnb-stat-num { font-family: 'Lora', serif; font-size: 30px; font-weight: 500; color: #C8164E; line-height: 1.1; margin: 0 0 6px; }
+    .cs-section p.bnb-stat-label { font-size: 13px; line-height: 1.55; color: #5C5C5C; margin: 0; }
+
+    /* focus: HMW and success criteria */
+    .bnb-hmw { margin: 28px 0; padding: 28px 32px; background: linear-gradient(148deg, #FBE6EC 0%, #F6EEE6 100%);
+      font-family: 'Lora', serif; font-style: italic; font-size: 19px; line-height: 1.5; color: #1A1A1A; }
+    .cs-section p.bnb-criteria-intro { margin-bottom: 12px; }
+    .bnb-criteria { counter-reset: c; list-style: none; padding: 0; margin: 0; display: grid; gap: 10px; }
+    .bnb-criteria li { counter-increment: c; display: grid; grid-template-columns: 28px 1fr; align-items: baseline; font-size: 14.4px; line-height: 1.6; color: #1A1A1A; }
+    .bnb-criteria li::before { content: counter(c); display: grid; place-items: center; width: 20px; height: 20px; border-radius: 50%; background: #C8164E; color: #fff; font-size: 11px; font-weight: 600; }
+
+    /* explorations */
+    .bnb-lofi { display: grid; grid-template-columns: repeat(6, 1fr); gap: 10px; margin: 24px 0 36px; background: #F0EFED; padding: 20px; }
+    .bnb-lofi img { display: block; width: 100%; height: auto; background: #fff; box-shadow: 0 1px 3px rgba(0,0,0,.08); }
+    .bnb-dirs { display: grid; grid-template-columns: 1fr 1fr; gap: 28px 20px; margin-top: 24px; }
+    .bnb-dir { margin: 0; }
+    .bnb-dir-img { background: #F0EFED; padding: 16px; aspect-ratio: 1 / 1; overflow: hidden; display: flex; align-items: flex-start; justify-content: center; }
+    .bnb-dir-img img { display: block; width: 100%; height: auto; }
+    .bnb-dir figcaption { font-size: 13px; line-height: 1.6; color: #5C5C5C; margin-top: 12px; }
+    .bnb-dir figcaption b { color: #0F0F0F; font-weight: 500; }
+    .bnb-keep, .bnb-drop { display: inline-block; font-size: 10.5px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; padding: 2px 7px; margin-right: 8px; }
+    .bnb-keep { background: #E4F3EA; color: #1E6B3C; }
+    .bnb-drop { background: #EFEFEF; color: #6B6B6B; }
+    .bnb-dropped .bnb-dir-img img { opacity: .45; filter: grayscale(1); }
+
+    /* final, states, handoff */
+    .bnb-figure { margin: 28px 0 0; }
+    .bnb-figure img { display: block; width: 100%; height: auto; }
+    .bnb-figure video { display: block; width: 100%; height: auto; }
+    .bnb-figure + .bnb-figure { margin-top: 20px; }
+    .bnb-panel { background: #F0EFED; padding: 0; }
+    .bnb-subs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; margin-top: 32px; }
+    .cs-section .bnb-subs h3 { font-family: 'Inter', system-ui, sans-serif; font-size: 16px; font-weight: 500; letter-spacing: -0.01em; line-height: 1.3; color: #0F0F0F; margin: 0 0 8px; }
+    .cs-section .bnb-subs p { font-size: 13px; line-height: 1.7; color: #5C5C5C; margin: 0; }
+    .bnb-figure + p { margin-top: 28px; }
+
+    @media (max-width: 760px) {
+      .bnb-stages { grid-template-columns: 1fr 1fr; }
+      .bnb-stats, .bnb-subs, .bnb-dirs { grid-template-columns: 1fr; }
+      .bnb-lofi { grid-template-columns: repeat(3, 1fr); padding: 12px; }
+      .bnb-hmw { padding: 20px; font-size: 17px; }
+    }
+    /* problem + solution up top: three solution rows, phone recording on a soft pink panel */
+    .cs-section h3.bnb-kicker { font-family: 'Inter', system-ui, sans-serif; font-size: 11px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: #8A8F98; margin: 28px 0 8px; }
+    .bnb-sols { display: grid; gap: 20px; margin-top: 32px; }
+    .bnb-sol { display: grid; grid-template-columns: 1fr 1fr; align-items: center; gap: 40px; }
+    .bnb-sol-media { background: linear-gradient(160deg, #FDE8EE 0%, #F7EFE8 100%); display: flex; justify-content: center; padding: 36px 0; }
+    .bnb-sol-media video { display: block; width: 58%; max-width: 250px; height: auto; border-radius: 26px;
+      box-shadow: 0 20px 50px rgba(120, 20, 50, .18), 0 2px 8px rgba(120, 20, 50, .08); }
+    .bnb-sol-flip .bnb-sol-media { order: 2; }
+    .cs-section p.bnb-sol-num { font-family: 'Lora', serif; font-size: 13px; color: #C8164E; margin: 0 0 8px; }
+    .cs-section .bnb-sol-text h3 { font-family: 'Inter', system-ui, sans-serif; font-size: 18px; font-weight: 500; letter-spacing: -0.01em; line-height: 1.3; color: #0F0F0F; margin: 0 0 10px; }
+    .cs-section .bnb-sol-text p:last-child { font-size: 14px; line-height: 1.7; color: #5C5C5C; margin: 0; }
+    @media (max-width: 760px) {
+      .bnb-sol { grid-template-columns: 1fr; gap: 16px; }
+      .bnb-sol-flip .bnb-sol-media { order: 0; }
+      .bnb-sol-media { padding: 28px 0; }
+    }
+
+    /* audit: three soft cards, number on top, takeaway at the bottom */
+    .bnb-cards { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-top:36px; }
+    .bnb-card { background:#F3F1EE; padding:18px 16px; display:flex; flex-direction:column; justify-content:flex-start; gap:44px; }
+    .bnb-card.bnb-card-dash { background:transparent; border:1px dashed #CFCAC4; padding:17px 15px; }
+    .cs-section .bnb-card p { margin:0; }
+    .cs-section p.bnb-card-num { font-family:'Lora',serif; font-size:52px; line-height:1; color:#C8164E; }
+    .cs-section .bnb-card-dash p.bnb-card-num { color:#9A948E; }
+    .cs-section p.bnb-card-t { font-size:16px; font-weight:500; color:#0F0F0F; letter-spacing:-0.01em; margin-bottom:6px; }
+    .cs-section p.bnb-card-d { font-size:13.5px; line-height:1.55; color:#5C5C5C; }
+    @media (max-width:760px){ .bnb-cards{grid-template-columns:1fr} .bnb-card{gap:28px} }
+
+    /* key findings: one outlined box split into three numbered columns */
+    .kf-box { display:grid; grid-template-columns:repeat(3,1fr); border:1px solid #6B6B6B; margin-top:32px; }
+    .kf-box > div { padding:22px 22px 26px; }
+    .kf-box > div + div { border-left:1px solid #6B6B6B; }
+    .kf-n { display:inline-block; padding:4px 8px; background:#6B6B6B; color:#fff; font-size:12px; line-height:1.3; font-variant-numeric:tabular-nums; }
+    .cs-section .kf-box h3 { font-family:'Inter',system-ui,sans-serif; font-weight:600; font-size:15.5px; line-height:1.35; letter-spacing:-0.01em; color:#0F0F0F; margin:40px 0 10px; }
+    .cs-section .kf-box p { font-size:14px; line-height:1.6; color:#5C5C5C; margin:0; }
+    @media (max-width:760px){ .kf-box{grid-template-columns:1fr} .kf-box > div + div{border-left:0;border-top:1px solid #6B6B6B} .cs-section .kf-box h3{margin-top:24px} }
+
+    /* focus: the flow as a line, with what I redesigned pointing at each stage */
+    .fz { display:grid; grid-template-columns:repeat(4,1fr); align-items:end; background:#F3F1EE; padding:72px 24px 64px; margin:32px 0 36px; }
+    .fz-ann { display:flex; flex-direction:column; align-items:center; }
+    .fz-span { grid-column:2 / 4; } .fz-one { grid-column:4; }
+    .cs-section p.fz-tag { font-size:13px; line-height:1.4; font-weight:600; color:#C8164E; text-align:center; margin:0 0 10px; }
+    .fz-br { position:relative; width:50%; height:20px; border:2px solid #C8164E; border-bottom:0; margin-bottom:24px; }
+    .fz-br::before { content:''; position:absolute; left:50%; top:-12px; width:2px; height:12px; background:#C8164E; transform:translateX(-50%); }
+    .fz-a { display:block; color:#C8164E; line-height:0; }
+    .fz-a svg { width:14px; height:22px; }
+    .fz-br .fz-a { position:absolute; top:100%; }
+    .fz-br .fz-a.l { left:-1px; transform:translateX(-50%); } .fz-br .fz-a.r { right:-1px; transform:translateX(50%); }
+    .fz-one .fz-a { margin:20px 0 4px; }
+    .fz-one .fz-a svg { height:20px; }
+    .fz-track { grid-column:1 / -1; position:relative; display:grid; grid-template-columns:repeat(4,1fr); justify-items:center; height:14px; margin-top:8px; }
+    .fz-track i { position:absolute; top:6px; height:2px; }
+    .fz-track .fz-off { left:12.5%; width:25%; background:#CFCAC4; }
+    .fz-track .fz-on { left:37.5%; width:50%; background:#C8164E; }
+    .fz-track b { position:relative; width:14px; height:14px; border-radius:50%; background:#C8164E; }
+    .fz-track b.off { background:#CFCAC4; }
+    .cs-section p.fz-lbl { font-size:14px; line-height:1.45; color:#1A1A1A; text-align:center; margin:16px 0 0; align-self:start; }
+    .cs-section p.fz-lbl.off { color:#9A948E; }
+    @media (max-width:760px){
+      .fz { padding:48px 8px 40px; }
+      .cs-section p.fz-tag, .cs-section p.fz-lbl { font-size:11.5px; }
+    }
+
+    /* explorations: each sketch beside its final screen, with what changed in between */
+    .cs-section h3.wf-head { font-family:'Inter',system-ui,sans-serif; font-weight:500; font-size:18px; letter-spacing:-0.01em; color:#0F0F0F; margin:56px 0 0; }
+    .wf-list { display:grid; gap:48px; margin-top:32px; }
+    .wf-panel { display:grid; grid-template-columns:1.226fr 1.5fr 1fr; align-items:center; gap:20px; background:#F3F1EE; padding:40px 44px; }
+    .wf-panel img { display:block; width:100%; height:auto; }
+    .wf-sk { background:#fff; box-shadow:0 1px 3px rgba(0,0,0,.08); }
+    .wf-fin { filter:drop-shadow(0 6px 18px rgba(0,0,0,.10)); }
+    .wf-notes { display:flex; flex-direction:column; justify-content:space-around; align-self:stretch; padding:18% 0; }
+    .wf-note { color:#C8164E; }
+    .cs-section .wf-note p { font-size:12.5px; line-height:1.45; color:#3D3D3D; text-align:center; margin:0 0 8px; }
+    .wf-note svg { display:block; width:100%; height:12px; }
+    .wf-cap { display:grid; grid-template-columns:1fr 1.6fr; gap:28px; margin-top:20px; }
+    .cs-section .wf-cap h3 { font-family:'Inter',system-ui,sans-serif; font-weight:500; font-size:16px; line-height:1.3; letter-spacing:-0.01em; color:#0F0F0F; margin:0; }
+    .cs-section .wf-cap p { font-size:14px; line-height:1.65; color:#5C5C5C; margin:0; }
+    @media (max-width:760px){
+      .wf-panel { padding:20px 14px; gap:10px; }
+      .cs-section .wf-note p { font-size:10.5px; }
+      .wf-cap { grid-template-columns:1fr; gap:8px; }
+    }
+  </style>
+  <script>
+    (function () {
+      var ok = 'IntersectionObserver' in window &&
+               !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (ok) document.documentElement.classList.add('js-reveal');
+    })();
+  </script>
+  <link rel="stylesheet" href="/cursor.css"/>
+</head>
+<body>
+
+  <nav>
+    <a class="nav-logo" href="/"><span class="logo-name">diya</span></a>
+    <ul class="nav-links">
+      <li><a href="/" class="active">Work</a></li>
+      <li><a href="/about">About</a></li>
+      <li><a href="/sandlot">Sandbox</a></li>
+      <li><a href="Diya-Mahapatra-Product-Designer-Resume.pdf" target="_blank">Resume</a></li>
+    </ul>
+  </nav>
+
+  <div class="cs-layout" id="top">
+
+    <!-- Sidebar -->
+    <aside class="cs-sidebar">
+      <ul class="cs-sidebar-links">
+        <li><a href="#overview" class="active">Overview</a></li>
+        <li><a href="#solution">Problem &amp; Solution</a></li>
+        <li><a href="#audit">Auditing the Flow</a></li>
+        <li><a href="#findings">Key Findings</a></li>
+        <li><a href="#focus">Focus</a></li>
+        <li><a href="#design">Design</a></li>
+        <li><a href="#states">States</a></li>
+        <li><a href="#handoff">Handoff</a></li>
+        <li><a href="#next">What I&rsquo;d Do Next</a></li>
+      </ul>
+      <a class="cs-sidebar-top" href="#top">Back to top</a>
+    </aside>
+
+    <!-- Main -->
+    <main class="cs-main">
+    <div class="cs-content">
+
+      <!-- Hero -->
+      <div class="cs-hero-img cs-hero-bnb">
+        <img src="images/airbnb-cs/hero.webp?v=2" alt="Redesigned Airbnb booking screens: adding travel insurance and confirming the payment, on Airbnb's pink" draggable="false"/>
+      </div>
+
+      <h1 class="cs-title cs-title-under">Making the Point of No Return Clearer</h1>
+
+      <!-- Overview grid -->
+      <div class="cs-overview-grid" id="overview">
+        <div class="cs-overview-item">
+          <p class="cs-overview-label">Role</p>
+          <p class="cs-overview-value">Product Designer</p>
+        </div>
+        <div class="cs-overview-item">
+          <p class="cs-overview-label">Timeline</p>
+          <p class="cs-overview-value">1-week sprint</p>
+        </div>
+        <div class="cs-overview-item">
+          <p class="cs-overview-label">Team</p>
+          <p class="cs-overview-value">Solo</p>
+        </div>
+        <div class="cs-overview-item">
+          <p class="cs-overview-label">Skills</p>
+          <p class="cs-overview-value">Figma<br>Interaction Design<br>Claude Code</p>
+        </div>
+      </div>
+
+      <!-- 1. Problem + Solution (solutions first) -->
+      <div class="cs-section revealed" id="solution">
+        <p class="cs-section-label">Overview</p>
+        <h2>Guests were leaving right before they booked.</h2>
+        <h3 class="bnb-kicker">Problem</h3>
+        <p>In a one-week design sprint, I worked on Airbnb&rsquo;s booking experience. Data showed some guests abandoning the flow right before completing a reservation, and uncertainty, overload and decision fatigue were all playing a part.</p>
+        <h3 class="bnb-kicker">Solution</h3>
+        <p>I redesigned the commitment moment: the three screens a guest sees right before an irreversible, non-refundable charge.</p>
+
+        <div class="bnb-sols">
+          <div class="bnb-sol">
+            <div class="bnb-sol-media"><video autoplay muted loop playsinline preload="metadata" poster="images/airbnb-cs/airbnb-insurance-poster.jpg" aria-label="Add travel insurance screen: the non-refundable context, what is covered, and the trip total with and without insurance"><source src="videos/airbnb-insurance.mp4" type="video/mp4"/></video></div>
+            <div class="bnb-sol-text">
+              <h3>Insurance tied to the risk it covers</h3>
+              <p>The insurance step now explains why it matters for a non-refundable stay, with the cost with and without it side by side.</p>
+            </div>
+          </div>
+          <div class="bnb-sol bnb-sol-flip">
+            <div class="bnb-sol-media"><video autoplay muted loop playsinline preload="metadata" poster="images/airbnb-cs/airbnb-policy-poster.jpg" aria-label="Cancellation policy sheet: no refund from booking, then situations like getting sick or bad weather and what happens in each"><source src="videos/airbnb-policy.mp4" type="video/mp4"/></video></div>
+            <div class="bnb-sol-text">
+              <h3>A cancellation policy people can actually read</h3>
+              <p>&ldquo;After Jan 16, 11:31 AM&rdquo; becomes &ldquo;No refund from booking,&rdquo; with real situations and what happens in each.</p>
+            </div>
+          </div>
+          <div class="bnb-sol">
+            <div class="bnb-sol-media"><video autoplay muted loop playsinline preload="metadata" poster="images/airbnb-cs/airbnb-commit-poster.jpg" aria-label="Confirm and pay: the price details, a non-refundable reminder, and the Confirm and pay button"><source src="videos/airbnb-commit.mp4" type="video/mp4"/></video></div>
+            <div class="bnb-sol-text">
+              <h3>A calm, clear moment to commit</h3>
+              <p>No urgency badges or floating buttons. The full price and the refund rule sit right above Pay, and guests see what happens next.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2. Auditing the flow -->
+      <div class="cs-section" id="audit">
+        <p class="cs-section-label">Auditing the Flow</p>
+        <h2>The riskiest screen was the hardest to read.</h2>
+        <p>I walked through the full flow for a $19,096 non-refundable stay, from deciding on a place to paying for it, and counted what each screen told a guest.</p>
+
+        <p>&ldquo;Non-refundable&rdquo; appeared five times and was never explained. The $17,144 listing price showed up three times before the real $19,096 total, and insurance was never once connected to the risk of a stay guests couldn&rsquo;t cancel.</p>
+      </div>
+
+      <!-- 3. Key findings -->
+      <div class="cs-section" id="findings">
+        <p class="cs-section-label">Key Findings</p>
+        <h2>Guests were asked to commit before they could see what they were committing to.</h2>
+        <div class="kf-box">
+          <div><span class="kf-n">01</span><h3>The total changed without explanation</h3><p>Guests built expectations around $17k, then saw $19k. The breakdown only appeared at the bottom of the last screen.</p></div>
+          <div><span class="kf-n">02</span><h3>&ldquo;Non-refundable&rdquo; was buried</h3><p>The most important fact about a $19k purchase sat low on the page, with no reminder at the moment of paying.</p></div>
+          <div><span class="kf-n">03</span><h3>The last screen repeated the review</h3><p>A floating Review button looked like the main action, and nothing said what would happen after paying.</p></div>
+        </div>
+      </div>
+
+      <!-- 4. Focus -->
+      <div class="cs-section" id="focus">
+        <p class="cs-section-label">Focus</p>
+        <h2>Every finding came back to the moment of payment.</h2>
+        <p>So I focused on the commitment moment: the Confirm and pay screen, and the cancellation and insurance screens it depends on. Before tapping Pay, without scrolling or opening a link, a guest should be able to answer how much they&rsquo;re paying and how much is charged now, whether they can get their money back if their plans change, and what happens after they tap Pay.</p>
+        <div class="fz" role="img" aria-label="The booking flow as four stages on a line: deciding, reviewing, setting up payment and paying. The cancellation policy and travel insurance screens cover reviewing and setting up payment, and the Confirm and pay screen covers paying. Deciding is outside the focus.">
+          <div class="fz-ann fz-span">
+            <p class="fz-tag">Cancellation policy<br>+ travel insurance</p>
+            <div class="fz-br"><span class="fz-a l"><svg viewBox="0 0 16 22" aria-hidden="true"><path d="M8 0v20M2 14l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="fz-a r"><svg viewBox="0 0 16 22" aria-hidden="true"><path d="M8 0v20M2 14l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div>
+          </div>
+          <div class="fz-ann fz-one">
+            <p class="fz-tag">Confirm<br>and pay</p>
+            <span class="fz-a"><svg viewBox="0 0 16 22" aria-hidden="true"><path d="M8 0v20M2 14l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          </div>
+          <div class="fz-track"><i class="fz-off"></i><i class="fz-on"></i><b class="off"></b><b></b><b></b><b></b></div>
+          <p class="fz-lbl off">Deciding</p>
+          <p class="fz-lbl">Reviewing</p>
+          <p class="fz-lbl">Setting up<br>payment</p>
+          <p class="fz-lbl">Paying</p>
+        </div>
+      </div>
+
+      <!-- 5. Design: sketch to final -->
+      <div class="cs-section" id="design">
+        <p class="cs-section-label">Design</p>
+        <h2>From sketches to final designs.</h2>
+        <div class="wf-list">
+          <div class="wf">
+            <div class="wf-panel">
+              <img class="wf-sk" src="images/airbnb-cs/lofi3.webp" alt="Sketch: cancellation policy with an in-case-of-emergency list" loading="lazy"/>
+              <div class="wf-notes">
+                <div class="wf-note"><p>&ldquo;In case of emergency&rdquo; became &ldquo;If your plans change,&rdquo; with a no-refund case added</p><svg viewBox="0 0 120 12" preserveAspectRatio="none" aria-hidden="true"><path d="M0 6h112" stroke="currentColor" stroke-width="1.5"/><path d="M110 1l8 5-8 5z" fill="currentColor"/></svg></div>
+                <div class="wf-note"><p>Klarna refund eligibility became a plain &ldquo;Paying monthly?&rdquo; note</p><svg viewBox="0 0 120 12" preserveAspectRatio="none" aria-hidden="true"><path d="M0 6h112" stroke="currentColor" stroke-width="1.5"/><path d="M110 1l8 5-8 5z" fill="currentColor"/></svg></div>
+              </div>
+              <img class="wf-fin" src="images/airbnb-cs/final-policy.webp" alt="Final cancellation policy: no refund from booking, and what happens if your plans change" loading="lazy"/>
+            </div>
+            <div class="wf-cap"><h3>Cancellation policy</h3><p>&ldquo;After Jan 16, 11:31 AM&rdquo; became &ldquo;No refund from booking.&rdquo; A new &ldquo;If your plans change&rdquo; section walks through common situations, always including the no-refund case.</p></div>
+          </div>
+          <div class="wf">
+            <div class="wf-panel">
+              <img class="wf-sk" src="images/airbnb-cs/lofi4.webp" alt="Sketch: add travel insurance, framed by the non-refundable stay" loading="lazy"/>
+              <div class="wf-notes">
+                <div class="wf-note"><p>Explained what insurance does: it can pay you back if you cancel for a covered reason</p><svg viewBox="0 0 120 12" preserveAspectRatio="none" aria-hidden="true"><path d="M0 6h112" stroke="currentColor" stroke-width="1.5"/><path d="M110 1l8 5-8 5z" fill="currentColor"/></svg></div>
+                <div class="wf-note"><p>Kept the trip total shown both ways, with and without insurance</p><svg viewBox="0 0 120 12" preserveAspectRatio="none" aria-hidden="true"><path d="M0 6h112" stroke="currentColor" stroke-width="1.5"/><path d="M110 1l8 5-8 5z" fill="currentColor"/></svg></div>
+              </div>
+              <img class="wf-fin" src="images/airbnb-cs/final-insurance.webp" alt="Final add travel insurance screen, with the trip total shown with and without insurance" loading="lazy"/>
+            </div>
+            <div class="wf-cap"><h3>Add travel insurance</h3><p>&ldquo;Yes, add peace of mind&rdquo; became a neutral &ldquo;Add travel insurance,&rdquo; with the total shown both ways ($19,096 or $20,290) before guests decide.</p></div>
+          </div>
+          <div class="wf">
+            <div class="wf-panel">
+              <img class="wf-sk" src="images/airbnb-cs/lofi1.webp" alt="Sketch: confirm and pay with the non-refundable line inside the trip card" loading="lazy"/>
+              <div class="wf-notes">
+                <div class="wf-note"><p>Kept the non-refundable line in the trip card, now linking to the full policy</p><svg viewBox="0 0 120 12" preserveAspectRatio="none" aria-hidden="true"><path d="M0 6h112" stroke="currentColor" stroke-width="1.5"/><path d="M110 1l8 5-8 5z" fill="currentColor"/></svg></div>
+                <div class="wf-note"><p>Pinned the total due today next to Confirm and pay</p><svg viewBox="0 0 120 12" preserveAspectRatio="none" aria-hidden="true"><path d="M0 6h112" stroke="currentColor" stroke-width="1.5"/><path d="M110 1l8 5-8 5z" fill="currentColor"/></svg></div>
+              </div>
+              <img class="wf-fin" src="images/airbnb-cs/final-confirm.webp" alt="Final confirm and pay, with the total due today pinned next to the Confirm and pay button" loading="lazy"/>
+            </div>
+            <div class="wf-cap"><h3>Confirm and pay</h3><p>Removed the floating Review button and the duplicate price link, so Pay is the only main action. A non-refundable reminder sits right above it, where the consequence meets the action.</p></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 7. States -->
+      <div class="cs-section" id="states">
+        <p class="cs-section-label">States</p>
+        <h2>Designing past the happy path.</h2>
+        <p>I covered what changes when insurance is added, how the Pay button behaves while processing or after a failed payment, and how the policy screen reads for a flexible booking instead of a non-refundable one.</p>
+        <figure class="bnb-figure bnb-panel">
+          <video muted loop playsinline autoplay preload="metadata" poster="images/airbnb-cs/airbnb-pay-states-poster.jpg" aria-label="The Pay button cycling through its states: default, pressed, processing, and failed with a retry">
+            <source src="videos/airbnb-pay-states.mp4" type="video/mp4">
+          </video>
+        </figure>
+      </div>
+
+      <!-- 8. Handoff -->
+      <div class="cs-section" id="handoff">
+        <p class="cs-section-label">Handoff</p>
+        <h2>Annotated for engineers, honest about the assumptions.</h2>
+        <p>I annotated every change for developers and wrote down what I was assuming. There was no user feedback in the brief, so the findings came from my own heuristic review. The insurance wording would need review from Legal and the insurance partner, and I assumed that removing urgency cues at checkout wouldn&rsquo;t meaningfully hurt conversion.</p>
+        <figure class="bnb-figure bnb-panel">
+          <video muted loop playsinline autoplay preload="metadata" poster="images/airbnb-cs/airbnb-handoff-scenarios-poster.jpg" aria-label="Annotated dev handoff for the scenario list: minimum height, line limits, top alignment, and where the outcome tag's text comes from">
+            <source src="videos/airbnb-handoff-scenarios.mp4" type="video/mp4">
+          </video>
+        </figure>
+      </div>
+
+      <!-- 9. What I'd do next -->
+      <div class="cs-section" id="next">
+        <p class="cs-section-label">What I&rsquo;d Do Next</p>
+        <h2>Test whether guests can answer the three questions.</h2>
+        <p>I&rsquo;d run a comprehension test with 5&ndash;8 people: before paying, can they state the total, whether they can get money back, and what happens next? Then I&rsquo;d explore the Klarna flow, edge cases for very expensive stays, an accessibility pass, and localization.</p>
+      </div>
+
+    </div>
+    </main>
+  </div>
+
+  <section class="next-up-section">
+    <p class="next-up-label">Next Up…</p>
+    <div class="next-up-grid">
+
+      <a class="next-up-card" href="/carbon-sustain">
+          <div class="work-thumb thumb-2">
+            <div class="thumb-2-img-wrap">
+              <div class="t2-frame-enter">
+                <div class="t2-glass-frame">
+                  <img src="images/carbs.png" alt="Carbon Sustain" draggable="false"/>
+                </div>
+              </div>
+            </div>
+          </div>
+          <p class="next-up-title">Making Carbon Data Actionable</p>
+        </a>
+
+      <a class="next-up-card" href="/amazon-music">
+        <div class="work-thumb thumb-3">
+          <div class="t3-imgs">
+            <div class="t3-img-back"><img src="images/fry1.png" draggable="false" alt="Amazon Music"/></div>
+            <div class="t3-img-front"><img src="images/fry.png" draggable="false" alt="Amazon Music"/></div>
+          </div>
+        </div>
+        <p class="next-up-title">Consumer &amp; Artist Collaboration</p>
+      </a>
+
+    </div>
+  </section>
+
+  <footer class="site-footer">
+    <div class="footer-reveal" aria-hidden="true"></div>
+    <canvas class="footer-veil" aria-hidden="true"></canvas>
+    <div class="footer-inner">
+      <div class="footer-main">
+        <div class="footer-left">
+          <h2 class="footer-heading">Let's build something<br><span class="footer-word" id="footer-word" aria-hidden="true">together</span><span class="footer-caret" aria-hidden="true">|</span><span class="sr-only"> together</span></h2>
+          <div class="footer-links">
+            <a class="footer-link" href="mailto:diyamahapatra@berkeley.edu">email</a>
+            <a class="footer-link" href="https://www.linkedin.com/in/diya-mahapatra/" target="_blank">linkedIn</a>
+            <a class="footer-link" href="Diya-Mahapatra-Product-Designer-Resume.pdf" target="_blank">resume</a>
+          </div>
+        </div>
+        <div class="footer-nav">
+          <a class="footer-nav-link" href="/">Work</a>
+          <a class="footer-nav-link" href="/sandlot">Sandbox</a>
+          <a class="footer-nav-link" href="Diya-Mahapatra-Product-Designer-Resume.pdf" target="_blank">Resume</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p class="footer-copy">© 2026 Diya Mahapatra</p>
+        <p class="footer-copy">made with thai iced tea 🧋 · designed on Figma, coded with Claude Code</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+
+    /* ── SOLUTION VIDEO: hide placeholder when video plays ── */
+    const solVideo = document.querySelector('#solution video');
+    const solPlaceholder = document.getElementById('solution-placeholder');
+    if (solVideo) {
+      solVideo.addEventListener('playing', () => {
+        if (solPlaceholder) solPlaceholder.style.display = 'none';
+      });
+      // If the video src is missing, keep placeholder visible
+      solVideo.addEventListener('error', () => {
+        if (solPlaceholder) solPlaceholder.style.display = 'flex';
+      });
+    }
+
+    /* ── SIDEBAR ACTIVE STATE ON SCROLL ── */
+    const sections = document.querySelectorAll('.cs-section, #overview');
+    const sidebarLinks = document.querySelectorAll('.cs-sidebar-links a');
+
+    const io = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          sidebarLinks.forEach(a => a.classList.remove('active'));
+          const active = document.querySelector(`.cs-sidebar-links a[href="#${entry.target.id}"]`);
+          if (active) active.classList.add('active');
+        }
+      });
+    }, { rootMargin: '-20% 0px -70% 0px' });
+
+    sections.forEach(s => io.observe(s));
+
+    /* ── FOOTER WORD CYCLER ── */
+    (function() {
+      const words = ['together', 'great', 'magical', 'inspiring'];
+      const el = document.getElementById('footer-word');
+      if (!el) return;
+      let wi = 0, charI = words[0].length, deleting = false;
+      const TYPE_SPEED = 80, DELETE_SPEED = 45, PAUSE_AFTER = 1800, PAUSE_BEFORE = 220;
+      function tick() {
+        const current = words[wi];
+        if (deleting) {
+          charI--;
+          el.textContent = current.slice(0, charI);
+          if (charI === 0) { deleting = false; wi = (wi + 1) % words.length; setTimeout(tick, PAUSE_BEFORE); return; }
+          setTimeout(tick, DELETE_SPEED);
+        } else {
+          charI++;
+          el.textContent = words[wi].slice(0, charI);
+          if (charI === words[wi].length) { setTimeout(() => { deleting = true; tick(); }, PAUSE_AFTER); return; }
+          setTimeout(tick, TYPE_SPEED);
+        }
+      }
+      setTimeout(() => { deleting = true; tick(); }, PAUSE_AFTER);
+    })();
+
+    /* ── NEXT UP thumbs in-view ── */
+    const nextUpIO = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) { e.target.classList.add('in-view'); nextUpIO.unobserve(e.target); }
+      });
+    }, { threshold: 0.2 });
+    document.querySelectorAll('.next-up-grid .thumb-1, .next-up-grid .thumb-2, .next-up-grid .thumb-3, .next-up-grid .thumb-lg').forEach(el => nextUpIO.observe(el));
+
+  
+    /* ── SCROLL REVEALS ── */
+    (function () {
+      var sections = document.querySelectorAll('.cs-section');
+      function revealAll() {
+        for (var i = 0; i < sections.length; i++) sections[i].classList.add('revealed');
+      }
+      if (!document.documentElement.classList.contains('js-reveal')) { revealAll(); return; }
+      var fired = false;
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+          if (e.isIntersecting) { fired = true; e.target.classList.add('revealed'); io.unobserve(e.target); }
+        });
+      }, { rootMargin: '0px 0px -15% 0px', threshold: 0 });
+      for (var i = 0; i < sections.length; i++) io.observe(sections[i]);
+      /* Failsafe only when the observer never fired at all. An unconditional
+         timer reveals every section before the visitor has scrolled, which
+         silently cancels the effect it was meant to protect. */
+      window.addEventListener('load', function () {
+        setTimeout(function () { if (!fired) revealAll(); }, 2500);
+      });
+    })();
+
+    /* ── FOOTER SCRATCH-OFF ──
+       Erases into a white canvas as the pointer moves, then heals back so the
+       next visitor gets a clean slate. The rAF loop only runs while there is
+       something to heal, so an idle footer costs nothing. */
+    (function () {
+      var footer = document.querySelector('.site-footer');
+      var canvas = footer && footer.querySelector('.footer-veil');
+      if (!canvas) return;
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+      var ctx = canvas.getContext('2d');
+      var w = 0, h = 0, raf = null, idleFrames = 0, last = null;
+      var RADIUS = 52, HEAL = 0.030, IDLE_STOP = 260;
+
+      function fillVeil() {
+        ctx.save();
+        ctx.setTransform(1, 0, 0, 1, 0, 0);
+        ctx.globalCompositeOperation = 'source-over';
+        ctx.fillStyle = '#FAF9F7';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.restore();
+      }
+
+      function resize() {
+        var dpr = Math.min(window.devicePixelRatio || 1, 2);
+        var r = footer.getBoundingClientRect();
+        w = r.width; h = r.height;
+        if (!w || !h) return;
+        canvas.width = Math.round(w * dpr);
+        canvas.height = Math.round(h * dpr);
+        canvas.style.width = w + 'px';
+        canvas.style.height = h + 'px';
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        fillVeil();
+        last = null;
+      }
+
+      function hole(x, y) {
+        var g = ctx.createRadialGradient(x, y, 0, x, y, RADIUS);
+        g.addColorStop(0, 'rgba(0,0,0,0.60)');
+        g.addColorStop(0.65, 'rgba(0,0,0,0.28)');
+        g.addColorStop(1, 'rgba(0,0,0,0)');
+        ctx.fillStyle = g;
+        ctx.beginPath();
+        ctx.arc(x, y, RADIUS, 0, Math.PI * 2);
+        ctx.fill();
+      }
+
+      function wipe(x, y) {
+        ctx.globalCompositeOperation = 'destination-out';
+        if (last) {
+          /* interpolate, or a fast flick leaves a dotted trail instead of a stroke */
+          var dx = x - last.x, dy = y - last.y;
+          var steps = Math.max(1, Math.ceil(Math.sqrt(dx * dx + dy * dy) / 14));
+          for (var i = 1; i <= steps; i++) hole(last.x + dx * i / steps, last.y + dy * i / steps);
+        } else {
+          hole(x, y);
+        }
+        last = { x: x, y: y };
+        idleFrames = 0;
+        start();
+      }
+
+      function frame() {
+        ctx.globalCompositeOperation = 'source-over';
+        ctx.fillStyle = 'rgba(250,249,247,' + HEAL + ')';
+        ctx.fillRect(0, 0, w, h);
+        idleFrames++;
+        if (idleFrames > IDLE_STOP) { fillVeil(); raf = null; return; }
+        raf = requestAnimationFrame(frame);
+      }
+
+      function start() { if (raf === null) raf = requestAnimationFrame(frame); }
+
+      footer.addEventListener('pointermove', function (e) {
+        var r = footer.getBoundingClientRect();
+        wipe(e.clientX - r.left, e.clientY - r.top);
+      }, { passive: true });
+
+      /* re-entering elsewhere shouldn't drag a streak across the whole footer */
+      footer.addEventListener('pointerleave', function () { last = null; });
+      footer.addEventListener('pointerdown', function (e) {
+        var r = footer.getBoundingClientRect();
+        last = null;
+        wipe(e.clientX - r.left, e.clientY - r.top);
+      }, { passive: true });
+
+      resize();
+      if ('ResizeObserver' in window) new ResizeObserver(resize).observe(footer);
+      else window.addEventListener('resize', resize);
+    })();
+</script>
+
+</body>
+</html>
